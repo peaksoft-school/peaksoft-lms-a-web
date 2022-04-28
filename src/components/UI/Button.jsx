@@ -16,7 +16,7 @@ const WrapperButton = styled.button`
    border: none;
    outline: none;
    &:hover {
-      background-color: #1d60ff;
+      background-color: #104bd3;
    }
    &:active {
       background-color: #6190ff;
