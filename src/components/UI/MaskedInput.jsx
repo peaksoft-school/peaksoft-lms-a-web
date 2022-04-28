@@ -3,7 +3,13 @@ import React from 'react'
 import InputMask from 'react-input-mask'
 
 export const MaskedInput = (props) => {
-   return <Input mask={'+\\9\\9\\6\\ 999 99 99 99'} {...props} />
+   return (
+      <Input
+         mask={'+\\9\\9\\6\\ 999 99 99 99'}
+         placeholder="+996  ___ __ __ __"
+         {...props}
+      />
+   )
 }
 
 const Input = styled(InputMask)`
