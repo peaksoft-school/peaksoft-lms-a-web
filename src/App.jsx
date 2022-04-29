@@ -1,15 +1,15 @@
-// import { Pagination } from '@mui/material'
-import { Pagination, PaginationItem } from '@mui/material'
+import { PaginationItem } from '@mui/material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import './App.css'
 import styled from '@emotion/styled'
+import { Pagination } from './components/UI/Pagination'
 
 function App() {
    return (
       <div className="App">
          <WrapperPagination
-            count={10}
+            count={37}
             color="primary"
             renderItem={(item) => (
                <Wrapper
@@ -26,9 +26,13 @@ function App() {
 }
 
 const WrapperPagination = styled(Pagination)`
-   .MuiPagination-root {
-      color: red;
-      background-color: red;
+   .css-1uvvthh-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+      color: blue;
+      background-color: white;
+      text-decoration: underline;
+   }
+   .css-1uvvthh-MuiButtonBase-root-MuiPaginationItem-root {
+      color: #8f8e8e;
    }
 `
 const Wrapper = styled(PaginationItem)`
