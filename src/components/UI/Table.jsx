@@ -1,51 +1,55 @@
 import styled from '@emotion/styled'
 import { styled as muiStyled } from '@mui/material/styles'
 import {
-   TableContainer,
+   TableContainer as MuiTableContainer,
    Table,
    TableHead,
    TableBody,
    TableRow,
    TableCell,
    Paper,
+   ThemeProvider,
+   createTheme,
 } from '@mui/material'
 
 export const AppTable = ({ columns, data }) => {
    return (
-      <Wrapper component={Paper}>
-         <Table>
-            <TableHead>
-               <TableRow>
-                  {columns.map((col) => {
+      <ThemeProvider theme={customTheme}>
+         <Container component={Paper}>
+            <Table>
+               <TableHead>
+                  <TableRow>
+                     {columns.map((col) => {
+                        return (
+                           <TableContainer key={col.accessKey}>
+                              {col.title}
+                           </TableContainer>
+                        )
+                     })}
+                  </TableRow>
+               </TableHead>
+               <TableBody>
+                  {data.map((item) => {
                      return (
-                        <WrapperTable key={col.accessKey}>
-                           {col.title}
-                        </WrapperTable>
+                        <StyledTableRow key={item.id}>
+                           {columns.map((col) => (
+                              <StyledTable key={col.accessKey}>
+                                 {item[col.accessKey]}
+                              </StyledTable>
+                           ))}
+                        </StyledTableRow>
                      )
                   })}
-               </TableRow>
-            </TableHead>
-            <TableBody>
-               {data.map((item) => {
-                  return (
-                     <StyledTableRow key={item.id}>
-                        {columns.map((col) => (
-                           <TableWrapper key={col.accessKey}>
-                              {item[col.accessKey]}
-                           </TableWrapper>
-                        ))}
-                     </StyledTableRow>
-                  )
-               })}
-            </TableBody>
-         </Table>
-      </Wrapper>
+               </TableBody>
+            </Table>
+         </Container>
+      </ThemeProvider>
    )
 }
 
-const Wrapper = styled(TableContainer)`
-   width: 1140px;
-   height: 587px;
+const Container = styled(MuiTableContainer)`
+   min-width: 1140px;
+   min-height: 587px;
    margin: 20px auto;
    left: 10%;
    right: 0%;
@@ -55,7 +59,7 @@ const Wrapper = styled(TableContainer)`
    box-sizing: border-box;
    border-radius: 10px;
 `
-const TableWrapper = styled(TableCell)`
+const StyledTable = styled(TableCell)`
    border: none;
    font-family: 'Open Sans', sans-serif;
    font-style: normal;
@@ -64,16 +68,8 @@ const TableWrapper = styled(TableCell)`
    line-height: 22px;
    color: #1d293f;
    letter-spacing: 0.02em;
-   & span {
-      cursor: pointer;
-      width: 115px;
-      display: flex;
-      border: none;
-      align-items: center;
-      justify-content: space-between;
-   }
 `
-const WrapperTable = styled(TableCell)`
+const TableContainer = styled(TableCell)`
    font-family: 'Open Sans', sans-serif;
    font-style: normal;
    font-weight: 600;
@@ -82,9 +78,14 @@ const WrapperTable = styled(TableCell)`
    color: #1d293f;
    border: none;
 `
+const customTheme = createTheme({
+   palette: {
+      main: 'rgba(26, 35, 126, 0.07);',
+   },
+})
 
 const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
    '&:nth-of-type(even)': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.main,
    },
 }))

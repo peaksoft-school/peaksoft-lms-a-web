@@ -1,9 +1,18 @@
 import './App.css'
+import styled from '@emotion/styled'
 import { ReactComponent as EyeIcon } from './assets/icons/eyeIcon.svg'
 import { ReactComponent as EditIcon } from './assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from './assets/icons/removeIcon.svg'
 import { AppTable } from './components/UI/Table'
 
+const Container = styled.span`
+   cursor: pointer;
+   width: 115px;
+   display: flex;
+   border: none;
+   align-items: center;
+   justify-content: space-between;
+`
 const COLUMNS = [
    {
       title: 'ID',
@@ -48,11 +57,11 @@ const DATA = [
       email: 'user@gmail.com',
       password: 'hjdj4343',
       action: (
-         <span>
+         <Container>
             <EyeIcon onClick={() => alert('hello')} />
             <EditIcon />
             <RemoveIcon />
-         </span>
+         </Container>
       ),
    },
    {
@@ -64,11 +73,11 @@ const DATA = [
       email: 'user@gmail.com',
       password: 'hjdj4343',
       action: (
-         <span>
+         <Container>
             <EyeIcon />
             <EditIcon />
             <RemoveIcon />
-         </span>
+         </Container>
       ),
    },
    {
@@ -80,11 +89,27 @@ const DATA = [
       email: 'user@gmail.com',
       password: 'hjdj4343',
       action: (
-         <span>
+         <Container>
             <EyeIcon />
             <EditIcon />
             <RemoveIcon />
-         </span>
+         </Container>
+      ),
+   },
+   {
+      id: 4,
+      name: 'John Smith',
+      group: 'JS-4',
+      study_format: 'Онлайн',
+      mobile_phone: '0222232312',
+      email: 'user@gmail.com',
+      password: 'hjdj4343',
+      action: (
+         <Container>
+            <EyeIcon />
+            <EditIcon />
+            <RemoveIcon />
+         </Container>
       ),
    },
 ]
