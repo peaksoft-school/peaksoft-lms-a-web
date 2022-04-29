@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import React from 'react'
 
-export const Button = ({ children }) => {
-   return <WrapperButton>{children}</WrapperButton>
+export const Button = (props) => {
+   return <WrapperButton {...props}>{props.children}</WrapperButton>
 }
 
 const WrapperButton = styled.button`
@@ -16,7 +16,7 @@ const WrapperButton = styled.button`
    border: none;
    outline: none;
    &:hover {
-      background-color: #104bd3;
+      background-color: #1d60ff;
    }
    &:active {
       background-color: #6190ff;

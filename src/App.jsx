@@ -4,7 +4,7 @@ import { Button } from './components/UI/Button'
 function App() {
    return (
       <div>
-         <Button>+ Создать группу</Button>
+         <Button onClick={() => alert('Hello :)')}>+ Создать группу</Button>
       </div>
    )
 }
