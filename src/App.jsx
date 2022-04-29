@@ -1,19 +1,15 @@
 import './App.css'
-import DatePickerUi from './components/UI/DatePickerUi'
-// import { BasicModal } from './components/UI/BasicModal'
-// import ConfirmModal from './components/UI/ConfirmModal'
+
+import { BasicModal } from './components/UI/BasicModal'
 
 function App() {
    return (
       <div className="App">
-         {/* <BasicModal
+         <BasicModal
             title="Добавить студента"
             cancel="Отмена"
             save="Добавить"
-         /> */}
-
-         {/* <ConfirmModal /> */}
-         <DatePickerUi />
+         />
       </div>
    )
 }
