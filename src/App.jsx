@@ -1,10 +1,11 @@
 import './App.css'
-import { Switcher } from './components/UI/Switch'
+import { ToggleSwitch } from './components/UI/ToggleSwitch'
 
 function App() {
    return (
       <div className="App">
-         <Switcher />
+         <ToggleSwitch id="switcher1" name="switcher1" />
+         <ToggleSwitch id="switcher2" name="switcher2" />
       </div>
    )
 }
