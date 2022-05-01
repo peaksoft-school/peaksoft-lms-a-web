@@ -1,37 +1,23 @@
-import React, { useState } from 'react'
-import Button from '@mui/material/Button'
+import React from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import styled from '@emotion/styled'
 
-export default function ConfirmModal() {
-   const [open, setOpen] = useState(false)
-
+export default function ConfirmModal(props) {
    return (
-      <div>
-         <Button variant="outlined" onClick={() => setOpen(true)}>
-            Open alert dialog
-         </Button>
-         <DialogWrapper
-            open={open}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-         >
-            <DialogStyle id="alert-dialog-description">
-               Вы уверенны, что хотите удалить группу ...?
-            </DialogStyle>
-            <ButtonStyle>
-               <button type="submit">Отмена</button>
-               <button type="submit">Удалить</button>
-            </ButtonStyle>
-         </DialogWrapper>
-      </div>
+      <DialogWrapper isConfirmModalOpen={props.confirmModalOpen}>
+         <DialogStyle>Вы уверенны, что хотите удалить группу ...?</DialogStyle>
+         <ButtonStyle>
+            <button type="submit">{props.cancelDeleteButton}</button>
+            <button type="submit">{props.confirmDeleteButton}</button>
+         </ButtonStyle>
+      </DialogWrapper>
    )
 }
 
 const DialogWrapper = styled(Dialog)`
-   .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+   .MuiDialog-paper {
       border-radius: 10px;
    }
    width: 315px;
