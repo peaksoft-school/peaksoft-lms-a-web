@@ -14,6 +14,10 @@ const Container = styled.div`
    display: flex;
    flex-direction: row;
    align-items: center;
+   z-index: 10;
+   position: fixed;
+   left: 40%;
+   top: 10%;
    animation: 3s slide-right;
    @keyframes slide-right {
       from {
