@@ -1,38 +1,24 @@
 import * as React from 'react'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import styled from '@emotion/styled'
 
-export function BasicModal(props) {
-   const [open, setOpen] = React.useState(true)
-   const handleOpen = () => setOpen(true)
-   const handleClose = () => setOpen(false)
-
+function BasicModal(props) {
    return (
-      <div>
-         <Button onClick={handleOpen}>Open modal</Button>
-         <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-         >
-            <Box sx={style}>
-               <Header id="modal-modal-title" variant="h6" component="h2">
-                  {props.title}
-               </Header>
-               <InputContent id="modal-modal-description" sx={{ mt: 3 }}>
-                  {props.children}
-               </InputContent>
-               <Footer>
-                  <button type="button">{props.cancel}</button>
-                  <button type="button">{props.save}</button>
-               </Footer>
-            </Box>
-         </Modal>
-      </div>
+      <Modal
+         isModalOpen={props.isModalOpen}
+         onModalClose={props.modalClosehandler}
+      >
+         <Box sx={style}>
+            <Header>{props.title}</Header>
+            <InputContent>{props.children}</InputContent>
+            <Footer>
+               <button type="button">{props.cancelButton}</button>
+               <button type="button">{props.confirmButton}</button>
+            </Footer>
+         </Box>
+      </Modal>
    )
 }
 const style = {
@@ -65,9 +51,11 @@ const InputContent = styled(Typography)`
    flex-direction: column;
    align-items: center;
    padding: 10px 8px 10px 18px;
+   margin-top: 20px;
 `
 const Footer = styled(Typography)`
    display: flex;
    justify-content: flex-end;
    padding: 40px;
 `
+export default BasicModal
