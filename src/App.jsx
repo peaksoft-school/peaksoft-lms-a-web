@@ -1,12 +1,7 @@
 import './App.css'
-import SelectUi from './components/UI/SelectUi'
 
 function App() {
-   return (
-      <div className="App">
-         <SelectUi />
-      </div>
-   )
+   return <div className="App">hello</div>
 }
 
 export default App
