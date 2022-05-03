@@ -1,12 +1,7 @@
 import './App.css'
-import { ImagePicker } from './components/UI/ImagePicker'
 
 function App() {
-   return (
-      <div className="App">
-         <ImagePicker />
-      </div>
-   )
+   return <div className="App">hello</div>
 }
 
 export default App

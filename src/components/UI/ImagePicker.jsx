@@ -1,20 +1,15 @@
 import styled from '@emotion/styled'
-import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from '../../assets/images/ImagePicker.png'
 
-export const ImagePicker = () => {
-   const [state, setState] = useState(Image)
-   const onDrop = useCallback((acceptedFiles) => {
-      setState(acceptedFiles)
-   }, [])
+export const ImagePicker = ({ onDrop, file }) => {
    const { getRootProps, getInputProps } = useDropzone({ onDrop })
    return (
       <ImgPickerCont {...getRootProps()}>
          <div>
             <ImgCont>
                <input {...getInputProps()} type="file" accept="image/*" />
-               <img src={state} alt="" />
+               <img src={file || Image} alt="Your selected file" />
             </ImgCont>
          </div>
          <Description>
@@ -36,6 +31,11 @@ const ImgCont = styled.div`
    border-radius: 10px;
    margin: 0 auto;
    cursor: pointer;
+   & > img {
+      width: 173px;
+      height: 145px;
+      border-radius: 10px;
+   }
 `
 const Description = styled.div`
    width: 100%;
