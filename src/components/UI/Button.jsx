@@ -7,14 +7,16 @@ export const Button = (props) => {
 
 const WrapperButton = styled.button`
    background-color: #3772ff;
-   height: 40px;
    padding: 10px 24px 10px 16px;
    color: white;
    border-radius: 8px;
    letter-spacing: 1px;
-   font-size: 16px;
    border: none;
    outline: none;
+   font-weight: 400;
+   font-size: 14px;
+   line-height: 20px;
+   letter-spacing: 0.06em;
    &:hover {
       background-color: #1d60ff;
    }

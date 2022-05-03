@@ -3,8 +3,8 @@ import { Button } from './components/UI/Button'
 
 function App() {
    return (
-      <div>
-         <Button onClick={() => alert('Hello :)')}>+ Создать группу</Button>
+      <div className="divka">
+         <Button>+ Создать группу</Button>
       </div>
    )
 }
