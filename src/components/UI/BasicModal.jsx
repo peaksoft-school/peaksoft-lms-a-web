@@ -6,16 +6,17 @@ import styled from '@emotion/styled'
 
 function BasicModal(props) {
    return (
-      <Modal
-         isModalOpen={props.isModalOpen}
-         onModalClose={props.modalClosehandler}
-      >
+      <Modal open={props.isModalOpen}>
          <Box sx={style}>
             <Header>{props.title}</Header>
             <InputContent>{props.children}</InputContent>
             <Footer>
-               <button type="button">{props.cancelButton}</button>
-               <button type="button">{props.confirmButton}</button>
+               <button type="button" onClick={props.onModalClose}>
+                  {props.cancelButton}
+               </button>
+               <button type="button" onClick={props.onModalConfirm}>
+                  {props.confirmButton}
+               </button>
             </Footer>
          </Box>
       </Modal>
@@ -30,6 +31,7 @@ const style = {
    bgcolor: 'background.paper',
    boxShadow: 24,
    borderRadius: '10px',
+   outline: 'none',
 }
 const Header = styled(Typography)`
    background: #3772ff;
