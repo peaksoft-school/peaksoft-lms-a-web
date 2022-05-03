@@ -10,13 +10,13 @@ const InputWrapper = styled.input`
    flex-direction: row;
    align-items: center;
    padding: 10px 8px 10px 18px;
-   width: ${({ width }) => width || '491px'};
-   height: 42px;
+   width: 100%;
    background: #ffffff;
-   border: ${({ color }) => `1px solid ${color || '#d4d4d4'}`};
+   border: ${({ invalid }) =>
+      invalid ? '1px solid red' : '1px solid #d4d4d4'};
    box-sizing: border-box;
    border-radius: 10px;
-   font-family: 'Open Sans';
+   font-family: 'Open Sans', sans-serif;
    font-style: normal;
    font-weight: 300;
    font-size: 16px;
