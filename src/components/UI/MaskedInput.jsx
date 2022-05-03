@@ -17,7 +17,7 @@ const Input = styled(InputMask)`
    flex-direction: row;
    align-items: center;
    padding: 10px 8px 10px 18px;
-   width: ${({ width }) => width || '491px'};
+   width: 100%;
    height: 42px;
    background: #ffffff;
    border: 1px solid #d4d4d4;
