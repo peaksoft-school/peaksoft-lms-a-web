@@ -15,7 +15,19 @@ export default function Datepicker(props) {
             renderInput={(params) => (
                <TextFieldStyle
                   {...params}
-                  inputProps={{ ...params.inputProps, placeholder: 'дд.мм.гг' }}
+                  sx={{
+                     '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& > fieldset': {
+                           border: '1px solid black',
+                        },
+                     },
+                  }}
+                  border="none"
+                  inputProps={{
+                     ...params.inputProps,
+                     readOnly: true,
+                     placeholder: 'дд.мм.гг',
+                  }}
                />
             )}
          />
@@ -24,11 +36,16 @@ export default function Datepicker(props) {
 }
 
 const TextFieldStyle = styled(TextField)`
-   .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
-      border-radius: 10px;
+   outline: none;
+   .MuiInputBase-root {
+      border-radius: 30px;
       width: 149px;
       height: 42px;
       color: gray;
       position: absolute;
+      outline: none;
+      .MuiInputBase-formControl:focus {
+         border: none;
+      }
    }
 `
