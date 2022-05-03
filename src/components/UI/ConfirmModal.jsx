@@ -6,11 +6,15 @@ import styled from '@emotion/styled'
 
 export default function ConfirmModal(props) {
    return (
-      <DialogWrapper isConfirmModalOpen={props.confirmModalOpen}>
+      <DialogWrapper open={props.isConfirmModalOpen}>
          <DialogStyle>Вы уверенны, что хотите удалить группу ...?</DialogStyle>
          <ButtonStyle>
-            <button type="submit">{props.cancelDeleteButton}</button>
-            <button type="submit">{props.confirmDeleteButton}</button>
+            <button type="button" onClick={props.onModalClose}>
+               {props.cancelDeleteButton}
+            </button>
+            <button type="button" onClick={props.onConfirmDelete}>
+               {props.confirmDeleteButton}
+            </button>
          </ButtonStyle>
       </DialogWrapper>
    )
