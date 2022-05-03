@@ -18,7 +18,7 @@ export const AppTable = ({ columns, data }) => {
          <Container component={Paper}>
             <Table>
                <TableHead>
-                  <TableRow>
+                  <TableRowContainer>
                      {columns.map((col) => {
                         return (
                            <TableContainer key={col.accessKey}>
@@ -26,7 +26,7 @@ export const AppTable = ({ columns, data }) => {
                            </TableContainer>
                         )
                      })}
-                  </TableRow>
+                  </TableRowContainer>
                </TableHead>
                <TableBody>
                   {data.map((item) => {
@@ -35,6 +35,9 @@ export const AppTable = ({ columns, data }) => {
                            {columns.map((col) => (
                               <StyledTable key={col.accessKey}>
                                  {item[col.accessKey]}
+                                 <StyledActions>
+                                    {col.accessKey.action}
+                                 </StyledActions>
                               </StyledTable>
                            ))}
                         </StyledTableRow>
@@ -58,6 +61,9 @@ const Container = styled(MuiTableContainer)`
    border: 1px solid #d4d4d4;
    box-sizing: border-box;
    border-radius: 10px;
+`
+const TableRowContainer = styled(TableRow)`
+   border-bottom: 1.5px solid #f7f8fa; ;
 `
 const StyledTable = styled(TableCell)`
    border: none;
@@ -86,6 +92,15 @@ const customTheme = createTheme({
 
 const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
    '&:nth-of-type(even)': {
+      padding: '10px',
       backgroundColor: theme.palette.main,
    },
 }))
+
+const StyledActions = styled.span`
+   cursor: pointer;
+   display: flex;
+   border: none;
+   align-items: center;
+   justify-content: space-between;
+`
