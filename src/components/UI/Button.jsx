@@ -8,18 +8,21 @@ export const Button = (props) => {
 const WrapperButton = styled.button`
    color: ${({ color }) => color || 'white'};
    background: ${({ background }) => background || ''};
+   border: ${({ border }) => border || 'none'};
    padding: 10px 24px 10px 16px;
    border-radius: 8px;
-   border: none;
    outline: none;
-   font-weight: 400;
+   font-weight: 500;
    font-size: 14px;
    line-height: 20px;
    letter-spacing: 0.07em;
    &:hover {
-      background-color: #1d60ff;
+      background: ${({ bgHover }) => bgHover || ''};
    }
    &:active {
-      background-color: #6190ff;
+      background: ${({ bgActive }) => bgActive || ''};
+   }
+   &:disabled {
+      background: ${({ disabled }) => disabled || ''};
    }
 `
