@@ -15,6 +15,7 @@
       "ecmaVersion": "latest",
       "sourceType": "module"
    },
+
    "plugins": ["react", "react-hooks"],
    "rules": {
       "react/jsx-filename-extension": [
@@ -59,6 +60,6 @@
          { "props": true, "ignorePropertyModificationsFor": ["state"] }
       ],
       "react/destructuring-assignment": "off",
-      "no-unused-vars":"warn"
+      "no-unused-vars": "warn"
    }
 }
