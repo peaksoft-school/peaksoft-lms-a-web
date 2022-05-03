@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import styled from '@emotion/styled'
 
-function BasicModal(props) {
+export function BasicModal(props) {
    return (
       <Modal open={props.isModalOpen}>
          <Box sx={style}>
@@ -60,4 +60,3 @@ const Footer = styled(Typography)`
    justify-content: flex-end;
    padding: 40px;
 `
-export default BasicModal
