@@ -1,55 +1,37 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { Box } from '@mui/material'
-import Typography from '@mui/material/Typography'
+import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
-import { useState } from 'react'
 
-function TabPanel(props) {
-   const { children, value, index, ...other } = props
-
+function LinkTab(props) {
    return (
-      <div
-         role="tabpanel"
-         hidden={value !== index}
-         id={`simple-tabpanel-${index}`}
-         aria-labelledby={`simple-tab-${index}`}
-         {...other}
-      >
-         {value === index && (
-            <Box sx={{ p: 3 }}>
-               <Typography>{children}</Typography>
-            </Box>
-         )}
-      </div>
+      <StyledTab
+         component={Link}
+         onClick={(event) => {
+            event.preventDefault()
+         }}
+         {...props}
+      />
    )
 }
 
-export function BasicTabs({ tabs }) {
+export default function NavTabs({ tabs }) {
    const [tabsValue, setTabsValue] = useState(0)
-
-   const tabsChangeHandler = (event, newValue) => {
+   const onChangeTabsHandler = (event, newValue) => {
       setTabsValue(newValue)
    }
 
    return (
-      <Box>
-         <StyledTabs
-            value={tabsValue}
-            onChange={tabsChangeHandler}
-            aria-label="basic tabs example"
-         >
-            {tabs.map(({ label }) => (
-               <StyledTab label={label} key={label} />
-            ))}
-         </StyledTabs>
-         {tabs.map(({ Component, label }, i) => (
-            <TabPanel value={tabsValue} index={i} key={label}>
-               {Component}
-            </TabPanel>
+      <StyledTabs
+         value={tabsValue}
+         onChange={onChangeTabsHandler}
+         aria-label="nav tabs example"
+      >
+         {tabs.map((tab) => (
+            <LinkTab label={tab.title} to={tab.to} />
          ))}
-      </Box>
+      </StyledTabs>
    )
 }
 
