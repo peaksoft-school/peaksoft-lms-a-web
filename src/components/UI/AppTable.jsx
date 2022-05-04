@@ -32,14 +32,16 @@ export const AppTable = ({ columns, data }) => {
                   {data.map((item) => {
                      return (
                         <StyledTableRow key={item.id}>
-                           {columns.map((col) => (
-                              <StyledTable key={col.accessKey}>
-                                 {item[col.accessKey]}
-                                 <StyledActions>
-                                    {col.accessKey.action}
-                                 </StyledActions>
-                              </StyledTable>
-                           ))}
+                           {columns.map((col) => {
+                              if (col.action) {
+                                 return col.action(item)
+                              }
+                              return (
+                                 <StyledTable key={col.accessKey}>
+                                    {item[col.accessKey]}
+                                 </StyledTable>
+                              )
+                           })}
                         </StyledTableRow>
                      )
                   })}
@@ -87,20 +89,15 @@ const TableContainer = styled(TableCell)`
 const customTheme = createTheme({
    palette: {
       main: 'rgba(26, 35, 126, 0.07);',
+      hover: 'rgba(27, 35, 119, 0.199)',
    },
 })
 
 const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
    '&:nth-of-type(even)': {
-      padding: '10px',
       backgroundColor: theme.palette.main,
    },
+   '&:hover': {
+      background: theme.palette.hover,
+   },
 }))
-
-const StyledActions = styled.span`
-   cursor: pointer;
-   display: flex;
-   border: none;
-   align-items: center;
-   justify-content: space-between;
-`
