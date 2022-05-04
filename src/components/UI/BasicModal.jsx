@@ -1,23 +1,14 @@
-import * as React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import styled from '@emotion/styled'
 
-export function BasicModal(props) {
+export const BasicModal = (props) => {
    return (
       <Modal open={props.isModalOpen}>
          <Box sx={style}>
             <Header>{props.title}</Header>
-            <InputContent>{props.children}</InputContent>
-            <Footer>
-               <button type="button" onClick={props.onModalClose}>
-                  {props.cancelButton}
-               </button>
-               <button type="button" onClick={props.onModalConfirm}>
-                  {props.confirmButton}
-               </button>
-            </Footer>
+            <Container>{props.children}</Container>
          </Box>
       </Modal>
    )
@@ -44,19 +35,13 @@ const Header = styled(Typography)`
    -moz-border-radius-topright: 10px;
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
-   font-family: 'Open Sans';
+   font-family: 'Open Sans', sans-serif;
    font-weight: 400;
    font-size: 20px;
 `
-const InputContent = styled(Typography)`
+const Container = styled.div`
    display: flex;
    flex-direction: column;
    align-items: center;
-   padding: 10px 8px 10px 18px;
-   margin-top: 20px;
-`
-const Footer = styled(Typography)`
-   display: flex;
-   justify-content: flex-end;
-   padding: 40px;
+   padding: 16px 25px 25px 25px;
 `
