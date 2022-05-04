@@ -5,27 +5,26 @@ import {
    MenuItem,
    Select as MuiSelect,
 } from '@mui/material'
-import { useState } from 'react'
 
-export default function Select(props) {
-   const [value, setValue] = useState('')
-   const handleChange = (e) => {
-      setValue(e.target.value)
-   }
+export default function Select({
+   placeholder,
+   value,
+   onChange,
+   options,
+   selectedOption,
+}) {
    return (
-      <FormStyled {...props}>
-         <InputLabel id="demo-simple-select-label">
-            {props.placeholder}
-         </InputLabel>
-         <MuiSelect
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={value}
-            label={props.placeholder}
-            onChange={handleChange}
-         >
-            {props.options.map((el) => (
-               <MenuItem value={el.value}>{el.label} </MenuItem>
+      <FormStyled>
+         <InputLabel>{placeholder}</InputLabel>
+         <MuiSelect value={value} label={placeholder} onChange={onChange}>
+            {options.map((el) => (
+               <MenuItem
+                  key={el.label}
+                  value={el.value}
+                  onClick={() => selectedOption(el.value)}
+               >
+                  {el.label}
+               </MenuItem>
             ))}
          </MuiSelect>
       </FormStyled>
