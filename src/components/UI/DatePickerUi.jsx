@@ -15,13 +15,13 @@ export default function Datepicker(props) {
             renderInput={(params) => (
                <TextFieldStyle
                   {...params}
-                  sx={{
-                     '& .MuiOutlinedInput-root.Mui-focused': {
-                        '& > fieldset': {
-                           border: '1px solid black',
-                        },
-                     },
-                  }}
+                  // sx={{
+                  //    '& .MuiOutlinedInput-root.Mui-focused': {
+                  //       '& > fieldset': {
+                  //          border: '1px solid black',
+                  //       },
+                  //    },
+                  // }}
                   border="none"
                   inputProps={{
                      ...params.inputProps,
@@ -44,8 +44,5 @@ const TextFieldStyle = styled(TextField)`
       color: gray;
       position: absolute;
       outline: none;
-      .MuiInputBase-formControl:focus {
-         border: none;
-      }
    }
 `
