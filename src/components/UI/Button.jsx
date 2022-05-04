@@ -2,10 +2,10 @@ import styled from '@emotion/styled'
 import React from 'react'
 
 export const Button = (props) => {
-   return <WrapperButton {...props}>{props.children}</WrapperButton>
+   return <StyledButton {...props}>{props.children}</StyledButton>
 }
 
-const WrapperButton = styled.button`
+const StyledButton = styled.button`
    color: ${({ color }) => color || 'white'};
    background: ${({ background }) => background || ''};
    border: ${({ border }) => border || 'none'};
