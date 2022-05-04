@@ -4,10 +4,10 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import styled from '@emotion/styled'
 
-export default function ConfirmModal(props) {
+export const ConfirmModal = (props) => {
    return (
       <DialogWrapper open={props.isConfirmModalOpen}>
-         <DialogStyle>Вы уверенны, что хотите удалить группу ...?</DialogStyle>
+         <DialogStyle>{props.title}</DialogStyle>
          <ButtonStyle>
             <button type="button" onClick={props.onModalClose}>
                {props.cancelDeleteButton}
@@ -31,6 +31,7 @@ const DialogWrapper = styled(Dialog)`
    font-style: normal;
    font-weight: 400;
    margin: 0 auto;
+   padding: 18px;
 `
 const DialogStyle = styled(DialogContentText)`
    border-radius: 10px;
