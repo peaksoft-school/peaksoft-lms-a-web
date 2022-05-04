@@ -17,13 +17,13 @@ export default function Select({
       <FormStyled>
          <InputLabel>{placeholder}</InputLabel>
          <MuiSelect value={value} label={placeholder} onChange={onChange}>
-            {options.map((el) => (
+            {options.map((option) => (
                <MenuItem
-                  key={el.label}
-                  value={el.value}
-                  onClick={() => selectedOption(el.value)}
+                  key={option.label}
+                  value={option.value}
+                  onClick={() => selectedOption(option.value)}
                >
-                  {el.label}
+                  {option.label}
                </MenuItem>
             ))}
          </MuiSelect>
