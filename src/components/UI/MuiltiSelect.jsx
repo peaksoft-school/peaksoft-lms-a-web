@@ -22,19 +22,9 @@ const MenuProps = {
    },
 }
 
-const names = [
-   'Oliver Hansen',
-   'Van Henry',
-   'April Tucker',
-   'Ralph Hubbard',
-   'Omar Alexander',
-   'Carlos Abbott',
-   'Miriam Wagner',
-   'Bradley Wilkerson',
-]
-
-export const MultiSelect = () => {
+export const MultiSelect = ({ names }) => {
    const [personName, setPersonName] = useState([])
+   console.log(personName)
 
    const handleChange = (event) => {
       const {
@@ -47,10 +37,8 @@ export const MultiSelect = () => {
       <div>
          {personName}
          <StyledForm>
-            <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+            <InputLabel>Tag</InputLabel>
             <Select
-               labelId="demo-multiple-checkbox-label"
-               id="demo-multiple-checkbox"
                multiple
                value={personName}
                onChange={handleChange}
@@ -81,10 +69,13 @@ const StyledForm = styled(FormControl)`
    }
 `
 const StyledMenuItem = styled(MenuItem)`
+   border-bottom: 1px solid #1a237e12;
+   .MuiButtonBase-root:active {
+      color: blue;
+   }
    .MuiTypography-root {
-      font-size: 16px;
+      font-size: 15px;
       color: #000000;
-      border: red;
    }
    .MuiSvgIcon-root {
       font-size: 16px;
