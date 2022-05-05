@@ -59,7 +59,6 @@ const Greeting = styled.div`
    font-size: 24px;
    line-height: 33px;
    text-align: center;
-
    color: #1f1f1f;
 `
 const LoginContainer = styled.div`
