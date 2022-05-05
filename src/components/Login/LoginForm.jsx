@@ -63,7 +63,7 @@ const Greeting = styled.div`
 `
 const LoginContainer = styled.div`
    width: 100%;
-   height: 166px;
+   height: 170px;
    display: flex;
    justify-content: space-between;
    flex-direction: column;
@@ -108,7 +108,7 @@ const StyledButtonLabel = styled.div`
 `
 const InvalidContainer = styled.div`
    width: 100%;
-   height: 22px;
+   height: 20px;
    display: flex;
    justify-content: center;
    align-items: center;
