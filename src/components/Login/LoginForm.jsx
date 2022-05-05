@@ -77,6 +77,7 @@ const StyledLogin = styled.div`
    & > label {
       display: flex;
       justify-content: start;
+      color: #6a6a6a;
    }
 `
 const StyledPassword = styled.div`
@@ -88,6 +89,7 @@ const StyledPassword = styled.div`
    & > label {
       display: flex;
       justify-content: start;
+      color: #6a6a6a;
    }
 `
 const ButtonContainer = styled.div`
