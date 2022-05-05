@@ -9,7 +9,7 @@ const StyledButton = styled.button`
    color: ${({ color }) => color || 'white'};
    background: ${({ background }) => background || ''};
    border: ${({ border }) => border || 'none'};
-   padding: 10px 24px 10px 16px;
+   padding: 10px 16px 10px 16px;
    border-radius: 8px;
    outline: none;
    font-weight: 500;
