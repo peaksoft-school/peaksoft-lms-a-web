@@ -4,58 +4,43 @@ import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import styled from '@emotion/styled/macro'
 import { ReactComponent as MeatBallIcon } from '../../assets/icons/meatballs.svg'
-import { ReactComponent as PinIcon } from '../../assets/icons/pinnedIcon.svg'
-import { ReactComponent as TrashIcon } from '../../assets/icons/trashIcon.svg'
-import { ReactComponent as Editcon } from '../../assets/icons/edit.svg'
 
-export const MeatBall = () => {
-   const [isOpenMenu, setIsOpenMenu] = useState(false)
+export const MeatBalls = (props) => {
+   const [anchorEl, setAnchorEl] = useState(null)
+   const open = Boolean(anchorEl)
 
    const handleClick = (event) => {
-      setIsOpenMenu(event.currentTarget)
+      setAnchorEl(event.currentTarget)
    }
    const handleClose = () => {
-      setIsOpenMenu(null)
+      setAnchorEl(null)
    }
 
    return (
       <div>
          <Button
             id="basic-button"
-            aria-controls={isOpenMenu ? 'basic-menu' : undefined}
+            aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
-            aria-expanded={isOpenMenu ? 'true' : undefined}
+            aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
          >
             <MeatBallIcon />
          </Button>
          <MenuContainer
             id="basic-menu"
-            anchorEl={isOpenMenu}
-            open={isOpenMenu}
+            anchorEl={anchorEl}
+            open={open}
             onClose={handleClose}
             MenuListProps={{
                'aria-labelledby': 'basic-button',
             }}
          >
-            <Container onClick={handleClose}>
-               <StyledIcon>
-                  <PinIcon />
-               </StyledIcon>
-               Назначить учителя
-            </Container>
-            <Container onClick={handleClose}>
-               <StyledIcon>
-                  <Editcon />
-               </StyledIcon>
-               Редактировать
-            </Container>
-            <Container onClick={handleClose}>
-               <StyledIcon>
-                  <TrashIcon />
-               </StyledIcon>
-               Удалить
-            </Container>
+            {props.options.map((option) => {
+               return (
+                  <Container onClick={handleClose}>{option.action}</Container>
+               )
+            })}
          </MenuContainer>
       </div>
    )
@@ -84,9 +69,4 @@ const Container = styled(MenuItem)`
    &:hover {
       color: #3772ff;
    }
-`
-const StyledIcon = styled.div`
-   width: 24px;
-   height: 24px;
-   margin-right: 8px;
 `

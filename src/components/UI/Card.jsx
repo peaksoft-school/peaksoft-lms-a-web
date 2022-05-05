@@ -5,13 +5,12 @@ import {
    Typography,
    Card as MuiCard,
 } from '@mui/material'
-
-import { MeatBall } from './MeatBall'
+import { MeatBalls } from './MeatBalls'
 
 export const Card = (props) => {
    return (
       <Wrapper>
-         <Container component="img" image={props.img} alt={props.title} />
+         <Container component="img" image={props.image} alt={props.title} />
          <CardContent>
             <StyledTitle>
                <TitleContainer variant="h5">{props.title}</TitleContainer>
@@ -22,16 +21,14 @@ export const Card = (props) => {
             </StyledDescription>
          </CardContent>
          <StyledIcon>
-            <MeatBall />
+            <MeatBalls options={props.options} />
          </StyledIcon>
       </Wrapper>
    )
 }
 
 const Wrapper = styled(MuiCard)`
-   width: 270px;
-   /* height: 311px; */
-   border: 1px solid #d4d4d4;
+   min-width: 270px;
    border-radius: 10px;
    margin: 10px;
 `
@@ -75,4 +72,5 @@ const StyledIcon = styled.div`
    display: flex;
    flex-direction: end;
    justify-content: end;
+   padding-bottom: 10px;
 `
