@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
    OutlinedInput,
-   InputLabel,
    MenuItem,
    FormControl,
    ListItemText,
@@ -9,46 +8,56 @@ import {
    Checkbox,
 } from '@mui/material'
 import styled from '@emotion/styled'
+import icons from '../../assets/icons/removeSelect.svg'
 
-const ITEM_HEIGHT = 76
-const ITEM_PADDING_TOP = 8
-const MenuProps = {
-   PaperProps: {
-      style: {
-         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-         width: 250,
-         borderRadius: '10px',
-      },
-   },
-}
-
-export const MultiSelect = ({ names }) => {
+export const MultiSelect = ({ data, selectedUsers, setSelectedUsers }) => {
    const [personName, setPersonName] = useState([])
-   console.log(personName)
 
    const handleChange = (event) => {
-      const {
-         target: { value },
-      } = event
-      setPersonName(typeof value === 'string' ? value.split(',') : value)
+      setPersonName(event.target.value)
    }
 
+   const addHandler = () => {
+      setSelectedUsers(personName)
+   }
+
+   const deleteHandler = (id) => {
+      setSelectedUsers(
+         selectedUsers.filter((selectedUser) => selectedUser.id !== id)
+      )
+   }
    return (
       <div>
-         {personName}
-         <StyledForm>
-            <InputLabel>Tag</InputLabel>
+         <StyledUl>
+            {selectedUsers.map((el) => (
+               <li key={el.id}>
+                  <p>{el.name}</p>
+                  <img
+                     src={icons}
+                     alt="icons"
+                     role="presentation"
+                     onClick={() => deleteHandler(el.id)}
+                  />
+               </li>
+            ))}
+         </StyledUl>
+         <StyledForm fullWidth>
             <Select
                multiple
+               displayEmpty
                value={personName}
                onChange={handleChange}
-               input={<OutlinedInput label="Tag" />}
-               renderValue={(selected) => selected.join(', ')}
-               MenuProps={MenuProps}
+               onClose={addHandler}
+               input={<OutlinedInput />}
+               renderValue={(selected) =>
+                  selected.map((value) => (
+                     <div key={value.id} label={value.name} />
+                  ))
+               }
             >
-               {names.map((name) => (
-                  <StyledMenuItem key={name} value={name}>
-                     <ListItemText primary={name} />
+               {data.map((name) => (
+                  <StyledMenuItem key={name.id} value={name}>
+                     <ListItemText primary={name.name} />
                      <Checkbox checked={personName.indexOf(name) > -1} />
                   </StyledMenuItem>
                ))}
@@ -70,14 +79,36 @@ const StyledForm = styled(FormControl)`
 `
 const StyledMenuItem = styled(MenuItem)`
    border-bottom: 1px solid #1a237e12;
-   .MuiButtonBase-root:active {
-      color: blue;
+   .MuiButtonBase-root:hover {
+      color: #3772ff;
    }
    .MuiTypography-root {
-      font-size: 15px;
+      font-size: 16px;
       color: #000000;
    }
    .MuiSvgIcon-root {
-      font-size: 16px;
+      font-size: 17px;
+   }
+`
+const StyledUl = styled.ul`
+   width: 100%;
+   img {
+      padding-right: 18px;
+      height: 20px;
+   }
+   li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 10px;
+      color: #000000;
+      border: 1px solid #d4d4d4;
+      list-style: none;
+      height: 42px;
+      margin: 8px;
+      padding-left: 16px;
+   }
+   p {
+      font-size: 18px;
    }
 `
