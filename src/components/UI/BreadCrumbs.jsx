@@ -1,4 +1,4 @@
-import { Breadcrumbs, Link, Typography } from '@mui/material'
+import { Breadcrumbs, Link } from '@mui/material'
 import styled from '@emotion/styled'
 import { useLocation } from 'react-router-dom'
 
@@ -21,7 +21,6 @@ export const BreadCrumbs = (props) => {
                </LinkStyleControl>
             )
          })}
-         <Typography color="textPrimary">{props.titleThird}</Typography>
       </StyledCrumbs>
    )
 }
