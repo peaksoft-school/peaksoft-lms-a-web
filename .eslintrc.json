@@ -25,6 +25,7 @@
          }
       ],
       "react/prop-types": "off",
+      "import/no-unresolved": "off",
       "react/jsx-props-no-spreading": "off",
       "react/react-in-jsx-scope": "off",
       "import/prefer-default-export": "off",
@@ -32,7 +33,6 @@
       "no-shadow": "off",
       "react-hooks/exhaustive-deps": "off",
       "react/function-component-definition": "off",
-
       "max-len": [
          "error",
          {
