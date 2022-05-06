@@ -9,16 +9,16 @@ export const BreadCrumbs = (props) => {
 
    return (
       <StyledCrumbs aria-label="breadcrumbs" separator="\">
-         {paths.map((crumb) => {
+         {paths.map((crumb, index) => {
             return (
-               <Link
+               <LinkStyleControl
                   underline="hover"
-                  color="inherit"
-                  href={`/${crumb}`}
-                  key={new Date().toLocaleString()}
+                  color={crumb === paths.at(-1) && 'black'}
+                  href={`/${paths.slice(0, index + 1).join('/')}`}
+                  key={crumb}
                >
                   {crumb}
-               </Link>
+               </LinkStyleControl>
             )
          })}
          <Typography color="textPrimary">{props.titleThird}</Typography>
@@ -26,6 +26,14 @@ export const BreadCrumbs = (props) => {
    )
 }
 const StyledCrumbs = styled(Breadcrumbs)`
-   font-size: 20px;
+   display: flex;
+   align-items: center;
+   text-align: center;
+   font-size: 14px;
    letter-spacing: 0.02em;
+   font-family: sans-serif;
+`
+
+const LinkStyleControl = styled(Link)`
+   color: ${({ color }) => color || 'gray'};
 `
