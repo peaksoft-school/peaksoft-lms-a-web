@@ -32,7 +32,6 @@
       "no-shadow": "off",
       "react-hooks/exhaustive-deps": "off",
       "react/function-component-definition": "off",
-
       "max-len": [
          "error",
          {
