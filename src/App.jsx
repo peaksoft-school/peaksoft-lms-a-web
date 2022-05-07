@@ -1,13 +1,12 @@
 import './App.css'
-import { MainContent } from './components/MainContent/MainContent'
-import { Dashboard } from './layout/Dashboard'
+import { AppRoutes } from './routes/AppRoutes'
 
 function App() {
    return (
-      <div className="App">
-         <Dashboard />
-         <MainContent />
+      <div>
+         <AppRoutes />
       </div>
    )
 }
+
 export default App

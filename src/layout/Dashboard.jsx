@@ -1,68 +1,61 @@
 import styled from '@emotion/styled'
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { ReactComponent as Logo } from '../assets/icons/Logo.svg'
-import { ReactComponent as GroupsIcon } from '../assets/icons/group.svg'
-import { ReactComponent as CoursesIcon } from '../assets/icons/courses.svg'
-import { ReactComponent as TeachersIcon } from '../assets/icons/teacher.svg'
-import { ReactComponent as StudentsIcon } from '../assets/icons/students.svg'
 
-export const Dashboard = () => {
+export const Dashboard = ({ data }) => {
    return (
       <Container>
          <StyledLogo>
             <Logo />
          </StyledLogo>
          <div>
-            <StyledContainer>
-               <StyledDiv>
-                  <GroupsIcon />
-                  <p>Группы</p>
-               </StyledDiv>
-            </StyledContainer>
-            <StyledContainer>
-               <StyledDiv>
-                  <CoursesIcon />
-                  <p>Курсы</p>
-               </StyledDiv>
-            </StyledContainer>
-            <StyledContainer>
-               <StyledDiv>
-                  <TeachersIcon />
-                  <p>Учителя</p>
-               </StyledDiv>
-            </StyledContainer>
-            <StyledContainer>
-               <StyledDiv>
-                  <StudentsIcon />
-                  <p>Студенты</p>
-               </StyledDiv>
-            </StyledContainer>
+            {data.map((item) => (
+               <StyledContainer
+                  key={item.title}
+                  to={item.pathName}
+                  className={(isActive) => isActive && 'active'}
+               >
+                  <StyledDiv>
+                     {item.icon}
+                     <p>{item.title}</p>
+                  </StyledDiv>
+               </StyledContainer>
+            ))}
          </div>
       </Container>
    )
 }
 
 const Container = styled.div`
-   position: absolute;
    width: 240px;
-   height: 100%;
+   height: 100vh;
    background-color: #ffffff;
+   padding-top: 31px;
 `
 const StyledLogo = styled.div`
    width: 142px;
    height: 42;
-   margin: 32px 49px 62px;
+   margin-left: 49px;
+   margin-bottom: 62px;
 `
-const StyledContainer = styled.div`
-   width: 224px;
-   height: 50px;
-   display: flex;
-   align-items: center;
-   &:hover {
+const StyledContainer = styled(NavLink)`
+   &.active {
       color: #1f6ed4;
       background: #dde9f9;
       border-radius: 0px 10px 10px 0px;
+      border-left: 4px solid blue;
+      p {
+         color: #1f6ed4;
+      }
    }
+   border-left: 4px solid transparent;
+   width: 220px;
+   height: 50px;
+   display: flex;
+   align-items: center;
+   text-decoration: none;
+   color: #292929;
 `
 const StyledDiv = styled.div`
    margin-left: 40px;
@@ -72,6 +65,5 @@ const StyledDiv = styled.div`
       font-family: 'Open Sans', sans-serif;
       font-weight: 600;
       line-height: 22px;
-      color: #292929;
    }
 `

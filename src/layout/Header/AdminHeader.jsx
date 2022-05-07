@@ -1,10 +1,20 @@
 import styled from '@emotion/styled'
-import { Card } from '@mui/material'
 import React from 'react'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { ReactComponent as ArrowIcon } from '../../assets/icons/Arrows.svg'
+import LinkTab from '../../components/UI/Tabs/Tabs'
 
-export const MainContent = () => {
+const tabs = [
+   {
+      title: ' teachers',
+      to: '/teachers',
+   },
+   {
+      title: ' teachers',
+      to: '/teachers',
+   },
+]
+export const AdminHeader = () => {
    return (
       <Container>
          <StyledProfile>
@@ -13,22 +23,17 @@ export const MainContent = () => {
             <ArrowIcon />
          </StyledProfile>
          <Rectangle />
-         <Card />
+         {/* <LinkTab tabs={tabs} /> */}
       </Container>
    )
 }
 
-const Container = styled.div`
-   position: absolute;
-   width: 1140px;
-   left: 260px;
-   top: 15px;
-`
 const Rectangle = styled.div`
    position: absolute;
-   width: 1220px;
+   width: 80%;
    height: 1px;
    top: 75px;
+   left: 260px;
    background: #c4c4c4;
 `
 const StyledProfile = styled.div`
@@ -40,7 +45,8 @@ const StyledProfile = styled.div`
    position: absolute;
    width: 213px;
    height: 46px;
-   left: 1000px;
+   left: 1280px;
+   top: 10px;
    cursor: pointer;
    & p {
       font-family: 'Open Sans', sans-serif;
@@ -50,4 +56,8 @@ const StyledProfile = styled.div`
       line-height: 22px;
       color: #232323;
    }
+`
+const Container = styled.div`
+   width: 100%;
+   height: 15%;
 `
