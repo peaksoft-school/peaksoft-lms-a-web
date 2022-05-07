@@ -23,7 +23,7 @@ export const AdminHeader = () => {
             <ArrowIcon />
          </StyledProfile>
          <Rectangle />
-         {/* <LinkTab tabs={tabs} /> */}
+         <LinkTab tabs={tabs} />
       </Container>
    )
 }

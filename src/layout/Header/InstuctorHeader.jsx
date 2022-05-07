@@ -19,7 +19,7 @@ export const AdminHeader = () => {
       <Container>
          <StyledProfile>
             <ProfileIcon />
-            <p>Администратор</p>
+            <p>Инструктор</p>
             <ArrowIcon />
          </StyledProfile>
          <Rectangle />
