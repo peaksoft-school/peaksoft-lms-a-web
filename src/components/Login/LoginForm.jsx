@@ -2,31 +2,57 @@ import styled from '@emotion/styled'
 import { Button } from '../UI/Button'
 import { Input } from '../UI/Input'
 
-export const LoginForm = () => {
+export const LoginForm = ({
+   onSubmit,
+   login,
+   password,
+   errors,
+   buttonType,
+   invalid,
+   passwordType,
+}) => {
    return (
-      <FormContainer>
+      <FormContainer onSubmit={onSubmit}>
          <GreetingContainer>
             <Greeting>
-               Добро пожаловать <br /> в <StyledSpan>PEAKSOFT LMS </StyledSpan>!
+               Добро пожаловать <br /> в<StyledSpan> PEAKSOFT LMS </StyledSpan>!
             </Greeting>
          </GreetingContainer>
          <LoginContainer>
             <StyledLogin>
                <label htmlFor="login">Логин:</label>
-               <Input placeholder="Введите логин" id="login" />
+               <Input
+                  placeholder="Введите логин"
+                  id="login"
+                  {...login}
+                  invalid={errors?.email && invalid}
+               />
             </StyledLogin>
             <StyledPassword>
                <label htmlFor="password">Пароль:</label>
-               <Input placeholder="Введите пароль" id="password" />
+               <Input
+                  placeholder="Введите пароль"
+                  id="password"
+                  {...password}
+                  type={passwordType}
+                  invalid={errors?.password && invalid}
+               />
             </StyledPassword>
          </LoginContainer>
          <InvalidContainer>
-            <StyledInvalidDiv>
-               Неправильно указан логин и/или пароль
-            </StyledInvalidDiv>
+            {(errors?.password && (
+               <StyledInvalidDiv>
+                  Неправильно указан логин и/или пароль
+               </StyledInvalidDiv>
+            )) ||
+               (errors?.email && (
+                  <StyledInvalidDiv>
+                     Неправильно указан логин и/или пароль
+                  </StyledInvalidDiv>
+               ))}
          </InvalidContainer>
          <ButtonContainer>
-            <Button background="#3772FF">
+            <Button background="#3772FF" type={buttonType}>
                <StyledButtonLabel>Войти</StyledButtonLabel>
             </Button>
          </ButtonContainer>

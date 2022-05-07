@@ -1,19 +1,49 @@
 import styled from '@emotion/styled'
+import { forwardRef } from 'react'
+import { useForm } from 'react-hook-form'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
 
-export const Login = () => {
+export const Login = forwardRef(() => {
+   const {
+      register,
+      formState: { errors, isValid },
+      handleSubmit,
+      reset,
+   } = useForm()
+   const onSubmitUserInfo = (userInfo) => {
+      console.log(userInfo)
+      reset()
+   }
    return (
       <LoginContainer>
          <LeftSide>
             <PeaksoftBoy />
          </LeftSide>
          <RightSide>
-            <LoginForm />
+            <LoginForm
+               onSubmit={handleSubmit(onSubmitUserInfo)}
+               login={{
+                  ...register('email', {
+                     required: true,
+                     validate: (value) => value === 'baiaaly@gmail.com',
+                  }),
+               }}
+               password={{
+                  ...register('password', {
+                     required: true,
+                     pattern: /^[A-Za-z\d]{5,}$/,
+                  }),
+               }}
+               passwordType="password"
+               errors={errors}
+               buttonType="submit"
+               invalid={!isValid}
+            />
          </RightSide>
       </LoginContainer>
    )
-}
+})
 
 const LoginContainer = styled.div`
    width: 100%;
