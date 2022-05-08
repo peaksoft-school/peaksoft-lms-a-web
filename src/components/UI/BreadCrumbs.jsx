@@ -6,16 +6,23 @@ export const BreadCrumbs = (props) => {
    const { pathname } = useLocation()
 
    const paths = pathname.split('/').filter((x) => x)
+
    const pathsHistory = props.pathsArray.slice(0, paths.length)
+
    const crumbs = pathsHistory.map((crumb, index) => {
+      const crumbHref = `/${paths.slice(0, index + 1).join('/')}`
+
       const isLast = index === paths.length - 1
+
       return isLast ? (
-         <LastPathStyle color="black">{crumb.name}</LastPathStyle>
+         <LastPathStyle color="black" key={new Date().toLocaleString()}>
+            {crumb.name}
+         </LastPathStyle>
       ) : (
          <LinkStyleControl
             underline="hover"
-            href={`/${paths.slice(0, index + 1).join('/')}`}
-            key={crumb}
+            href={crumbHref}
+            key={new Date().toLocaleString()}
          >
             {crumb.name}
          </LinkStyleControl>
