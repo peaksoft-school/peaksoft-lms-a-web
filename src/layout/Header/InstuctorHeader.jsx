@@ -14,7 +14,7 @@ const tabs = [
       to: '/teachers',
    },
 ]
-export const AdminHeader = () => {
+export const InstructorHeader = () => {
    return (
       <Container>
          <StyledProfile>

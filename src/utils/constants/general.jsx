@@ -15,7 +15,7 @@ export const ROUTES = {
    STUDENT_COURSES: '/student/student_course',
 }
 
-export const ADMINDATA = [
+export const DATA = [
    {
       icon: <GroupsIcon />,
       title: 'Группы',
