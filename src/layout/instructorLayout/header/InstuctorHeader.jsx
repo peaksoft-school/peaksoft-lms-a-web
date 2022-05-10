@@ -2,18 +2,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { ReactComponent as ArrowIcon } from '../../assets/icons/Arrows.svg'
-import LinkTab from '../../components/UI/Tabs/Tabs'
 
-const tabs = [
-   {
-      title: ' teachers',
-      to: '/teachers',
-   },
-   {
-      title: ' teachers',
-      to: '/teachers',
-   },
-]
 export const InstructorHeader = () => {
    return (
       <Container>
@@ -23,7 +12,6 @@ export const InstructorHeader = () => {
             <ArrowIcon />
          </StyledProfile>
          <Rectangle />
-         {/* <LinkTab tabs={tabs} /> */}
       </Container>
    )
 }

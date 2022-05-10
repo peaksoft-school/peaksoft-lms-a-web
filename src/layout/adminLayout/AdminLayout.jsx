@@ -1,16 +1,17 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Outlet } from 'react-router-dom'
-import { AdminDashboard } from '../layout/Dashboard/AdminDashboard'
-import { AdminHeader } from '../layout/Header/AdminHeader'
+import { AdminHeader } from './header/AdminHeader'
+import { Dashboard } from '../../components/UI/dashboard/Dashboard'
+import { ADMINTABS } from '../../utils/constants/general'
+import { AdminRoutes } from '../../routes/AdminRoutes'
 
-export const AdminPage = () => {
+export const AdminLayout = () => {
    return (
       <Wrapper>
-         <AdminDashboard />
+         <Dashboard tabs={ADMINTABS} />
          <Container>
             <AdminHeader />
-            <Outlet />
+            <AdminRoutes />
          </Container>
       </Wrapper>
    )

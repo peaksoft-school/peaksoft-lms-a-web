@@ -1,16 +1,16 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { ReactComponent as Logo } from '../assets/icons/Logo.svg'
+import { ReactComponent as Logo } from '../../../assets/icons/Logo.svg'
 
-export const Dashboard = ({ data }) => {
+export const Dashboard = ({ tabs }) => {
    return (
       <Container>
          <StyledLogo>
             <Logo />
          </StyledLogo>
          <div>
-            {data.map((item) => (
+            {tabs.map((item) => (
                <StyledContainer
                   key={item.title}
                   to={item.pathName}

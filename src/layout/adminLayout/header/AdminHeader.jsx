@@ -1,29 +1,18 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
-import { ReactComponent as ArrowIcon } from '../../assets/icons/Arrows.svg'
-import LinkTab from '../../components/UI/Tabs/Tabs'
+import { ReactComponent as ProfileIcon } from '../../../assets/icons/Profile.svg'
+import { ReactComponent as ArrowIcon } from '../../../assets/icons/Arrows.svg'
+import LinkTab from '../../../components/UI/tabs/Tabs'
 
-const tabs = [
-   {
-      title: ' teachers',
-      to: '/teachers',
-   },
-   {
-      title: ' teachers',
-      to: '/teachers',
-   },
-]
-export const StudentHeader = () => {
+export const AdminHeader = () => {
    return (
       <Container>
          <StyledProfile>
             <ProfileIcon />
-            <p>Инструктор</p>
+            <p>Администратор</p>
             <ArrowIcon />
          </StyledProfile>
          <Rectangle />
-         {/* <LinkTab tabs={tabs} /> */}
       </Container>
    )
 }
@@ -32,7 +21,7 @@ const Rectangle = styled.div`
    position: absolute;
    width: 80%;
    height: 1px;
-   top: 75px;
+   top: 78px;
    left: 260px;
    background: #c4c4c4;
 `
@@ -59,5 +48,5 @@ const StyledProfile = styled.div`
 `
 const Container = styled.div`
    width: 100%;
-   height: 15%;
+   height: 70px;
 `

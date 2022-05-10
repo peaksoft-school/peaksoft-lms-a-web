@@ -4,18 +4,18 @@ import { ReactComponent as TeachersIcon } from '../../assets/icons/teacher.svg'
 import { ReactComponent as StudentsIcon } from '../../assets/icons/students.svg'
 
 export const ROUTES = {
-   ADMIN: '/admin',
-   GROUPS: '/admin/groups',
-   TEACHERS: '/admin/teachers',
-   COURSES: '/admin/courses',
-   STUDENTS: '/admin/students',
-   INSTRUCTOR: '/instructor',
-   INSTRUCTOR_COURSES: '/instructor/instructor_course',
-   STUDENT: '/student',
-   STUDENT_COURSES: '/student/student_course',
+   ADMIN: '/admin/*',
+   GROUPS: 'groups',
+   TEACHERS: 'teachers',
+   COURSES: 'courses',
+   STUDENTS: 'students',
+   INSTRUCTOR: '/instructor/*',
+   INSTRUCTOR_COURSES: 'instructor_course',
+   STUDENT: '/student/*',
+   STUDENT_COURSES: 'student_course',
 }
 
-export const DATA = [
+export const ADMINTABS = [
    {
       icon: <GroupsIcon />,
       title: 'Группы',
@@ -35,5 +35,21 @@ export const DATA = [
       icon: <StudentsIcon />,
       title: 'Студенты',
       pathName: ROUTES.STUDENTS,
+   },
+]
+
+export const INSTRUCTORTABS = [
+   {
+      icon: <CoursesIcon />,
+      title: 'Мои Курсы',
+      pathName: ROUTES.INSTRUCTOR_COURSES,
+   },
+]
+
+export const STUDENTTABS = [
+   {
+      icon: <CoursesIcon />,
+      title: 'Мои Курсы',
+      pathName: ROUTES.STUDENT_COURSES,
    },
 ]

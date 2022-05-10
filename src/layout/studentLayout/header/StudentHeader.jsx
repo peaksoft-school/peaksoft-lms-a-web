@@ -1,51 +1,50 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
-import { ReactComponent as ArrowIcon } from '../../assets/icons/Arrows.svg'
-import LinkTab from '../../components/UI/Tabs/Tabs'
+import { ReactComponent as ProfileIcon } from '../../../assets/icons/Profile.svg'
+import LinkTabs from '../../../components/UI/tabs/Tabs'
+import { ReactComponent as BellIcon } from '../../../assets/icons/Bell.svg'
+import { Logout } from '../../../components/UI/logoutButton/Logoutbutton'
 
-const tabs = [
-   {
-      title: ' teachers',
-      to: '/teachers',
-   },
-   {
-      title: ' teachers',
-      to: '/teachers',
-   },
-]
-export const AdminHeader = () => {
+export const StudentHeader = () => {
    return (
       <Container>
          <StyledProfile>
+            <BellIcon />
             <ProfileIcon />
-            <p>Администратор</p>
-            <ArrowIcon />
+            <p>Инструктор</p>
          </StyledProfile>
          <Rectangle />
-         <LinkTab tabs={tabs} />
       </Container>
    )
 }
-
+const tabs = [
+   {
+      title: 'student',
+      to: '/tabs',
+   },
+   {
+      title: 'student',
+      to: '/sss',
+   },
+]
 const Rectangle = styled.div`
    position: absolute;
    width: 80%;
    height: 1px;
-   top: 78px;
+   top: 75px;
    left: 260px;
    background: #c4c4c4;
 `
 const StyledProfile = styled.div`
    display: flex;
    flex-direction: row;
-   justify-content: space-around;
+   justify-content: end;
    align-items: center;
    padding: 8px;
    position: absolute;
-   width: 213px;
+   width: 259px;
+   justify-content: space-between;
    height: 46px;
-   left: 1280px;
    top: 10px;
    cursor: pointer;
    & p {
@@ -59,5 +58,7 @@ const StyledProfile = styled.div`
 `
 const Container = styled.div`
    width: 100%;
-   height: 70px;
+   display: flex;
+   justify-content: end;
+   height: 15%;
 `

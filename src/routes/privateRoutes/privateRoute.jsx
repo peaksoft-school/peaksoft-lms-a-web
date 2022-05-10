@@ -1,5 +1,7 @@
 import React from 'react'
+import { Navigate } from 'react-router-dom'
 
-export const PrivateRoute = () => {
-   return <div>privateRoute</div>
+export const PrivateRoute = ({ Component, isAuthorized }) => {
+   if (!isAuthorized) return <Navigate to="/login" />
+   return Component
 }
