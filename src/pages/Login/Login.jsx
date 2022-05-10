@@ -1,10 +1,13 @@
 import styled from '@emotion/styled'
 import { forwardRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
+import { signIn } from '../../store/authSlice'
 
 export const Login = forwardRef(() => {
+   const dispatch = useDispatch()
    const {
       register,
       formState: { errors, isValid },
@@ -12,7 +15,7 @@ export const Login = forwardRef(() => {
       reset,
    } = useForm()
    const onSubmitUserInfo = (userInfo) => {
-      console.log(userInfo)
+      dispatch(signIn(userInfo))
       reset()
    }
    return (
@@ -26,13 +29,13 @@ export const Login = forwardRef(() => {
                login={{
                   ...register('email', {
                      required: true,
-                     validate: (value) => value === 'baiaaly@gmail.com',
+                     // validate: (value) => value === 'baiaaly@gmail.com',
                   }),
                }}
                password={{
                   ...register('password', {
                      required: true,
-                     pattern: /^[A-Za-z\d]{5,}$/,
+                     // validate: (value) => value === '12345',
                   }),
                }}
                passwordType="password"
