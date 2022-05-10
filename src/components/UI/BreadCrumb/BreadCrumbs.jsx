@@ -15,15 +15,11 @@ export const BreadCrumbs = (props) => {
       const isLast = index === paths.length - 1
 
       return isLast ? (
-         <LastPathStyle color="black" key={new Date().toLocaleString()}>
+         <LastPathStyle color="black" key={crumb.path}>
             {crumb.name}
          </LastPathStyle>
       ) : (
-         <LinkStyleControl
-            underline="hover"
-            href={crumbHref}
-            key={new Date().toLocaleString()}
-         >
+         <LinkStyleControl underline="hover" href={crumbHref} key={crumb.path}>
             {crumb.name}
          </LinkStyleControl>
       )
