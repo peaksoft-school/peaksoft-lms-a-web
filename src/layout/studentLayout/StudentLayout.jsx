@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Dashboard } from '../../components/UI/dashboard/Dashboard'
+import { SideBar } from '../../components/UI/sideBar/SideBar'
 import { STUDENTTABS } from '../../utils/constants/general'
 import { StudentRoutes } from '../../routes/StudentRoutes'
 import { Header } from '../header/Header'
@@ -8,7 +8,7 @@ import { Header } from '../header/Header'
 export const StudentLayout = () => {
    return (
       <Wrapper>
-         <Dashboard tabs={STUDENTTABS} />
+         <SideBar tabs={STUDENTTABS} />
          <Container>
             <Header />
             <StudentRoutes />

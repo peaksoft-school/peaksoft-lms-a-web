@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { Header } from '../header/Header'
-import { Dashboard } from '../../components/UI/dashboard/Dashboard'
+import { SideBar } from '../../components/UI/sideBar/SideBar'
 import { ADMINTABS } from '../../utils/constants/general'
 import { AdminRoutes } from '../../routes/AdminRoutes'
 
 export const AdminLayout = () => {
    return (
       <Wrapper>
-         <Dashboard tabs={ADMINTABS} />
+         <SideBar tabs={ADMINTABS} />
          <Container>
             <Header />
             <AdminRoutes />

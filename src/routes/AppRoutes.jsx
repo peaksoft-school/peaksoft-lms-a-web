@@ -8,6 +8,11 @@ import { PrivateRoute } from './privateRoutes/privateRoute'
 
 export const AppRoutes = () => {
    const isAuthorized = true
+   const roles = {
+      admin: 'admin',
+      instructor: 'instructor',
+      student: 'student',
+   }
 
    return (
       <Routes>
@@ -19,6 +24,7 @@ export const AppRoutes = () => {
                <PrivateRoute
                   Component={<AdminLayout />}
                   isAuthorized={isAuthorized}
+                  role={roles.admin}
                />
             }
          />
@@ -28,6 +34,7 @@ export const AppRoutes = () => {
                <PrivateRoute
                   Component={<InstructorLayout />}
                   isAuthorized={isAuthorized}
+                  role={roles.instructor}
                />
             }
          />
@@ -37,6 +44,7 @@ export const AppRoutes = () => {
                <PrivateRoute
                   Component={<StudentLayout />}
                   isAuthorized={isAuthorized}
+                  role={roles.student}
                />
             }
          />
