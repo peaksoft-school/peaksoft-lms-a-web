@@ -32,6 +32,7 @@ export const Login = forwardRef(() => {
                      // validate: (value) => value === 'baiaaly@gmail.com',
                   }),
                }}
+               emailType="email"
                password={{
                   ...register('password', {
                      required: true,

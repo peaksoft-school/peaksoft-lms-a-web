@@ -10,6 +10,7 @@ export const LoginForm = ({
    buttonType,
    invalid,
    passwordType,
+   emailType,
 }) => {
    return (
       <FormContainer onSubmit={onSubmit}>
@@ -26,6 +27,7 @@ export const LoginForm = ({
                   id="login"
                   {...login}
                   invalid={errors?.email && invalid}
+                  type={emailType}
                />
             </StyledLogin>
             <StyledPassword>
@@ -141,7 +143,7 @@ const InvalidContainer = styled.div`
 `
 const StyledInvalidDiv = styled.div`
    width: 309px;
-   font-family: 'Nunito';
+   font-family: 'Nunito' sans-serif;
    font-style: normal;
    font-weight: 400;
    font-size: 16px;

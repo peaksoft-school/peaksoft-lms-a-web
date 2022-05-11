@@ -2,33 +2,29 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 
 const initState = {
-   user: {
-      role: null,
-      email: null,
-      token: null,
-      firstName: null,
-      lastName: null,
-   },
+   user: {},
    status: null,
+   error: null,
    isLoading: null,
 }
-export const signIn = createAsyncThunk('auth/signIn', async (userInfo) => {
-   try {
-      const response = await baseFetch({
-         path: 'api/authentication/signin',
-         method: 'POST',
-         body: userInfo,
-      })
-      return response
-   } catch (error) {
-      return error.message
+export const signIn = createAsyncThunk(
+   'auth/signIn',
+   async (userInfo, { rejectWithValue }) => {
+      try {
+         const response = await baseFetch({
+            path: '/api/authentication/signin',
+            method: 'POST',
+            body: userInfo,
+         })
+         if (!response.ok) {
+            throw new Error('Something went wrong.Try later')
+         }
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
    }
-})
-
-const setError = (state, action) => {
-   state.status = 'rejected'
-   state.error = action.payload
-}
+)
 
 export const authSlice = createSlice({
    name: 'authentication',
@@ -37,13 +33,15 @@ export const authSlice = createSlice({
    extraReducers: {
       [signIn.pending]: (state) => {
          state.status = 'loading'
-         state.error = null
       },
       [signIn.fulfilled]: (state, action) => {
          state.status = 'resolved'
-         console.log(action.payload)
+         state.user = action.payload
       },
-      [signIn.rejected]: setError,
+      [signIn.rejected]: (state, action) => {
+         state.status = 'rejected'
+         state.error = action.payload
+      },
    },
 })
 
