@@ -6,7 +6,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { ru } from 'date-fns/locale'
 import styled from '@emotion/styled'
 
-export default function Datepicker(props) {
+export default function DatepickerUi(props) {
    return (
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={ru}>
          <DatePicker
@@ -18,7 +18,7 @@ export default function Datepicker(props) {
                   sx={{
                      '& .MuiOutlinedInput-root.Mui-focused': {
                         '& > fieldset': {
-                           border: '1px solid black',
+                           border: '1px solid #1f6ed4',
                         },
                      },
                   }}
@@ -38,9 +38,9 @@ export default function Datepicker(props) {
 const TextFieldStyle = styled(TextField)`
    outline: none;
    .MuiInputBase-root {
-      border-radius: 30px;
+      border-radius: 10px;
       width: 149px;
-      height: 42px;
+      height: 44px;
       color: gray;
       position: absolute;
       outline: none;
