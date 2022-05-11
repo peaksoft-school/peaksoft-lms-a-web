@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { AdminHeader } from './header/AdminHeader'
+import { Header } from '../header/Header'
 import { Dashboard } from '../../components/UI/dashboard/Dashboard'
 import { ADMINTABS } from '../../utils/constants/general'
 import { AdminRoutes } from '../../routes/AdminRoutes'
@@ -10,7 +10,7 @@ export const AdminLayout = () => {
       <Wrapper>
          <Dashboard tabs={ADMINTABS} />
          <Container>
-            <AdminHeader />
+            <Header />
             <AdminRoutes />
          </Container>
       </Wrapper>

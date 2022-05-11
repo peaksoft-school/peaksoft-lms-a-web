@@ -12,10 +12,7 @@ export const AppRoutes = () => {
    return (
       <Routes>
          <Route path="/" element={<div>login</div>} />
-         <Route
-            path="*"
-            element={<div style={{ textAlign: 'center' }}>page not found</div>}
-         />
+         <Route path="*" element={<div>page not found</div>} />
          <Route
             path={ROUTES.ADMIN}
             element={

@@ -5,7 +5,7 @@ import {
    Typography,
    Card as MuiCard,
 } from '@mui/material'
-import { MeatBalls } from './MeatBalls'
+import { MeatBalls } from './card/MeatBalls'
 
 export const Card = (props) => {
    return (

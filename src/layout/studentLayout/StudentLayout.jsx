@@ -3,14 +3,14 @@ import styled from '@emotion/styled'
 import { Dashboard } from '../../components/UI/dashboard/Dashboard'
 import { STUDENTTABS } from '../../utils/constants/general'
 import { StudentRoutes } from '../../routes/StudentRoutes'
-import { StudentHeader } from './header/StudentHeader'
+import { Header } from '../header/Header'
 
 export const StudentLayout = () => {
    return (
       <Wrapper>
          <Dashboard tabs={STUDENTTABS} />
          <Container>
-            <StudentHeader />
+            <Header />
             <StudentRoutes />
          </Container>
       </Wrapper>
