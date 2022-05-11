@@ -3,18 +3,33 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import styled from '@emotion/styled'
+import { Button } from './Button'
 
 export const ConfirmModal = (props) => {
    return (
       <DialogWrapper open={props.isConfirmModalOpen}>
          <DialogStyle>{props.title}</DialogStyle>
          <ButtonStyle>
-            <button type="button" onClick={props.onModalClose}>
+            <Button
+               background="none"
+               bgHover="#1D60FF1A"
+               bgActive="#6190FF4D"
+               border="1px solid #1D60FF"
+               color="#3772FF"
+               onClick={props.onModalClose}
+            >
                {props.cancelDeleteButton}
-            </button>
-            <button type="button" onClick={props.onConfirmDelete}>
+               Отмена
+            </Button>
+            <Button
+               background="#C91E1E"
+               bgHover="#B62727"
+               bgActive="#E13A3A"
+               onClick={props.onConfirmDelete}
+            >
                {props.confirmDeleteButton}
-            </button>
+               Удалить
+            </Button>
          </ButtonStyle>
       </DialogWrapper>
    )
@@ -23,6 +38,7 @@ export const ConfirmModal = (props) => {
 const DialogWrapper = styled(Dialog)`
    .MuiDialog-paper {
       border-radius: 10px;
+      margin: 0;
    }
    width: 315px;
    background: white;

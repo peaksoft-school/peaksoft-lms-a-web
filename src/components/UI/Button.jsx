@@ -16,6 +16,7 @@ const StyledButton = styled.button`
    font-size: 14px;
    line-height: 20px;
    letter-spacing: 0.07em;
+   cursor: pointer;
    &:hover {
       background: ${({ bgHover }) => bgHover || ''};
    }
