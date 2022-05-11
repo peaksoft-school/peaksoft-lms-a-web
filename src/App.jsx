@@ -1,5 +1,5 @@
 import './App.css'
-import { TeachersPanel } from './components/admin/TeachersPanel'
+import { TeachersPanel } from './components/admin/TeachersAdmin/TeachersPanel'
 
 function App() {
    return (
