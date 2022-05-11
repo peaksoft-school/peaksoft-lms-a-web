@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '../../UI/Button'
+import { Card } from '../../UI/Card'
 
 export const Courses = () => {
    return (
@@ -9,15 +10,22 @@ export const Courses = () => {
                + Создать курс
             </Button>
          </div>
-         <div>card</div>
+         <div>
+            <Card options={options} />
+         </div>
       </div>
    )
 }
 
 const options = [
    {
-      id: '',
-      action: '',
-      content: '',
+      id: '1',
+      action: () => alert('hi'),
+      content: (
+         <>
+            <p>icon</p>
+            <p>edit</p>
+         </>
+      ),
    },
 ]
