@@ -1,8 +1,12 @@
 import './App.css'
-import Datepicker from './components/UI/DatePickerUi'
+import { AppRoutes } from './routes/AppRoutes'
 
 function App() {
-   return <div className="App">hello</div>
+   return (
+      <div>
+         <AppRoutes />
+      </div>
+   )
 }
 
 export default App
