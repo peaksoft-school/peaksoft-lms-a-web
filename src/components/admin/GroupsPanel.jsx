@@ -10,6 +10,11 @@ import DatepickerUi from '../UI/DatePickerUi'
 export const GroupsPanel = (props) => {
    const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false)
    const [dateValue, setDateValue] = useState(null)
+   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false)
+
+   const deletingModalHandler = () => {
+      setOpenDeleteConfirmModal(true)
+   }
 
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
@@ -73,19 +78,7 @@ export const GroupsPanel = (props) => {
             </BasicModal>
          )}
          <CardContentStyleControl>
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
-            <Card options={props.options} />
+            <Card options={props.options} onModal={deletingModalHandler} />
          </CardContentStyleControl>
       </div>
    )

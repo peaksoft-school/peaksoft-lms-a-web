@@ -1,30 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { GroupsPanel } from './components/admin/GroupsPanel'
 import { ReactComponent as PinIcon } from './assets/icons/pinnedIcon.svg'
 import { ReactComponent as EditIcon } from './assets/icons/edit.svg'
 import { ReactComponent as DeleteIcon } from './assets/icons/trashIcon.svg'
+import { ConfirmModal } from './components/UI/ConfirmModal'
 import './App.css'
 
 function App() {
    const options = [
       {
          id: 'one',
-         actions: () => alert('hello'),
+         action: () => alert('hello'),
          content: (
             <Container>
-               <div>
-                  <PinIcon />
-               </div>
-               <div>
-                  <p>Назначить учителя</p>
-               </div>
+               <PinIcon />
+               <p>Назначить учителя</p>
             </Container>
          ),
       },
       {
          id: 'onhhe',
-         actions: () => alert('hello'),
+         action: () => alert('hello'),
          content: (
             <Container>
                <EditIcon />
@@ -34,7 +31,7 @@ function App() {
       },
       {
          id: 'onhe',
-         actions: () => alert('hello'),
+         action: () => alert('hello'),
          content: (
             <Container>
                <DeleteIcon />
@@ -45,7 +42,7 @@ function App() {
    ]
    return (
       <div className="App">
-         <GroupsPanel options={options} />
+         <GroupsPanel options={options} actions={options.actions} />
       </div>
    )
 }
