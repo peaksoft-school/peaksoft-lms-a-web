@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
-import { LogoutButton } from '../../components/UI/logoutButton/LogoutButton'
+import { LogoutButton } from '../../components/UI/logoutButton/Logoutbutton'
 import { ReactComponent as BellIcon } from '../../assets/icons/Bell.svg'
 
 export const Header = () => {
