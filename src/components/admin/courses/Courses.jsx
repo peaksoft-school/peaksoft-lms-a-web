@@ -8,6 +8,7 @@ import { ReactComponent as TrashIcon } from '../../../assets/icons/trashIcon.svg
 import { BasicModal } from '../../UI/BasicModal'
 // import { ImagePicker } from '../../UI/ImagePicker'
 import { Input } from '../../UI/Input'
+import { Datepicker } from '../../UI/Datepicker'
 
 export const Courses = () => {
    const [isModalOpen, setIsModalOpen] = useState(false)
@@ -32,6 +33,7 @@ export const Courses = () => {
             <BasicModal isModalOpen={isModalOpen} title="Создать курс">
                {/* <ImagePicker /> */}
                <Input />
+               <Datepicker />
                <StyledContainer>
                   <Button
                      background="none"

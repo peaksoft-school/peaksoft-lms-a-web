@@ -6,7 +6,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { ru } from 'date-fns/locale'
 import styled from '@emotion/styled'
 
-export default function Datepicker(props) {
+export function Datepicker(props) {
    return (
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={ru}>
          <DatePicker
