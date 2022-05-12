@@ -5,11 +5,19 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
+import useInput from '../../../hooks/useInput'
 
 export const CoursesHeader = () => {
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
+   const courses = useInput({
+      title: '',
+      deacription: '',
+      image: '',
+      date: '',
+   })
+
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
    }
@@ -45,17 +53,27 @@ export const CoursesHeader = () => {
             <ImagePicker onDrop={onDrop} file={file} />
             <ModalContentControl>
                <div>
-                  <Input placeholder="Название курса" />
+                  <Input
+                     placeholder="Название курса"
+                     onChange={courses.onChange}
+                     value={courses.value.title}
+                  />
                </div>
                <div>
                   <Datepicker
                      dateValue={dateValue}
                      onChange={dateChangehandler}
+                     // onChange={courses.onChange}
+                     value={courses.value}
                   />
                </div>
             </ModalContentControl>
             <ModalContentControlTwo>
-               <textarea placeholder="Описание курса" />
+               <textarea
+                  placeholder="Описание курса"
+                  onChange={courses.onChange}
+                  value={courses.value.description}
+               />
             </ModalContentControlTwo>
             <BtnStyleControl>
                <div>
@@ -73,6 +91,7 @@ export const CoursesHeader = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
+                     onClick={() => console.log(courses.value)}
                   >
                      Добавить
                   </Button>
