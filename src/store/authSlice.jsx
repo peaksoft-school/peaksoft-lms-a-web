@@ -10,7 +10,7 @@ const initState = {
 export const signIn = createAsyncThunk('auth/signIn', async (userInfo) => {
    try {
       const response = await baseFetch({
-         path: 'authentication',
+         path: 'api/authentication',
          method: 'POST',
          body: userInfo,
       })
@@ -30,6 +30,7 @@ export const authSlice = createSlice({
       },
       [signIn.fulfilled]: (state, action) => {
          state.status = 'resolved'
+         console.log(action.payload)
          state.user = action.payload
       },
       [signIn.rejected]: (state, action) => {

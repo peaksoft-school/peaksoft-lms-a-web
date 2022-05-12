@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { forwardRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
 import { signIn } from '../../store/authSlice'
@@ -9,6 +10,7 @@ import { localStorageHelper } from '../../utils/helpers/general'
 
 export const Login = forwardRef(() => {
    const dispatch = useDispatch()
+   const naviagate = useNavigate()
    const { user, error } = useSelector((state) => state.auth)
    const {
       register,
@@ -20,6 +22,17 @@ export const Login = forwardRef(() => {
       dispatch(signIn(userInfo))
       reset()
    }
+   useEffect(() => {
+      if (user.role === 'ADMIN') {
+         naviagate('/admin')
+      }
+      if (user.role === 'STUDENT') {
+         naviagate('/student')
+      }
+      if (user.role === 'INSTRUCTOR') {
+         naviagate('/instructor')
+      }
+   }, [user.role])
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store('@peaksoft-lms', user)
