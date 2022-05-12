@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { GroupsPanel } from '../components/admin/GroupsPanel'
@@ -8,6 +8,11 @@ import { ReactComponent as EditIcon } from '../assets/icons/edit.svg'
 import { ReactComponent as DeleteIcon } from '../assets/icons/trashIcon.svg'
 
 export const AdminRoutes = () => {
+   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false)
+
+   const deletingModalHandler = () => {
+      setOpenDeleteConfirmModal(true)
+   }
    const options = [
       {
          id: 'wqqw',
@@ -15,7 +20,7 @@ export const AdminRoutes = () => {
          content: (
             <Container>
                <PinIcon />
-               <p>edit</p>
+               <p>Назначить учителя</p>
             </Container>
          ),
       },
@@ -25,17 +30,17 @@ export const AdminRoutes = () => {
          content: (
             <Container>
                <EditIcon />
-               <p>edit</p>
+               <p>Редактировать</p>
             </Container>
          ),
       },
       {
          id: 'wqqdfvfvw',
-         action: () => alert('hello'),
+         action: () => deletingModalHandler(),
          content: (
             <Container>
                <DeleteIcon />
-               <p>edit</p>
+               <p>Удалить</p>
             </Container>
          ),
       },
@@ -46,7 +51,12 @@ export const AdminRoutes = () => {
             <Route path="/" element={<Navigate to={ROUTES.GROUPS} />} />
             <Route
                path={ROUTES.GROUPS}
-               element={<GroupsPanel options={options} />}
+               element={
+                  <GroupsPanel
+                     options={options}
+                     openDeleteConfirmModal={openDeleteConfirmModal}
+                  />
+               }
             />
             <Route path={ROUTES.COURSES} element={<div>Course</div>} />
             <Route path={ROUTES.TEACHERS} element={<div>TeacherPage</div>} />
@@ -58,6 +68,7 @@ export const AdminRoutes = () => {
 const Container = styled.div`
    width: 180px;
    display: flex;
+   align-items: center;
 
    &:hover {
       color: blue;

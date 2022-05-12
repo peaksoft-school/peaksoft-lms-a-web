@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { Card } from '../UI/Card'
 import { Button } from '../UI/Button'
 import { BasicModal } from '../UI/BasicModal'
+import { ConfirmModal } from '../UI/ConfirmModal'
 import { ImagePicker } from '../UI/ImagePicker'
 import { Input } from '../UI/Input'
 import DatepickerUi from '../UI/DatePickerUi'
@@ -10,11 +11,6 @@ import DatepickerUi from '../UI/DatePickerUi'
 export const GroupsPanel = (props) => {
    const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false)
    const [dateValue, setDateValue] = useState(null)
-   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false)
-
-   const deletingModalHandler = () => {
-      setOpenDeleteConfirmModal(true)
-   }
 
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
@@ -78,7 +74,13 @@ export const GroupsPanel = (props) => {
             </BasicModal>
          )}
          <CardContentStyleControl>
-            <Card options={props.options} onModal={deletingModalHandler} />
+            <Card options={props.options} />
+            {props.openDeleteConfirmModal && (
+               <ConfirmModal
+                  title="Вы уверены, что хотите удалить группу ... ?"
+                  isConfirmModalOpen={props.openDeleteConfirmModal}
+               />
+            )}
          </CardContentStyleControl>
       </div>
    )
