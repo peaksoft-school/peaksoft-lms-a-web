@@ -6,7 +6,7 @@ import { ReactComponent as PinIcon } from '../../../assets/icons/pinnedIcon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
 import { ReactComponent as TrashIcon } from '../../../assets/icons/trashIcon.svg'
 import { BasicModal } from '../../UI/BasicModal'
-import { ImagePicker } from '../../UI/ImagePicker'
+// import { ImagePicker } from '../../UI/ImagePicker'
 import { Input } from '../../UI/Input'
 
 export const Courses = () => {
@@ -30,10 +30,26 @@ export const Courses = () => {
          </StyledButton>
          {isModalOpen && (
             <BasicModal isModalOpen={isModalOpen} title="Создать курс">
-               <ImagePicker />
+               {/* <ImagePicker /> */}
                <Input />
-               <Button>Отмена</Button>
-               <Button>Добавить</Button>
+               <StyledContainer>
+                  <Button
+                     background="none"
+                     bgHover="#1D60FF1A"
+                     bgActive="#6190FF4D"
+                     color="#3772FF"
+                     border="1px solid #3772FF"
+                  >
+                     Отмена
+                  </Button>
+                  <Button
+                     background="#3772FF"
+                     bgHover="#1D60FF"
+                     bgActive="#6190FF"
+                  >
+                     Добавить
+                  </Button>
+               </StyledContainer>
             </BasicModal>
          )}
 
@@ -73,6 +89,10 @@ const Container = styled.div`
    flex-wrap: wrap;
    justify-content: space-between;
 `
+const StyledContainer = styled.div`
+   display: flex;
+`
+
 const options = [
    {
       id: '1',
