@@ -1,13 +1,15 @@
 import styled from '@emotion/styled'
-import { forwardRef } from 'react'
+import { forwardRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
 import { signIn } from '../../store/authSlice'
+import { localStorageHelper } from '../../utils/helpers/general'
 
 export const Login = forwardRef(() => {
    const dispatch = useDispatch()
+   const { user, error } = useSelector((state) => state.auth)
    const {
       register,
       formState: { errors, isValid },
@@ -18,6 +20,11 @@ export const Login = forwardRef(() => {
       dispatch(signIn(userInfo))
       reset()
    }
+   useEffect(() => {
+      window.onbeforeunload = () => {
+         return localStorageHelper.store('@peaksoft-lms', user)
+      }
+   }, [user])
    return (
       <LoginContainer>
          <LeftSide>
@@ -29,14 +36,12 @@ export const Login = forwardRef(() => {
                login={{
                   ...register('email', {
                      required: true,
-                     // validate: (value) => value === 'baiaaly@gmail.com',
                   }),
                }}
                emailType="email"
                password={{
                   ...register('password', {
                      required: true,
-                     // validate: (value) => value === '12345',
                   }),
                }}
                passwordType="password"
