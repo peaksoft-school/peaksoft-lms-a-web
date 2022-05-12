@@ -36,6 +36,7 @@ const Container = styled(CardMedia)`
    width: 100%;
    height: 171px;
    border-radius: 10px 10px 0px 0px;
+   transform: matrix(-1, 0, 0, 1, 0, 0);
 `
 const StyledTitle = styled.div`
    display: flex;
@@ -49,8 +50,6 @@ const TitleContainer = styled(Typography)`
    font-size: 19px;
    color: #1d293f;
    padding-right: 18px;
-   word-break: break;
-   text-overflow: ellipsis;
 `
 const StyledDate = styled(Typography)`
    font-family: 'Open Sans', sans-serif;
@@ -68,6 +67,11 @@ const StyledDescription = styled.div`
    margin-top: 10px;
    width: 236px;
    padding: 0px 18px 0 0;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
 `
 const StyledIcon = styled.div`
    display: flex;

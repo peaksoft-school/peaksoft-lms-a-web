@@ -38,7 +38,7 @@ export function Datepicker(props) {
 const TextFieldStyle = styled(TextField)`
    outline: none;
    .MuiInputBase-root {
-      border-radius: 30px;
+      border-radius: 10px;
       width: 149px;
       height: 42px;
       color: gray;
