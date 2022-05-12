@@ -121,6 +121,8 @@ const StyledPassword = styled.div`
    }
 `
 const ButtonContainer = styled.div`
+   display: flex;
+   justify-content: center;
    width: 100%;
    height: 51px;
 `

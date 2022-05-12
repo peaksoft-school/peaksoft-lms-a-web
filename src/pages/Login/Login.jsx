@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
 import { signIn } from '../../store/authSlice'
+import { ROUTES } from '../../utils/constants/general'
 import { localStorageHelper } from '../../utils/helpers/general'
 
 export const Login = forwardRef(() => {
@@ -24,13 +25,13 @@ export const Login = forwardRef(() => {
    }
    useEffect(() => {
       if (user.role === 'ADMIN') {
-         naviagate('/admin')
+         naviagate(ROUTES.ADMIN)
       }
       if (user.role === 'STUDENT') {
-         naviagate('/student')
+         naviagate(ROUTES.STUDENT)
       }
       if (user.role === 'INSTRUCTOR') {
-         naviagate('/instructor')
+         naviagate(ROUTES.INSTRUCTOR)
       }
    }, [user.role])
    useEffect(() => {
