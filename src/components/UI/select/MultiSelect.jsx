@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useState } from 'react'
-import { ReactComponent as OpenSelect } from '../../assets/icons/selected.svg'
-import { ReactComponent as RemoveSelect } from '../../assets/icons/removeSelect.svg'
+import { ReactComponent as OpenSelect } from '../../../assets/icons/selected.svg'
+import { ReactComponent as RemoveSelect } from '../../../assets/icons/removeSelect.svg'
 
 export const MultiSelect = ({
    options,

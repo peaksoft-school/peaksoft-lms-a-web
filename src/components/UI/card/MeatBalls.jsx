@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import styled from '@emotion/styled/macro'
-import { ReactComponent as MeatBallIcon } from '../../assets/icons/meatballs.svg'
+import { ReactComponent as MeatBallIcon } from '../../../assets/icons/meatballs.svg'
 
 export const MeatBalls = (props) => {
    const [anchorEl, setAnchorEl] = useState(null)

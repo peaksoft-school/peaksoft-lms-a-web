@@ -32,7 +32,7 @@ const Container = styled.div`
    height: 100vh;
    background-color: #ffffff;
    padding-top: 31px;
-   /* position: fixed; */
+   position: fixed;
 `
 const StyledLogo = styled.div`
    width: 142px;

@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import styled from '@emotion/styled'
-import { Button } from '../../UI/Button'
-import { BasicModal } from '../../UI/BasicModal'
-import { ImagePicker } from '../../UI/ImagePicker'
-import { Input } from '../../UI/Input'
-import { Datepicker } from '../../UI/Datepicker'
+import { Button } from '../../UI/button/Button'
+import { BasicModal } from '../../UI/modal/BasicModal'
+import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
+import { Input } from '../../UI/input/Input'
+import { Datepicker } from '../../UI/datePicker/Datepicker'
 
-export const CoursesHeader = (props) => {
+export const CoursesHeader = () => {
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
