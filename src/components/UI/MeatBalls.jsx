@@ -12,11 +12,14 @@ export const MeatBalls = (props) => {
    const handleClick = (event) => {
       setAnchorEl(event.currentTarget)
    }
-   const handleClose = (action) => {
-      action()
+   const handleClose = () => {
       setAnchorEl(null)
    }
 
+   const clickHandler = (action) => {
+      action()
+      setAnchorEl(null)
+   }
    return (
       <div>
          <Button
@@ -40,7 +43,7 @@ export const MeatBalls = (props) => {
             {props.options.map((option) => {
                return (
                   <Container
-                     onClick={() => handleClose(option.action)}
+                     onClick={() => clickHandler(option.action)}
                      key={option.id}
                   >
                      {option.content}
