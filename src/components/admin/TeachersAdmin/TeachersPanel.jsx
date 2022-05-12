@@ -10,7 +10,7 @@ import { Button } from '../../UI/Button'
 import { MaskedInput } from '../../UI/MaskedInput'
 import { useInput } from '../../../hooks/useInput/useInput'
 import { AppTable } from '../../UI/AppTable'
-import { ConfirmModal } from '../../UI/ConfirmModal'
+import ConfirmModal from '../../UI/ConfirmModal'
 
 export const TeachersPanel = () => {
    const [isModalOpen, setIsOpenModal] = useState(false)
