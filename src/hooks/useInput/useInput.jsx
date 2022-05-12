@@ -14,6 +14,10 @@ export const useInput = (initialState) => {
    }
    return {
       value,
+      onClear: () => {
+         setValue(initialState)
+      },
       onChange: handleChange,
+      setValue,
    }
 }

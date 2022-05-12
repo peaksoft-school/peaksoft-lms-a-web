@@ -1,10 +1,10 @@
 import './App.css'
-import { TeachersPanel } from './components/admin/TeachersAdmin/TeachersPanel'
+import { AppRoutes } from './routes/AppRoutes'
 
 function App() {
    return (
-      <div className="App">
-         <TeachersPanel />
+      <div>
+         <AppRoutes />
       </div>
    )
 }
