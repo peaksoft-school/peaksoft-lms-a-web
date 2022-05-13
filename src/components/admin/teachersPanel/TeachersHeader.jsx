@@ -1,22 +1,18 @@
-/* eslint-disable react/no-unstable-nested-components */
-import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { ReactComponent as EyeIcon } from '../../../assets/icons/eyeIcon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
-import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
-import { BasicModal } from '../../UI/BasicModal'
-import { Input } from '../../UI/Input'
-import { Button } from '../../UI/Button'
-import { MaskedInput } from '../../UI/MaskedInput'
+import React, { useEffect, useState } from 'react'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { AppTable } from '../../UI/AppTable'
-import ConfirmModal from '../../UI/ConfirmModal'
+import { Button } from '../../UI/button/Button'
+import { Input } from '../../UI/input/Input'
+import { MaskedInput } from '../../UI/input/MaskedInput'
+import { BasicModal } from '../../UI/modal/BasicModal'
 
-export const TeachersPanel = () => {
-   const [isModalOpen, setIsOpenModal] = useState(false)
-   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+export const TeachersHeader = ({
+   setIsOpenModal,
+   isModalOpen,
+   handleClose,
+   setStudentsData,
+}) => {
    const [registerIsValid, setRegisterIsValid] = useState(false)
-   const [studentsData, setStudentsData] = useState(DATA)
 
    const { value, onChange, onClear } = useInput({
       firstName: '',
@@ -27,47 +23,6 @@ export const TeachersPanel = () => {
       specialization: '',
       id: Math.random().toString(),
    })
-   const COLUMNS = [
-      {
-         title: 'ID',
-         accessKey: 'id',
-      },
-      {
-         title: 'Имя фамилия',
-         accessKey: 'name',
-      },
-      {
-         title: 'Специализация',
-         accessKey: 'specialization',
-      },
-      {
-         title: 'Номер телефона',
-         accessKey: 'mobile_phone',
-      },
-      {
-         title: 'E-mail',
-         accessKey: 'email',
-      },
-      {
-         title: 'Пароль',
-         accessKey: 'password',
-      },
-      {
-         title: 'Действия',
-         accessKey: '',
-         action: () => (
-            <StyledActions>
-               <EyeIcon />
-               <EditIcon />
-               <RemoveIcon onClick={() => setIsConfirmModalOpen(true)} />
-            </StyledActions>
-         ),
-      },
-   ]
-   const handleClose = () => {
-      setIsOpenModal(false)
-      setIsConfirmModalOpen(false)
-   }
    useEffect(() => {
       setRegisterIsValid(
          value.firstName.trim().length > 0 &&
@@ -106,25 +61,6 @@ export const TeachersPanel = () => {
                + Добавить учителя
             </Button>
          </StyledButton>
-         <ConfirmModal
-            title="Вы уверены, что хотите удалить эту группу?"
-            isConfirmModalOpen={isConfirmModalOpen}
-            onModalClose={() => setIsConfirmModalOpen(false)}
-            closeConfirmModal={handleClose}
-         >
-            <Button
-               background="#3772FF"
-               bgHover="#1D60FF"
-               bgActive="#6190FF"
-               onClick={() => setIsConfirmModalOpen(false)}
-            >
-               Отмена
-            </Button>
-            <Button background="#C91E1E" bgHover="#B62727" bgActive="#E13A3A">
-               Удалить
-            </Button>
-         </ConfirmModal>
-         <AppTable columns={COLUMNS} data={studentsData} />
          <BasicModal
             isModalOpen={isModalOpen}
             onClose={handleClose}
@@ -198,18 +134,18 @@ export const TeachersPanel = () => {
    )
 }
 
-const StyledInput = styled(Input)`
-   margin: 5px;
-`
-const StyledMaskedInput = styled(MaskedInput)`
-   margin: 5px;
-`
 const StyledButton = styled(Button)`
    display: flex;
    justify-content: end;
    width: 100%;
    padding: 0;
    margin-top: 10px;
+`
+const StyledInput = styled(Input)`
+   margin: 5px;
+`
+const StyledMaskedInput = styled(MaskedInput)`
+   margin: 5px;
 `
 const StyledModalButton = styled.div`
    display: flex;
@@ -227,23 +163,4 @@ const StyledModalButton = styled.div`
    :enabled {
       background-color: violet;
    }
-`
-let DATA = [
-   {
-      id: 1,
-      name: 'Baya Asanova',
-      specialization: 'Front End',
-      mobile_phone: '0700777999',
-      email: 'baya@gmail.com',
-      password: '123qwe',
-   },
-]
-
-const StyledActions = styled.span`
-   cursor: pointer;
-   display: flex;
-   border: none;
-   align-items: center;
-   justify-content: space-between;
-   margin: 20px;
 `

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { TeachersPanel } from '../components/admin/TeachersAdmin/TeachersPanel'
+import { TeachersPanel } from '../components/admin/teachersPanel/TeachersPanel'
 import { ROUTES } from '../utils/constants/general'
 
 export const AdminRoutes = () => {

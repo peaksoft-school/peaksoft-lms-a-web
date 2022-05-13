@@ -3,7 +3,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import styled from '@emotion/styled'
-import { Button } from './Button'
 
 export default function ConfirmModal(props) {
    return (
