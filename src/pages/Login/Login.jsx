@@ -1,23 +1,17 @@
 import styled from '@emotion/styled'
-import { forwardRef, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
 import { signIn } from '../../store/authSlice'
-import { ROUTES } from '../../utils/constants/general'
+import { AUTH_KEY, ROUTES } from '../../utils/constants/general'
 import { localStorageHelper } from '../../utils/helpers/general'
 
-export const Login = forwardRef(() => {
+export const Login = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { user, isInvalid } = useSelector((state) => state.auth)
-   const {
-      register,
-      formState: { errors },
-      handleSubmit,
-   } = useForm()
+   const { user } = useSelector((state) => state.auth)
    const onSubmitUserInfo = (userInfo) => {
       dispatch(signIn(userInfo))
    }
@@ -34,7 +28,7 @@ export const Login = forwardRef(() => {
    }, [user])
    useEffect(() => {
       window.onbeforeunload = () => {
-         return localStorageHelper.store('@peaksoft-lms', user)
+         return localStorageHelper.store(AUTH_KEY, user)
       }
    }, [user])
    return (
@@ -43,27 +37,11 @@ export const Login = forwardRef(() => {
             <PeaksoftBoy />
          </LeftSide>
          <RightSide>
-            <LoginForm
-               onSubmit={handleSubmit(onSubmitUserInfo)}
-               login={{
-                  ...register('email', {
-                     required: true,
-                  }),
-               }}
-               emailType="email"
-               password={{
-                  ...register('password', {
-                     required: true,
-                  }),
-               }}
-               passwordType="password"
-               errors={errors && isInvalid}
-               buttonType="submit"
-            />
+            <LoginForm onSubmit={onSubmitUserInfo} />
          </RightSide>
       </LoginContainer>
    )
-})
+}
 
 const LoginContainer = styled.div`
    width: 100%;

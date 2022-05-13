@@ -1,18 +1,21 @@
 import styled from '@emotion/styled'
+import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import { Button } from '../UI/button/Button'
 import { Input } from '../UI/input/Input'
 
-export const LoginForm = ({
-   onSubmit,
-   login,
-   password,
-   errors,
-   buttonType,
-   passwordType,
-   emailType,
-}) => {
+export const LoginForm = ({ onSubmit }) => {
+   const { isInvalid } = useSelector((state) => state.auth)
+   const {
+      register,
+      formState: { errors },
+      handleSubmit,
+   } = useForm({ mode: 'onBlur' })
+   const onSubmitUserInfo = (userInfo) => {
+      onSubmit(userInfo)
+   }
    return (
-      <FormContainer onSubmit={onSubmit}>
+      <FormContainer onSubmit={handleSubmit(onSubmitUserInfo)}>
          <GreetingContainer>
             <Greeting>
                Добро пожаловать <br /> в<StyledSpan> PEAKSOFT LMS </StyledSpan>!
@@ -24,9 +27,11 @@ export const LoginForm = ({
                <Input
                   placeholder="Введите логин"
                   id="login"
-                  {...login}
-                  invalid={errors}
-                  type={emailType}
+                  {...register('email', {
+                     required: true,
+                  })}
+                  invalid={errors?.email || (errors && isInvalid)}
+                  type="email"
                />
             </StyledLogin>
             <StyledPassword>
@@ -34,28 +39,28 @@ export const LoginForm = ({
                <Input
                   placeholder="Введите пароль"
                   id="password"
-                  {...password}
-                  type={passwordType}
-                  invalid={errors}
+                  {...register('password', {
+                     required: true,
+                  })}
+                  type="password"
+                  invalid={errors?.password || (errors && isInvalid)}
                />
             </StyledPassword>
          </LoginContainer>
          <InvalidContainer>
-            {(errors && (
+            {(errors && isInvalid && (
                <StyledInvalidDiv>
                   Неправильно указан логин и/или пароль
                </StyledInvalidDiv>
             )) ||
-               (errors && (
+               (errors?.password && errors?.email && (
                   <StyledInvalidDiv>
-                     Неправильно указан логин и/или пароль
+                     Внимание , вы не заполнили все поля !
                   </StyledInvalidDiv>
                ))}
          </InvalidContainer>
          <ButtonContainer>
-            <Button background="#3772FF" type={buttonType}>
-               <StyledButtonLabel>Войти</StyledButtonLabel>
-            </Button>
+            <StyledButton type="submit">Войти</StyledButton>
          </ButtonContainer>
       </FormContainer>
    )
@@ -125,7 +130,7 @@ const ButtonContainer = styled.div`
    width: 100%;
    height: 51px;
 `
-const StyledButtonLabel = styled.div`
+const StyledButton = styled(Button)`
    width: 194px;
    font-family: 'Open Sans' sans-serif;
    font-style: normal;
@@ -134,6 +139,7 @@ const StyledButtonLabel = styled.div`
    line-height: 27px;
    text-transform: capitalize;
    color: #ffffff;
+   background: #3772ff;
 `
 const InvalidContainer = styled.div`
    width: 100%;

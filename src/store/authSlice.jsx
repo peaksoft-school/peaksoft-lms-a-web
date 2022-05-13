@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
+import { AUTH_KEY } from '../utils/constants/general'
 import { localStorageHelper } from '../utils/helpers/general'
 
 const initState = {
    user: {},
-   status: null,
-   error: null,
    isLoading: null,
    isInvalid: false,
 }
@@ -25,11 +24,11 @@ export const signIn = createAsyncThunk(
    }
 )
 export const logOut = createAsyncThunk('auth/logOut', async () => {
-   localStorageHelper.clear('@peaksoft-lms')
+   localStorageHelper.clear(AUTH_KEY)
 })
 
-const userData = localStorageHelper.laod('@peaksoft-lms')
-   ? { ...initState, user: localStorageHelper.laod('@peaksoft-lms') }
+const userData = localStorageHelper.laod(AUTH_KEY)
+   ? { ...initState, user: localStorageHelper.laod(AUTH_KEY) }
    : initState
 
 export const authSlice = createSlice({
@@ -38,20 +37,23 @@ export const authSlice = createSlice({
    reducers: {},
    extraReducers: {
       [signIn.pending]: (state) => {
-         state.status = 'loading'
+         state.isLoading = true
       },
       [signIn.fulfilled]: (state, action) => {
-         state.status = 'resolved'
          state.isInvalid = false
          state.user = action.payload
+         state.isLoading = false
       },
-      [signIn.rejected]: (state, action) => {
-         state.status = 'rejected'
+      [signIn.rejected]: (state) => {
          state.isInvalid = true
-         state.error = action.payload
+         state.isLoading = false
+      },
+      [logOut.pending]: (state) => {
+         state.isLoading = true
       },
       [logOut.fulfilled]: (state) => {
          state.user = {}
+         state.isLoading = false
       },
    },
 })
