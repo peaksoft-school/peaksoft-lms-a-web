@@ -6,19 +6,24 @@ const initState = {
    status: null,
    error: null,
    isLoading: null,
+   isAuth: false,
+   isInvalid: false,
 }
-export const signIn = createAsyncThunk('auth/signIn', async (userInfo) => {
-   try {
-      const response = await baseFetch({
-         path: 'api/authentication',
-         method: 'POST',
-         body: userInfo,
-      })
-      return response
-   } catch (error) {
-      return error.message
+export const signIn = createAsyncThunk(
+   'auth/signIn',
+   async (userInfo, { rejectWithValue }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/authentication',
+            method: 'POST',
+            body: userInfo,
+         })
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
    }
-})
+)
 
 export const authSlice = createSlice({
    name: 'authentication',
@@ -30,11 +35,13 @@ export const authSlice = createSlice({
       },
       [signIn.fulfilled]: (state, action) => {
          state.status = 'resolved'
-         console.log(action.payload)
+         state.isAuth = true
+         state.isInvalid = false
          state.user = action.payload
       },
       [signIn.rejected]: (state, action) => {
          state.status = 'rejected'
+         state.isInvalid = true
          state.error = action.payload
       },
    },

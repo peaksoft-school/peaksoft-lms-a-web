@@ -12,16 +12,14 @@ import { localStorageHelper } from '../../utils/helpers/general'
 export const Login = forwardRef(() => {
    const dispatch = useDispatch()
    const naviagate = useNavigate()
-   const { user, error } = useSelector((state) => state.auth)
+   const { user, isInvalid } = useSelector((state) => state.auth)
    const {
       register,
-      formState: { errors, isValid },
+      formState: { errors },
       handleSubmit,
-      reset,
    } = useForm()
    const onSubmitUserInfo = (userInfo) => {
       dispatch(signIn(userInfo))
-      reset()
    }
    useEffect(() => {
       if (user.role === 'ADMIN') {
@@ -33,7 +31,7 @@ export const Login = forwardRef(() => {
       if (user.role === 'INSTRUCTOR') {
          naviagate(ROUTES.INSTRUCTOR)
       }
-   }, [user.role])
+   }, [])
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store('@peaksoft-lms', user)
@@ -59,9 +57,8 @@ export const Login = forwardRef(() => {
                   }),
                }}
                passwordType="password"
-               errors={errors}
+               errors={errors && isInvalid}
                buttonType="submit"
-               invalid={!isValid}
             />
          </RightSide>
       </LoginContainer>

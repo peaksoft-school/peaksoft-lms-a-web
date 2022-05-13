@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { ROUTES } from '../utils/constants/general'
 import { AdminLayout } from '../layout/adminLayout/AdminLayout'
 import { InstructorLayout } from '../layout/instructorLayout/InstructorLayout'
@@ -8,12 +9,8 @@ import { PrivateRoute } from './privateRoutes/privateRoute'
 import { Login } from '../pages/Login/Login'
 
 export const AppRoutes = () => {
+   const { role } = useSelector((state) => state.auth.user)
    const isAuthorized = true
-   const roles = {
-      admin: 'admin',
-      instructor: 'instructor',
-      student: 'student',
-   }
 
    return (
       <Routes>
@@ -25,7 +22,7 @@ export const AppRoutes = () => {
                <PrivateRoute
                   Component={<AdminLayout />}
                   isAuthorized={isAuthorized}
-                  role={roles.admin}
+                  role={role && 'ADMIN'}
                />
             }
          />
@@ -35,7 +32,7 @@ export const AppRoutes = () => {
                <PrivateRoute
                   Component={<InstructorLayout />}
                   isAuthorized={isAuthorized}
-                  role={roles.instructor}
+                  role={role && 'INSTRUCTOR'}
                />
             }
          />
@@ -45,7 +42,7 @@ export const AppRoutes = () => {
                <PrivateRoute
                   Component={<StudentLayout />}
                   isAuthorized={isAuthorized}
-                  role={roles.student}
+                  role={role && 'STUDENT'}
                />
             }
          />

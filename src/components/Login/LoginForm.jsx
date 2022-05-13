@@ -8,7 +8,6 @@ export const LoginForm = ({
    password,
    errors,
    buttonType,
-   invalid,
    passwordType,
    emailType,
 }) => {
@@ -26,7 +25,7 @@ export const LoginForm = ({
                   placeholder="Введите логин"
                   id="login"
                   {...login}
-                  invalid={errors?.email && invalid}
+                  invalid={errors}
                   type={emailType}
                />
             </StyledLogin>
@@ -37,17 +36,17 @@ export const LoginForm = ({
                   id="password"
                   {...password}
                   type={passwordType}
-                  invalid={errors?.password && invalid}
+                  invalid={errors}
                />
             </StyledPassword>
          </LoginContainer>
          <InvalidContainer>
-            {(errors?.password && (
+            {(errors && (
                <StyledInvalidDiv>
                   Неправильно указан логин и/или пароль
                </StyledInvalidDiv>
             )) ||
-               (errors?.email && (
+               (errors && (
                   <StyledInvalidDiv>
                      Неправильно указан логин и/или пароль
                   </StyledInvalidDiv>

@@ -17,10 +17,15 @@ export const baseFetch = async (options) => {
          const path = `${path}?${queryParamsStringValue}`
       }
       const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
+      const result = await response.json()
       if (!response.ok) {
-         throw new Error('Some thing went wrong')
+         let errorMessage = 'Some thing went wrong'
+         if (result && result.message) {
+            errorMessage = result.message
+         }
+         throw new Error(errorMessage)
       }
-      return response.json()
+      return result
    } catch (e) {
       throw new Error(e.message)
    }
