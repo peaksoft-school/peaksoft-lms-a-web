@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { Button } from '../UI/Button'
-import { Input } from '../UI/Input'
+import { Button } from '../UI/button/Button'
+import { Input } from '../UI/input/Input'
 
 export const LoginForm = ({
    onSubmit,

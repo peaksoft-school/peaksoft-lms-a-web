@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ROUTES } from '../utils/constants/general'
 import { AdminLayout } from '../layout/adminLayout/AdminLayout'
@@ -9,20 +9,25 @@ import { PrivateRoute } from './privateRoutes/privateRoute'
 import { Login } from '../pages/Login/Login'
 
 export const AppRoutes = () => {
-   const { role } = useSelector((state) => state.auth.user)
-   const isAuthorized = true
-
+   const { user } = useSelector((state) => state.auth)
    return (
       <Routes>
-         <Route path="/" element={<Login />} />
+         <Route
+            path="/"
+            element={
+               <Navigate
+                  to={ROUTES.ADMIN || ROUTES.INSTRUCTOR || ROUTES.STUDENT}
+               />
+            }
+         />
          <Route path="*" element={<div>page not found</div>} />
+         <Route path={ROUTES.LOGIN} element={<Login />} />
          <Route
             path={ROUTES.ADMIN}
             element={
                <PrivateRoute
                   Component={<AdminLayout />}
-                  isAuthorized={isAuthorized}
-                  role={role && 'ADMIN'}
+                  role={user.role === 'ADMIN' && true}
                />
             }
          />
@@ -31,8 +36,7 @@ export const AppRoutes = () => {
             element={
                <PrivateRoute
                   Component={<InstructorLayout />}
-                  isAuthorized={isAuthorized}
-                  role={role && 'INSTRUCTOR'}
+                  role={user.role === 'INSTRUCTOR' && true}
                />
             }
          />
@@ -41,8 +45,7 @@ export const AppRoutes = () => {
             element={
                <PrivateRoute
                   Component={<StudentLayout />}
-                  isAuthorized={isAuthorized}
-                  role={role && 'STUDENT'}
+                  role={user.role === 'STUDENT' && true}
                />
             }
          />

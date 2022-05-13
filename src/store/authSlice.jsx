@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
+import { localStorageHelper } from '../utils/helpers/general'
 
 const initState = {
    user: {},
    status: null,
    error: null,
    isLoading: null,
-   isAuth: false,
    isInvalid: false,
 }
 export const signIn = createAsyncThunk(
@@ -24,10 +24,17 @@ export const signIn = createAsyncThunk(
       }
    }
 )
+export const logOut = createAsyncThunk('auth/logOut', async () => {
+   localStorageHelper.clear('@peaksoft-lms')
+})
+
+const userData = localStorageHelper.laod('@peaksoft-lms')
+   ? { ...initState, user: localStorageHelper.laod('@peaksoft-lms') }
+   : initState
 
 export const authSlice = createSlice({
    name: 'authentication',
-   initialState: initState,
+   initialState: userData,
    reducers: {},
    extraReducers: {
       [signIn.pending]: (state) => {
@@ -35,7 +42,6 @@ export const authSlice = createSlice({
       },
       [signIn.fulfilled]: (state, action) => {
          state.status = 'resolved'
-         state.isAuth = true
          state.isInvalid = false
          state.user = action.payload
       },
@@ -43,6 +49,9 @@ export const authSlice = createSlice({
          state.status = 'rejected'
          state.isInvalid = true
          state.error = action.payload
+      },
+      [logOut.fulfilled]: (state) => {
+         state.user = {}
       },
    },
 })

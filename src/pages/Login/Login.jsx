@@ -11,7 +11,7 @@ import { localStorageHelper } from '../../utils/helpers/general'
 
 export const Login = forwardRef(() => {
    const dispatch = useDispatch()
-   const naviagate = useNavigate()
+   const navigate = useNavigate()
    const { user, isInvalid } = useSelector((state) => state.auth)
    const {
       register,
@@ -23,15 +23,15 @@ export const Login = forwardRef(() => {
    }
    useEffect(() => {
       if (user.role === 'ADMIN') {
-         naviagate(ROUTES.ADMIN)
+         navigate(ROUTES.ADMIN)
       }
       if (user.role === 'STUDENT') {
-         naviagate(ROUTES.STUDENT)
+         navigate(ROUTES.STUDENT)
       }
       if (user.role === 'INSTRUCTOR') {
-         naviagate(ROUTES.INSTRUCTOR)
+         navigate(ROUTES.INSTRUCTOR)
       }
-   }, [])
+   }, [user])
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store('@peaksoft-lms', user)

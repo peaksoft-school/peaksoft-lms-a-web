@@ -7,6 +7,7 @@ export const BASE_URL =
    'http://peaksoftlmsab4-env.eba-azvcpcga.eu-west-2.elasticbeanstalk.com'
 
 export const ROUTES = {
+   LOGIN: '/login',
    ADMIN: '/admin/*',
    GROUPS: 'groups',
    TEACHERS: 'teachers',
