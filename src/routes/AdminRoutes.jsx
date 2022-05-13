@@ -7,7 +7,7 @@ export const AdminRoutes = () => {
    return (
       <div>
          <Routes>
-            <Route path="" element={<Navigate to={ROUTES.GROUPS} />} />
+            <Route path="/*" element={<Navigate to={ROUTES.GROUPS} />} />
             <Route path={ROUTES.GROUPS} element={<div>groups</div>} />
             <Route path={ROUTES.COURSES} element={<Courses />} />
             <Route path={ROUTES.TEACHERS} element={<div>teachers</div>} />

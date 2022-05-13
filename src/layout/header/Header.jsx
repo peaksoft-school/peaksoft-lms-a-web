@@ -1,21 +1,25 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { LogoutButton } from '../../components/UI/logoutButton/Logoutbutton'
 import { ReactComponent as BellIcon } from '../../assets/icons/Bell.svg'
+import { logOut } from '../../store/authSlice'
+import { ROUTES } from '../../utils/constants/general'
 
 export const Header = () => {
    const navigate = useNavigate()
+   const dispatch = useDispatch()
+   const { role } = useSelector((state) => state.auth.user)
    const logoutHandler = () => {
-      navigate('/login')
+      dispatch(logOut())
+      navigate(ROUTES.LOGIN)
    }
-
-   const role = 'admin'
 
    let content
    switch (role) {
-      case 'admin':
+      case 'ADMIN':
          content = (
             <StyledProfile>
                <ProfileIcon />
@@ -24,7 +28,7 @@ export const Header = () => {
             </StyledProfile>
          )
          break
-      case 'instructor':
+      case 'INSTRUCTOR':
          content = (
             <StyledProfile>
                <ProfileIcon />
@@ -33,7 +37,7 @@ export const Header = () => {
             </StyledProfile>
          )
          break
-      case 'student':
+      case 'STUDENT':
          content = (
             <StyledProfile>
                <BellIcon />

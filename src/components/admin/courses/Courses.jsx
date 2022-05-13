@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
 import { CourseCards } from './CourseCards'
-import { CoursesHeader } from './CoursesHeader'
+import { AddNewCourse } from './AddNewCourse'
 
 export const Courses = () => {
    return (
       <div>
-         <CoursesHeader />
+         <AddNewCourse />
          <CourseCards />
       </div>
    )

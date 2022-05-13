@@ -6,10 +6,12 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import useInput from '../../../hooks/useInput'
+import { BASE_URL } from '../../../utils/constants/general'
+import { baseFetch } from '../../../api/baseFetch'
 
-export const CoursesHeader = () => {
+export const AddNewCourse = () => {
    const [isModalOpen, setIsModalOpen] = useState(false)
-   const [file, setFile] = useState(null)
+   const [selectedFile, setSelectedFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
    const { value, onChange, onClear } = useInput({
       title: '',
@@ -19,17 +21,50 @@ export const CoursesHeader = () => {
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
    }
+
    const openModalHandler = () => {
       setIsModalOpen(true)
    }
-   const onDrop = useCallback((acceptedFiles) => {
-      // setFile(URL.createObjectURL(acceptedFiles[0]))
-      setFile(acceptedFiles[0])
-   }, [])
-   console.log(file)
+
    const handleClose = () => {
       setIsModalOpen(false)
    }
+
+   const onDrop = useCallback((acceptedFiles) => {
+      // setFile(URL.createObjectURL(acceptedFiles[0]))
+      setSelectedFile(acceptedFiles[0])
+   }, [])
+
+   const handleSubmission = () => {
+      const formData = new FormData()
+      formData.append('file', selectedFile)
+      // eslint-disable-next-line consistent-return
+      const postFile = async () => {
+         try {
+            const response = await baseFetch({
+               path: 'api/file',
+               method: 'POST',
+               body: formData,
+            })
+            return response
+         } catch (error) {
+            console.log(error)
+         }
+      }
+      postFile()
+      // fetch(`${BASE_URL}/api/file`, {
+      //    method: 'POST',
+      //    body: formData,
+      // })
+      //    .then((response) => response.json())
+      //    .then((result) => {
+      //       console.log('success', result)
+      //    })
+      //    .catch((error) => {
+      //       console.log('error', error)
+      //    })
+   }
+
    return (
       <>
          <StyledButton>
@@ -49,7 +84,7 @@ export const CoursesHeader = () => {
             title="Создать курс"
             handleClose={handleClose}
          >
-            <ImagePicker onDrop={onDrop} file={file} />
+            <ImagePicker onDrop={onDrop} file={selectedFile} />
             <ModalContentControl>
                <div>
                   <Input
@@ -90,7 +125,7 @@ export const CoursesHeader = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={() => console.log(value)}
+                     onClick={() => handleSubmission()}
                   >
                      Добавить
                   </Button>
