@@ -11,11 +11,9 @@ export const CoursesHeader = () => {
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
-   const courses = useInput({
+   const { value, onChange, onClear } = useInput({
       title: '',
-      deacription: '',
-      image: '',
-      date: '',
+      description: '',
    })
 
    const dateChangehandler = (newValue) => {
@@ -25,9 +23,10 @@ export const CoursesHeader = () => {
       setIsModalOpen(true)
    }
    const onDrop = useCallback((acceptedFiles) => {
-      setFile(URL.createObjectURL(acceptedFiles[0]))
+      // setFile(URL.createObjectURL(acceptedFiles[0]))
+      setFile(acceptedFiles[0])
    }, [])
-
+   console.log(file)
    const handleClose = () => {
       setIsModalOpen(false)
    }
@@ -55,24 +54,24 @@ export const CoursesHeader = () => {
                <div>
                   <Input
                      placeholder="Название курса"
-                     onChange={courses.onChange}
-                     value={courses.value.title}
+                     onChange={onChange}
+                     value={value.title}
+                     name="title"
                   />
                </div>
                <div>
                   <Datepicker
                      dateValue={dateValue}
                      onChange={dateChangehandler}
-                     // onChange={courses.onChange}
-                     value={courses.value}
                   />
                </div>
             </ModalContentControl>
             <ModalContentControlTwo>
                <textarea
                   placeholder="Описание курса"
-                  onChange={courses.onChange}
-                  value={courses.value.description}
+                  onChange={onChange}
+                  value={value.description}
+                  name="description"
                />
             </ModalContentControlTwo>
             <BtnStyleControl>
@@ -91,7 +90,7 @@ export const CoursesHeader = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={() => console.log(courses.value)}
+                     onClick={() => console.log(value)}
                   >
                      Добавить
                   </Button>

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initState = [
    {
       id: '1',
-      image: 'https://akcdn.detik.net.id/community/media/visual/2022/03/15/silicon-valley-1_43.jpeg?w=480',
+      image: 'https://i0.wp.com/tiqets-cdn.s3.eu-west-1.amazonaws.com/wordpress/blog/wp-content/uploads/2020/03/22094311/San-Francisco-scaled.jpg?fit=2560%2C1707&ssl=1',
       title: 'React',
       description:
          'Silicon Valley is a global center of technological innovation located in the South San Francisco Bay Area of California',
