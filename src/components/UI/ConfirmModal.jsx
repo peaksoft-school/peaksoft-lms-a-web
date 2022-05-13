@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import styled from '@emotion/styled'
+import { Button } from './Button'
 
 export default function ConfirmModal(props) {
    return (
@@ -39,10 +40,9 @@ const TitleStyle = styled(Typography)`
    text-align: center;
 `
 const ButtonStyle = styled(Typography)`
-   width: 100%;
    border-radius: 10px;
    display: flex;
    align-items: center;
-   justify-content: center;
+   justify-content: space-around;
    margin: 10px;
 `

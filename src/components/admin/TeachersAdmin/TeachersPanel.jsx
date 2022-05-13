@@ -59,13 +59,14 @@ export const TeachersPanel = () => {
             <StyledActions>
                <EyeIcon />
                <EditIcon />
-               <RemoveIcon onClick={() => setIsConfirmModalOpen(false)} />
+               <RemoveIcon onClick={() => setIsConfirmModalOpen(true)} />
             </StyledActions>
          ),
       },
    ]
    const handleClose = () => {
-      setIsOpenModal(true)
+      setIsOpenModal(false)
+      setIsConfirmModalOpen(false)
    }
    useEffect(() => {
       setRegisterIsValid(
@@ -109,12 +110,19 @@ export const TeachersPanel = () => {
             title="Вы уверены, что хотите удалить эту группу?"
             isConfirmModalOpen={isConfirmModalOpen}
             onModalClose={() => setIsConfirmModalOpen(false)}
+            closeConfirmModal={handleClose}
          >
-            <p>Вы уверены, что хотите удалить группу...?</p>
-            <Button background="#3772FF" bgHover="#1D60FF" bgActive="#6190FF">
+            <Button
+               background="#3772FF"
+               bgHover="#1D60FF"
+               bgActive="#6190FF"
+               onClick={() => setIsConfirmModalOpen(false)}
+            >
                Отмена
             </Button>
-            <Button>Удалить</Button>
+            <Button background="#C91E1E" bgHover="#B62727" bgActive="#E13A3A">
+               Удалить
+            </Button>
          </ConfirmModal>
          <AppTable columns={COLUMNS} data={studentsData} />
          <BasicModal
