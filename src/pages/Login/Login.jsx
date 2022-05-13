@@ -12,9 +12,11 @@ export const Login = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { user } = useSelector((state) => state.auth)
+
    const onSubmitUserInfo = (userInfo) => {
       dispatch(signIn(userInfo))
    }
+
    useEffect(() => {
       if (user.role === 'ADMIN') {
          navigate(ROUTES.ADMIN)
@@ -26,11 +28,13 @@ export const Login = () => {
          navigate(ROUTES.INSTRUCTOR)
       }
    }, [user])
+
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store(AUTH_KEY, user)
       }
    }, [user])
+
    return (
       <LoginContainer>
          <LeftSide>

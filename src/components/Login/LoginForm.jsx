@@ -6,14 +6,17 @@ import { Input } from '../UI/input/Input'
 
 export const LoginForm = ({ onSubmit }) => {
    const { isInvalid } = useSelector((state) => state.auth)
+
    const {
       register,
       formState: { errors },
       handleSubmit,
    } = useForm({ mode: 'onBlur' })
+
    const onSubmitUserInfo = (userInfo) => {
       onSubmit(userInfo)
    }
+
    return (
       <FormContainer onSubmit={handleSubmit(onSubmitUserInfo)}>
          <GreetingContainer>
