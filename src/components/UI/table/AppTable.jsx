@@ -50,9 +50,7 @@ export const AppTable = ({ columns, data }) => {
                   })}
                </TableBody>
             </Table>
-            <StyledTable>
-               <Pagination />
-            </StyledTable>
+            <StyledTable>{data.length > 10 && <Pagination />}</StyledTable>
          </Container>
       </ThemeProvider>
    )

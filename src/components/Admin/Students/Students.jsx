@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { useState } from 'react'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
-import { ReactComponent as EyeIcon } from '../../../assets/icons/eyeIcon.svg'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
@@ -47,15 +46,10 @@ const COLUMNS = [
       accessKey: 'email',
    },
    {
-      title: 'Пароль',
-      accessKey: 'password',
-   },
-   {
       title: 'Действия',
       accessKey: 'actions',
       action: () => (
          <StyledActions>
-            <EyeIcon />
             <EditIcon />
             <RemoveIcon />
          </StyledActions>
@@ -166,6 +160,7 @@ export const Students = () => {
          <BasicModal
             isModalOpen={showAddStudentsModal}
             title="Добавить студента"
+            onClose={showAddStudentsModalHandler}
          >
             <StyledChildrenOfModal>
                <Input placeholder="Имя" />
@@ -215,7 +210,7 @@ const StyledActions = styled.span`
    display: flex;
    border: none;
    align-items: center;
-   justify-content: space-between; // if needed change
+   justify-content: space-around;
    margin: 20px;
 `
 const StyledChildrenOfModal = styled.div`
