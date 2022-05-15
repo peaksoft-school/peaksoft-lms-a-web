@@ -25,6 +25,7 @@ export const AppRoutes = () => {
          <Route
             path={ROUTES.ADMIN}
             element={
+               // <AdminLayout />
                <PrivateRoute
                   Component={<AdminLayout />}
                   role={user.role === 'ADMIN' && true}

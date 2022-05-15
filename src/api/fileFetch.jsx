@@ -1,7 +1,7 @@
 import { BASE_URL } from '../utils/constants/general'
-import { store } from '../store/index'
+import { store } from '../store'
 
-export const baseFetch = async (options) => {
+export const fileFetch = async (options) => {
    const { token } = store.getState().auth.user
    try {
       const { path, body, method, params } = options
@@ -9,15 +9,16 @@ export const baseFetch = async (options) => {
          method: method || 'GET',
          headers: token
             ? {
-                 'Content-Type': 'application/json',
+                 Accept: 'application/json',
+                 'Content-Type': 'multipart/form-data',
                  Authorization: `Bearer ${token}`,
               }
             : {
-                 'Content-Type': 'application/json',
+                 'Content-Type': 'multipart/form-data',
               },
       }
       if (method !== 'GET') {
-         requestOptions.body = JSON.stringify(body || {})
+         requestOptions.body = body || {}
       }
       if (params) {
          const queryParamsStringValue = Object.keys(params)
@@ -27,6 +28,7 @@ export const baseFetch = async (options) => {
       }
       const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
       const result = await response.json()
+      console.log(result)
       if (!response.ok) {
          let errorMessage = 'Some thing went wrong'
          if (result && result.message) {
@@ -35,7 +37,7 @@ export const baseFetch = async (options) => {
          throw new Error(errorMessage)
       }
       return result
-   } catch (e) {
-      throw new Error(e.message)
+   } catch (error) {
+      throw new Error(error.message)
    }
 }

@@ -1,25 +1,31 @@
 import React, { useCallback, useState } from 'react'
 import styled from '@emotion/styled'
+import { useDispatch } from 'react-redux'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import useInput from '../../../hooks/useInput'
-import { BASE_URL } from '../../../utils/constants/general'
-import { baseFetch } from '../../../api/baseFetch'
+import { addNewCourse, coursesActions } from '../../../store/coursesSlice'
 
 export const AddNewCourse = () => {
+   const dispatch = useDispatch()
+
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [selectedFile, setSelectedFile] = useState(null)
+   const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
+
    const { value, onChange, onClear } = useInput({
       title: '',
       description: '',
+      date: '',
    })
 
    const dateChangehandler = (newValue) => {
-      setDateValue(newValue)
+      console.log(newValue)
+      setDateValue(newValue.toLocaleDateString())
    }
 
    const openModalHandler = () => {
@@ -31,40 +37,25 @@ export const AddNewCourse = () => {
    }
 
    const onDrop = useCallback((acceptedFiles) => {
-      // setFile(URL.createObjectURL(acceptedFiles[0]))
       setSelectedFile(acceptedFiles[0])
+      setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
+   console.log(selectedFile)
+   console.log(file)
+   const addNewCourseHandler = () => {
+      // const newCourse = {
+      //    description: value.description,
+      //    course_name: value.title,
+      //    date_of_start: dateValue,
+      // }
 
-   const handleSubmission = () => {
       const formData = new FormData()
       formData.append('file', selectedFile)
-      // eslint-disable-next-line consistent-return
-      const postFile = async () => {
-         try {
-            const response = await baseFetch({
-               path: 'api/file',
-               method: 'POST',
-               body: formData,
-            })
-            return response
-         } catch (error) {
-            console.log(error)
-         }
-      }
-      postFile()
-      // fetch(`${BASE_URL}/api/file`, {
-      //    method: 'POST',
-      //    body: formData,
-      // })
-      //    .then((response) => response.json())
-      //    .then((result) => {
-      //       console.log('success', result)
-      //    })
-      //    .catch((error) => {
-      //       console.log('error', error)
-      //    })
-   }
 
+      console.log(formData)
+      dispatch(addNewCourse(formData))
+      setIsModalOpen(false)
+   }
    return (
       <>
          <StyledButton>
@@ -84,8 +75,8 @@ export const AddNewCourse = () => {
             title="Создать курс"
             handleClose={handleClose}
          >
-            <ImagePicker onDrop={onDrop} file={selectedFile} />
-            <ModalContentControl>
+            <ImagePicker onDrop={onDrop} file={file} />
+            <StyledInput>
                <div>
                   <Input
                      placeholder="Название курса"
@@ -100,16 +91,16 @@ export const AddNewCourse = () => {
                      onChange={dateChangehandler}
                   />
                </div>
-            </ModalContentControl>
-            <ModalContentControlTwo>
+            </StyledInput>
+            <StyledTextArea>
                <textarea
                   placeholder="Описание курса"
                   onChange={onChange}
                   value={value.description}
                   name="description"
                />
-            </ModalContentControlTwo>
-            <BtnStyleControl>
+            </StyledTextArea>
+            <ButtonContainer>
                <div>
                   <Button
                      background="none"
@@ -125,12 +116,12 @@ export const AddNewCourse = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={() => handleSubmission()}
+                     onClick={addNewCourseHandler}
                   >
                      Добавить
                   </Button>
                </div>
-            </BtnStyleControl>
+            </ButtonContainer>
          </BasicModal>
       </>
    )
@@ -142,7 +133,7 @@ const StyledButton = styled.div`
    justify-content: flex-end;
    height: 80px;
 `
-const ModalContentControlTwo = styled.div`
+const StyledTextArea = styled.div`
    textarea {
       max-width: 100%;
       min-width: 487px;
@@ -161,7 +152,7 @@ const ModalContentControlTwo = styled.div`
       }
    }
 `
-const BtnStyleControl = styled.div`
+const ButtonContainer = styled.div`
    width: 100%;
    display: flex;
    justify-content: flex-end;
@@ -173,7 +164,7 @@ const BtnStyleControl = styled.div`
    }
 `
 
-const ModalContentControl = styled.div`
+const StyledInput = styled.div`
    width: 338px;
    display: flex;
    justify-content: center;
