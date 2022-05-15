@@ -1,11 +1,20 @@
 import { BASE_URL } from '../utils/constants/general'
+import { store } from '../store'
 
 export const baseFetch = async (options) => {
+   const secretToken = store.getState().auth.user.token
    try {
       const { path, body, method, params } = options
       const requestOptions = {
          method: method || 'GET',
-         headers: { 'Content-Type': 'application/json' },
+         headers: secretToken
+            ? {
+                 'Content-Type': 'application/json',
+                 Authentication: `Bearer ${secretToken}`,
+              }
+            : {
+                 'Content-Type': 'application/json',
+              },
       }
       if (method !== 'GET') {
          requestOptions.body = JSON.stringify(body || {})

@@ -60,6 +60,7 @@
          { "props": true, "ignorePropertyModificationsFor": ["state"] }
       ],
       "react/destructuring-assignment": "off",
-      "no-unused-vars": "warn"
+      "no-unused-vars": "warn",
+      "import/no-cycle": "off"
    }
 }
