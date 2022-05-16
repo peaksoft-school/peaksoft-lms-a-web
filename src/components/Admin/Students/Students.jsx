@@ -8,11 +8,13 @@ import {
    addStudents,
    deleteStudents,
    editStudents,
+   getSingleStudent,
    getStudents,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
 import { AppTable } from '../../UI/table/AppTable'
 import { AddStudents } from './AddStudents'
+import { StudentsEditModal } from './StudentEditModal'
 import { StudentsModalForm } from './StudentsModalForm'
 
 const options = [
@@ -28,17 +30,25 @@ const options = [
 
 export const Students = () => {
    const dispatch = useDispatch()
-   const { studentData } = useSelector((state) => state.students)
+   const { studentData, singleStudent } = useSelector((state) => state.students)
 
    const [showAddStudentsModal, setshowAddStudentsModal] = useState(false)
+   const [showEditStudentsModal, setshowEditStudentsModal] = useState(false)
 
    const showAddStudentsModalHandler = () => {
       setshowAddStudentsModal((prevState) => !prevState)
+   }
+   const showEditStudentsModalHandler = () => {
+      setshowEditStudentsModal((prevState) => !prevState)
    }
 
    const addStudentsHandler = (value) => {
       showAddStudentsModalHandler()
       dispatch(addStudents(value))
+   }
+
+   const sendEditedStudentInfo = () => {
+      dispatch(editStudents(singleStudent.id))
    }
 
    const deleteStudentHandler = (id) => {
@@ -47,7 +57,7 @@ export const Students = () => {
    }
    const editStudentsInfoHandler = (id) => {
       const student = studentData.find((item) => item.id === id)
-      dispatch(editStudents(student.id))
+      dispatch(getSingleStudent(student.id))
    }
    useEffect(() => {
       dispatch(getStudents())
@@ -105,6 +115,11 @@ export const Students = () => {
             showAddStudentsModal={showAddStudentsModal}
             showAddStudentsModalHandler={showAddStudentsModalHandler}
             addStudentsHandler={addStudentsHandler}
+         />
+         <StudentsEditModal
+            showEditStudentsModal={showEditStudentsModal}
+            showEditStudentsModalHandler={showEditStudentsModalHandler}
+            editStudentsHandler={sendEditedStudentInfo}
          />
          <AppTable data={studentData} columns={COLUMNS} />
       </div>

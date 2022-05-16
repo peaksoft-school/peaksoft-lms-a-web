@@ -29,26 +29,28 @@ const groupOptions = [
    },
 ]
 
-export const StudentsModalForm = ({
-   showAddStudentsModal,
-   showAddStudentsModalHandler,
-   addStudentsHandler,
+export const StudentsEditModal = ({
+   showEditStudentsModal,
+   showEditStudentsModalHandler,
+   editStudentsHandler,
 }) => {
-   const { singleStudent } = useSelector((state) => state.students)
+   const { email, phoneNumber, studyFormat, groupName, fullName } = useSelector(
+      (state) => state.students.singleStudent
+   )
    const { value, onChange, onClear } = useInput({
       firstName: '',
       lastName: '',
-      phoneNumber: '',
-      email: '',
+      phoneNumber: phoneNumber || '',
+      email: email || '',
       password: '',
-      group: '',
-      studyFormat: '',
+      group: groupName || '',
+      studyFormat: studyFormat || '',
    })
 
    const [disableButton, setDisableButton] = useState(false)
 
    const addStudents = () => {
-      addStudentsHandler(value)
+      editStudentsHandler(value)
       onClear()
    }
 
@@ -70,9 +72,9 @@ export const StudentsModalForm = ({
 
    return (
       <BasicModal
-         isModalOpen={showAddStudentsModal}
+         isModalOpen={showEditStudentsModal}
          title="Добавить студента"
-         onClose={showAddStudentsModalHandler}
+         onClose={showEditStudentsModalHandler}
       >
          <StyledChildrenOfModal>
             <Input
@@ -123,7 +125,7 @@ export const StudentsModalForm = ({
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={showAddStudentsModalHandler}
+                  onClick={showEditStudentsModalHandler}
                >
                   Отмена
                </Button>
@@ -134,7 +136,7 @@ export const StudentsModalForm = ({
                   onClick={addStudents}
                   disabled={!disableButton}
                >
-                  Добавить
+                  Сохранять
                </Button>
             </StyledModalButtonContainer>
          </StyledChildrenOfModal>

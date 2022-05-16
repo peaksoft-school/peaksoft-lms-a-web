@@ -4,6 +4,7 @@ import { baseFetch } from '../api/baseFetch'
 const initState = {
    studentData: [],
    isLoading: null,
+   singleStudent: null,
 }
 
 export const addStudents = createAsyncThunk(
@@ -30,7 +31,22 @@ export const getStudents = createAsyncThunk(
             path: 'api/students',
             method: 'GET',
          })
-         dispatch(studentsActions.getData(response))
+         dispatch(studentsActions.getStudentData(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const getSingleStudent = createAsyncThunk(
+   'students/getSingleStudent',
+   async (studentId, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/students/${studentId}`,
+            method: 'GET',
+         })
+         dispatch(studentsActions.getSingleStudentData(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -77,12 +93,16 @@ const setPending = (state) => {
 const setError = (state) => {
    state.isLoading = false
 }
+
 export const studentsSlice = createSlice({
    name: 'students',
    initialState: initState,
    reducers: {
-      getData(state, action) {
+      getStudentData(state, action) {
          state.studentData = action.payload
+      },
+      getSingleStudentData(state, action) {
+         state.singleStudent = action.payload
       },
    },
    extraReducers: {
