@@ -7,7 +7,7 @@ export const InstructorRoutes = () => {
       <div>
          <Routes>
             <Route
-               path=""
+               path="/*"
                element={<Navigate to={ROUTES.INSTRUCTOR_COURSES} />}
             />
             <Route
