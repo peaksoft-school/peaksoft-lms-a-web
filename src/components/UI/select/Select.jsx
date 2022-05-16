@@ -11,18 +11,24 @@ export function Select({
    placeholder,
    onChange,
    value,
+   name,
    selectedOption,
    type,
 }) {
    return (
       <FormControlForSelect type={type}>
          <InputLabel>{placeholder}</InputLabel>
-         <MuiSelect value={value} label={placeholder} onChange={onChange}>
+         <MuiSelect
+            value={value}
+            label={placeholder}
+            onChange={onChange}
+            name={name}
+         >
             {options.map((option) => (
                <MenuItem
                   key={option.id}
                   value={option.title}
-                  onClick={() => selectedOption(option.title)}
+                  // onClick={() => selectedOption(option.title)}
                >
                   {option.title}
                </MenuItem>

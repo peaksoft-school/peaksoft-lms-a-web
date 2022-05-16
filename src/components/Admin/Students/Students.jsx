@@ -1,7 +1,10 @@
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
+import { useInput } from '../../../hooks/usuInput/useInput'
+import { addStudents, getStudents } from '../../../store/studentsSlice'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
@@ -13,11 +16,21 @@ import { AddStudents } from './AddStudents'
 const options = [
    {
       id: 'ONLINE',
-      title: 'Online',
+      title: 'ONLINE',
    },
    {
       id: 'OFFLINE',
-      title: 'Offline',
+      title: 'OFFLINE',
+   },
+]
+const groupOptions = [
+   {
+      id: 'ONLINE',
+      title: 'JS-4',
+   },
+   {
+      id: 'OFFLINE',
+      title: 'JAVA-4',
    },
 ]
 const COLUMNS = [
@@ -27,19 +40,19 @@ const COLUMNS = [
    },
    {
       title: 'Имя Фамилия',
-      accessKey: 'name',
+      accessKey: 'lastName',
    },
    {
       title: 'Группа',
-      accessKey: 'group',
+      accessKey: 'studyFormat',
    },
    {
       title: 'Формат обучения',
-      accessKey: 'formatOfEdu',
+      accessKey: 'studyFormat',
    },
    {
       title: 'Номер телефона',
-      accessKey: 'phoneNumber',
+      accessKey: 'mobilePhone',
    },
    {
       title: 'E-mail',
@@ -56,95 +69,36 @@ const COLUMNS = [
       ),
    },
 ]
-const DATA = [
-   {
-      id: 1,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-      password: '12345',
-   },
-   {
-      id: 2,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-      password: '12345',
-   },
-   {
-      id: 3,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 4,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 5,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 6,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 7,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 8,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 9,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-   {
-      id: 10,
-      name: 'Baya Asanova',
-      group: 'JS-4',
-      formatOfEdu: 'Online',
-      phoneNumber: '0700777999',
-      email: 'baya@gmail.com',
-   },
-]
+
 export const Students = () => {
+   const dispatch = useDispatch()
+   const { studentData } = useSelector((state) => state.students)
+
+   const { value, onChange, onClear } = useInput({
+      firstName: '',
+      lastName: '',
+      mobilePhone: '',
+      email: '',
+      password: '',
+      group: '',
+      studyFormat: '',
+   })
    const [showAddStudentsModal, setshowAddStudentsModal] = useState(false)
+   // const [disabledButtonWhen]
+
    const showAddStudentsModalHandler = () => {
       setshowAddStudentsModal((prevState) => !prevState)
    }
+
+   const addStudentsHandler = () => {
+      onClear()
+      showAddStudentsModalHandler()
+      dispatch(addStudents(value))
+      dispatch(getStudents())
+   }
+   useEffect(() => {
+      dispatch(getStudents())
+   }, [])
    return (
       <div>
          <StyledButtonsContainer>
@@ -163,13 +117,49 @@ export const Students = () => {
             onClose={showAddStudentsModalHandler}
          >
             <StyledChildrenOfModal>
-               <Input placeholder="Имя" />
-               <Input placeholder="Фамилия" />
-               <MaskedInput />
-               <Input placeholder="Email" />
-               <Input placeholder="Пароль" />
-               <Select options={options} placeholder="Группа" />
-               <Select options={options} placeholder="Формат обучения" />
+               <Input
+                  placeholder="Имя"
+                  name="firstName"
+                  value={value.firstName}
+                  onChange={onChange}
+               />
+               <Input
+                  placeholder="Фамилия"
+                  name="lastName"
+                  value={value.lastName}
+                  onChange={onChange}
+               />
+               <MaskedInput
+                  name="mobilePhone"
+                  value={value.mobilePhone}
+                  onChange={onChange}
+               />
+               <Input
+                  placeholder="Email"
+                  name="email"
+                  value={value.email}
+                  onChange={onChange}
+               />
+               <Input
+                  placeholder="Пароль"
+                  name="password"
+                  value={value.password}
+                  onChange={onChange}
+               />
+               <Select
+                  options={groupOptions}
+                  placeholder="Группа"
+                  name="group"
+                  value={value.group}
+                  onChange={onChange}
+               />
+               <Select
+                  options={options}
+                  placeholder="Формат обучения"
+                  name="studyFormat"
+                  value={value.studyFormat}
+                  onChange={onChange}
+               />
                <StyledModalButtonContainer>
                   <Button
                      background="none"
@@ -183,13 +173,14 @@ export const Students = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
+                     onClick={addStudentsHandler}
                   >
                      Добавить
                   </Button>
                </StyledModalButtonContainer>
             </StyledChildrenOfModal>
          </BasicModal>
-         <AppTable data={DATA} columns={COLUMNS} />
+         <AppTable data={studentData} columns={COLUMNS} />
       </div>
    )
 }

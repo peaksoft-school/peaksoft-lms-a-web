@@ -2,15 +2,15 @@ import { BASE_URL } from '../utils/constants/general'
 import { store } from '../store'
 
 export const baseFetch = async (options) => {
-   const secretToken = store.getState().auth.user.token
+   const { token } = store.getState().auth.user
    try {
       const { path, body, method, params } = options
       const requestOptions = {
          method: method || 'GET',
-         headers: secretToken
+         headers: token
             ? {
                  'Content-Type': 'application/json',
-                 Authentication: `Bearer ${secretToken}`,
+                 Authorization: `Bearer ${token}`,
               }
             : {
                  'Content-Type': 'application/json',
