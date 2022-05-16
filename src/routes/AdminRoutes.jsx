@@ -55,6 +55,7 @@ export const AdminRoutes = () => {
                   <GroupsPanel
                      options={options}
                      openDeleteConfirmModal={openDeleteConfirmModal}
+                     setOpenDeleteConfirmModal={setOpenDeleteConfirmModal}
                   />
                }
             />

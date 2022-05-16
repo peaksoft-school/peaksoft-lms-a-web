@@ -1,50 +1,46 @@
-import React from 'react'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContentText from '@mui/material/DialogContentText'
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Modal from '@mui/material/Modal'
 import styled from '@emotion/styled'
 
-export const ConfirmModal = (props) => {
+export default function ConfirmModal(props) {
    return (
-      <DialogWrapper open={props.isConfirmModalOpen}>
-         <DialogStyle>{props.title}</DialogStyle>
-         <ButtonStyle>
-            <button type="button" onClick={props.onModalClose}>
-               {props.cancelDeleteButton}
-            </button>
-            <button type="button" onClick={props.onConfirmDelete}>
-               {props.confirmDeleteButton}
-            </button>
-         </ButtonStyle>
-      </DialogWrapper>
+      <Modal open={props.isConfirmModalOpen} onClose={props.closeConfirmModal}>
+         <Box sx={style}>
+            <TitleStyle id="modal-modal-title" variant="h6" component="h2">
+               {props.title}
+            </TitleStyle>
+            <ButtonStyle id="modal-modal-description">
+               {props.children}
+            </ButtonStyle>
+         </Box>
+      </Modal>
    )
 }
+const style = {
+   position: 'absolute',
+   top: '50%',
+   left: '50%',
+   transform: 'translate(-50%, -50%)',
+   width: '315px',
+   height: '145px',
+   bgcolor: 'background.paper',
+   boxShadow: 24,
+   p: 4,
+   borderRadius: '10px',
+   outline: 'none',
+}
 
-const DialogWrapper = styled(Dialog)`
-   .MuiDialog-paper {
-      border-radius: 10px;
-   }
-   width: 315px;
-   background: white;
-   border-radius: 10px;
-   font-family: 'Open Sans';
-   font-style: normal;
-   font-weight: 400;
-   margin: 0 auto;
-   padding: 18px;
-`
-const DialogStyle = styled(DialogContentText)`
-   border-radius: 10px;
+const TitleStyle = styled(Typography)`
    color: #1f1c1c;
-   font-size: 16px;
+   font-size: 17px;
    line-height: 22px;
    text-align: center;
-   margin: 20px;
 `
-const ButtonStyle = styled(DialogActions)`
-   border-radius: 10px;
+const ButtonStyle = styled(Typography)`
    display: flex;
    align-items: center;
-   justify-content: center;
-   margin-bottom: 10px;
+   justify-content: space-between;
+   margin: 10px;
 `

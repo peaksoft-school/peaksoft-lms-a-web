@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { Card } from '../UI/Card'
 import { Button } from '../UI/Button'
 import { BasicModal } from '../UI/BasicModal'
-import { ConfirmModal } from '../UI/ConfirmModal'
+import ConfirmModal from '../UI/ConfirmModal'
 import { ImagePicker } from '../UI/ImagePicker'
 import { Input } from '../UI/Input'
 import DatepickerUi from '../UI/DatePickerUi'
@@ -11,7 +11,8 @@ import DatepickerUi from '../UI/DatePickerUi'
 export const GroupsPanel = (props) => {
    const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false)
    const [dateValue, setDateValue] = useState(null)
-
+   // const [isCreateModalFilled, setisCreateModalFilled] = useState(false)
+   const [file, setFile] = useState(null)
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
    }
@@ -19,6 +20,11 @@ export const GroupsPanel = (props) => {
    const createGroupModalHandler = () => {
       setOpenCreateGroupModal(true)
    }
+
+   const onDrop = useCallback((acceptedFiles) => {
+      setFile(URL.createObjectURL(acceptedFiles[0]))
+   }, [])
+
    return (
       <div>
          <Button
@@ -35,7 +41,7 @@ export const GroupsPanel = (props) => {
                isModalOpen={openCreateGroupModal}
                title="Создать группу"
             >
-               <ImagePicker />
+               <ImagePicker onDrop={onDrop} file={file} />
                <ModalContentControl>
                   <div>
                      <Input placeholder="Название курса" />
@@ -56,6 +62,8 @@ export const GroupsPanel = (props) => {
                         background="none"
                         border="1px solid #3772FF"
                         color="#3772FF"
+                        bgHover="rgba(29, 96, 255, 0.1)"
+                        bgActive="rgba(97, 144, 255, 0.3)"
                         onClick={() => setOpenCreateGroupModal(false)}
                      >
                         Отмена
@@ -66,6 +74,7 @@ export const GroupsPanel = (props) => {
                         background="#3772FF"
                         bgHover="#1D60FF"
                         bgActive="#6190FF"
+                        disabled="rgba(28, 27, 31, 0.12)"
                      >
                         Добавить
                      </Button>
@@ -79,7 +88,25 @@ export const GroupsPanel = (props) => {
                <ConfirmModal
                   title="Вы уверены, что хотите удалить группу ... ?"
                   isConfirmModalOpen={props.openDeleteConfirmModal}
-               />
+               >
+                  <Button
+                     onClick={() => props.setOpenDeleteConfirmModal(false)}
+                     background="none"
+                     border="1px solid #3772FF"
+                     color="#3772FF"
+                     bgHover="rgba(29, 96, 255, 0.1)"
+                     bgActive="rgba(97, 144, 255, 0.3)"
+                  >
+                     Отмена
+                  </Button>
+                  <Button
+                     background="#C91E1E"
+                     bgHover="#B62727"
+                     bgActive="#E13A3A"
+                  >
+                     Удалить
+                  </Button>
+               </ConfirmModal>
             )}
          </CardContentStyleControl>
       </div>
