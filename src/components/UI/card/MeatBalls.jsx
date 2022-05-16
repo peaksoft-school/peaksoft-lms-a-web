@@ -15,9 +15,8 @@ export const MeatBalls = (props) => {
    const handleClose = () => {
       setAnchorEl(null)
    }
-
    const clickHandler = (action) => {
-      action()
+      action(props.course)
       setAnchorEl(null)
    }
    return (

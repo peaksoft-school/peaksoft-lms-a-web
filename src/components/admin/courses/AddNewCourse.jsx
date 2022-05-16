@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { Button } from '../../UI/button/Button'
@@ -7,7 +7,12 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { addNewCourse, coursesActions } from '../../../store/coursesSlice'
+import {
+   addNewCourse,
+   coursesActions,
+   getAllCourses,
+} from '../../../store/coursesSlice'
+import { fileFetch } from '../../../api/fileFetch'
 
 export const AddNewCourse = () => {
    const dispatch = useDispatch()
@@ -16,6 +21,7 @@ export const AddNewCourse = () => {
    const [selectedFile, setSelectedFile] = useState(null)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
+   const [imageUrl, setImageUrl] = useState(null)
 
    const { value, onChange, onClear } = useInput({
       title: '',
@@ -39,14 +45,27 @@ export const AddNewCourse = () => {
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
 
-   const addNewCourseHandler = () => {
+   useEffect(() => {
+      dispatch(getAllCourses())
+   }, [])
+
+   const addNewCourseHandler = async () => {
+      const formData = new FormData()
+      formData.append('file', selectedFile)
+      const response = await fileFetch({
+         path: 'api/file',
+         method: 'POST',
+         body: formData,
+      })
+      setImageUrl(response.url.toString())
       const newCourse = {
+         courseName: value.title,
+         dateOfStart: dateValue,
          description: value.description,
-         course_name: value.title,
-         date_of_start: dateValue,
+         image: imageUrl,
       }
       setIsModalOpen(false)
-      dispatch(addNewCourse(selectedFile, newCourse))
+      dispatch(addNewCourse(newCourse))
       onClear()
    }
 

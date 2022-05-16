@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Card } from '../../UI/card/Card'
 import { ReactComponent as PinIcon } from '../../../assets/icons/pinnedIcon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
@@ -10,12 +10,16 @@ import ConfirmModal from '../../UI/modal/ConfirmModal'
 import { AppointTeacher } from './AppointTeacher'
 import { EditCourse } from './EditCourse'
 import { AddNewCourse } from './AddNewCourse'
+import { deleteCourse, getAllCourses } from '../../../store/coursesSlice'
 
 export const CourseCards = () => {
+   const dispatch = useDispatch()
    const courses = useSelector((state) => state.courses.course)
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+   const [cards, setCard] = useState(null)
+   const [cardss, setCasrd] = useState({})
 
    const options = [
       {
@@ -30,7 +34,7 @@ export const CourseCards = () => {
       },
       {
          id: '2',
-         action: () => setIsEditModalOpen(true),
+         action: (course) => opens(course),
          content: (
             <StyledIcon>
                <EditIcon />
@@ -40,7 +44,7 @@ export const CourseCards = () => {
       },
       {
          id: '3',
-         action: () => setIsConfirmModalOpen(true),
+         action: (course) => open(course),
          content: (
             <StyledIcon>
                <TrashIcon />
@@ -49,13 +53,25 @@ export const CourseCards = () => {
          ),
       },
    ]
+   const open = (course) => {
+      setIsConfirmModalOpen(true)
+      setCard(course)
+   }
+   const opens = (course) => {
+      setIsEditModalOpen(true)
+      setCasrd(course)
+   }
 
    const closeModalHandler = () => {
       setIsModalOpen(false)
       setIsConfirmModalOpen(false)
       setIsEditModalOpen(false)
    }
-
+   const deletehandler = () => {
+      dispatch(deleteCourse(cards.id))
+      closeModalHandler()
+   }
+   console.log(cards)
    return (
       <div>
          <AddNewCourse />
@@ -65,9 +81,10 @@ export const CourseCards = () => {
                   <Card
                      options={options}
                      image={card.image}
-                     title={card.course_name}
+                     title={card.courseName}
                      description={card.description}
-                     date={card.date_of_start}
+                     date={card.dateOfStart}
+                     course={card}
                   />
                </StyledCard>
             ))}
@@ -79,6 +96,7 @@ export const CourseCards = () => {
          <EditCourse
             isEditModalOpen={isEditModalOpen}
             closeEditModalHandler={closeModalHandler}
+            course={cardss}
          />
          <ConfirmModal
             isConfirmModalOpen={isConfirmModalOpen}
@@ -98,6 +116,7 @@ export const CourseCards = () => {
                   background="#C91E1E"
                   bgHover="#B62727"
                   bgActive="#E13A3A"
+                  onClick={deletehandler}
                >
                   Удалить
                </Button>
@@ -114,7 +133,7 @@ const Container = styled.div`
    display: flex;
    cursor: pointer;
    flex-wrap: wrap;
-   gap: 40px;
+   gap: 15px;
 `
 const StyledIcon = styled.div`
    display: flex;

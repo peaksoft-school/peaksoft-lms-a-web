@@ -9,15 +9,59 @@ const initState = {
 
 export const addNewCourse = createAsyncThunk(
    'courses/addNewCourse',
-   async (file, { rejectWithValue }) => {
-      const formData = new FormData()
-      formData.append('file', file)
+   async (newCourse, { rejectWithValue, dispatch }) => {
       try {
-         const response = await fileFetch({
-            path: 'api/file',
+         const response = await baseFetch({
+            path: 'api/courses',
             method: 'POST',
-            body: formData,
+            body: newCourse,
          })
+         dispatch(getAllCourses())
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const getAllCourses = createAsyncThunk(
+   'courses/getAllCourse',
+   async (_, { rejectWithValue }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/courses',
+            method: 'GET',
+         })
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
+export const deleteCourse = createAsyncThunk(
+   'courses/deleteCourse',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/courses/${id}`,
+            method: 'DELETE',
+         })
+         dispatch(getAllCourses())
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const editCourse = createAsyncThunk(
+   'courses/editCourse',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/courses/${id}`,
+            method: 'PUT',
+         })
+         dispatch(getAllCourses())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -28,11 +72,7 @@ export const addNewCourse = createAsyncThunk(
 export const coursesSlice = createSlice({
    name: 'courses',
    initialState: initState,
-   reducers: {
-      addNewCourse(state, action) {
-         state.course.push(action.payload)
-      },
-   },
+   reducers: {},
    extraReducers: {
       [addNewCourse.pending]: (state) => {
          state.isLoading = true
@@ -41,6 +81,16 @@ export const coursesSlice = createSlice({
          state.isLoading = false
       },
       [addNewCourse.rejected]: (state) => {
+         state.isLoading = false
+      },
+      [getAllCourses.pending]: (state) => {
+         state.isLoading = true
+      },
+      [getAllCourses.fulfilled]: (state, action) => {
+         state.course = action.payload
+         state.isLoading = false
+      },
+      [getAllCourses.rejected]: (state) => {
          state.isLoading = false
       },
    },

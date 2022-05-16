@@ -1,12 +1,18 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { BasicModal } from '../../UI/modal/BasicModal'
 
-export const EditCourse = (props) => {
+export const EditCourse = ({
+   course,
+   isEditModalOpen,
+   closeEditModalHandler,
+}) => {
+   const courses = useSelector((state) => state.courses.course)
    const [dateValue, setDateValue] = useState(null)
    const [file, setFile] = useState(null)
    const dateChangehandler = (newValue) => {
@@ -15,28 +21,33 @@ export const EditCourse = (props) => {
    const onDrop = useCallback((acceptedFiles) => {
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
-
    return (
       <div>
          <BasicModal
-            isModalOpen={props.isEditModalOpen}
+            isModalOpen={isEditModalOpen}
             title="Создать курс"
-            handleClose={props.closeEditModalHandler}
+            handleClose={closeEditModalHandler}
          >
-            <ImagePicker onDrop={onDrop} file={file} />
+            <ImagePicker onDrop={onDrop} file={course.image} />
             <ModalContentControl>
                <div>
-                  <Input placeholder="Название курса" />
+                  <Input
+                     placeholder="Название курса"
+                     value={course.courseName}
+                  />
                </div>
                <div>
                   <Datepicker
-                     dateValue={dateValue}
+                     dateValue={course.dateOfStart}
                      onChange={dateChangehandler}
                   />
                </div>
             </ModalContentControl>
             <ModalContentControlTwo>
-               <textarea placeholder="Описание курса" />
+               <textarea
+                  placeholder="Описание курса"
+                  value={course.description}
+               />
             </ModalContentControlTwo>
             <BtnStyleControl>
                <div>
@@ -44,7 +55,7 @@ export const EditCourse = (props) => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={() => props.closeEditModalHandler()}
+                     onClick={() => closeEditModalHandler()}
                   >
                      Отмена
                   </Button>
