@@ -6,7 +6,7 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
-import useInput from '../../../hooks/useInput'
+import { useInput } from '../../../hooks/usuInput/useInput'
 import { addNewCourse, coursesActions } from '../../../store/coursesSlice'
 
 export const AddNewCourse = () => {
@@ -20,12 +20,10 @@ export const AddNewCourse = () => {
    const { value, onChange, onClear } = useInput({
       title: '',
       description: '',
-      date: '',
    })
 
    const dateChangehandler = (newValue) => {
-      console.log(newValue)
-      setDateValue(newValue.toLocaleDateString())
+      setDateValue(newValue)
    }
 
    const openModalHandler = () => {
@@ -40,22 +38,18 @@ export const AddNewCourse = () => {
       setSelectedFile(acceptedFiles[0])
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
-   console.log(selectedFile)
-   console.log(file)
+
    const addNewCourseHandler = () => {
-      // const newCourse = {
-      //    description: value.description,
-      //    course_name: value.title,
-      //    date_of_start: dateValue,
-      // }
-
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-
-      console.log(formData)
-      dispatch(addNewCourse(formData))
+      const newCourse = {
+         description: value.description,
+         course_name: value.title,
+         date_of_start: dateValue,
+      }
       setIsModalOpen(false)
+      dispatch(addNewCourse(selectedFile, newCourse))
+      onClear()
    }
+
    return (
       <>
          <StyledButton>

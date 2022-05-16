@@ -9,6 +9,7 @@ import { Button } from '../../UI/button/Button'
 import ConfirmModal from '../../UI/modal/ConfirmModal'
 import { AppointTeacher } from './AppointTeacher'
 import { EditCourse } from './EditCourse'
+import { AddNewCourse } from './AddNewCourse'
 
 export const CourseCards = () => {
    const courses = useSelector((state) => state.courses.course)
@@ -51,16 +52,13 @@ export const CourseCards = () => {
 
    const closeModalHandler = () => {
       setIsModalOpen(false)
-   }
-   const closeConfirmModalHandler = () => {
       setIsConfirmModalOpen(false)
-   }
-   const closeEditModalHandler = () => {
       setIsEditModalOpen(false)
    }
 
    return (
       <div>
+         <AddNewCourse />
          <Container>
             {courses.map((card) => (
                <StyledCard key={card.id}>
@@ -80,11 +78,11 @@ export const CourseCards = () => {
          />
          <EditCourse
             isEditModalOpen={isEditModalOpen}
-            closeEditModalHandler={closeEditModalHandler}
+            closeEditModalHandler={closeModalHandler}
          />
          <ConfirmModal
             isConfirmModalOpen={isConfirmModalOpen}
-            closeConfirmModal={closeConfirmModalHandler}
+            closeConfirmModal={closeModalHandler}
             title="Вы уверены, что хотите удалить группу ... ?"
          >
             <StyledButton>
@@ -92,7 +90,7 @@ export const CourseCards = () => {
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={() => closeConfirmModalHandler()}
+                  onClick={closeModalHandler}
                >
                   Отмена
                </Button>

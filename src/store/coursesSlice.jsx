@@ -1,26 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
 
 const initState = {
    course: [],
    isLoading: null,
 }
+
 export const addNewCourse = createAsyncThunk(
    'courses/addNewCourse',
-   async (formData, { rejectWithValue }) => {
-      console.log(formData)
+   async (file, { rejectWithValue }) => {
+      const formData = new FormData()
+      formData.append('file', file)
       try {
          const response = await fileFetch({
             path: 'api/file',
             method: 'POST',
-            body: {
-               file: formData,
-            },
+            body: formData,
          })
-
          return response
       } catch (error) {
-         console.log(error)
          return rejectWithValue(error.message)
       }
    }

@@ -15,6 +15,7 @@ export const EditCourse = (props) => {
    const onDrop = useCallback((acceptedFiles) => {
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
+
    return (
       <div>
          <BasicModal

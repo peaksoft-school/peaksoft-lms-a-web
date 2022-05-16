@@ -6,9 +6,11 @@ import { MultiSelect } from '../../UI/select/MultiSelect'
 
 export const AppointTeacher = (props) => {
    const [selectedOptions, setSelectedOptions] = useState([])
+
    const newMultiSelect = (selected) => {
       console.log(selected)
    }
+
    return (
       <div>
          <BasicModal

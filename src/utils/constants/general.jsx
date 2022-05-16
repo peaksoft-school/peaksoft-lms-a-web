@@ -57,4 +57,5 @@ export const STUDENTTABS = [
       pathName: ROUTES.STUDENT_COURSES,
    },
 ]
+
 export const AUTH_KEY = '@peaksoft-lms-a-auth-info'

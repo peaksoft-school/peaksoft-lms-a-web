@@ -4,28 +4,17 @@ import { store } from '../store'
 export const fileFetch = async (options) => {
    const { token } = store.getState().auth.user
    try {
-      const { path, body, method, params } = options
+      const { path, body, method } = options
       const requestOptions = {
          method: method || 'GET',
-         headers: token
-            ? {
-                 Accept: 'application/json',
-                 'Content-Type': 'multipart/form-data',
-                 Authorization: `Bearer ${token}`,
-              }
-            : {
-                 'Content-Type': 'multipart/form-data',
-              },
+         headers: {
+            Authorization: `Bearer ${token}`,
+         },
       }
       if (method !== 'GET') {
          requestOptions.body = body || {}
       }
-      if (params) {
-         const queryParamsStringValue = Object.keys(params)
-            .map((paramKey) => `${paramKey}=${params[paramKey]}`)
-            .join('&')
-         const path = `${path}?${queryParamsStringValue}`
-      }
+
       const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
       const result = await response.json()
       console.log(result)
