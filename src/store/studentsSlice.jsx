@@ -8,13 +8,14 @@ const initState = {
 
 export const addStudents = createAsyncThunk(
    'students/addStudents',
-   async (studentInfo, { rejectWithValue }) => {
+   async (studentInfo, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: 'api/students',
+            path: 'api/students/withGroup',
             method: 'POST',
-            body: studentInfo,
+            body: { ...studentInfo, groupId: 1 },
          })
+         dispatch(getStudents())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -23,12 +24,43 @@ export const addStudents = createAsyncThunk(
 )
 export const getStudents = createAsyncThunk(
    'students/getStudents',
-   async (_, { rejectWithValue }) => {
+   async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: 'api/students',
             method: 'GET',
          })
+         dispatch(studentsActions.getData(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const deleteStudents = createAsyncThunk(
+   'students/deleteStudents',
+   async (studentId, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/students/${studentId}`,
+            method: 'DELETE',
+         })
+         dispatch(getStudents())
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const editStudents = createAsyncThunk(
+   'students/editStudents',
+   async (studentId, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/students/${studentId}`,
+            method: 'PUT',
+         })
+         dispatch(getStudents())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -36,31 +68,36 @@ export const getStudents = createAsyncThunk(
    }
 )
 
+const setFulfilled = (state) => {
+   state.isLoading = false
+}
+const setPending = (state) => {
+   state.isLoading = true
+}
+const setError = (state) => {
+   state.isLoading = false
+}
 export const studentsSlice = createSlice({
    name: 'students',
    initialState: initState,
-   reducers: {},
-   extraReducers: {
-      [addStudents.pending]: (state) => {
-         state.isLoading = true
-      },
-      [addStudents.fulfilled]: (state) => {
-         state.isLoading = false
-      },
-      [addStudents.rejected]: (state) => {
-         state.isLoading = false
-      },
-      [getStudents.pending]: (state) => {
-         state.isLoading = true
-      },
-      [getStudents.fulfilled]: (state, action) => {
-         console.log(action.payload)
+   reducers: {
+      getData(state, action) {
          state.studentData = action.payload
-         state.isLoading = false
       },
-      [getStudents.rejected]: (state) => {
-         state.isLoading = false
-      },
+   },
+   extraReducers: {
+      [addStudents.pending]: setPending,
+      [addStudents.fulfilled]: setFulfilled,
+      [addStudents.rejected]: setError,
+      [getStudents.pending]: setPending,
+      [getStudents.fulfilled]: setFulfilled,
+      [getStudents.rejected]: setError,
+      [deleteStudents.pending]: setPending,
+      [deleteStudents.fulfilled]: setFulfilled,
+      [deleteStudents.rejected]: setError,
+      [editStudents.pending]: setPending,
+      [editStudents.fulfilled]: setFulfilled,
+      [editStudents.rejected]: setError,
    },
 })
 
