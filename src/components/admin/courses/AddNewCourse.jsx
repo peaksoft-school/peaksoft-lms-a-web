@@ -24,7 +24,7 @@ export const AddNewCourse = () => {
    const [imageUrl, setImageUrl] = useState(null)
 
    const { value, onChange, onClear } = useInput({
-      title: '',
+      courseName: '',
       description: '',
    })
 
@@ -59,7 +59,7 @@ export const AddNewCourse = () => {
       })
       setImageUrl(response.url.toString())
       const newCourse = {
-         courseName: value.title,
+         courseName: value.courseName,
          dateOfStart: dateValue,
          description: value.description,
          image: imageUrl,
@@ -94,8 +94,8 @@ export const AddNewCourse = () => {
                   <Input
                      placeholder="Название курса"
                      onChange={onChange}
-                     value={value.title}
-                     name="title"
+                     value={value.courseName}
+                     name="courseName"
                   />
                </div>
                <div>

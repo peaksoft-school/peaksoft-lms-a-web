@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useInput } from '../../../hooks/usuInput/useInput'
+import { editCourse } from '../../../store/coursesSlice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
@@ -12,15 +14,23 @@ export const EditCourse = ({
    isEditModalOpen,
    closeEditModalHandler,
 }) => {
+   const dispatch = useDispatch()
    const courses = useSelector((state) => state.courses.course)
    const [dateValue, setDateValue] = useState(null)
    const [file, setFile] = useState(null)
+
    const dateChangehandler = (newValue) => {
-      setDateValue(newValue)
+      setDateValue(course.dateOfStart || newValue)
    }
+
+   const { value, onChange, onClear } = useInput({
+      courseName: course.courseName || '',
+      description: course.description || '',
+   })
    const onDrop = useCallback((acceptedFiles) => {
-      setFile(URL.createObjectURL(acceptedFiles[0]))
+      setFile(course.image || URL.createObjectURL(acceptedFiles[0]))
    }, [])
+   console.log(course.id)
    return (
       <div>
          <BasicModal
@@ -28,17 +38,19 @@ export const EditCourse = ({
             title="Создать курс"
             handleClose={closeEditModalHandler}
          >
-            <ImagePicker onDrop={onDrop} file={course.image} />
+            <ImagePicker onDrop={onDrop} file={course.image || file} />
             <ModalContentControl>
                <div>
                   <Input
                      placeholder="Название курса"
-                     value={course.courseName}
+                     value={value.courseName}
+                     onChange={onChange}
+                     name="courseName"
                   />
                </div>
                <div>
                   <Datepicker
-                     dateValue={course.dateOfStart}
+                     dateValue={course.dateOfStart && dateValue}
                      onChange={dateChangehandler}
                   />
                </div>
@@ -46,7 +58,9 @@ export const EditCourse = ({
             <ModalContentControlTwo>
                <textarea
                   placeholder="Описание курса"
-                  value={course.description}
+                  value={value.description}
+                  onChange={onChange}
+                  name="description"
                />
             </ModalContentControlTwo>
             <BtnStyleControl>
@@ -62,6 +76,7 @@ export const EditCourse = ({
                </div>
                <div>
                   <Button
+                     onClick={() => dispatch(editCourse(course.id))}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"

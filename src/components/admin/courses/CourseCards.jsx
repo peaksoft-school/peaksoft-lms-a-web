@@ -20,11 +20,12 @@ export const CourseCards = () => {
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
    const [cards, setCard] = useState(null)
    const [cardss, setCasrd] = useState({})
+   const [cardsss, setCasrds] = useState({})
 
    const options = [
       {
          id: '1',
-         action: () => setIsModalOpen(true),
+         action: (course) => opens(course),
          content: (
             <StyledIcon>
                <PinIcon />
@@ -34,7 +35,7 @@ export const CourseCards = () => {
       },
       {
          id: '2',
-         action: (course) => opens(course),
+         action: (course) => edit(course),
          content: (
             <StyledIcon>
                <EditIcon />
@@ -58,8 +59,12 @@ export const CourseCards = () => {
       setCard(course)
    }
    const opens = (course) => {
-      setIsEditModalOpen(true)
+      setIsModalOpen(true)
       setCasrd(course)
+   }
+   const edit = (course) => {
+      setIsEditModalOpen(true)
+      setCasrds(course)
    }
 
    const closeModalHandler = () => {
@@ -71,7 +76,6 @@ export const CourseCards = () => {
       dispatch(deleteCourse(cards.id))
       closeModalHandler()
    }
-   console.log(cards)
    return (
       <div>
          <AddNewCourse />
@@ -96,7 +100,7 @@ export const CourseCards = () => {
          <EditCourse
             isEditModalOpen={isEditModalOpen}
             closeEditModalHandler={closeModalHandler}
-            course={cardss}
+            course={cardsss}
          />
          <ConfirmModal
             isConfirmModalOpen={isConfirmModalOpen}
