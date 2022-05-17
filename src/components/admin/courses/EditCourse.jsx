@@ -2,7 +2,11 @@ import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { editCourse } from '../../../store/coursesSlice'
+import {
+   editCourse,
+   postFileToBase,
+   updateFile,
+} from '../../../store/coursesSlice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
@@ -14,23 +18,41 @@ export const EditCourse = ({
    isEditModalOpen,
    closeEditModalHandler,
 }) => {
+   const { courseName, dateOfStart, description, image } = useSelector(
+      (state) => state.courses.course
+   )
    const dispatch = useDispatch()
-   const courses = useSelector((state) => state.courses.course)
    const [dateValue, setDateValue] = useState(null)
    const [file, setFile] = useState(null)
+   const [selectedFile, setSelectedFile] = useState(null)
 
    const dateChangehandler = (newValue) => {
-      setDateValue(course.dateOfStart || newValue)
+      setDateValue(dateOfStart || newValue)
+   }
+   console.log(courseName)
+   const { value, onChange, onClear } = useInput({
+      courseName: courseName || '',
+      description: description || '',
+   })
+
+   const onDrop = useCallback((acceptedFiles) => {
+      setSelectedFile(acceptedFiles[0])
+      setFile(image || URL.createObjectURL(acceptedFiles[0]))
+   }, [])
+
+   console.log(course.courseName)
+   console.log(value)
+
+   const editCourseHandler = () => {
+      const courses = {
+         courseName: value.courseName,
+         dateOfStart: dateValue,
+         description: value.description,
+         id: course.id,
+      }
+      dispatch(updateFile({ file: selectedFile, courseData: courses }))
    }
 
-   const { value, onChange, onClear } = useInput({
-      courseName: course.courseName || '',
-      description: course.description || '',
-   })
-   const onDrop = useCallback((acceptedFiles) => {
-      setFile(course.image || URL.createObjectURL(acceptedFiles[0]))
-   }, [])
-   console.log(course.id)
    return (
       <div>
          <BasicModal
@@ -38,7 +60,7 @@ export const EditCourse = ({
             title="Создать курс"
             handleClose={closeEditModalHandler}
          >
-            <ImagePicker onDrop={onDrop} file={course.image || file} />
+            <ImagePicker onDrop={onDrop} file={file} />
             <ModalContentControl>
                <div>
                   <Input
@@ -50,7 +72,7 @@ export const EditCourse = ({
                </div>
                <div>
                   <Datepicker
-                     dateValue={course.dateOfStart && dateValue}
+                     dateValue={dateValue}
                      onChange={dateChangehandler}
                   />
                </div>
@@ -76,7 +98,7 @@ export const EditCourse = ({
                </div>
                <div>
                   <Button
-                     onClick={() => dispatch(editCourse(course.id))}
+                     onClick={editCourseHandler}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"

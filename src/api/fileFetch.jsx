@@ -17,7 +17,6 @@ export const fileFetch = async (options) => {
 
       const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
       const result = await response.json()
-      console.log(result)
       if (!response.ok) {
          let errorMessage = 'Some thing went wrong'
          if (result && result.message) {

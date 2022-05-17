@@ -1,6 +1,8 @@
+/* eslint-disable no-useless-computed-key */
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { Card } from '../../UI/card/Card'
 import { ReactComponent as PinIcon } from '../../../assets/icons/pinnedIcon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
@@ -10,22 +12,30 @@ import ConfirmModal from '../../UI/modal/ConfirmModal'
 import { AppointTeacher } from './AppointTeacher'
 import { EditCourse } from './EditCourse'
 import { AddNewCourse } from './AddNewCourse'
-import { deleteCourse, getAllCourses } from '../../../store/coursesSlice'
+import { deleteCourse, getSingleCourse } from '../../../store/coursesSlice'
 
 export const CourseCards = () => {
    const dispatch = useDispatch()
-   const courses = useSelector((state) => state.courses.course)
+
+   const { courses, course } = useSelector((state) => state.courses)
+
+   const [courseId, setCourseId] = useState({})
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-   const [cards, setCard] = useState(null)
-   const [cardss, setCasrd] = useState({})
-   const [cardsss, setCasrds] = useState({})
+
+   const [searchParamsForCreate, setSearchParamsForCreateStudents] =
+      useSearchParams()
+   const [searchParamsForEditStudents, setSearchParamsForEditStudents] =
+      useSearchParams()
+
+   const showAddStudentsModal = searchParamsForCreate.get('add_course')
+   const showEditStudentsModal = searchParamsForEditStudents.get('edit_course')
 
    const options = [
       {
          id: '1',
-         action: (course) => opens(course),
+         action: (course) => appointATeacher(course),
          content: (
             <StyledIcon>
                <PinIcon />
@@ -35,7 +45,7 @@ export const CourseCards = () => {
       },
       {
          id: '2',
-         action: (course) => edit(course),
+         action: (course) => editATeacher(course),
          content: (
             <StyledIcon>
                <EditIcon />
@@ -45,7 +55,7 @@ export const CourseCards = () => {
       },
       {
          id: '3',
-         action: (course) => open(course),
+         action: (course) => getCourseId(course),
          content: (
             <StyledIcon>
                <TrashIcon />
@@ -54,17 +64,25 @@ export const CourseCards = () => {
          ),
       },
    ]
-   const open = (course) => {
+
+   const getCourseId = (course) => {
       setIsConfirmModalOpen(true)
-      setCard(course)
+      dispatch(getSingleCourse(course.id))
+      setCourseId(course.id)
    }
-   const opens = (course) => {
+
+   const appointATeacher = (course) => {
       setIsModalOpen(true)
-      setCasrd(course)
+      dispatch(getSingleCourse(course.id))
    }
-   const edit = (course) => {
+
+   const editATeacher = (course) => {
       setIsEditModalOpen(true)
-      setCasrds(course)
+      dispatch(getSingleCourse(course.id))
+      setSearchParamsForEditStudents({
+         ['add_course']: true,
+         courseId: course.id,
+      })
    }
 
    const closeModalHandler = () => {
@@ -72,10 +90,12 @@ export const CourseCards = () => {
       setIsConfirmModalOpen(false)
       setIsEditModalOpen(false)
    }
-   const deletehandler = () => {
-      dispatch(deleteCourse(cards.id))
+
+   const deleteCourseHandler = () => {
+      dispatch(deleteCourse(courseId))
       closeModalHandler()
    }
+
    return (
       <div>
          <AddNewCourse />
@@ -96,12 +116,13 @@ export const CourseCards = () => {
          <AppointTeacher
             isModalOpen={isModalOpen}
             closeHandler={closeModalHandler}
+            // teacher={appointTeacher}
          />
-         <EditCourse
+         {/* <EditCourse
             isEditModalOpen={isEditModalOpen}
             closeEditModalHandler={closeModalHandler}
-            course={cardsss}
-         />
+            // course={editCourse}
+         /> */}
          <ConfirmModal
             isConfirmModalOpen={isConfirmModalOpen}
             closeConfirmModal={closeModalHandler}
@@ -120,7 +141,7 @@ export const CourseCards = () => {
                   background="#C91E1E"
                   bgHover="#B62727"
                   bgActive="#E13A3A"
-                  onClick={deletehandler}
+                  onClick={deleteCourseHandler}
                >
                   Удалить
                </Button>

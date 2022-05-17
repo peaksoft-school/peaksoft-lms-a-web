@@ -7,12 +7,7 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import {
-   addNewCourse,
-   coursesActions,
-   getAllCourses,
-} from '../../../store/coursesSlice'
-import { fileFetch } from '../../../api/fileFetch'
+import { getAllCourses, postFileToBase } from '../../../store/coursesSlice'
 
 export const AddNewCourse = () => {
    const dispatch = useDispatch()
@@ -21,14 +16,17 @@ export const AddNewCourse = () => {
    const [selectedFile, setSelectedFile] = useState(null)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
-   const [imageUrl, setImageUrl] = useState(null)
 
    const { value, onChange, onClear } = useInput({
       courseName: '',
       description: '',
    })
 
-   const dateChangehandler = (newValue) => {
+   useEffect(() => {
+      dispatch(getAllCourses())
+   }, [])
+
+   const dateChangeHandler = (newValue) => {
       setDateValue(newValue)
    }
 
@@ -36,7 +34,7 @@ export const AddNewCourse = () => {
       setIsModalOpen(true)
    }
 
-   const handleClose = () => {
+   const closeModalHandler = () => {
       setIsModalOpen(false)
    }
 
@@ -44,29 +42,18 @@ export const AddNewCourse = () => {
       setSelectedFile(acceptedFiles[0])
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
-
-   useEffect(() => {
-      dispatch(getAllCourses())
-   }, [])
-
+   console.log(dateValue)
    const addNewCourseHandler = async () => {
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-      const response = await fileFetch({
-         path: 'api/file',
-         method: 'POST',
-         body: formData,
-      })
-      setImageUrl(response.url.toString())
       const newCourse = {
          courseName: value.courseName,
          dateOfStart: dateValue,
          description: value.description,
-         image: imageUrl,
       }
       setIsModalOpen(false)
-      dispatch(addNewCourse(newCourse))
+      dispatch(postFileToBase({ file: selectedFile, courseData: newCourse }))
       onClear()
+      setDateValue(null)
+      setFile(null)
    }
 
    return (
@@ -86,7 +73,7 @@ export const AddNewCourse = () => {
          <BasicModal
             isModalOpen={isModalOpen}
             title="Создать курс"
-            handleClose={handleClose}
+            handleClose={closeModalHandler}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <StyledInput>
@@ -101,7 +88,7 @@ export const AddNewCourse = () => {
                <div>
                   <Datepicker
                      dateValue={dateValue}
-                     onChange={dateChangehandler}
+                     onChange={dateChangeHandler}
                   />
                </div>
             </StyledInput>
@@ -119,7 +106,7 @@ export const AddNewCourse = () => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={() => handleClose()}
+                     onClick={closeModalHandler}
                   >
                      Отмена
                   </Button>
