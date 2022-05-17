@@ -58,3 +58,6 @@ export const STUDENTTABS = [
    },
 ]
 export const AUTH_KEY = '@peaksoft-lms-a-auth-info'
+
+export const CREATE_STUDENT = 'createStudent'
+export const EDIT_STUDENT = 'editStudent'

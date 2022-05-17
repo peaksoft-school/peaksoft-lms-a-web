@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import styled from '@emotion/styled'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
@@ -16,6 +17,7 @@ import { AppTable } from '../../UI/table/AppTable'
 import { AddStudents } from './AddStudents'
 import { StudentsEditModal } from './StudentEditModal'
 import { StudentsModalForm } from './StudentsModalForm'
+import { CREATE_STUDENT, EDIT_STUDENT } from '../../../utils/constants/general'
 
 const options = [
    {
@@ -31,36 +33,55 @@ const options = [
 export const Students = () => {
    const dispatch = useDispatch()
    const { studentData, singleStudent } = useSelector((state) => state.students)
+   const [searchParamsForCreate, setSearchParamsForCreateStudents] =
+      useSearchParams()
+   const [searchParamsForEditStudents, setSearchParamsForEditStudents] =
+      useSearchParams()
 
-   const [showAddStudentsModal, setshowAddStudentsModal] = useState(false)
-   const [showEditStudentsModal, setshowEditStudentsModal] = useState(false)
+   const showAddStudentsModal = searchParamsForCreate.get(CREATE_STUDENT)
+   const showEditStudentsModal = searchParamsForEditStudents.get(EDIT_STUDENT)
 
-   const showAddStudentsModalHandler = () => {
-      setshowAddStudentsModal((prevState) => !prevState)
+   const closeCreateStudentModal = () => {
+      setSearchParamsForCreateStudents('')
    }
-   const showEditStudentsModalHandler = () => {
-      setshowEditStudentsModal((prevState) => !prevState)
+
+   const closeEditStudentsModal = () => {
+      setSearchParamsForEditStudents('')
+   }
+
+   const openStudentsModal = () => {
+      setSearchParamsForCreateStudents({ [CREATE_STUDENT]: true })
    }
 
    const addStudentsHandler = (value) => {
-      showAddStudentsModalHandler()
       dispatch(addStudents(value))
    }
 
-   const sendEditedStudentInfo = () => {
-      dispatch(editStudents(singleStudent.id))
+   const sendEditedStudentInfo = (singleStudentsData) => {
+      const student = {
+         id: singleStudent.id,
+         data: singleStudentsData,
+      }
+      dispatch(editStudents(student))
    }
 
    const deleteStudentHandler = (id) => {
-      const student = studentData.find((item) => item.id === id)
-      dispatch(deleteStudents(student.id))
+      dispatch(deleteStudents(id))
    }
+
    const editStudentsInfoHandler = (id) => {
-      const student = studentData.find((item) => item.id === id)
-      dispatch(getSingleStudent(student.id))
+      dispatch(getSingleStudent(id))
+      setSearchParamsForEditStudents({ [EDIT_STUDENT]: true, studentId: id })
    }
    useEffect(() => {
       dispatch(getStudents())
+   }, [])
+
+   useEffect(() => {
+      const studentId = searchParamsForEditStudents.get('studentId')
+      if (studentId) {
+         dispatch(getSingleStudent(studentId))
+      }
    }, [])
 
    const COLUMNS = [
@@ -93,7 +114,13 @@ export const Students = () => {
          accessKey: 'actions',
          action: (item) => (
             <StyledActions>
-               <EditIcon onClick={() => editStudentsInfoHandler(item.id)} />
+               <EditIcon
+                  onClick={() => {
+                     if (item) {
+                        editStudentsInfoHandler(item.id)
+                     }
+                  }}
+               />
                <RemoveIcon onClick={() => deleteStudentHandler(item.id)} />
             </StyledActions>
          ),
@@ -109,18 +136,21 @@ export const Students = () => {
                   type="second"
                />
             </StyledFormatOfEdu>
-            <AddStudents onOpenStudentsModal={showAddStudentsModalHandler} />
+            <AddStudents onOpenStudentsModal={openStudentsModal} />
          </StyledButtonsContainer>
          <StudentsModalForm
             showAddStudentsModal={showAddStudentsModal}
-            showAddStudentsModalHandler={showAddStudentsModalHandler}
+            showAddStudentsModalHandler={closeCreateStudentModal}
             addStudentsHandler={addStudentsHandler}
          />
-         <StudentsEditModal
-            showEditStudentsModal={showEditStudentsModal}
-            showEditStudentsModalHandler={showEditStudentsModalHandler}
-            editStudentsHandler={sendEditedStudentInfo}
-         />
+         {singleStudent && (
+            <StudentsEditModal
+               showEditStudentsModal={showEditStudentsModal}
+               closeEditStudentsModal={closeEditStudentsModal}
+               editStudentsHandler={sendEditedStudentInfo}
+               singleStudent={singleStudent}
+            />
+         )}
          <AppTable data={studentData} columns={COLUMNS} />
       </div>
    )

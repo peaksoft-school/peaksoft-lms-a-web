@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useInput } from '../../../hooks/usuInput/useInput'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
@@ -31,29 +30,28 @@ const groupOptions = [
 
 export const StudentsEditModal = ({
    showEditStudentsModal,
-   showEditStudentsModalHandler,
+   closeEditStudentsModal,
    editStudentsHandler,
+   singleStudent,
 }) => {
-   const { email, phoneNumber, studyFormat, groupName, fullName } = useSelector(
-      (state) => state.students.singleStudent
-   )
+   const { email, phoneNumber, studyFormat, groupName, fullName } =
+      singleStudent
+   const [firstName, lastName] = fullName.split(' ')
    const { value, onChange, onClear } = useInput({
-      firstName: '',
-      lastName: '',
+      firstName: firstName || '',
+      lastName: lastName || '',
       phoneNumber: phoneNumber || '',
       email: email || '',
       password: '',
       group: groupName || '',
       studyFormat: studyFormat || '',
    })
-
    const [disableButton, setDisableButton] = useState(false)
 
    const addStudents = () => {
       editStudentsHandler(value)
       onClear()
    }
-
    useEffect(() => {
       if (
          value.firstName.length > 0 &&
@@ -74,7 +72,7 @@ export const StudentsEditModal = ({
       <BasicModal
          isModalOpen={showEditStudentsModal}
          title="Добавить студента"
-         onClose={showEditStudentsModalHandler}
+         onClose={closeEditStudentsModal}
       >
          <StyledChildrenOfModal>
             <Input
@@ -125,7 +123,7 @@ export const StudentsEditModal = ({
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={showEditStudentsModalHandler}
+                  onClick={closeEditStudentsModal}
                >
                   Отмена
                </Button>

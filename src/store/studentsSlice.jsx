@@ -41,11 +41,13 @@ export const getStudents = createAsyncThunk(
 export const getSingleStudent = createAsyncThunk(
    'students/getSingleStudent',
    async (studentId, { rejectWithValue, dispatch }) => {
+      dispatch(studentsActions.clearSingleStudentData())
       try {
          const response = await baseFetch({
             path: `api/students/${studentId}`,
             method: 'GET',
          })
+
          dispatch(studentsActions.getSingleStudentData(response))
          return response
       } catch (error) {
@@ -70,11 +72,13 @@ export const deleteStudents = createAsyncThunk(
 )
 export const editStudents = createAsyncThunk(
    'students/editStudents',
-   async (studentId, { rejectWithValue, dispatch }) => {
+   async (studentData, { rejectWithValue, dispatch }) => {
+      const { id, data } = studentData
       try {
          const response = await baseFetch({
-            path: `api/students/${studentId}`,
+            path: `api/students/${id}`,
             method: 'PUT',
+            body: { ...data, groupId: 1 },
          })
          dispatch(getStudents())
          return response
@@ -103,6 +107,9 @@ export const studentsSlice = createSlice({
       },
       getSingleStudentData(state, action) {
          state.singleStudent = action.payload
+      },
+      clearSingleStudentData(state) {
+         state.singleStudent = null
       },
    },
    extraReducers: {

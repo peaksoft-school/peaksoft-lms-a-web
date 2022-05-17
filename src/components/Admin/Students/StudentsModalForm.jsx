@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useInput } from '../../../hooks/usuInput/useInput'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
@@ -34,7 +33,6 @@ export const StudentsModalForm = ({
    showAddStudentsModalHandler,
    addStudentsHandler,
 }) => {
-   const { singleStudent } = useSelector((state) => state.students)
    const { value, onChange, onClear } = useInput({
       firstName: '',
       lastName: '',
