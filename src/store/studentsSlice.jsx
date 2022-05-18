@@ -121,6 +121,7 @@ export const getGroups = createAsyncThunk(
       }
    }
 )
+
 const setFulfilled = (state) => {
    state.isLoading = false
 }

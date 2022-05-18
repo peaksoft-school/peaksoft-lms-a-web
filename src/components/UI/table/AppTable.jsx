@@ -51,7 +51,12 @@ export const AppTable = ({ columns, data, pagination }) => {
                </TableBody>
             </Table>
             <StyledTable>
-               {pagination && <Pagination count={pagination.count} />}
+               {pagination && (
+                  <Pagination
+                     count={pagination.count}
+                     // onChange={pagination.onChange}
+                  />
+               )}
             </StyledTable>
          </Container>
       </ThemeProvider>

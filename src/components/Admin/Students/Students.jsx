@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
@@ -29,7 +29,6 @@ import { UploadExcel } from './UploadExcelModal'
 
 export const Students = () => {
    const dispatch = useDispatch()
-   const params = useLocation()
    const { studentData, singleStudent, groups } = useSelector(
       (state) => state.students
    )
@@ -44,7 +43,7 @@ export const Students = () => {
    const showEditStudentsModal = searchParamsForEditStudents.get(EDIT_STUDENT)
    const showUploadStudentsModal =
       searchParamsForUploadStudents.get(UPLOAD_STUDENT)
-   console.log(showUploadStudentsModal)
+
    const closeCreateStudentModal = () => {
       setSearchParamsForCreateStudents('')
    }
@@ -84,7 +83,7 @@ export const Students = () => {
    const deleteStudentHandler = (id) => {
       dispatch(deleteStudents(id))
    }
-   console.log(params.search)
+
    const editStudentsInfoHandler = (id) => {
       dispatch(getSingleStudent(id))
       dispatch(getGroups())
@@ -96,12 +95,9 @@ export const Students = () => {
       dispatch(getGroups())
    }
    useEffect(() => {
+      const studentId = searchParamsForEditStudents.get('studentId')
       dispatch(getStudents())
       dispatch(getGroups())
-   }, [])
-
-   useEffect(() => {
-      const studentId = searchParamsForEditStudents.get('studentId')
       if (studentId) {
          dispatch(getSingleStudent(studentId))
          dispatch(getGroups())
