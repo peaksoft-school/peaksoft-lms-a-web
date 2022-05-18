@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { Pagination } from '../pagination/Pagination'
 
-export const AppTable = ({ columns, data }) => {
+export const AppTable = ({ columns, data, pagination }) => {
    return (
       <ThemeProvider theme={customTheme}>
          <Container component={Paper}>
@@ -50,7 +50,9 @@ export const AppTable = ({ columns, data }) => {
                   })}
                </TableBody>
             </Table>
-            <StyledTable>{data.length > 10 && <Pagination />}</StyledTable>
+            <StyledTable>
+               {pagination && <Pagination count={pagination.count} />}
+            </StyledTable>
          </Container>
       </ThemeProvider>
    )

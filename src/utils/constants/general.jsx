@@ -61,3 +61,15 @@ export const AUTH_KEY = '@peaksoft-lms-a-auth-info'
 
 export const CREATE_STUDENT = 'createStudent'
 export const EDIT_STUDENT = 'editStudent'
+export const UPLOAD_STUDENT = 'uploadStudent'
+
+export const STUDY_FORMAT_OPTION = [
+   {
+      id: 'ONLINE',
+      title: 'ONLINE',
+   },
+   {
+      id: 'OFFLINE',
+      title: 'OFFLINE',
+   },
+]

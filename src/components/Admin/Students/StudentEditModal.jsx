@@ -1,38 +1,19 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useInput } from '../../../hooks/usuInput/useInput'
+import { STUDY_FORMAT_OPTION } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { Select } from '../../UI/select/Select'
 
-const options = [
-   {
-      id: 'ONLINE',
-      title: 'ONLINE',
-   },
-   {
-      id: 'OFFLINE',
-      title: 'OFFLINE',
-   },
-]
-const groupOptions = [
-   {
-      id: 'ONLINE',
-      title: 'JS-4',
-   },
-   {
-      id: 'OFFLINE',
-      title: 'JAVA-4',
-   },
-]
-
 export const StudentsEditModal = ({
    showEditStudentsModal,
    closeEditStudentsModal,
    editStudentsHandler,
    singleStudent,
+   groupOptions,
 }) => {
    const { email, phoneNumber, studyFormat, groupName, fullName } =
       singleStudent
@@ -43,23 +24,29 @@ export const StudentsEditModal = ({
       phoneNumber: phoneNumber || '',
       email: email || '',
       password: '',
-      group: groupName || '',
+      groupName: groupName || '',
       studyFormat: studyFormat || '',
    })
    const [disableButton, setDisableButton] = useState(false)
+   const [selectedOption, setSelectedOption] = useState('')
 
-   const addStudents = () => {
-      editStudentsHandler(value)
+   const editStudents = () => {
+      editStudentsHandler(value, selectedOption)
+      closeEditStudentsModal()
       onClear()
    }
+
+   const seletedOptionHandler = (option) => {
+      setSelectedOption(option.id)
+   }
+
    useEffect(() => {
       if (
          value.firstName.length > 0 &&
          value.lastName.length > 0 &&
          value.phoneNumber.length > 0 &&
          value.email.length > 0 &&
-         value.password.length > 0 &&
-         value.group.length > 0 &&
+         value.groupName.length > 0 &&
          value.studyFormat.length > 0
       ) {
          setDisableButton(true)
@@ -71,7 +58,7 @@ export const StudentsEditModal = ({
    return (
       <BasicModal
          isModalOpen={showEditStudentsModal}
-         title="Добавить студента"
+         title="Редактировать студента"
          onClose={closeEditStudentsModal}
       >
          <StyledChildrenOfModal>
@@ -105,14 +92,15 @@ export const StudentsEditModal = ({
                onChange={onChange}
             />
             <Select
-               options={groupOptions}
+               options={groupOptions[0]}
                placeholder="Группа"
-               name="group"
-               value={value.group}
+               name="groupName"
+               selectedOption={seletedOptionHandler}
+               value={value.groupName}
                onChange={onChange}
             />
             <Select
-               options={options}
+               options={STUDY_FORMAT_OPTION}
                placeholder="Формат обучения"
                name="studyFormat"
                value={value.studyFormat}
@@ -131,7 +119,7 @@ export const StudentsEditModal = ({
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
-                  onClick={addStudents}
+                  onClick={editStudents}
                   disabled={!disableButton}
                >
                   Сохранять

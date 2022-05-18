@@ -1,37 +1,18 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useInput } from '../../../hooks/usuInput/useInput'
+import { STUDY_FORMAT_OPTION } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { Select } from '../../UI/select/Select'
 
-const options = [
-   {
-      id: 'ONLINE',
-      title: 'ONLINE',
-   },
-   {
-      id: 'OFFLINE',
-      title: 'OFFLINE',
-   },
-]
-const groupOptions = [
-   {
-      id: 'ONLINE',
-      title: 'JS-4',
-   },
-   {
-      id: 'OFFLINE',
-      title: 'JAVA-4',
-   },
-]
-
 export const StudentsModalForm = ({
    showAddStudentsModal,
    showAddStudentsModalHandler,
    addStudentsHandler,
+   groupOptions,
 }) => {
    const { value, onChange, onClear } = useInput({
       firstName: '',
@@ -44,12 +25,19 @@ export const StudentsModalForm = ({
    })
 
    const [disableButton, setDisableButton] = useState(false)
+   const [selectedOption, setSelectedOption] = useState('')
 
    const addStudents = () => {
-      addStudentsHandler(value)
+      addStudentsHandler(value, selectedOption)
       onClear()
    }
 
+   const seletedOptionHandler = (option) => {
+      setSelectedOption(option.id)
+   }
+   const seletedOption = (option) => {
+      console.log(option)
+   }
    useEffect(() => {
       if (
          value.firstName.length > 0 &&
@@ -103,17 +91,19 @@ export const StudentsModalForm = ({
                onChange={onChange}
             />
             <Select
-               options={groupOptions}
+               options={groupOptions[0]}
                placeholder="Группа"
                name="group"
                value={value.group}
+               selectedOption={seletedOptionHandler}
                onChange={onChange}
             />
             <Select
-               options={options}
+               options={STUDY_FORMAT_OPTION}
                placeholder="Формат обучения"
                name="studyFormat"
                value={value.studyFormat}
+               selectedOption={seletedOption}
                onChange={onChange}
             />
             <StyledModalButtonContainer>

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
@@ -9,78 +9,102 @@ import {
    addStudents,
    deleteStudents,
    editStudents,
+   getGroups,
    getSingleStudent,
    getStudents,
+   sendStudentsAsExcel,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
 import { AppTable } from '../../UI/table/AppTable'
 import { AddStudents } from './AddStudents'
 import { StudentsEditModal } from './StudentEditModal'
 import { StudentsModalForm } from './StudentsModalForm'
-import { CREATE_STUDENT, EDIT_STUDENT } from '../../../utils/constants/general'
-
-const options = [
-   {
-      id: 'ONLINE',
-      title: 'ONLINE',
-   },
-   {
-      id: 'OFFLINE',
-      title: 'OFFLINE',
-   },
-]
+import {
+   CREATE_STUDENT,
+   EDIT_STUDENT,
+   STUDY_FORMAT_OPTION,
+   UPLOAD_STUDENT,
+} from '../../../utils/constants/general'
+import { UploadExcel } from './UploadExcelModal'
 
 export const Students = () => {
    const dispatch = useDispatch()
-   const { studentData, singleStudent } = useSelector((state) => state.students)
+   const params = useLocation()
+   const { studentData, singleStudent, groups } = useSelector(
+      (state) => state.students
+   )
    const [searchParamsForCreate, setSearchParamsForCreateStudents] =
       useSearchParams()
    const [searchParamsForEditStudents, setSearchParamsForEditStudents] =
       useSearchParams()
+   const [searchParamsForUploadStudents, setSearchParamsForUploadStudents] =
+      useSearchParams()
 
    const showAddStudentsModal = searchParamsForCreate.get(CREATE_STUDENT)
    const showEditStudentsModal = searchParamsForEditStudents.get(EDIT_STUDENT)
-
+   const showUploadStudentsModal =
+      searchParamsForUploadStudents.get(UPLOAD_STUDENT)
+   console.log(showUploadStudentsModal)
    const closeCreateStudentModal = () => {
       setSearchParamsForCreateStudents('')
    }
 
    const closeEditStudentsModal = () => {
+      setSearchParamsForUploadStudents('')
+   }
+
+   const closeUploadStudentsModal = () => {
       setSearchParamsForEditStudents('')
    }
 
    const openStudentsModal = () => {
       setSearchParamsForCreateStudents({ [CREATE_STUDENT]: true })
+      dispatch(getGroups())
    }
 
-   const addStudentsHandler = (value) => {
-      dispatch(addStudents(value))
+   const openUploadStudentsModal = () => {
+      setSearchParamsForUploadStudents({ [UPLOAD_STUDENT]: true })
    }
 
-   const sendEditedStudentInfo = (singleStudentsData) => {
-      const student = {
-         id: singleStudent.id,
-         data: singleStudentsData,
-      }
-      dispatch(editStudents(student))
+   const addStudentsHandler = (value, groupId) => {
+      dispatch(addStudents({ value, id: groupId }))
+      closeEditStudentsModal()
+   }
+
+   const sendEditedStudentInfo = (singleStudentsData, groupId) => {
+      dispatch(
+         editStudents({
+            id: singleStudent.id,
+            data: singleStudentsData,
+            groupid: groupId,
+         })
+      )
    }
 
    const deleteStudentHandler = (id) => {
       dispatch(deleteStudents(id))
    }
-
+   console.log(params.search)
    const editStudentsInfoHandler = (id) => {
       dispatch(getSingleStudent(id))
+      dispatch(getGroups())
       setSearchParamsForEditStudents({ [EDIT_STUDENT]: true, studentId: id })
+   }
+
+   const uploadStudentsAsExcelFileHandler = (groupId, excelFile) => {
+      dispatch(sendStudentsAsExcel({ file: excelFile, id: groupId }))
+      dispatch(getGroups())
    }
    useEffect(() => {
       dispatch(getStudents())
+      dispatch(getGroups())
    }, [])
 
    useEffect(() => {
       const studentId = searchParamsForEditStudents.get('studentId')
       if (studentId) {
          dispatch(getSingleStudent(studentId))
+         dispatch(getGroups())
       }
    }, [])
 
@@ -126,22 +150,34 @@ export const Students = () => {
          ),
       },
    ]
+   const groupOptions = [
+      groups.map((el) => {
+         return {
+            id: el.id,
+            title: el.groupName,
+         }
+      }),
+   ]
    return (
       <div>
          <StyledButtonsContainer>
             <StyledFormatOfEdu>
                <Select
-                  options={options}
+                  options={STUDY_FORMAT_OPTION}
                   placeholder="Формат обучения"
                   type="second"
                />
             </StyledFormatOfEdu>
-            <AddStudents onOpenStudentsModal={openStudentsModal} />
+            <AddStudents
+               onOpenStudentsModal={openStudentsModal}
+               onOpenUploadStudentsModal={openUploadStudentsModal}
+            />
          </StyledButtonsContainer>
          <StudentsModalForm
             showAddStudentsModal={showAddStudentsModal}
             showAddStudentsModalHandler={closeCreateStudentModal}
             addStudentsHandler={addStudentsHandler}
+            groupOptions={groupOptions}
          />
          {singleStudent && (
             <StudentsEditModal
@@ -149,9 +185,20 @@ export const Students = () => {
                closeEditStudentsModal={closeEditStudentsModal}
                editStudentsHandler={sendEditedStudentInfo}
                singleStudent={singleStudent}
+               groupOptions={groupOptions}
             />
          )}
-         <AppTable data={studentData} columns={COLUMNS} />
+         <UploadExcel
+            uploadStudentsHandler={uploadStudentsAsExcelFileHandler}
+            colseUplaodStudentsModal={closeUploadStudentsModal}
+            openUplaodModal={showUploadStudentsModal}
+            groupOptions={groupOptions}
+         />
+         <AppTable
+            data={studentData}
+            columns={COLUMNS}
+            pagination={{ count: 3 }}
+         />
       </div>
    )
 }

@@ -28,7 +28,7 @@ export function Select({
                <MenuItem
                   key={option.id}
                   value={option.title}
-                  // onClick={() => selectedOption(option.title)}
+                  onClick={() => selectedOption(option)}
                >
                   {option.title}
                </MenuItem>

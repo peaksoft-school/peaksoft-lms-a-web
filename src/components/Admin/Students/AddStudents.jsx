@@ -3,10 +3,18 @@ import { Button } from '../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../assets/icons/AddIcon.svg'
 import { ReactComponent as Vector } from '../../../assets/icons/Vector.svg'
 
-export const AddStudents = ({ onOpenStudentsModal }) => {
+export const AddStudents = ({
+   onOpenStudentsModal,
+   onOpenUploadStudentsModal,
+}) => {
    return (
       <StyledButtons>
-         <Button background="none" border="1px solid #3772FF" color="#3772FF">
+         <Button
+            background="none"
+            border="1px solid #3772FF"
+            onClick={onOpenUploadStudentsModal}
+            color="#3772FF"
+         >
             <StyledIconVector /> Импорт Excel
          </Button>
          <Button
@@ -26,7 +34,7 @@ const StyledButtons = styled.div`
    justify-content: space-between;
 `
 const StyledAddIcon = styled(AddIcon)`
-   margin-right: 12px;
+   margin-right: 5px;
 `
 const StyledIconVector = styled(Vector)`
    margin-right: 10px;
