@@ -1,16 +1,39 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { appointTeacherToCourse } from '../../../store/coursesSlice'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { MultiSelect } from '../../UI/select/MultiSelect'
 
 export const AppointTeacher = (props) => {
+   const dispatch = useDispatch()
    const [selectedOptions, setSelectedOptions] = useState([])
+   const [listOfTeacher, setListOfTeacher] = useState([])
+   const [selectedTeacher, setSelectedTeacher] = useState('')
 
    const newMultiSelect = (selected) => {
-      console.log(selected)
+      setListOfTeacher((prev) => [...prev, selected.id])
+      setSelectedTeacher(selected.name)
    }
-
+   const options = [
+      props.teachers.map((teacher) => {
+         return {
+            id: teacher.id,
+            name: teacher.fullName,
+         }
+      }),
+   ]
+   console.log(props.id)
+   const appointTeacher = () => {
+      dispatch(
+         appointTeacherToCourse({
+            courseId: props.id,
+            instructorId: listOfTeacher,
+         })
+      )
+   }
+   console.log(listOfTeacher)
    return (
       <div>
          <BasicModal
@@ -19,7 +42,8 @@ export const AppointTeacher = (props) => {
             handleClose={props.closeHandler}
          >
             <MultiSelect
-               options={multiOptions}
+               title={selectedTeacher}
+               options={options[0]}
                onSelected={newMultiSelect}
                selectedOptions={selectedOptions}
                setSelectedOptions={setSelectedOptions}
@@ -40,6 +64,7 @@ export const AppointTeacher = (props) => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
+                     onClick={appointTeacher}
                   >
                      Добавить
                   </Button>
@@ -49,13 +74,6 @@ export const AppointTeacher = (props) => {
       </div>
    )
 }
-
-const multiOptions = [
-   { id: '1', name: 'Mavliuda' },
-   { id: '2', name: 'Baiyrta' },
-   { id: '3', name: 'Aigerim' },
-   { id: '4', name: 'Baiaaly' },
-]
 
 const BtnStyleControl = styled.div`
    width: 100%;
@@ -68,3 +86,4 @@ const BtnStyleControl = styled.div`
       margin-left: 10px;
    }
 `
+const option = [{ id: '1', name: 'Baya' }]

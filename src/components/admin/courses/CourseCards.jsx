@@ -1,5 +1,4 @@
-/* eslint-disable no-useless-computed-key */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
@@ -12,30 +11,47 @@ import ConfirmModal from '../../UI/modal/ConfirmModal'
 import { AppointTeacher } from './AppointTeacher'
 import { EditCourse } from './EditCourse'
 import { AddNewCourse } from './AddNewCourse'
-import { deleteCourse, getSingleCourse } from '../../../store/coursesSlice'
+import {
+   deleteCourse,
+   getAllCourses,
+   getSingleCourse,
+   getTeachers,
+   pagination,
+} from '../../../store/coursesSlice'
+import {
+   ADD_COURSE,
+   APPOINT_TEACHER,
+   DELETE_COURSE,
+   EDIT_COURSE,
+} from '../../../utils/constants/general'
 
 export const CourseCards = () => {
    const dispatch = useDispatch()
+   const { allCourses, singleCourse, teachers } = useSelector(
+      (state) => state.courses
+   )
 
-   const { courses, course } = useSelector((state) => state.courses)
+   const [courseId, setCourseId] = useState()
 
-   const [courseId, setCourseId] = useState({})
-   const [isModalOpen, setIsModalOpen] = useState(false)
-   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
-   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-
-   const [searchParamsForCreate, setSearchParamsForCreateStudents] =
+   const [searchParamsForAddCourse, setSearchParamsForAddCourse] =
       useSearchParams()
-   const [searchParamsForEditStudents, setSearchParamsForEditStudents] =
+   const [searchParamsForEditCourse, setSearchParamsForEditStudents] =
+      useSearchParams()
+   const [searchParamsForAppointTeacher, setSearchParamsForAppointTeacher] =
+      useSearchParams()
+   const [searchParamsForDeleteCourse, setSearchParamsForDeleteCourse] =
       useSearchParams()
 
-   const showAddStudentsModal = searchParamsForCreate.get('add_course')
-   const showEditStudentsModal = searchParamsForEditStudents.get('edit_course')
+   const showAddCourseModal = searchParamsForAddCourse.get(ADD_COURSE)
+   const showEditCourseModal = searchParamsForEditCourse.get(EDIT_COURSE)
+   const showAppointTeacherModal =
+      searchParamsForAppointTeacher.get(APPOINT_TEACHER)
+   const showConfirmModal = searchParamsForDeleteCourse.get(DELETE_COURSE)
 
    const options = [
       {
          id: '1',
-         action: (course) => appointATeacher(course),
+         action: (course) => appointTeacher(course.id),
          content: (
             <StyledIcon>
                <PinIcon />
@@ -45,7 +61,7 @@ export const CourseCards = () => {
       },
       {
          id: '2',
-         action: (course) => editATeacher(course),
+         action: (course) => editTeacher(course.id),
          content: (
             <StyledIcon>
                <EditIcon />
@@ -64,43 +80,75 @@ export const CourseCards = () => {
          ),
       },
    ]
+   useEffect(() => {
+      dispatch(getAllCourses())
+   }, [])
+
+   useEffect(() => {
+      const courseId = searchParamsForEditCourse.get('courseId')
+      if (courseId) {
+         dispatch(getSingleCourse(courseId))
+      }
+   }, [])
+
+   useEffect(() => {
+      const teacherId = searchParamsForAppointTeacher.get('teacherId')
+      if (teacherId) {
+         dispatch(getTeachers())
+      }
+   }, [])
+   useEffect(() => {
+      dispatch(pagination())
+   }, [])
 
    const getCourseId = (course) => {
-      setIsConfirmModalOpen(true)
-      dispatch(getSingleCourse(course.id))
+      setSearchParamsForDeleteCourse({ [DELETE_COURSE]: true })
       setCourseId(course.id)
    }
 
-   const appointATeacher = (course) => {
-      setIsModalOpen(true)
-      dispatch(getSingleCourse(course.id))
+   const appointTeacher = (id) => {
+      setSearchParamsForAppointTeacher({
+         [APPOINT_TEACHER]: true,
+         teacherId: id,
+      })
+      setCourseId(id)
+      dispatch(getTeachers())
    }
 
-   const editATeacher = (course) => {
-      setIsEditModalOpen(true)
-      dispatch(getSingleCourse(course.id))
+   const addCourse = () => {
+      setSearchParamsForAddCourse({ [ADD_COURSE]: true })
+   }
+
+   const editTeacher = (id) => {
+      dispatch(getSingleCourse(id))
       setSearchParamsForEditStudents({
-         ['add_course']: true,
-         courseId: course.id,
+         [EDIT_COURSE]: true,
+         courseId: id,
       })
    }
 
    const closeModalHandler = () => {
-      setIsModalOpen(false)
-      setIsConfirmModalOpen(false)
-      setIsEditModalOpen(false)
+      setSearchParamsForAddCourse(false)
+      setSearchParamsForEditStudents(false)
+      setSearchParamsForAppointTeacher(false)
+      setSearchParamsForDeleteCourse(false)
    }
 
    const deleteCourseHandler = () => {
       dispatch(deleteCourse(courseId))
       closeModalHandler()
    }
+   console.log(teachers)
 
    return (
       <div>
-         <AddNewCourse />
+         <AddNewCourse
+            isModalOpen={showAddCourseModal}
+            closeModalHandler={closeModalHandler}
+            addCourse={addCourse}
+         />
          <Container>
-            {courses.map((card) => (
+            {allCourses.map((card) => (
                <StyledCard key={card.id}>
                   <Card
                      options={options}
@@ -113,18 +161,25 @@ export const CourseCards = () => {
                </StyledCard>
             ))}
          </Container>
-         <AppointTeacher
-            isModalOpen={isModalOpen}
-            closeHandler={closeModalHandler}
-            // teacher={appointTeacher}
-         />
-         {/* <EditCourse
-            isEditModalOpen={isEditModalOpen}
-            closeEditModalHandler={closeModalHandler}
-            // course={editCourse}
-         /> */}
+         {teachers && (
+            <AppointTeacher
+               isModalOpen={Boolean(showAppointTeacherModal)}
+               closeHandler={closeModalHandler}
+               teachers={teachers}
+               id={courseId}
+            />
+         )}
+
+         {singleCourse && (
+            <EditCourse
+               isEditModalOpen={Boolean(showEditCourseModal)}
+               closeEditModalHandler={closeModalHandler}
+               singleCourse={singleCourse}
+            />
+         )}
+
          <ConfirmModal
-            isConfirmModalOpen={isConfirmModalOpen}
+            isConfirmModalOpen={Boolean(showConfirmModal)}
             closeConfirmModal={closeModalHandler}
             title="Вы уверены, что хотите удалить группу ... ?"
          >

@@ -1,12 +1,8 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import {
-   editCourse,
-   postFileToBase,
-   updateFile,
-} from '../../../store/coursesSlice'
+import { updateFile } from '../../../store/coursesSlice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
@@ -14,22 +10,22 @@ import { Input } from '../../UI/input/Input'
 import { BasicModal } from '../../UI/modal/BasicModal'
 
 export const EditCourse = ({
-   course,
+   singleCourse,
    isEditModalOpen,
    closeEditModalHandler,
 }) => {
-   const { courseName, dateOfStart, description, image } = useSelector(
-      (state) => state.courses.course
-   )
+   const { courseName, dateOfStart, description, image } = singleCourse
+   console.log(singleCourse)
+
    const dispatch = useDispatch()
    const [dateValue, setDateValue] = useState(null)
    const [file, setFile] = useState(null)
    const [selectedFile, setSelectedFile] = useState(null)
 
    const dateChangehandler = (newValue) => {
-      setDateValue(dateOfStart || newValue)
+      setDateValue(newValue)
    }
-   console.log(courseName)
+
    const { value, onChange, onClear } = useInput({
       courseName: courseName || '',
       description: description || '',
@@ -40,17 +36,15 @@ export const EditCourse = ({
       setFile(image || URL.createObjectURL(acceptedFiles[0]))
    }, [])
 
-   console.log(course.courseName)
-   console.log(value)
-
    const editCourseHandler = () => {
       const courses = {
          courseName: value.courseName,
          dateOfStart: dateValue,
          description: value.description,
-         id: course.id,
+         id: singleCourse.id,
       }
       dispatch(updateFile({ file: selectedFile, courseData: courses }))
+      closeEditModalHandler()
    }
 
    return (
@@ -72,7 +66,7 @@ export const EditCourse = ({
                </div>
                <div>
                   <Datepicker
-                     dateValue={dateValue}
+                     dateValue={dateOfStart || dateValue}
                      onChange={dateChangehandler}
                   />
                </div>

@@ -1,21 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { getAllCourses, postFileToBase } from '../../../store/coursesSlice'
+import { postFile } from '../../../store/coursesSlice'
+import { Notification } from '../../UI/notification/Notification'
 
-export const AddNewCourse = () => {
+export const AddNewCourse = (props) => {
    const dispatch = useDispatch()
-
-   const [isModalOpen, setIsModalOpen] = useState(false)
+   const { isLoading } = useSelector((state) => state.courses)
    const [selectedFile, setSelectedFile] = useState(null)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
+   const [modalIsValid, setModalIsValid] = useState(false)
+   const [notification, setNotificaton] = useState(null)
 
    const { value, onChange, onClear } = useInput({
       courseName: '',
@@ -23,37 +25,36 @@ export const AddNewCourse = () => {
    })
 
    useEffect(() => {
-      dispatch(getAllCourses())
-   }, [])
+      setModalIsValid(
+         value.courseName.length > 0 &&
+            value.description.length > 0 &&
+            file.length !== null &&
+            dateValue.length !== null
+      )
+   }, [value])
 
    const dateChangeHandler = (newValue) => {
       setDateValue(newValue)
-   }
-
-   const openModalHandler = () => {
-      setIsModalOpen(true)
-   }
-
-   const closeModalHandler = () => {
-      setIsModalOpen(false)
    }
 
    const onDrop = useCallback((acceptedFiles) => {
       setSelectedFile(acceptedFiles[0])
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
-   console.log(dateValue)
+
    const addNewCourseHandler = async () => {
       const newCourse = {
          courseName: value.courseName,
          dateOfStart: dateValue,
          description: value.description,
       }
-      setIsModalOpen(false)
-      dispatch(postFileToBase({ file: selectedFile, courseData: newCourse }))
+
+      dispatch(postFile({ file: selectedFile, courseData: newCourse }))
       onClear()
       setDateValue(null)
       setFile(null)
+      props.closeModalHandler()
+      setNotificaton(true)
    }
 
    return (
@@ -61,7 +62,7 @@ export const AddNewCourse = () => {
          <StyledButton>
             <span>
                <Button
-                  onClick={openModalHandler}
+                  onClick={props.addCourse}
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
@@ -71,9 +72,9 @@ export const AddNewCourse = () => {
             </span>
          </StyledButton>
          <BasicModal
-            isModalOpen={isModalOpen}
+            isModalOpen={!!props.isModalOpen}
             title="Создать курс"
-            handleClose={closeModalHandler}
+            handleClose={props.closeModalHandler}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <StyledInput>
@@ -106,13 +107,14 @@ export const AddNewCourse = () => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={closeModalHandler}
+                     onClick={props.closeModalHandler}
                   >
                      Отмена
                   </Button>
                </div>
                <div>
                   <Button
+                     disabled={!modalIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
@@ -123,6 +125,7 @@ export const AddNewCourse = () => {
                </div>
             </ButtonContainer>
          </BasicModal>
+         {notification && <Notification message="course created" />}
       </>
    )
 }
