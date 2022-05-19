@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { forwardRef } from 'react'
 
-export const Input = (props) => {
-   return <InputWrapper {...props} />
-}
+export const Input = forwardRef((props, ref) => {
+   return <InputWrapper {...props} ref={ref} />
+})
 
 const InputWrapper = styled.input`
    display: flex;

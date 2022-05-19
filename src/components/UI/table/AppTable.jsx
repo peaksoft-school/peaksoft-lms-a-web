@@ -22,7 +22,7 @@ export const AppTable = ({ columns, data }) => {
                      {columns.map((col) => {
                         return (
                            <TableContainer key={col.accessKey}>
-                              {col.title}
+                              <StyledItemLabel>{col.title}</StyledItemLabel>
                            </TableContainer>
                         )
                      })}
@@ -38,7 +38,9 @@ export const AppTable = ({ columns, data }) => {
                               }
                               return (
                                  <StyledTable key={col.accessKey}>
-                                    {item[col.accessKey]}
+                                    <StyledItemLabel>
+                                       {item[col.accessKey]}
+                                    </StyledItemLabel>
                                  </StyledTable>
                               )
                            })}
@@ -101,3 +103,9 @@ const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
       background: theme.palette.hover,
    },
 }))
+
+const StyledItemLabel = styled.span`
+   display: flex;
+   justify-content: center;
+   align-items: center;
+`

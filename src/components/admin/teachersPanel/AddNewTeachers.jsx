@@ -1,68 +1,80 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../hooks/useInput/useInput'
+import { addTeachers } from '../../../store/teachers-slice'
+import { ADD_TEACHERS } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
+import { Notification } from '../../UI/notification/Notification'
 
-export const TeachersHeader = ({
-   setIsOpenModal,
-   isModalOpen,
-   handleClose,
-   setStudentsData,
+export const AddNewTeachers = ({
+   setSuccessNotification,
+   successNotification,
 }) => {
+   const dispatch = useDispatch()
    const [registerIsValid, setRegisterIsValid] = useState(false)
+   const [addSearchParams, setAddSearchParams] = useSearchParams()
+   const addTeachersModal = addSearchParams.get(ADD_TEACHERS)
 
    const { value, onChange, onClear } = useInput({
       firstName: '',
       lastName: '',
-      number: '',
       email: '',
+      phoneNumber: '',
       password: '',
       specialization: '',
-      id: Math.random().toString(),
    })
+
+   const addTeachersHandler = () => {
+      setAddSearchParams({ [ADD_TEACHERS]: true })
+   }
+
+   const handleClose = () => {
+      setAddSearchParams()
+   }
+
+   const onSubmit = () => {
+      setSuccessNotification(true)
+      dispatch(addTeachers(value))
+      onClear()
+      setAddSearchParams()
+   }
+
    useEffect(() => {
       setRegisterIsValid(
-         value.firstName.trim().length > 0 &&
-            value.lastName.trim().length > 0 &&
-            value.number.trim().length > 0 &&
-            value.email.trim().length > 0 &&
-            value.password.trim().length > 0 &&
-            value.specialization.trim().length > 0
+         value.firstName.length > 0 &&
+            value.lastName.length > 0 &&
+            value.phoneNumber.length > 0 &&
+            value.email.length > 0 &&
+            value.password.length > 0 &&
+            value.specialization.length > 0
       )
-   }, [value])
-   const onSubmit = (e) => {
-      e.preventDefault()
-      setStudentsData((prevData) => [
-         ...prevData,
-         {
-            id: value.id,
-            name: `${value.firstName} ${value.lastName}`,
-            specialization: value.specialization,
-            mobile_phone: value.number,
-            email: value.email,
-            password: value.password,
-         },
-      ])
-      onClear()
-      setIsOpenModal(false)
-   }
+      setTimeout(() => {
+         setSuccessNotification(false)
+      }, 1400)
+   }, [value, successNotification])
+
    return (
       <>
+         {successNotification && (
+            <Notification message="Учителя успешно созданы" />
+         )}
          <StyledButton>
             <Button
                background="#3772FF"
                bgHover="#1D60FF"
                bgActive="#6190FF"
-               onClick={() => setIsOpenModal(true)}
+               onClick={addTeachersHandler}
             >
                + Добавить учителя
             </Button>
          </StyledButton>
          <BasicModal
-            isModalOpen={isModalOpen}
+            isModalOpen={Boolean(addTeachersModal)}
             onClose={handleClose}
             title="Добавить учителя"
          >
@@ -81,8 +93,8 @@ export const TeachersHeader = ({
                onChange={onChange}
             />
             <StyledMaskedInput
-               name="number"
-               value={value.number}
+               name="phoneNumber"
+               value={value.phoneNumber}
                onChange={onChange}
             />
             <StyledInput
@@ -94,7 +106,6 @@ export const TeachersHeader = ({
             />
             <StyledInput
                placeholder="Пароль"
-               type="password"
                name="password"
                value={value.password}
                onChange={onChange}
@@ -114,7 +125,7 @@ export const TeachersHeader = ({
                      bgActive="#6190FF4D"
                      border="1px solid #1D60FF"
                      color="#3772FF"
-                     onClick={() => setIsOpenModal(false)}
+                     onClick={() => setAddSearchParams()}
                   >
                      Отмена
                   </Button>
@@ -134,7 +145,7 @@ export const TeachersHeader = ({
    )
 }
 
-const StyledButton = styled(Button)`
+const StyledButton = styled.div`
    display: flex;
    justify-content: end;
    width: 100%;
@@ -156,11 +167,5 @@ const StyledModalButton = styled.div`
       width: 245px;
       display: flex;
       justify-content: space-around;
-   }
-   :disabled {
-      background-color: red;
-   }
-   :enabled {
-      background-color: violet;
    }
 `

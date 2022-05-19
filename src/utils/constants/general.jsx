@@ -3,7 +3,11 @@ import { ReactComponent as CoursesIcon } from '../../assets/icons/courses.svg'
 import { ReactComponent as TeachersIcon } from '../../assets/icons/teacher.svg'
 import { ReactComponent as StudentsIcon } from '../../assets/icons/students.svg'
 
+export const BASE_URL =
+   'http://peaksoftlmsab4-env.eba-azvcpcga.eu-west-2.elasticbeanstalk.com'
+
 export const ROUTES = {
+   LOGIN: '/login',
    ADMIN: '/admin/*',
    GROUPS: 'groups',
    TEACHERS: 'teachers',
@@ -53,3 +57,8 @@ export const STUDENTTABS = [
       pathName: ROUTES.STUDENT_COURSES,
    },
 ]
+export const AUTH_KEY = '@peaksoft-lms-a-auth-info'
+
+export const ADD_TEACHERS = 'add_tachers'
+export const DELETE_TEACHER = 'delete_teacher'
+export const EDIT_TEACHER = 'edit_tacher'

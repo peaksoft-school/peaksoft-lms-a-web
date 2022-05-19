@@ -1,18 +1,46 @@
-/* eslint-disable react/no-unstable-nested-components */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { ReactComponent as EyeIcon } from '../../../assets/icons/eyeIcon.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
 import { Button } from '../../UI/button/Button'
 import ConfirmModal from '../../UI/modal/ConfirmModal'
 import { AppTable } from '../../UI/table/AppTable'
-import { TeachersHeader } from './TeachersHeader'
+import {
+   deleteTeacher,
+   getAllTeachers,
+   getSingleTeacher,
+} from '../../../store/teachers-slice'
+import { UpdateTeacher } from './UpdateTeacher'
+import { DELETE_TEACHER, EDIT_TEACHER } from '../../../utils/constants/general'
+import { AddNewTeachers } from './AddNewTeachers'
 
 export const TeachersPanel = () => {
-   const [isModalOpen, setIsOpenModal] = useState(false)
-   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
-   const [teachersData, setTeachersData] = useState(DATA)
+   const dispatch = useDispatch()
+   const { teachersData, singleTeacher } = useSelector(
+      (state) => state.teachers
+   )
+
+   const [teacherId, setTeacherId] = useState()
+   const [successNotification, setSuccessNotification] = useState(false)
+
+   const [deleteSearchParams, setDeleteSearchParams] = useSearchParams()
+   const [editSearchParams, setEditSearchParams] = useSearchParams()
+
+   const deleteTeacherModal = deleteSearchParams.get(DELETE_TEACHER)
+   const editTeacherModal = editSearchParams.get(EDIT_TEACHER)
+
+   const deleteHandler = () => {
+      setDeleteSearchParams({ [DELETE_TEACHER]: true, teacher: teacherId })
+      setDeleteSearchParams()
+      dispatch(deleteTeacher(teacherId))
+      dispatch(getAllTeachers())
+   }
+
+   const handleClose = () => {
+      setDeleteSearchParams()
+   }
 
    const COLUMNS = [
       {
@@ -21,7 +49,7 @@ export const TeachersPanel = () => {
       },
       {
          title: 'Имя Фамилия',
-         accessKey: 'name',
+         accessKey: 'fullName',
       },
       {
          title: 'Специализация',
@@ -29,56 +57,83 @@ export const TeachersPanel = () => {
       },
       {
          title: 'Номер телефона',
-         accessKey: 'mobile_phone',
+         accessKey: 'phoneNumber',
       },
       {
          title: 'E-mail',
          accessKey: 'email',
       },
       {
-         title: 'Пароль',
-         accessKey: 'password',
-      },
-      {
          title: 'Действия',
          accessKey: '',
-         action: () => (
+         action: (teacher) => (
             <StyledActions>
-               <EyeIcon />
-               <EditIcon />
-               <RemoveIcon onClick={() => setIsConfirmModalOpen(true)} />
+               <EditIcon onClick={() => editTeacherHandler(teacher.id)} />
+               <RemoveIcon
+                  onClick={() => {
+                     deleteTeacherHandler(teacher.id)
+                  }}
+               />
             </StyledActions>
          ),
       },
    ]
-   const handleClose = () => {
-      setIsOpenModal(false)
-      setIsConfirmModalOpen(false)
+
+   const deleteTeacherHandler = (id) => {
+      setDeleteSearchParams({ [DELETE_TEACHER]: true, teacher: id })
+      setTeacherId(id)
    }
+
+   const editTeacherHandler = (id) => {
+      setEditSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
+      dispatch(getSingleTeacher(id))
+   }
+
+   useEffect(() => {
+      const teacherId = editSearchParams.get('teacherId')
+      if (teacherId) {
+         dispatch(getSingleTeacher(teacherId))
+      }
+      const id = deleteSearchParams.get('teacher')
+      if (id) {
+         dispatch(deleteTeacher())
+      }
+      dispatch(getAllTeachers())
+   }, [])
 
    return (
       <>
-         <TeachersHeader
-            setIsOpenModal={setIsOpenModal}
-            isModalOpen={isModalOpen}
-            handleClose={handleClose}
-            setStudentsData={setTeachersData}
+         <AddNewTeachers
+            setSuccessNotification={setSuccessNotification}
+            successNotification={successNotification}
          />
+         {singleTeacher && (
+            <UpdateTeacher
+               singleTeacher={singleTeacher}
+               editTeacherModal={editTeacherModal}
+               setEditSearchParams={setEditSearchParams}
+            />
+         )}
          <ConfirmModal
             title="Вы уверены, что хотите удалить учителя...?"
-            isConfirmModalOpen={isConfirmModalOpen}
-            onModalClose={() => setIsConfirmModalOpen(false)}
+            isConfirmModalOpen={Boolean(deleteTeacherModal)}
+            onModalClose={() => setDeleteSearchParams()}
             closeConfirmModal={handleClose}
          >
             <Button
                background="#3772FF"
                bgHover="#1D60FF"
                bgActive="#6190FF"
-               onClick={() => setIsConfirmModalOpen(false)}
+               onClick={() => setDeleteSearchParams()}
             >
                Отмена
             </Button>
-            <Button background="#C91E1E" bgHover="#B62727" bgActive="#E13A3A">
+            <Button
+               background="#C91E1E"
+               bgHover="#B62727"
+               bgActive="#E13A3A"
+               onClick={deleteHandler}
+            >
                Удалить
             </Button>
          </ConfirmModal>
@@ -87,22 +142,11 @@ export const TeachersPanel = () => {
    )
 }
 
-let DATA = [
-   {
-      id: 1,
-      name: 'Baya Asanova',
-      specialization: 'Front End',
-      mobile_phone: '0700777999',
-      email: 'baya@gmail.com',
-      password: '123qwe',
-   },
-]
-
 const StyledActions = styled.span`
    cursor: pointer;
    display: flex;
    border: none;
    align-items: center;
-   justify-content: space-between;
+   justify-content: space-around;
    margin: 20px;
 `

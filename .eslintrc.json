@@ -33,7 +33,8 @@
       "no-shadow": "off",
       "react-hooks/exhaustive-deps": "off",
       "react/function-component-definition": "off",
-      // "react/no-unstable-nested-components": ["off", { "allowAsProps": true }],
+      "import/no-cycle": "off",
+      "react/no-unstable-nested-components": "off",
       "max-len": [
          "error",
          {
