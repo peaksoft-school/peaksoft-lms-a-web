@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { addTeachers } from '../../../store/teachers-slice'
+import { addTeacher } from '../../../store/teachers-slice'
 import { ADD_TEACHERS } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
@@ -39,7 +39,7 @@ export const AddNewTeachers = ({
 
    const onSubmit = () => {
       setSuccessNotification(true)
-      dispatch(addTeachers(value))
+      dispatch(addTeacher(value))
       onClear()
       setAddSearchParams()
    }

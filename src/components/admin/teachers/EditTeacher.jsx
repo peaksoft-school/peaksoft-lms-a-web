@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { updateTeacher } from '../../../store/teachers-slice'
+import { editTeacher } from '../../../store/teachers-slice'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 
-export const UpdateTeacher = ({
+export const EditTeacher = ({
    setEditSearchParams,
    editTeacherModal,
    singleTeacher,
@@ -29,7 +29,7 @@ export const UpdateTeacher = ({
    })
 
    const onSubmit = () => {
-      dispatch(updateTeacher({ id, teacherInfo: value }))
+      dispatch(editTeacher({ id, teacherInfo: value }))
       setEditSearchParams()
    }
 

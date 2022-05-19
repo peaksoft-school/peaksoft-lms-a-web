@@ -7,7 +7,7 @@ const initialState = {
    singleTeacher: null,
 }
 
-export const addTeachers = createAsyncThunk(
+export const addTeacher = createAsyncThunk(
    'teachers/addTeachers',
    async (teacherInfo, { rejectWithValue, dispatch }) => {
       try {
@@ -58,13 +58,13 @@ export const deleteTeacher = createAsyncThunk(
 export const getSingleTeacher = createAsyncThunk(
    'teachers/getSingleTeachers',
    async (id, { rejectWithValue, dispatch }) => {
-      dispatch(editTeacher())
+      dispatch(clearTeacher())
       try {
          const response = await baseFetch({
             path: `api/instructors/${id}`,
             method: 'GET',
          })
-         dispatch(editTeacher(response))
+         dispatch(setSingleTeacher(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -72,7 +72,7 @@ export const getSingleTeacher = createAsyncThunk(
    }
 )
 
-export const updateTeacher = createAsyncThunk(
+export const editTeacher = createAsyncThunk(
    'teachers/updateTeacher',
    async ({ id, teacherInfo }, { rejectWithValue, dispatch }) => {
       try {
@@ -100,27 +100,31 @@ export const teachersSlice = createSlice({
    name: 'teachers',
    initialState,
    reducers: {
-      editTeacher(state, action) {
+      setSingleTeacher(state, action) {
          state.singleTeacher = action.payload
+      },
+      clearTeacher(state) {
+         state.singleTeacher = null
       },
    },
    extraReducers: {
-      [addTeachers.pending]: (state) => {
+      [addTeacher.pending]: (state) => {
          state.isLoading = true
       },
-      [addTeachers.fulfilled]: setPending,
-      [addTeachers.rejected]: setIsLoading,
+      [addTeacher.fulfilled]: setPending,
+      [addTeacher.rejected]: setIsLoading,
       [getAllTeachers.pending]: setPending,
       [getAllTeachers.fulfilled]: (state, action) => {
          state.teachersData = action.payload
          state.isLoading = false
       },
       [getAllTeachers.rejected]: setIsLoading,
-      [updateTeacher.fulfilled]: (state, action) => {
+      [editTeacher.fulfilled]: (state, action) => {
          state.singleTeacher = action.payload
       },
    },
 })
 
-export const { removeTeacher, editTeacher } = teachersSlice.actions
+export const { removeTeacher, clearTeacher, setSingleTeacher } =
+   teachersSlice.actions
 export const instructorActions = teachersSlice.actions

@@ -21,7 +21,7 @@ export const AppTable = ({ columns, data }) => {
                   <TableRowContainer>
                      {columns.map((col) => {
                         return (
-                           <TableContainer key={col.accessKey}>
+                           <TableContainer key={col.id}>
                               <StyledItemLabel>{col.title}</StyledItemLabel>
                            </TableContainer>
                         )
@@ -37,7 +37,7 @@ export const AppTable = ({ columns, data }) => {
                                  return col.action(item)
                               }
                               return (
-                                 <StyledTable key={col.accessKey}>
+                                 <StyledTable key={col.id}>
                                     <StyledItemLabel>
                                        {item[col.accessKey]}
                                     </StyledItemLabel>

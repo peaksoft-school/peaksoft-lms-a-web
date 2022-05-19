@@ -12,11 +12,11 @@ import {
    getAllTeachers,
    getSingleTeacher,
 } from '../../../store/teachers-slice'
-import { UpdateTeacher } from './UpdateTeacher'
+import { EditTeacher } from './EditTeacher'
 import { DELETE_TEACHER, EDIT_TEACHER } from '../../../utils/constants/general'
 import { AddNewTeachers } from './AddNewTeachers'
 
-export const TeachersPanel = () => {
+export const Teachers = () => {
    const dispatch = useDispatch()
    const { teachersData, singleTeacher } = useSelector(
       (state) => state.teachers
@@ -35,7 +35,6 @@ export const TeachersPanel = () => {
       setDeleteSearchParams({ [DELETE_TEACHER]: true, teacher: teacherId })
       setDeleteSearchParams()
       dispatch(deleteTeacher(teacherId))
-      dispatch(getAllTeachers())
    }
 
    const handleClose = () => {
@@ -44,30 +43,36 @@ export const TeachersPanel = () => {
 
    const COLUMNS = [
       {
+         id: 1,
          title: 'ID',
          accessKey: 'id',
       },
       {
+         id: 2,
          title: 'Имя Фамилия',
          accessKey: 'fullName',
       },
       {
+         id: 3,
          title: 'Специализация',
          accessKey: 'specialization',
       },
       {
+         id: 4,
          title: 'Номер телефона',
          accessKey: 'phoneNumber',
       },
       {
+         id: 5,
          title: 'E-mail',
          accessKey: 'email',
       },
       {
+         id: 6,
          title: 'Действия',
          accessKey: '',
          action: (teacher) => (
-            <StyledActions>
+            <StyledActions key={teacher.id}>
                <EditIcon onClick={() => editTeacherHandler(teacher.id)} />
                <RemoveIcon
                   onClick={() => {
@@ -94,10 +99,6 @@ export const TeachersPanel = () => {
       if (teacherId) {
          dispatch(getSingleTeacher(teacherId))
       }
-      const id = deleteSearchParams.get('teacher')
-      if (id) {
-         dispatch(deleteTeacher())
-      }
       dispatch(getAllTeachers())
    }, [])
 
@@ -108,7 +109,7 @@ export const TeachersPanel = () => {
             successNotification={successNotification}
          />
          {singleTeacher && (
-            <UpdateTeacher
+            <EditTeacher
                singleTeacher={singleTeacher}
                editTeacherModal={editTeacherModal}
                setEditSearchParams={setEditSearchParams}
