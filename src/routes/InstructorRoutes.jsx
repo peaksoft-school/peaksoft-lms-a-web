@@ -1,5 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { PrimerPage } from '../components/instructor/primerPage/PrimerPage'
 import { ROUTES } from '../utils/constants/general'
 
 export const InstructorRoutes = () => {
@@ -10,10 +11,7 @@ export const InstructorRoutes = () => {
                path="/*"
                element={<Navigate to={ROUTES.INSTRUCTOR_COURSES} />}
             />
-            <Route
-               path={ROUTES.INSTRUCTOR_COURSES}
-               element={<div>course</div>}
-            />
+            <Route path={ROUTES.INSTRUCTOR_COURSES} element={<PrimerPage />} />
          </Routes>
       </div>
    )
