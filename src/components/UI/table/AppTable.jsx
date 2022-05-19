@@ -22,8 +22,8 @@ export const AppTable = ({ columns, data, pagination }) => {
                   <TableRowContainer>
                      {columns.map((col) => {
                         return (
-                           <TableContainer key={col.accessKey}>
-                              <TableTitleLabel>{col.title}</TableTitleLabel>
+                           <TableContainer key={col.id}>
+                              <StyledItemLabel>{col.title}</StyledItemLabel>
                            </TableContainer>
                         )
                      })}
@@ -38,7 +38,7 @@ export const AppTable = ({ columns, data, pagination }) => {
                                  return col.action(item)
                               }
                               return (
-                                 <StyledTable key={col.accessKey}>
+                                 <StyledTable key={col.id}>
                                     <StyledItemLabel>
                                        {item[col.accessKey]}
                                     </StyledItemLabel>
@@ -51,10 +51,11 @@ export const AppTable = ({ columns, data, pagination }) => {
                </TableBody>
             </Table>
             <StyledTable>
-               {pagination && (
+               {pagination.count && (
                   <Pagination
                      count={pagination.count}
                      onChange={pagination.onChange}
+                     defaultPage={pagination.defaultPage}
                   />
                )}
             </StyledTable>
@@ -86,7 +87,7 @@ const StyledTable = styled(TableCell)`
    color: #1d293f;
    letter-spacing: 0.02em;
 `
-const StyledItemLabel = styled.label`
+const StyledItemLabel = styled.span`
    display: flex;
    justify-content: center;
    align-items: center;
@@ -99,11 +100,6 @@ const TableContainer = styled(TableCell)`
    line-height: 19px;
    color: #1d293f;
    border: none;
-`
-const TableTitleLabel = styled.label`
-   display: flex;
-   justify-content: center;
-   align-items: center;
 `
 const customTheme = createTheme({
    palette: {

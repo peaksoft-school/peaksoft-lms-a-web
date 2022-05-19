@@ -35,9 +35,7 @@ export const StudentsModalForm = ({
    const seletedOptionHandler = (option) => {
       setSelectedOption(option.id)
    }
-   const seletedOption = (option) => {
-      console.log(option)
-   }
+   const seletedOption = () => {}
    useEffect(() => {
       if (
          value.firstName.length > 0 &&
@@ -56,7 +54,7 @@ export const StudentsModalForm = ({
 
    return (
       <BasicModal
-         isModalOpen={showAddStudentsModal}
+         isModalOpen={Boolean(showAddStudentsModal)}
          title="Добавить студента"
          onClose={showAddStudentsModalHandler}
       >

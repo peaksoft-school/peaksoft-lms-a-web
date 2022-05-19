@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -13,6 +12,7 @@ import {
    getSingleStudent,
    getStudentsWithPagination,
    sendStudentsAsExcel,
+   studentsActions,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
 import { AppTable } from '../../UI/table/AppTable'
@@ -23,8 +23,11 @@ import {
    CREATE_STUDENT,
    EDIT_STUDENT,
    UPLOAD_STUDENT,
+   DELETE_STUDENT,
 } from '../../../utils/constants/general'
 import { UploadExcel } from './UploadExcelModal'
+import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
+import { Notification } from '../../UI/notification/Notification'
 
 const STUDY_FORMAT_OPTION = [
    {
@@ -43,50 +46,44 @@ const STUDY_FORMAT_OPTION = [
 
 export const Students = () => {
    const dispatch = useDispatch()
-   const { studentData, singleStudent, groups } = useSelector(
-      (state) => state.students
-   )
-   const [searchParamsForCreate, setSearchParamsForCreateStudents] =
-      useSearchParams()
-   const [searchParamsForEditStudents, setSearchParamsForEditStudents] =
-      useSearchParams()
-   const [searchParamsForUploadStudents, setSearchParamsForUploadStudents] =
-      useSearchParams()
+   const {
+      studentData,
+      singleStudent,
+      groups,
+      totalPages,
+      isSuccess,
+      presentPage,
+   } = useSelector((state) => state.students)
+
+   const [searchParams, setSearchParams] = useSearchParams()
 
    const [currentPage, setCurrentPage] = useState(1)
-   const [studyFormat, setStudyFormat] = useState('OFFLINE')
+   const [studyFormat, setStudyFormat] = useState('ALL')
+   const [deleteStudent, setDeleteStudent] = useState(null)
 
-   const showAddStudentsModal = searchParamsForCreate.get(CREATE_STUDENT)
-   const showEditStudentsModal = searchParamsForEditStudents.get(EDIT_STUDENT)
-   const showUploadStudentsModal =
-      searchParamsForUploadStudents.get(UPLOAD_STUDENT)
+   const showConfirmModal = searchParams.get(DELETE_STUDENT)
+   const showAddStudentsModal = searchParams.get(CREATE_STUDENT)
+   const showEditStudentsModal = searchParams.get(EDIT_STUDENT)
+   const showUploadStudentsModal = searchParams.get(UPLOAD_STUDENT)
 
-   const closeCreateStudentModal = () => {
-      setSearchParamsForCreateStudents('')
-   }
-
-   const closeEditStudentsModal = () => {
-      setSearchParamsForUploadStudents('')
-   }
-
-   const closeUploadStudentsModal = () => {
-      setSearchParamsForEditStudents('')
+   const closeModals = () => {
+      setSearchParams({ page: currentPage })
    }
 
    const openStudentsModal = () => {
-      setSearchParamsForCreateStudents({ [CREATE_STUDENT]: true })
+      setSearchParams({ [CREATE_STUDENT]: true })
       dispatch(getGroups())
    }
 
    const openUploadStudentsModal = () => {
-      setSearchParamsForUploadStudents({ [UPLOAD_STUDENT]: true })
+      setSearchParams({ [UPLOAD_STUDENT]: true })
    }
 
    const addStudentsHandler = (value, groupId) => {
       dispatch(
          addStudents({ value, id: groupId, page: currentPage, studyFormat })
       )
-      closeEditStudentsModal()
+      closeModals()
    }
 
    const sendEditedStudentInfo = (singleStudentsData, groupId) => {
@@ -101,14 +98,22 @@ export const Students = () => {
       )
    }
 
-   const deleteStudentHandler = (id) => {
-      dispatch(deleteStudents({ id, page: currentPage, studyFormat }))
+   const deleteHandler = (id) => {
+      setDeleteStudent(id)
+      setSearchParams({ [DELETE_STUDENT]: true })
+   }
+
+   const deleteStudentHandler = () => {
+      dispatch(
+         deleteStudents({ id: deleteStudent, page: currentPage, studyFormat })
+      )
+      closeModals()
    }
 
    const editStudentsInfoHandler = (id) => {
       dispatch(getSingleStudent(id))
       dispatch(getGroups())
-      setSearchParamsForEditStudents({ [EDIT_STUDENT]: true, studentId: id })
+      setSearchParams({ [EDIT_STUDENT]: true, studentId: id })
    }
 
    const uploadStudentsAsExcelFileHandler = (groupId, excelFile) => {
@@ -128,48 +133,81 @@ export const Students = () => {
       dispatch(getStudentsWithPagination({ page: value, studyFormat }))
    }
 
+   const changeStudyFormatHandler = (option) => {
+      setStudyFormat(option.title)
+      dispatch(
+         getStudentsWithPagination({
+            page: currentPage,
+            studyFormat: option.title,
+         })
+      )
+   }
+
    useEffect(() => {
-      const studentId = searchParamsForEditStudents.get('studentId')
-      // dispatch(getStudents())
-      // getStudentsWithPagination({ page: 1, studyFormat: 'OFFLINE' })
-      paginationHandler('', 1)
+      const studentId = searchParams.get('studentId')
+      const pageNumber = searchParams.get('page')
+
+      paginationHandler('', pageNumber || 1)
       dispatch(getGroups())
       if (studentId) {
          dispatch(getSingleStudent(studentId))
          dispatch(getGroups())
       }
+      if (showConfirmModal) {
+         closeModals()
+      }
    }, [])
+
+   useEffect(() => {
+      setTimeout(() => {
+         dispatch(studentsActions.showSuccessModal(false))
+      }, 2000)
+   }, [isSuccess])
+
+   useEffect(() => {
+      const page = searchParams.get('page')
+      if (page) {
+         setSearchParams({ page: currentPage || '1' })
+      }
+   }, [currentPage])
 
    const COLUMNS = [
       {
          title: 'ID',
          accessKey: 'id',
+         id: 1,
       },
       {
          title: 'Имя Фамилия',
          accessKey: 'fullName',
+         id: 2,
       },
       {
          title: 'Группа',
          accessKey: 'groupName',
+         id: 3,
       },
       {
          title: 'Формат обучения',
          accessKey: 'studyFormat',
+         id: 4,
       },
       {
          title: 'Номер телефона',
          accessKey: 'phoneNumber',
+         id: 5,
       },
       {
          title: 'E-mail',
          accessKey: 'email',
+         id: 6,
       },
       {
          title: 'Действия',
          accessKey: 'actions',
+         id: 7,
          action: (item) => (
-            <StyledActions>
+            <StyledActions key={item.id}>
                <EditIcon
                   onClick={() => {
                      if (item) {
@@ -177,7 +215,7 @@ export const Students = () => {
                      }
                   }}
                />
-               <RemoveIcon onClick={() => deleteStudentHandler(item.id)} />
+               <RemoveIcon onClick={() => deleteHandler(item.id)} />
             </StyledActions>
          ),
       },
@@ -191,12 +229,13 @@ export const Students = () => {
       }),
    ]
    return (
-      <div>
+      <>
          <StyledButtonsContainer>
             <StyledFormatOfEdu>
                <Select
                   options={STUDY_FORMAT_OPTION}
                   placeholder="Формат обучения"
+                  selectedOption={changeStudyFormatHandler}
                   type="second"
                />
             </StyledFormatOfEdu>
@@ -207,31 +246,41 @@ export const Students = () => {
          </StyledButtonsContainer>
          <StudentsModalForm
             showAddStudentsModal={showAddStudentsModal}
-            showAddStudentsModalHandler={closeCreateStudentModal}
+            showAddStudentsModalHandler={closeModals}
             addStudentsHandler={addStudentsHandler}
             groupOptions={groupOptions}
          />
          {singleStudent && (
             <StudentsEditModal
-               showEditStudentsModal={showEditStudentsModal}
-               closeEditStudentsModal={closeEditStudentsModal}
+               showEditStudentsModal={Boolean(showEditStudentsModal)}
+               closeEditStudentsModal={closeModals}
                editStudentsHandler={sendEditedStudentInfo}
                singleStudent={singleStudent}
                groupOptions={groupOptions}
             />
          )}
+         <ConfirmModalOnDelete
+            showConfirmModal={Boolean(showConfirmModal)}
+            deleteStudentHandler={deleteStudentHandler}
+            closeConfirmModal={closeModals}
+         />
          <UploadExcel
             uploadStudentsHandler={uploadStudentsAsExcelFileHandler}
-            colseUplaodStudentsModal={closeUploadStudentsModal}
-            openUplaodModal={showUploadStudentsModal}
+            colseUplaodStudentsModal={closeModals}
+            openUplaodModal={Boolean(showUploadStudentsModal)}
             groupOptions={groupOptions}
          />
          <AppTable
             data={studentData}
             columns={COLUMNS}
-            pagination={{ count: 3, onChange: paginationHandler }}
+            pagination={{
+               count: totalPages,
+               onChange: paginationHandler,
+               defaultPage: presentPage,
+            }}
          />
-      </div>
+         {isSuccess && <Notification message="Cтудент успешно создан" />}
+      </>
    )
 }
 const StyledButtonsContainer = styled.div`
@@ -246,7 +295,7 @@ const StyledFormatOfEdu = styled.div`
    display: flex;
    justify-content: start;
 `
-const StyledActions = styled.span`
+const StyledActions = styled.td`
    cursor: pointer;
    display: flex;
    border: none;

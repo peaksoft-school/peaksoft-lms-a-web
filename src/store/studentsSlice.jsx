@@ -7,6 +7,9 @@ const initState = {
    groups: [],
    isLoading: null,
    singleStudent: null,
+   totalPages: null,
+   isSuccess: null,
+   presentPage: null,
 }
 
 export const addStudents = createAsyncThunk(
@@ -19,6 +22,7 @@ export const addStudents = createAsyncThunk(
             body: { ...value, groupId: id },
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
+         dispatch(studentsActions.showSuccessModal(true))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -172,6 +176,11 @@ export const studentsSlice = createSlice({
       },
       getStudentDataWithPagination(state, action) {
          state.studentData = action.payload.responseList
+         state.totalPages = action.payload.totalPage
+         state.presentPage = action.payload.currentPage
+      },
+      showSuccessModal(state, action) {
+         state.isSuccess = action.payload
       },
    },
    extraReducers: {

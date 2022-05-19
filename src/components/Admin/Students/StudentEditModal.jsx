@@ -15,8 +15,7 @@ export const StudentsEditModal = ({
    singleStudent,
    groupOptions,
 }) => {
-   const { email, phoneNumber, studyFormat, groupName, fullName } =
-      singleStudent
+   const { email, phoneNumber, studyFormat, fullName } = singleStudent
    const [firstName, lastName] = fullName.split(' ')
    const { value, onChange, onClear } = useInput({
       firstName: firstName || '',
@@ -24,7 +23,7 @@ export const StudentsEditModal = ({
       phoneNumber: phoneNumber || '',
       email: email || '',
       password: '',
-      groupName: groupName || '',
+      groupName: '',
       studyFormat: studyFormat || '',
    })
    const [disableButton, setDisableButton] = useState(false)
@@ -39,6 +38,7 @@ export const StudentsEditModal = ({
    const seletedOptionHandler = (option) => {
       setSelectedOption(option.id)
    }
+   const selectedOptionHandler = () => {}
 
    useEffect(() => {
       if (
@@ -57,7 +57,7 @@ export const StudentsEditModal = ({
 
    return (
       <BasicModal
-         isModalOpen={showEditStudentsModal}
+         isModalOpen={Boolean(showEditStudentsModal)}
          title="Редактировать студента"
          onClose={closeEditStudentsModal}
       >
@@ -104,6 +104,7 @@ export const StudentsEditModal = ({
                placeholder="Формат обучения"
                name="studyFormat"
                value={value.studyFormat}
+               selectedOption={selectedOptionHandler}
                onChange={onChange}
             />
             <StyledModalButtonContainer>
