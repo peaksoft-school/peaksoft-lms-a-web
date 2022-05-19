@@ -54,7 +54,7 @@ export const AppTable = ({ columns, data, pagination }) => {
                {pagination && (
                   <Pagination
                      count={pagination.count}
-                     // onChange={pagination.onChange}
+                     onChange={pagination.onChange}
                   />
                )}
             </StyledTable>

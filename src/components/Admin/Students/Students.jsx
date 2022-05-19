@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import styled from '@emotion/styled'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
@@ -11,7 +11,7 @@ import {
    editStudents,
    getGroups,
    getSingleStudent,
-   getStudents,
+   getStudentsWithPagination,
    sendStudentsAsExcel,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
@@ -22,10 +22,24 @@ import { StudentsModalForm } from './StudentsModalForm'
 import {
    CREATE_STUDENT,
    EDIT_STUDENT,
-   STUDY_FORMAT_OPTION,
    UPLOAD_STUDENT,
 } from '../../../utils/constants/general'
 import { UploadExcel } from './UploadExcelModal'
+
+const STUDY_FORMAT_OPTION = [
+   {
+      id: 'ALL',
+      title: 'ALL',
+   },
+   {
+      id: 'ONLINE',
+      title: 'ONLINE',
+   },
+   {
+      id: 'OFFLINE',
+      title: 'OFFLINE',
+   },
+]
 
 export const Students = () => {
    const dispatch = useDispatch()
@@ -38,6 +52,9 @@ export const Students = () => {
       useSearchParams()
    const [searchParamsForUploadStudents, setSearchParamsForUploadStudents] =
       useSearchParams()
+
+   const [currentPage, setCurrentPage] = useState(1)
+   const [studyFormat, setStudyFormat] = useState('OFFLINE')
 
    const showAddStudentsModal = searchParamsForCreate.get(CREATE_STUDENT)
    const showEditStudentsModal = searchParamsForEditStudents.get(EDIT_STUDENT)
@@ -66,7 +83,9 @@ export const Students = () => {
    }
 
    const addStudentsHandler = (value, groupId) => {
-      dispatch(addStudents({ value, id: groupId }))
+      dispatch(
+         addStudents({ value, id: groupId, page: currentPage, studyFormat })
+      )
       closeEditStudentsModal()
    }
 
@@ -76,12 +95,14 @@ export const Students = () => {
             id: singleStudent.id,
             data: singleStudentsData,
             groupid: groupId,
+            page: currentPage,
+            studyFormat,
          })
       )
    }
 
    const deleteStudentHandler = (id) => {
-      dispatch(deleteStudents(id))
+      dispatch(deleteStudents({ id, page: currentPage, studyFormat }))
    }
 
    const editStudentsInfoHandler = (id) => {
@@ -91,12 +112,27 @@ export const Students = () => {
    }
 
    const uploadStudentsAsExcelFileHandler = (groupId, excelFile) => {
-      dispatch(sendStudentsAsExcel({ file: excelFile, id: groupId }))
+      dispatch(
+         sendStudentsAsExcel({
+            file: excelFile,
+            id: groupId,
+            page: currentPage,
+            studyFormat,
+         })
+      )
       dispatch(getGroups())
    }
+
+   const paginationHandler = (event, value) => {
+      setCurrentPage(value)
+      dispatch(getStudentsWithPagination({ page: value, studyFormat }))
+   }
+
    useEffect(() => {
       const studentId = searchParamsForEditStudents.get('studentId')
-      dispatch(getStudents())
+      // dispatch(getStudents())
+      // getStudentsWithPagination({ page: 1, studyFormat: 'OFFLINE' })
+      paginationHandler('', 1)
       dispatch(getGroups())
       if (studentId) {
          dispatch(getSingleStudent(studentId))
@@ -193,7 +229,7 @@ export const Students = () => {
          <AppTable
             data={studentData}
             columns={COLUMNS}
-            pagination={{ count: 3 }}
+            pagination={{ count: 3, onChange: paginationHandler }}
          />
       </div>
    )

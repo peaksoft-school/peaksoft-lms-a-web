@@ -11,14 +11,14 @@ const initState = {
 
 export const addStudents = createAsyncThunk(
    'students/addStudents',
-   async ({ value, id }, { rejectWithValue, dispatch }) => {
+   async ({ value, id, page, studyFormat }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: 'api/students/withGroup',
             method: 'POST',
             body: { ...value, groupId: id },
          })
-         dispatch(getStudents())
+         dispatch(getStudentsWithPagination({ page, studyFormat }))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -59,13 +59,13 @@ export const getSingleStudent = createAsyncThunk(
 )
 export const deleteStudents = createAsyncThunk(
    'students/deleteStudents',
-   async (studentId, { rejectWithValue, dispatch }) => {
+   async ({ id, page, studyFormat }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/students/${studentId}`,
+            path: `api/students/${id}`,
             method: 'DELETE',
          })
-         dispatch(getStudents())
+         dispatch(getStudentsWithPagination({ page, studyFormat }))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -74,14 +74,17 @@ export const deleteStudents = createAsyncThunk(
 )
 export const editStudents = createAsyncThunk(
    'students/editStudents',
-   async ({ id, data, groupid }, { rejectWithValue, dispatch }) => {
+   async (
+      { id, data, groupid, page, studyFormat },
+      { rejectWithValue, dispatch }
+   ) => {
       try {
          const response = await baseFetch({
             path: `api/students/${id}`,
             method: 'PUT',
             body: { ...data, groupId: groupid },
          })
-         dispatch(getStudents())
+         dispatch(getStudentsWithPagination({ page, studyFormat }))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -90,7 +93,7 @@ export const editStudents = createAsyncThunk(
 )
 export const sendStudentsAsExcel = createAsyncThunk(
    'students/sendStudents',
-   async ({ file, id }, { rejectWithValue, dispatch }) => {
+   async ({ file, id, page, studyFormat }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
@@ -99,7 +102,7 @@ export const sendStudentsAsExcel = createAsyncThunk(
             method: 'POST',
             body: formData,
          })
-         dispatch(getStudents())
+         dispatch(getStudentsWithPagination({ page, studyFormat }))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -121,7 +124,26 @@ export const getGroups = createAsyncThunk(
       }
    }
 )
-
+export const getStudentsWithPagination = createAsyncThunk(
+   'students/getStudentsWithPagination',
+   async ({ page, studyFormat }, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/students/pagination',
+            method: 'GET',
+            params: {
+               page,
+               size: 10,
+               studyFormat,
+            },
+         })
+         dispatch(studentsActions.getStudentDataWithPagination(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
 const setFulfilled = (state) => {
    state.isLoading = false
 }
@@ -147,6 +169,9 @@ export const studentsSlice = createSlice({
       },
       getGroups(state, action) {
          state.groups = action.payload
+      },
+      getStudentDataWithPagination(state, action) {
+         state.studentData = action.payload.responseList
       },
    },
    extraReducers: {
