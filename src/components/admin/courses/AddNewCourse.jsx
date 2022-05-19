@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { postFile } from '../../../store/coursesSlice'
+import { pagination, sendFile } from '../../../store/courses-slice'
 import { Notification } from '../../UI/notification/Notification'
+import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
 
 export const AddNewCourse = (props) => {
    const dispatch = useDispatch()
-   const { isLoading } = useSelector((state) => state.courses)
    const [selectedFile, setSelectedFile] = useState(null)
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
-   const [modalIsValid, setModalIsValid] = useState(false)
+   const [formIsValid, setFormIsValid] = useState(false)
    const [notification, setNotificaton] = useState(null)
 
    const { value, onChange, onClear } = useInput({
@@ -25,13 +25,13 @@ export const AddNewCourse = (props) => {
    })
 
    useEffect(() => {
-      setModalIsValid(
+      setFormIsValid(
          value.courseName.length > 0 &&
             value.description.length > 0 &&
             file.length !== null &&
             dateValue.length !== null
       )
-   }, [value])
+   }, [value, file, dateValue])
 
    const dateChangeHandler = (newValue) => {
       setDateValue(newValue)
@@ -49,25 +49,30 @@ export const AddNewCourse = (props) => {
          description: value.description,
       }
 
-      dispatch(postFile({ file: selectedFile, courseData: newCourse }))
+      dispatch(sendFile({ file: selectedFile, courseData: newCourse }))
       onClear()
       setDateValue(null)
       setFile(null)
       props.closeModalHandler()
       setNotificaton(true)
+      dispatch(pagination(props.currentPage))
    }
-
+   useEffect(() => {
+      setTimeout(() => {
+         setNotificaton(false)
+      }, 1000)
+   }, [notification])
    return (
       <>
          <StyledButton>
             <span>
                <Button
-                  onClick={props.addCourse}
+                  onClick={props.addCourseHandler}
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
                >
-                  + Создать курс
+                  <AddIcon /> Создать курс
                </Button>
             </span>
          </StyledButton>
@@ -114,7 +119,7 @@ export const AddNewCourse = (props) => {
                </div>
                <div>
                   <Button
-                     disabled={!modalIsValid}
+                     disabled={!formIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
@@ -125,7 +130,7 @@ export const AddNewCourse = (props) => {
                </div>
             </ButtonContainer>
          </BasicModal>
-         {notification && <Notification message="course created" />}
+         {notification && <Notification message="Курс успешно создан" />}
       </>
    )
 }

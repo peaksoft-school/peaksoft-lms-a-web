@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { updateFile } from '../../../store/coursesSlice'
+import { updateFile } from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
@@ -15,25 +15,25 @@ export const EditCourse = ({
    closeEditModalHandler,
 }) => {
    const { courseName, dateOfStart, description, image } = singleCourse
-   console.log(singleCourse)
 
    const dispatch = useDispatch()
-   const [dateValue, setDateValue] = useState(null)
-   const [file, setFile] = useState(null)
+   const [dateValue, setDateValue] = useState(dateOfStart)
+   const [file, setFile] = useState(image)
    const [selectedFile, setSelectedFile] = useState(null)
 
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
    }
 
-   const { value, onChange, onClear } = useInput({
+   const { value, onChange } = useInput({
       courseName: courseName || '',
       description: description || '',
    })
 
    const onDrop = useCallback((acceptedFiles) => {
       setSelectedFile(acceptedFiles[0])
-      setFile(image || URL.createObjectURL(acceptedFiles[0]))
+
+      setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
 
    const editCourseHandler = () => {
@@ -51,7 +51,7 @@ export const EditCourse = ({
       <div>
          <BasicModal
             isModalOpen={isEditModalOpen}
-            title="Создать курс"
+            title="Редактировать курс"
             handleClose={closeEditModalHandler}
          >
             <ImagePicker onDrop={onDrop} file={file} />
@@ -66,7 +66,7 @@ export const EditCourse = ({
                </div>
                <div>
                   <Datepicker
-                     dateValue={dateOfStart || dateValue}
+                     dateValue={dateValue}
                      onChange={dateChangehandler}
                   />
                </div>
@@ -97,7 +97,7 @@ export const EditCourse = ({
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
                   >
-                     Добавить
+                     Сохранить
                   </Button>
                </div>
             </BtnStyleControl>

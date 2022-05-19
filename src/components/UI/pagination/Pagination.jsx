@@ -22,4 +22,8 @@ const StyledPagination = styled(MuiPagination)`
       color: #3772ff;
       font-size: 30px;
    }
+   position: absolute;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
 `

@@ -86,6 +86,25 @@ const StyledMultiItems = styled.ul`
    border: 1px solid #d4d4d4;
    border-radius: 10px;
    margin-top: 8px;
+   max-height: 180px;
+   overflow-y: scroll;
+   ::-webkit-scrollbar {
+      width: 10px;
+   }
+
+   ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px #3772ff;
+      border-radius: 10px;
+   }
+
+   ::-webkit-scrollbar-thumb {
+      background: #3772ff;
+      border-radius: 10px;
+   }
+
+   ::-webkit-scrollbar-thumb:hover {
+      background: #3772ff;
+   }
    li {
       display: flex;
       justify-content: space-between;

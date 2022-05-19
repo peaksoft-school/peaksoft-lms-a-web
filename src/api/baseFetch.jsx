@@ -3,8 +3,10 @@ import { store } from '../store/index'
 
 export const baseFetch = async (options) => {
    const { token } = store.getState().auth.user
+
    try {
       const { path, body, method, params } = options
+      let url = path
       const requestOptions = {
          method: method || 'GET',
          headers: token
@@ -23,9 +25,10 @@ export const baseFetch = async (options) => {
          const queryParamsStringValue = Object.keys(params)
             .map((paramKey) => `${paramKey}=${params[paramKey]}`)
             .join('&')
-         const path = `${path}?${queryParamsStringValue}`
+
+         url = `${path}?${queryParamsStringValue}`
       }
-      const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
+      const response = await fetch(`${BASE_URL}/${url}`, requestOptions)
       const result = await response.json()
       if (!response.ok) {
          let errorMessage = 'Some thing went wrong'

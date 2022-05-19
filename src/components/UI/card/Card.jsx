@@ -29,6 +29,7 @@ export const Card = (props) => {
 
 const Wrapper = styled(MuiCard)`
    min-width: 270px;
+   min-height: 320px;
    border-radius: 10px;
    margin: 10px;
 `
@@ -63,6 +64,7 @@ const StyledDescription = styled.div`
    font-size: 16px;
    line-height: 22px;
    color: #1d293f;
+   height: 60px;
    margin-top: 10px;
    width: 236px;
    padding: 0px 18px 0 0;

@@ -5,12 +5,14 @@ import { fileFetch } from '../api/fileFetch'
 const initState = {
    allCourses: [],
    singleCourse: null,
-   teachers: null,
+   instructors: null,
+   pages: null,
+   courses: [],
    isLoading: null,
 }
 
-export const postFile = createAsyncThunk(
-   'courses/postFile',
+export const sendFile = createAsyncThunk(
+   'courses/sendFile',
    async ({ file, courseData }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
@@ -42,6 +44,7 @@ export const addNewCourse = createAsyncThunk(
             body: newCourse,
          })
          dispatch(getAllCourses())
+         dispatch(pagination())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -139,14 +142,17 @@ export const getSingleCourse = createAsyncThunk(
    }
 )
 
-export const appointTeacherToCourse = createAsyncThunk(
-   'courses/appointTeacherToCourse',
+export const assignTeacherToCourse = createAsyncThunk(
+   'courses/assignTeacherToCourse ',
    async ({ courseId, instructorId }, { rejectWithValue, dispatch }) => {
-      console.log(courseId, instructorId)
       try {
          const response = await baseFetch({
-            path: `api/instructors/accept-list-to-course/${courseId}/${instructorId}`,
-            method: 'PUT',
+            path: 'api/courses/assign',
+            method: 'POST',
+            body: {
+               courseId,
+               teacherId: instructorId,
+            },
          })
          dispatch(getAllCourses())
          return response
@@ -155,16 +161,17 @@ export const appointTeacherToCourse = createAsyncThunk(
       }
    }
 )
+
 export const getTeachers = createAsyncThunk(
-   'teachers/getTeachers',
+   'courses/getTeachers',
    async (_, { rejectWithValue, dispatch }) => {
-      dispatch(coursesActions.appointTeacher())
+      dispatch(coursesActions.appointInstructor())
       try {
          const response = await baseFetch({
             path: 'api/instructors',
             method: 'GET',
          })
-         dispatch(coursesActions.appointTeacher(response))
+         dispatch(coursesActions.appointInstructor(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -172,15 +179,22 @@ export const getTeachers = createAsyncThunk(
    }
 )
 export const pagination = createAsyncThunk(
-   'teachers/getTeachers',
-   async (_, { rejectWithValue, dispatch }) => {
-      dispatch(coursesActions.appointTeacher())
+   'courses/pagination',
+   async (currentPage, { rejectWithValue, dispatch }) => {
+      console.log(currentPage)
       try {
          const response = await baseFetch({
-            path: 'api/courses/pagination',
+            path: `api/courses/pagination`,
             method: 'GET',
+            params: {
+               page: currentPage,
+               size: 8,
+            },
          })
-         dispatch(coursesActions.appointTeacher(response))
+         console.log(response.howManyPages)
+         console.log(response)
+         dispatch(coursesActions.getPages(response.totalPage))
+         dispatch(coursesActions.getCourses(response.responseList))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -206,14 +220,20 @@ export const coursesSlice = createSlice({
       editCourse(state, action) {
          state.singleCourse = action.payload
       },
-      appointTeacher(state, action) {
-         state.teachers = action.payload
+      appointInstructor(state, action) {
+         state.instructors = action.payload
+      },
+      getCourses(state, action) {
+         state.courses = action.payload
+      },
+      getPages(state, action) {
+         state.pages = action.payload
       },
    },
    extraReducers: {
-      [postFile.pending]: setPending,
-      [postFile.fulfilled]: setIsLoading,
-      [postFile.rejected]: setIsLoading,
+      [sendFile.pending]: setPending,
+      [sendFile.fulfilled]: setIsLoading,
+      [sendFile.rejected]: setIsLoading,
       [addNewCourse.pending]: setPending,
       [addNewCourse.fulfilled]: setIsLoading,
       [addNewCourse.rejected]: setIsLoading,
