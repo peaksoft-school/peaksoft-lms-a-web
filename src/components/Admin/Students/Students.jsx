@@ -161,7 +161,7 @@ export const Students = () => {
    useEffect(() => {
       setTimeout(() => {
          dispatch(studentsActions.showSuccessModal(false))
-      }, 2000)
+      }, 1800)
    }, [isSuccess])
 
    useEffect(() => {
@@ -229,7 +229,7 @@ export const Students = () => {
       }),
    ]
    return (
-      <>
+      <div>
          <StyledButtonsContainer>
             <StyledFormatOfEdu>
                <Select
@@ -280,7 +280,7 @@ export const Students = () => {
             }}
          />
          {isSuccess && <Notification message="Cтудент успешно создан" />}
-      </>
+      </div>
    )
 }
 const StyledButtonsContainer = styled.div`

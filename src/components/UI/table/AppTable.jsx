@@ -50,15 +50,13 @@ export const AppTable = ({ columns, data, pagination }) => {
                   })}
                </TableBody>
             </Table>
-            <StyledTable>
-               {pagination.count && (
-                  <Pagination
-                     count={pagination.count}
-                     onChange={pagination.onChange}
-                     defaultPage={pagination.defaultPage}
-                  />
-               )}
-            </StyledTable>
+            {pagination.count && (
+               <Pagination
+                  count={pagination.count}
+                  onChange={pagination.onChange}
+                  defaultPage={pagination.defaultPage}
+               />
+            )}
          </Container>
       </ThemeProvider>
    )
@@ -66,7 +64,7 @@ export const AppTable = ({ columns, data, pagination }) => {
 
 const Container = styled(MuiTableContainer)`
    min-width: 1140px;
-   min-height: 587px;
+   min-height: 687px;
    margin: 20px auto;
    position: relative;
    background: #ffffff;

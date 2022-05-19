@@ -62,6 +62,6 @@
       "react/destructuring-assignment": "off",
       "no-unused-vars": "warn",
       "import/no-cycle": "off",
-      "no-unstable-nested-components": "off"
+      "react/no-unstable-nested-components": "off"
    }
 }
