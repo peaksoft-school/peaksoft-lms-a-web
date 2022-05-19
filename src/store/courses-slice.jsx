@@ -11,9 +11,9 @@ const initState = {
    isLoading: null,
 }
 
-export const sendFile = createAsyncThunk(
+export const uploadFile = createAsyncThunk(
    'courses/sendFile',
-   async ({ file, courseData }, { rejectWithValue, dispatch }) => {
+   async ({ file, courseData, currentPage }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
@@ -26,7 +26,7 @@ export const sendFile = createAsyncThunk(
 
          const data = await response.url.toString()
          if (data) {
-            dispatch(addNewCourse({ ...courseData, image: data }))
+            dispatch(addNewCourse({ ...courseData, image: data, currentPage }))
          }
          return data
       } catch (error) {
@@ -34,6 +34,7 @@ export const sendFile = createAsyncThunk(
       }
    }
 )
+
 export const addNewCourse = createAsyncThunk(
    'courses/addNewCourse',
    async (newCourse, { rejectWithValue, dispatch }) => {
@@ -44,7 +45,7 @@ export const addNewCourse = createAsyncThunk(
             body: newCourse,
          })
          dispatch(getAllCourses())
-         dispatch(pagination())
+         dispatch(pagination(newCourse.currentPage))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -93,13 +94,14 @@ export const updateFile = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
    'courses/deleteCourse',
-   async (id, { rejectWithValue, dispatch }) => {
+   async ({ id, currentPage }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: `api/courses/${id}`,
             method: 'DELETE',
          })
          dispatch(getAllCourses())
+         dispatch(pagination(currentPage))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -134,7 +136,7 @@ export const getSingleCourse = createAsyncThunk(
             method: 'GET',
          })
          dispatch(getAllCourses())
-         dispatch(coursesActions.editCourse(response))
+         dispatch(coursesActions.getSingleCourse(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -171,17 +173,17 @@ export const getTeachers = createAsyncThunk(
             path: 'api/instructors',
             method: 'GET',
          })
-         dispatch(coursesActions.appointInstructor(response))
+         dispatch(coursesActions.getInstructors(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
       }
    }
 )
+
 export const pagination = createAsyncThunk(
    'courses/pagination',
    async (currentPage, { rejectWithValue, dispatch }) => {
-      console.log(currentPage)
       try {
          const response = await baseFetch({
             path: `api/courses/pagination`,
@@ -191,10 +193,8 @@ export const pagination = createAsyncThunk(
                size: 8,
             },
          })
-         console.log(response.howManyPages)
-         console.log(response)
-         dispatch(coursesActions.getPages(response.totalPage))
-         dispatch(coursesActions.getCourses(response.responseList))
+         dispatch(coursesActions.getTotalNumberOfPages(response.totalPage))
+         dispatch(coursesActions.getCoursesPerPage(response.responseList))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -217,23 +217,23 @@ export const coursesSlice = createSlice({
       addNewCourse(state, action) {
          state.allCourses = action.payload
       },
-      editCourse(state, action) {
+      getSingleCourse(state, action) {
          state.singleCourse = action.payload
       },
-      appointInstructor(state, action) {
+      getInstructors(state, action) {
          state.instructors = action.payload
       },
-      getCourses(state, action) {
+      getCoursesPerPage(state, action) {
          state.courses = action.payload
       },
-      getPages(state, action) {
+      getTotalNumberOfPages(state, action) {
          state.pages = action.payload
       },
    },
    extraReducers: {
-      [sendFile.pending]: setPending,
-      [sendFile.fulfilled]: setIsLoading,
-      [sendFile.rejected]: setIsLoading,
+      [uploadFile.pending]: setPending,
+      [uploadFile.fulfilled]: setIsLoading,
+      [uploadFile.rejected]: setIsLoading,
       [addNewCourse.pending]: setPending,
       [addNewCourse.fulfilled]: setIsLoading,
       [addNewCourse.rejected]: setIsLoading,

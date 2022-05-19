@@ -16,7 +16,7 @@ const StyledPagination = styled(MuiPagination)`
    .Mui-selected {
       color: #3772ff;
       text-decoration: underline;
-      background-color: white !important;
+      background-color: transparent !important;
    }
    .MuiPaginationItem-icon {
       color: #3772ff;

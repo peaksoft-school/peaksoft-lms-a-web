@@ -26,7 +26,7 @@ import {
 } from '../../../utils/constants/general'
 import { Pagination } from '../../UI/pagination/Pagination'
 
-export const CourseCards = () => {
+export const Courses = () => {
    const dispatch = useDispatch()
    const { singleCourse, instructors, pages, courses } = useSelector(
       (state) => state.courses
@@ -34,44 +34,33 @@ export const CourseCards = () => {
 
    const [courseId, setCourseId] = useState()
    const [currentPage, setCurrentPage] = useState(1)
+   const [searchParams, setSearchParams] = useSearchParams()
 
-   const [searchParamsForAddCourse, setSearchParamsForAddCourse] =
-      useSearchParams()
-   const [searchParamsForEditCourse, setSearchParamsForEditStudents] =
-      useSearchParams()
-   const [searchParamsForAppointTeacher, setSearchParamsForAppointTeacher] =
-      useSearchParams()
-   const [searchParamsForDeleteCourse, setSearchParamsForDeleteCourse] =
-      useSearchParams()
-   const [searchParamsCoursePages, setSearchParamsCoursePages] =
-      useSearchParams()
-
-   const showAddCourseModal = searchParamsForAddCourse.get(ADD_COURSE)
-   const showEditCourseModal = searchParamsForEditCourse.get(EDIT_COURSE)
-   const showAppointTeacherModal =
-      searchParamsForAppointTeacher.get(APPOINT_TEACHER)
-   const showConfirmModal = searchParamsForDeleteCourse.get(DELETE_COURSE)
+   const showAddCourseModal = searchParams.get(ADD_COURSE)
+   const showEditCourseModal = searchParams.get(EDIT_COURSE)
+   const showAppointTeacherModal = searchParams.get(APPOINT_TEACHER)
+   const showConfirmModal = searchParams.get(DELETE_COURSE)
 
    useEffect(() => {
       dispatch(getAllCourses())
-      const courseId = searchParamsForEditCourse.get('courseId')
+      const courseId = searchParams.get('courseId')
       if (courseId) {
          dispatch(getSingleCourse(courseId))
       }
-      const teacherId = searchParamsForAppointTeacher.get('teacherId')
+      const teacherId = searchParams.get('teacherId')
       if (teacherId) {
          dispatch(getTeachers())
       }
+      dispatch(getTeachers())
       dispatch(pagination(currentPage))
-      setSearchParamsCoursePages(`page=${currentPage}`)
    }, [])
 
    const addCourseHandler = () => {
-      setSearchParamsForAddCourse({ [ADD_COURSE]: true })
+      setSearchParams({ [ADD_COURSE]: true })
    }
 
    const assignTeacherHandler = (id) => {
-      setSearchParamsForAppointTeacher({
+      setSearchParams({
          [APPOINT_TEACHER]: true,
          teacherId: id,
       })
@@ -80,35 +69,32 @@ export const CourseCards = () => {
    }
 
    const getCourseIdHandler = (id) => {
-      setSearchParamsForDeleteCourse({ [DELETE_COURSE]: true })
+      setSearchParams({ [DELETE_COURSE]: true })
       setCourseId(id)
    }
 
    const editTeacherHandler = (id) => {
       dispatch(getSingleCourse(id))
-      setSearchParamsForEditStudents({
+      setSearchParams({
          [EDIT_COURSE]: true,
          courseId: id,
       })
    }
 
-   const closeModalHandler = () => {
-      setSearchParamsForAddCourse(false)
-      setSearchParamsForEditStudents(false)
-      setSearchParamsForAppointTeacher(false)
-      setSearchParamsForDeleteCourse(false)
-   }
-
    const deleteCourseHandler = () => {
-      dispatch(deleteCourse(courseId))
+      dispatch(deleteCourse({ id: courseId, currentPage }))
       closeModalHandler()
    }
 
    const onChangeHandler = (currentPage) => {
-      setSearchParamsCoursePages(`page=${currentPage}`)
+      setSearchParams(`page=${currentPage}`)
       setCurrentPage(currentPage)
       dispatch(pagination(currentPage))
    }
+   const closeModalHandler = () => {
+      setSearchParams(false)
+   }
+   console.log(instructors)
 
    const options = [
       {
@@ -151,15 +137,15 @@ export const CourseCards = () => {
             currentPage={currentPage}
          />
          <Container>
-            {courses.map((card) => (
-               <StyledCard key={card.id}>
+            {courses.map((course) => (
+               <StyledCard key={course.id}>
                   <Card
                      options={options}
-                     image={card.image}
-                     title={card.courseName}
-                     description={card.description}
-                     date={card.dateOfStart}
-                     course={card}
+                     image={course.image}
+                     title={course.courseName}
+                     description={course.description}
+                     date={course.dateOfStart}
+                     card={course}
                   />
                </StyledCard>
             ))}
@@ -168,7 +154,7 @@ export const CourseCards = () => {
             <AssignTeacher
                isModalOpen={Boolean(showAppointTeacherModal)}
                closeHandler={closeModalHandler}
-               teachers={instructors}
+               instructors={instructors}
                id={courseId}
             />
          )}
@@ -206,11 +192,13 @@ export const CourseCards = () => {
             </StyledButton>
          </ConfirmModal>
          {pages && (
-            <Pagination
-               count={pages}
-               page={currentPage}
-               onChange={(_, num) => onChangeHandler(num)}
-            />
+            <StyledPagination>
+               <Pagination
+                  count={pages}
+                  page={currentPage}
+                  onChange={(_, num) => onChangeHandler(num)}
+               />
+            </StyledPagination>
          )}
       </Wrapper>
    )
@@ -218,18 +206,22 @@ export const CourseCards = () => {
 
 const Wrapper = styled.div`
    position: relative;
-   height: 850px;
+   height: 880px;
    margin: 0 auto;
 `
-
+const StyledPagination = styled.div`
+   margin-top: 20px;
+`
 const StyledCard = styled.div`
-   width: 270px;
+   min-width: 270px;
 `
 const Container = styled.div`
    display: flex;
    cursor: pointer;
    flex-wrap: wrap;
    gap: 40px;
+   grid-template-columns: auto auto auto auto;
+   display: grid;
 `
 const StyledIcon = styled.div`
    display: flex;

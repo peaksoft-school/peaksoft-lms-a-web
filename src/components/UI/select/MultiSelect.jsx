@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
 import { useState } from 'react'
-import { ReactComponent as OpenSelect } from '../../../assets/icons/selected.svg'
+import { ReactComponent as CloseSelect } from '../../../assets/icons/selected.svg'
 import { ReactComponent as RemoveSelect } from '../../../assets/icons/removeSelect.svg'
+import { ReactComponent as OpenSelect } from '../../../assets/icons/arrow.svg'
 
 export const MultiSelect = ({
    options,
@@ -12,6 +13,7 @@ export const MultiSelect = ({
 }) => {
    const [openMultiSelect, setOpenMultiSelect] = useState(false)
    const [userOptions, setUserOptions] = useState(options)
+
    const toggleSelection = () => setOpenMultiSelect(!openMultiSelect)
 
    const addMultiSelectHandler = (id, option) => {
@@ -42,7 +44,7 @@ export const MultiSelect = ({
          </StyledUl>
          <StyledSelect onClick={toggleSelection} role="presentation">
             <p>{title}</p>
-            {openMultiSelect && <OpenSelect />}
+            {openMultiSelect ? <OpenSelect /> : <CloseSelect />}
          </StyledSelect>
          {openMultiSelect && (
             <StyledMultiItems>
@@ -137,6 +139,25 @@ const StyledMultiItems = styled.ul`
    }
 `
 const StyledUl = styled.ul`
+   max-height: 100px;
+   overflow-y: scroll;
+   ::-webkit-scrollbar {
+      width: 10px;
+   }
+
+   ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px #3772ff;
+      border-radius: 10px;
+   }
+
+   ::-webkit-scrollbar-thumb {
+      background: #3772ff;
+      border-radius: 10px;
+   }
+
+   ::-webkit-scrollbar-thumb:hover {
+      background: #3772ff;
+   }
    li {
       display: flex;
       justify-content: space-between;

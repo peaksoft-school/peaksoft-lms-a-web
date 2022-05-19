@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { CourseCards } from '../components/admin/courses/CourseCards'
+import { Courses } from '../components/admin/courses/Courses'
 import { ROUTES } from '../utils/constants/general'
 
 export const AdminRoutes = () => {
@@ -9,7 +9,7 @@ export const AdminRoutes = () => {
          <Routes>
             <Route path="/*" element={<Navigate to={ROUTES.GROUPS} />} />
             <Route path={ROUTES.GROUPS} element={<div>groups</div>} />
-            <Route path={ROUTES.COURSES} element={<CourseCards />} />
+            <Route path={ROUTES.COURSES} element={<Courses />} />
             <Route path={ROUTES.TEACHERS} element={<div>teachers</div>} />
             <Route path={ROUTES.STUDENTS} element={<div>Students</div>} />
          </Routes>

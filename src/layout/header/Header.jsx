@@ -60,7 +60,7 @@ export const Header = () => {
 
 const Rectangle = styled.div`
    position: absolute;
-   width: 80%;
+   min-width: 80%;
    height: 1px;
    top: 78px;
    left: 260px;

@@ -7,11 +7,16 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { pagination, sendFile } from '../../../store/courses-slice'
+import { pagination, uploadFile } from '../../../store/courses-slice'
 import { Notification } from '../../UI/notification/Notification'
 import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
 
-export const AddNewCourse = (props) => {
+export const AddNewCourse = ({
+   closeModalHandler,
+   currentPage,
+   addCourseHandler,
+   isModalOpen,
+}) => {
    const dispatch = useDispatch()
    const [selectedFile, setSelectedFile] = useState(null)
    const [file, setFile] = useState(null)
@@ -26,10 +31,10 @@ export const AddNewCourse = (props) => {
 
    useEffect(() => {
       setFormIsValid(
-         value.courseName.length > 0 &&
-            value.description.length > 0 &&
-            file.length !== null &&
-            dateValue.length !== null
+         file !== null &&
+            value.courseName.length > 0 &&
+            dateValue !== null &&
+            value.description.length > 0
       )
    }, [value, file, dateValue])
 
@@ -49,13 +54,15 @@ export const AddNewCourse = (props) => {
          description: value.description,
       }
 
-      dispatch(sendFile({ file: selectedFile, courseData: newCourse }))
+      dispatch(
+         uploadFile({ file: selectedFile, courseData: newCourse, currentPage })
+      )
       onClear()
+      dispatch(pagination(currentPage))
       setDateValue(null)
       setFile(null)
-      props.closeModalHandler()
+      closeModalHandler()
       setNotificaton(true)
-      dispatch(pagination(props.currentPage))
    }
    useEffect(() => {
       setTimeout(() => {
@@ -67,7 +74,7 @@ export const AddNewCourse = (props) => {
          <StyledButton>
             <span>
                <Button
-                  onClick={props.addCourseHandler}
+                  onClick={addCourseHandler}
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
@@ -77,9 +84,9 @@ export const AddNewCourse = (props) => {
             </span>
          </StyledButton>
          <BasicModal
-            isModalOpen={!!props.isModalOpen}
+            isModalOpen={!!isModalOpen}
             title="Создать курс"
-            handleClose={props.closeModalHandler}
+            handleClose={closeModalHandler}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <StyledInput>
@@ -112,7 +119,7 @@ export const AddNewCourse = (props) => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={props.closeModalHandler}
+                     onClick={closeModalHandler}
                   >
                      Отмена
                   </Button>

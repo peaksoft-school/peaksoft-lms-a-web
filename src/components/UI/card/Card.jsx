@@ -21,7 +21,7 @@ export const Card = (props) => {
             </StyledDescription>
          </CardContent>
          <StyledIcon>
-            <MeatBalls options={props.options} course={props.course} />
+            <MeatBalls options={props.options} course={props.card} />
          </StyledIcon>
       </Wrapper>
    )
