@@ -12,7 +12,7 @@ const initState = {
    presentPage: null,
 }
 
-export const addStudents = createAsyncThunk(
+export const addStudent = createAsyncThunk(
    'students/addStudents',
    async ({ value, id, page, studyFormat }, { rejectWithValue, dispatch }) => {
       try {
@@ -61,8 +61,8 @@ export const getSingleStudent = createAsyncThunk(
       }
    }
 )
-export const deleteStudents = createAsyncThunk(
-   'students/deleteStudents',
+export const deleteStudent = createAsyncThunk(
+   'students/deleteStudent',
    async ({ id, page, studyFormat }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
@@ -76,8 +76,8 @@ export const deleteStudents = createAsyncThunk(
       }
    }
 )
-export const editStudents = createAsyncThunk(
-   'students/editStudents',
+export const editStudent = createAsyncThunk(
+   'students/editStudent',
    async (
       { id, data, groupid, page, studyFormat },
       { rejectWithValue, dispatch }
@@ -184,21 +184,24 @@ export const studentsSlice = createSlice({
       },
    },
    extraReducers: {
-      [addStudents.pending]: setPending,
-      [addStudents.fulfilled]: setFulfilled,
-      [addStudents.rejected]: setError,
+      [addStudent.pending]: setPending,
+      [addStudent.fulfilled]: setFulfilled,
+      [addStudent.rejected]: setError,
       [getStudents.pending]: setPending,
       [getStudents.fulfilled]: setFulfilled,
       [getStudents.rejected]: setError,
-      [deleteStudents.pending]: setPending,
-      [deleteStudents.fulfilled]: setFulfilled,
-      [deleteStudents.rejected]: setError,
-      [editStudents.pending]: setPending,
-      [editStudents.fulfilled]: setFulfilled,
-      [editStudents.rejected]: setError,
+      [deleteStudent.pending]: setPending,
+      [deleteStudent.fulfilled]: setFulfilled,
+      [deleteStudent.rejected]: setError,
+      [editStudent.pending]: setPending,
+      [editStudent.fulfilled]: setFulfilled,
+      [editStudent.rejected]: setError,
       [sendStudentsAsExcel.pending]: setPending,
       [sendStudentsAsExcel.fulfilled]: setFulfilled,
       [sendStudentsAsExcel.rejected]: setError,
+      [getStudentsWithPagination.pending]: setPending,
+      [getStudentsWithPagination.fulfilled]: setFulfilled,
+      [getStudentsWithPagination.rejected]: setError,
    },
 })
 

@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.svg'
 import {
-   addStudents,
-   deleteStudents,
-   editStudents,
+   addStudent,
+   deleteStudent,
+   editStudent,
    getGroups,
    getSingleStudent,
    getStudentsWithPagination,
@@ -59,7 +59,7 @@ export const Students = () => {
 
    const [currentPage, setCurrentPage] = useState(1)
    const [studyFormat, setStudyFormat] = useState('ALL')
-   const [deleteStudent, setDeleteStudent] = useState(null)
+   const [deletedStudentId, setDeletedStudentId] = useState(null)
 
    const showConfirmModal = searchParams.get(DELETE_STUDENT)
    const showAddStudentsModal = searchParams.get(CREATE_STUDENT)
@@ -81,14 +81,14 @@ export const Students = () => {
 
    const addStudentsHandler = (value, groupId) => {
       dispatch(
-         addStudents({ value, id: groupId, page: currentPage, studyFormat })
+         addStudent({ value, id: groupId, page: currentPage, studyFormat })
       )
       closeModals()
    }
 
    const sendEditedStudentInfo = (singleStudentsData, groupId) => {
       dispatch(
-         editStudents({
+         editStudent({
             id: singleStudent.id,
             data: singleStudentsData,
             groupid: groupId,
@@ -99,13 +99,13 @@ export const Students = () => {
    }
 
    const deleteHandler = (id) => {
-      setDeleteStudent(id)
+      setDeletedStudentId(id)
       setSearchParams({ [DELETE_STUDENT]: true })
    }
 
    const deleteStudentHandler = () => {
       dispatch(
-         deleteStudents({ id: deleteStudent, page: currentPage, studyFormat })
+         deleteStudent({ id: deletedStudentId, page: currentPage, studyFormat })
       )
       closeModals()
    }
