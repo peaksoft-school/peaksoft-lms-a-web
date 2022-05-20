@@ -236,5 +236,6 @@ const StyledIcon = styled.div`
 const StyledButton = styled.div`
    width: 241px;
    display: flex;
+   margin: 10px 0;
    justify-content: space-between;
 `

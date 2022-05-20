@@ -25,6 +25,6 @@ const Container = styled.div`
    display: flex;
    flex-direction: column;
    margin: 20px;
-   min-width: 80%;
+   min-width: 83%;
    margin-left: 260px;
 `

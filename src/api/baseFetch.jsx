@@ -1,14 +1,13 @@
+import { store } from '../store'
 import { BASE_URL } from '../utils/constants/general'
-import { store } from '../store/index'
 
 export const baseFetch = async (options) => {
    const { token } = store.getState().auth.user
-
    try {
       const { path, body, method, params } = options
       let url = path
       const requestOptions = {
-         method: method || 'GET',
+         method: options.method || 'GET',
          headers: token
             ? {
                  'Content-Type': 'application/json',

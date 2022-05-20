@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { assignTeacherToCourse } from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
@@ -16,6 +16,7 @@ export const AssignTeacher = ({
    const [selectedOptions, setSelectedOptions] = useState([])
    const [listOfTeacher, setListOfTeacher] = useState([])
    const [selectedTeacher, setSelectedTeacher] = useState('')
+   const [selectIsValid, setSelectIsValid] = useState(false)
 
    const newMultiSelect = (selected) => {
       setListOfTeacher((prev) => [...prev, Number(selected.id)])
@@ -41,11 +42,15 @@ export const AssignTeacher = ({
       }),
    ]
 
+   useEffect(() => {
+      setSelectIsValid(selectedOptions.length > 0)
+   }, [selectedOptions])
+
    return (
       <BasicModal
          title="Назначить учителя"
          isModalOpen={!!isModalOpen}
-         handleClose={closeModalHandler}
+         onClose={closeModalHandler}
       >
          <MultiSelect
             title={selectedTeacher}
@@ -71,6 +76,7 @@ export const AssignTeacher = ({
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
                   onClick={appointTeacher}
+                  disabled={!selectIsValid}
                >
                   Добавить
                </Button>

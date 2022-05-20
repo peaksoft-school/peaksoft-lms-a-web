@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 export const BasicModal = (props) => {
    return (
-      <Modal open={props.isModalOpen} onClose={props.handleClose}>
+      <Modal open={props.isModalOpen} onClose={props.onClose}>
          <Box sx={style}>
             <Header>{props.title}</Header>
             <Container>{props.children}</Container>

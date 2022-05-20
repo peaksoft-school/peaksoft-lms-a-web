@@ -86,7 +86,7 @@ export const AddNewCourse = ({
          <BasicModal
             isModalOpen={!!isModalOpen}
             title="Создать курс"
-            handleClose={closeModalHandler}
+            onClose={closeModalHandler}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <StyledInput>

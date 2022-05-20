@@ -53,7 +53,7 @@ export const EditCourse = ({
          <BasicModal
             isModalOpen={isEditModalOpen}
             title="Редактировать курс"
-            handleClose={closeEditModalHandler}
+            onClose={closeEditModalHandler}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <ModalContentControl>

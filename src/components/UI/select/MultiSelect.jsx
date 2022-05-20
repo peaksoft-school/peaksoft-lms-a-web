@@ -43,7 +43,7 @@ export const MultiSelect = ({
             ))}
          </StyledUl>
          <StyledSelect onClick={toggleSelection} role="presentation">
-            <p>{title}</p>
+            {openMultiSelect ? <p>{title}</p> : <p>Выберите учителя</p>}
             {openMultiSelect ? <OpenSelect /> : <CloseSelect />}
          </StyledSelect>
          {openMultiSelect && (
@@ -77,21 +77,25 @@ const StyledSelect = styled.div`
    justify-content: space-between;
    align-items: center;
    height: 42px;
-   border: 1px solid #d4d4d4;
+   border: 1.8px solid #8d9bb9;
    border-radius: 10px;
    padding: 7px 18px 10px 18px;
+   margin: 13px 0;
+   color: #00125b;
+   font-weight: 600;
 `
 const StyledMultiItems = styled.ul`
    display: flex;
    flex-direction: column;
-   border-radius: 10px;
-   border: 1px solid #d4d4d4;
+   border-radius: 8px;
+   border: 1px solid #00156a;
    border-radius: 10px;
    margin-top: 8px;
    max-height: 180px;
+   padding: 10px;
    overflow-y: scroll;
    ::-webkit-scrollbar {
-      width: 10px;
+      width: 8px;
    }
 
    ::-webkit-scrollbar-track {
@@ -141,13 +145,14 @@ const StyledMultiItems = styled.ul`
 const StyledUl = styled.ul`
    max-height: 100px;
    overflow-y: scroll;
+   border-radius: 10px;
    ::-webkit-scrollbar {
-      width: 10px;
+      width: 8px;
    }
 
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
-      border-radius: 10px;
+      border-radius: 8px;
    }
 
    ::-webkit-scrollbar-thumb {
@@ -164,7 +169,7 @@ const StyledUl = styled.ul`
       list-style: none;
       margin-bottom: 8px;
       height: 42px;
-      border: 1px solid #d4d4d4;
+      border: 1px solid #8e9ba6;
       border-radius: 10px;
       padding: 7px 12px 10px 18px;
    }
