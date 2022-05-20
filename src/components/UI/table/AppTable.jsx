@@ -50,13 +50,15 @@ export const AppTable = ({ columns, data, pagination }) => {
                   })}
                </TableBody>
             </Table>
-            {pagination && (
-               <Pagination
-                  count={pagination.count || 1}
-                  onChange={pagination.onChange}
-                  defaultPage={pagination.defaultPage || 1}
-               />
-            )}
+            <StyledPaginationContainer>
+               {pagination && (
+                  <Pagination
+                     count={pagination.count || 1}
+                     onChange={pagination.onChange}
+                     defaultPage={pagination.defaultPage || 1}
+                  />
+               )}
+            </StyledPaginationContainer>
          </Container>
       </ThemeProvider>
    )
@@ -114,3 +116,13 @@ const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
       background: theme.palette.hover,
    },
 }))
+
+const StyledPaginationContainer = styled.div`
+   width: 100%;
+   height: 15px;
+   position: absolute;
+   margin-bottom: 8px;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
+`

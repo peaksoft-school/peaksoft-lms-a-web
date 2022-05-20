@@ -79,6 +79,7 @@ export const StudentsModalForm = ({
             <Input
                placeholder="Email"
                name="email"
+               type="email"
                value={value.email}
                onChange={onChange}
             />

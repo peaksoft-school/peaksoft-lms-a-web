@@ -28,6 +28,7 @@ import {
 import { UploadExcel } from './UploadExcelModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { Notification } from '../../UI/notification/Notification'
+import { Spinner } from '../../UI/Spinner/Spinner'
 
 const STUDY_FORMAT_OPTION = [
    {
@@ -53,6 +54,8 @@ export const Students = () => {
       totalPages,
       isSuccess,
       presentPage,
+      error,
+      isLoading,
    } = useSelector((state) => state.students)
 
    const [searchParams, setSearchParams] = useSearchParams()
@@ -79,7 +82,7 @@ export const Students = () => {
       setSearchParams({ [UPLOAD_STUDENT]: true })
    }
 
-   const addStudentsHandler = (value, groupId) => {
+   const addStudentHandler = (value, groupId) => {
       dispatch(
          addStudent({ value, id: groupId, page: currentPage, studyFormat })
       )
@@ -110,7 +113,7 @@ export const Students = () => {
       closeModals()
    }
 
-   const editStudentsInfoHandler = (id) => {
+   const editStudentInfoHandler = (id) => {
       dispatch(getSingleStudent(id))
       dispatch(getGroups())
       setSearchParams({ [EDIT_STUDENT]: true, studentId: id })
@@ -161,8 +164,14 @@ export const Students = () => {
    useEffect(() => {
       setTimeout(() => {
          dispatch(studentsActions.showSuccessModal(false))
-      }, 1800)
+      }, 1555)
    }, [isSuccess])
+
+   useEffect(() => {
+      setTimeout(() => {
+         dispatch(studentsActions.showErrorMessage(false))
+      }, 2500)
+   }, [error])
 
    useEffect(() => {
       const page = searchParams.get('page')
@@ -211,7 +220,7 @@ export const Students = () => {
                <EditIcon
                   onClick={() => {
                      if (item) {
-                        editStudentsInfoHandler(item.id)
+                        editStudentInfoHandler(item.id)
                      }
                   }}
                />
@@ -247,7 +256,7 @@ export const Students = () => {
          <StudentsModalForm
             showAddStudentsModal={showAddStudentsModal}
             showAddStudentsModalHandler={closeModals}
-            addStudentsHandler={addStudentsHandler}
+            addStudentHandler={addStudentHandler}
             groupOptions={groupOptions}
          />
          {singleStudent && (
@@ -279,7 +288,9 @@ export const Students = () => {
                defaultPage: presentPage,
             }}
          />
-         {isSuccess && <Notification message="Cтудент успешно создан" />}
+         {isLoading && <Spinner />}
+         {isSuccess && <Notification message={isSuccess} />}
+         {error && <Notification message={error} status="error" />}
       </div>
    )
 }

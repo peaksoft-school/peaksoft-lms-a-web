@@ -10,6 +10,7 @@ const initState = {
    totalPages: null,
    isSuccess: null,
    presentPage: null,
+   error: null,
 }
 
 export const addStudent = createAsyncThunk(
@@ -22,9 +23,12 @@ export const addStudent = createAsyncThunk(
             body: { ...value, groupId: id },
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
-         dispatch(studentsActions.showSuccessModal(true))
+         dispatch(studentsActions.showSuccessModal('Cтудент успешно создан'))
          return response
       } catch (error) {
+         dispatch(
+            studentsActions.showErrorMessage('Не удалось добавить cтудентa')
+         )
          return rejectWithValue(error.message)
       }
    }
@@ -70,8 +74,12 @@ export const deleteStudent = createAsyncThunk(
             method: 'DELETE',
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
+         dispatch(studentsActions.showSuccessModal('Cтудент успешно удален'))
          return response
       } catch (error) {
+         dispatch(
+            studentsActions.showErrorMessage('Не удалось удалить cтудентa')
+         )
          return rejectWithValue(error.message)
       }
    }
@@ -89,8 +97,14 @@ export const editStudent = createAsyncThunk(
             body: { ...data, groupId: groupid },
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
+         dispatch(
+            studentsActions.showSuccessModal('Изменения успешно сохранены')
+         )
          return response
       } catch (error) {
+         dispatch(
+            studentsActions.showErrorMessage('Не удалось изменить данные')
+         )
          return rejectWithValue(error.message)
       }
    }
@@ -107,8 +121,10 @@ export const sendStudentsAsExcel = createAsyncThunk(
             body: formData,
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
+         dispatch(studentsActions.showSuccessModal('Данные успешно сохранены'))
          return response
       } catch (error) {
+         dispatch(studentsActions.showErrorMessage(error.message))
          return rejectWithValue(error.message)
       }
    }
@@ -144,6 +160,11 @@ export const getStudentsWithPagination = createAsyncThunk(
          dispatch(studentsActions.getStudentDataWithPagination(response))
          return response
       } catch (error) {
+         dispatch(
+            studentsActions.showErrorMessage(
+               'Что-то пошло не так, попробуйте еще раз'
+            )
+         )
          return rejectWithValue(error.message)
       }
    }
@@ -181,6 +202,9 @@ export const studentsSlice = createSlice({
       },
       showSuccessModal(state, action) {
          state.isSuccess = action.payload
+      },
+      showErrorMessage(state, action) {
+         state.error = action.payload
       },
    },
    extraReducers: {
