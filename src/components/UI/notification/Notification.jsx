@@ -16,15 +16,15 @@ const Container = styled.div`
    align-items: center;
    z-index: 10;
    position: fixed;
-   left: 40%;
+   right: 0%;
    top: 10%;
-   animation: 3s slide-right;
-   @keyframes slide-right {
+   animation: 1.5s slide-left;
+   @keyframes slide-left {
       from {
-         margin-left: -100%;
+         margin-right: 0%;
       }
       to {
-         margin-left: 0%;
+         margin-right: 15%;
       }
    }
    .MuiAlert-filledSuccess {
