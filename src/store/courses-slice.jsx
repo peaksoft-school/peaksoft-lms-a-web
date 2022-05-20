@@ -4,10 +4,11 @@ import { fileFetch } from '../api/fileFetch'
 
 const initState = {
    allCourses: [],
+   courses: [],
    singleCourse: null,
    instructors: null,
    pages: null,
-   courses: [],
+   presentPage: null,
    isLoading: null,
 }
 
@@ -71,7 +72,7 @@ export const getAllCourses = createAsyncThunk(
 
 export const updateFile = createAsyncThunk(
    'courses/updateFile',
-   async ({ file, courseData }, { rejectWithValue, dispatch }) => {
+   async ({ file, course, currentPage }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
@@ -83,7 +84,7 @@ export const updateFile = createAsyncThunk(
          })
          const data = await response.url.toString()
          if (data) {
-            dispatch(editCourse({ ...courseData, image: data }))
+            dispatch(editCourse({ ...course, image: data, currentPage }))
          }
          return data
       } catch (error) {
@@ -119,6 +120,7 @@ export const editCourse = createAsyncThunk(
             body: course,
          })
          dispatch(getAllCourses())
+         dispatch(pagination(course.currentPage))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -129,14 +131,13 @@ export const editCourse = createAsyncThunk(
 export const getSingleCourse = createAsyncThunk(
    'courses/getSingleCourse',
    async (id, { rejectWithValue, dispatch }) => {
-      dispatch(coursesActions.editCourse())
+      dispatch(coursesActions.clearCourses())
       try {
          const response = await baseFetch({
             path: `api/courses/${id}`,
             method: 'GET',
          })
-         dispatch(getAllCourses())
-         dispatch(coursesActions.getSingleCourse(response))
+         dispatch(coursesActions.getCourse(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -164,10 +165,9 @@ export const assignTeacherToCourse = createAsyncThunk(
    }
 )
 
-export const getTeachers = createAsyncThunk(
+export const getInstructor = createAsyncThunk(
    'courses/getTeachers',
    async (_, { rejectWithValue, dispatch }) => {
-      dispatch(coursesActions.appointInstructor())
       try {
          const response = await baseFetch({
             path: 'api/instructors',
@@ -193,8 +193,7 @@ export const pagination = createAsyncThunk(
                size: 8,
             },
          })
-         dispatch(coursesActions.getTotalNumberOfPages(response.totalPage))
-         dispatch(coursesActions.getCoursesPerPage(response.responseList))
+         dispatch(coursesActions.getCoursesWithPagination(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -217,17 +216,19 @@ export const coursesSlice = createSlice({
       addNewCourse(state, action) {
          state.allCourses = action.payload
       },
-      getSingleCourse(state, action) {
+      getCourse(state, action) {
          state.singleCourse = action.payload
       },
       getInstructors(state, action) {
          state.instructors = action.payload
       },
-      getCoursesPerPage(state, action) {
-         state.courses = action.payload
+      getCoursesWithPagination(state, action) {
+         state.courses = action.payload.responseList
+         state.pages = action.payload.totalPage
+         state.presentPage = action.payload.currentPage
       },
-      getTotalNumberOfPages(state, action) {
-         state.pages = action.payload
+      clearCourses(state) {
+         state.singleCourse = null
       },
    },
    extraReducers: {
@@ -252,9 +253,9 @@ export const coursesSlice = createSlice({
       [editCourse.pending]: setPending,
       [editCourse.fulfilled]: setIsLoading,
       [editCourse.rejected]: setIsLoading,
-      [getTeachers.pending]: setPending,
-      [getTeachers.fulfilled]: setIsLoading,
-      [getTeachers.rejected]: setIsLoading,
+      [getInstructor.pending]: setPending,
+      [getInstructor.fulfilled]: setIsLoading,
+      [getInstructor.rejected]: setIsLoading,
    },
 })
 

@@ -13,6 +13,7 @@ export const EditCourse = ({
    singleCourse,
    isEditModalOpen,
    closeEditModalHandler,
+   currentPage,
 }) => {
    const { courseName, dateOfStart, description, image } = singleCourse
 
@@ -37,13 +38,13 @@ export const EditCourse = ({
    }, [])
 
    const editCourseHandler = () => {
-      const courses = {
+      const course = {
          courseName: value.courseName,
          dateOfStart: dateValue,
          description: value.description,
          id: singleCourse.id,
       }
-      dispatch(updateFile({ file: selectedFile, courseData: courses }))
+      dispatch(updateFile({ file: selectedFile, course, currentPage }))
       closeEditModalHandler()
    }
 

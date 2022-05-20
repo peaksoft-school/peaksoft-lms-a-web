@@ -14,8 +14,8 @@ import { AddNewCourse } from './AddNewCourse'
 import {
    deleteCourse,
    getAllCourses,
+   getInstructor,
    getSingleCourse,
-   getTeachers,
    pagination,
 } from '../../../store/courses-slice'
 import {
@@ -44,14 +44,14 @@ export const Courses = () => {
    useEffect(() => {
       dispatch(getAllCourses())
       const courseId = searchParams.get('courseId')
+      dispatch(getSingleCourse(courseId))
       if (courseId) {
          dispatch(getSingleCourse(courseId))
       }
       const teacherId = searchParams.get('teacherId')
       if (teacherId) {
-         dispatch(getTeachers())
+         dispatch(getInstructor())
       }
-      dispatch(getTeachers())
       dispatch(pagination(currentPage))
    }, [])
 
@@ -65,7 +65,7 @@ export const Courses = () => {
          teacherId: id,
       })
       setCourseId(id)
-      dispatch(getTeachers())
+      dispatch(getInstructor())
    }
 
    const getCourseIdHandler = (id) => {
@@ -94,8 +94,6 @@ export const Courses = () => {
    const closeModalHandler = () => {
       setSearchParams(false)
    }
-   console.log(instructors)
-
    const options = [
       {
          id: '1',
@@ -153,7 +151,7 @@ export const Courses = () => {
          {instructors && (
             <AssignTeacher
                isModalOpen={Boolean(showAppointTeacherModal)}
-               closeHandler={closeModalHandler}
+               closeModalHandler={closeModalHandler}
                instructors={instructors}
                id={courseId}
             />
@@ -164,6 +162,7 @@ export const Courses = () => {
                isEditModalOpen={Boolean(showEditCourseModal)}
                closeEditModalHandler={closeModalHandler}
                singleCourse={singleCourse}
+               currentPage={currentPage}
             />
          )}
 
@@ -214,14 +213,19 @@ const StyledPagination = styled.div`
 `
 const StyledCard = styled.div`
    min-width: 270px;
+   min-height: 300px;
+   max-height: 330px;
 `
 const Container = styled.div`
-   display: flex;
    cursor: pointer;
    flex-wrap: wrap;
    gap: 40px;
-   grid-template-columns: auto auto auto auto;
+   grid-row: 40px;
    display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   grid-template-rows: repeat(2, 1fr);
+   grid-column-gap: 40px;
+   grid-row-gap: 40px;
 `
 const StyledIcon = styled.div`
    display: flex;

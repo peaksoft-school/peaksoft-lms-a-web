@@ -29,7 +29,7 @@ export const Card = (props) => {
 
 const Wrapper = styled(MuiCard)`
    min-width: 270px;
-   min-height: 320px;
+   height: auto;
    border-radius: 10px;
    margin: 10px;
 `
@@ -50,6 +50,11 @@ const TitleContainer = styled(Typography)`
    font-size: 19px;
    color: #1d293f;
    padding-right: 18px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 1;
+   -webkit-box-orient: vertical;
 `
 const StyledDate = styled(Typography)`
    font-family: 'Open Sans', sans-serif;
