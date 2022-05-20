@@ -21,7 +21,11 @@ export const Card = (props) => {
             </StyledDescription>
          </CardContent>
          <StyledIcon>
-            <MeatBalls options={props.options} actions={props.actions} />
+            <MeatBalls
+               options={props.options}
+               action={props.action}
+               card={props.cards}
+            />
          </StyledIcon>
       </Wrapper>
    )
@@ -36,7 +40,6 @@ const Container = styled(CardMedia)`
    width: 100%;
    height: 171px;
    border-radius: 10px 10px 0px 0px;
-   transform: matrix(-1, 0, 0, 1, 0, 0);
 `
 const StyledTitle = styled.div`
    display: flex;
