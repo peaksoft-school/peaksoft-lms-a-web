@@ -50,11 +50,11 @@ export const AppTable = ({ columns, data, pagination }) => {
                   })}
                </TableBody>
             </Table>
-            {pagination.count && (
+            {pagination && (
                <Pagination
-                  count={pagination.count}
+                  count={pagination.count || 1}
                   onChange={pagination.onChange}
-                  defaultPage={pagination.defaultPage}
+                  defaultPage={pagination.defaultPage || 1}
                />
             )}
          </Container>

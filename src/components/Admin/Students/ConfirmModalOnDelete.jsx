@@ -9,7 +9,7 @@ export const ConfirmModalOnDelete = ({
 }) => {
    return (
       <ConfirmModal
-         title="Вы уверены, что хотите удалить группу ... ?"
+         title="Вы уверены, что хотите удалить студента ... ?"
          isConfirmModalOpen={Boolean(showConfirmModal)}
          closeConfirmModal={closeConfirmModal}
       >

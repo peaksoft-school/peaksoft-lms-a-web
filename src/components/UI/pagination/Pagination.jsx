@@ -5,7 +5,6 @@ import styled from '@emotion/styled'
 export const Pagination = (props) => {
    return <StyledPagination {...props} />
 }
-
 const StyledPagination = styled(MuiPagination)`
    .MuiButtonBase-root {
       color: #8f8e8e;
@@ -16,7 +15,7 @@ const StyledPagination = styled(MuiPagination)`
    .Mui-selected {
       color: #3772ff;
       text-decoration: underline;
-      background-color: white !important;
+      background-color: transparent !important;
    }
    .MuiPaginationItem-icon {
       color: #3772ff;

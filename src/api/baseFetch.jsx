@@ -1,5 +1,5 @@
-import { BASE_URL } from '../utils/constants/general'
 import { store } from '../store'
+import { BASE_URL } from '../utils/constants/general'
 
 export const baseFetch = async (options) => {
    const { token } = store.getState().auth.user
@@ -7,7 +7,7 @@ export const baseFetch = async (options) => {
       const { path, body, method, params } = options
       let url = path
       const requestOptions = {
-         method: method || 'GET',
+         method: options.method || 'GET',
          headers: token
             ? {
                  'Content-Type': 'application/json',
