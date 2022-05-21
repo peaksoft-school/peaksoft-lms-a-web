@@ -6,12 +6,7 @@ import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { MultiSelect } from '../../UI/select/MultiSelect'
 
-export const AssignTeacher = ({
-   instructors,
-   id,
-   closeModalHandler,
-   isModalOpen,
-}) => {
+export const AssignTeacher = ({ instructors, id, closeModal, isModalOpen }) => {
    const dispatch = useDispatch()
    const [selectedOptions, setSelectedOptions] = useState([])
    const [listOfTeacher, setListOfTeacher] = useState([])
@@ -30,7 +25,7 @@ export const AssignTeacher = ({
             instructorId: listOfTeacher,
          })
       )
-      closeModalHandler()
+      closeModal()
    }
 
    const options = [
@@ -50,7 +45,7 @@ export const AssignTeacher = ({
       <BasicModal
          title="Назначить учителя"
          isModalOpen={!!isModalOpen}
-         onClose={closeModalHandler}
+         onClose={closeModal}
       >
          <MultiSelect
             title={selectedTeacher}
@@ -65,7 +60,7 @@ export const AssignTeacher = ({
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={() => closeModalHandler()}
+                  onClick={() => closeModal()}
                >
                   Отмена
                </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
@@ -12,6 +12,7 @@ import { AssignTeacher } from './AssignTeacher'
 import { EditCourse } from './EditCourse'
 import { AddNewCourse } from './AddNewCourse'
 import {
+   coursesActions,
    deleteCourse,
    getAllCourses,
    getInstructor,
@@ -25,12 +26,12 @@ import {
    EDIT_COURSE,
 } from '../../../utils/constants/general'
 import { Pagination } from '../../UI/pagination/Pagination'
+import { Notification } from '../../UI/notification/Notification'
 
 export const Courses = () => {
    const dispatch = useDispatch()
-   const { singleCourse, instructors, pages, courses } = useSelector(
-      (state) => state.courses
-   )
+   const { сourse, instructors, pages, courses, isSuccess, error } =
+      useSelector((state) => state.courses)
 
    const [courseId, setCourseId] = useState()
    const [currentPage, setCurrentPage] = useState(1)
@@ -43,15 +44,17 @@ export const Courses = () => {
 
    useEffect(() => {
       dispatch(getAllCourses())
+
       const courseId = searchParams.get('courseId')
-      dispatch(getSingleCourse(courseId))
       if (courseId) {
          dispatch(getSingleCourse(courseId))
       }
+
       const teacherId = searchParams.get('teacherId')
       if (teacherId) {
          dispatch(getInstructor())
       }
+
       dispatch(pagination(currentPage))
    }, [])
 
@@ -59,7 +62,7 @@ export const Courses = () => {
       setSearchParams({ [ADD_COURSE]: true })
    }
 
-   const assignTeacherHandler = (id) => {
+   const assignTeacher = (id) => {
       setSearchParams({
          [APPOINT_TEACHER]: true,
          teacherId: id,
@@ -68,12 +71,12 @@ export const Courses = () => {
       dispatch(getInstructor())
    }
 
-   const getCourseIdHandler = (id) => {
+   const getCourseId = (id) => {
       setSearchParams({ [DELETE_COURSE]: true })
       setCourseId(id)
    }
 
-   const editTeacherHandler = (id) => {
+   const editCourse = (id) => {
       dispatch(getSingleCourse(id))
       setSearchParams({
          [EDIT_COURSE]: true,
@@ -81,9 +84,9 @@ export const Courses = () => {
       })
    }
 
-   const deleteCourseHandler = () => {
+   const deleteHandler = () => {
       dispatch(deleteCourse({ id: courseId, currentPage }))
-      closeModalHandler()
+      closeModal()
    }
 
    const onChangeHandler = (currentPage) => {
@@ -91,46 +94,63 @@ export const Courses = () => {
       setCurrentPage(currentPage)
       dispatch(pagination(currentPage))
    }
-   const closeModalHandler = () => {
+
+   const closeModal = () => {
       setSearchParams(false)
    }
-   const options = [
-      {
-         id: '1',
-         action: (course) => assignTeacherHandler(course.id),
-         content: (
-            <StyledIcon>
-               <PinIcon />
-               <p>Назначить учителя</p>
-            </StyledIcon>
-         ),
-      },
-      {
-         id: '2',
-         action: (course) => editTeacherHandler(course.id),
-         content: (
-            <StyledIcon>
-               <EditIcon />
-               <p>Редактировать</p>
-            </StyledIcon>
-         ),
-      },
-      {
-         id: '3',
-         action: (course) => getCourseIdHandler(course.id),
-         content: (
-            <StyledIcon>
-               <TrashIcon />
-               <p>Удалить</p>
-            </StyledIcon>
-         ),
-      },
-   ]
+
+   useEffect(() => {
+      setTimeout(() => {
+         dispatch(coursesActions.showSuccessMessage(false))
+      }, 1555)
+   }, [isSuccess])
+
+   useEffect(() => {
+      setTimeout(() => {
+         dispatch(coursesActions.showErrorMessage(false))
+      }, 2500)
+   }, [error])
+
+   const options = useMemo(
+      () => [
+         {
+            id: '1',
+            action: (course) => assignTeacher(course.id),
+            content: (
+               <StyledIcon>
+                  <PinIcon />
+                  <p>Назначить учителя</p>
+               </StyledIcon>
+            ),
+         },
+         {
+            id: '2',
+            action: (course) => editCourse(course.id),
+            content: (
+               <StyledIcon>
+                  <EditIcon />
+                  <p>Редактировать</p>
+               </StyledIcon>
+            ),
+         },
+         {
+            id: '3',
+            action: (course) => getCourseId(course.id),
+            content: (
+               <StyledIcon>
+                  <TrashIcon />
+                  <p>Удалить</p>
+               </StyledIcon>
+            ),
+         },
+      ],
+      []
+   )
    return (
       <Wrapper>
          <AddNewCourse
             isModalOpen={showAddCourseModal}
-            closeModalHandler={closeModalHandler}
+            closeModal={closeModal}
             addCourseHandler={addCourseHandler}
             currentPage={currentPage}
          />
@@ -151,24 +171,24 @@ export const Courses = () => {
          {instructors && (
             <AssignTeacher
                isModalOpen={Boolean(showAppointTeacherModal)}
-               closeModalHandler={closeModalHandler}
+               closeModal={closeModal}
                instructors={instructors}
                id={courseId}
             />
          )}
 
-         {singleCourse && (
+         {сourse && (
             <EditCourse
-               isEditModalOpen={Boolean(showEditCourseModal)}
-               closeEditModalHandler={closeModalHandler}
-               singleCourse={singleCourse}
+               isModalOpen={Boolean(showEditCourseModal)}
+               closeModal={closeModal}
+               сourse={сourse}
                currentPage={currentPage}
             />
          )}
 
          <ConfirmModal
             isConfirmModalOpen={Boolean(showConfirmModal)}
-            closeConfirmModal={closeModalHandler}
+            closeConfirmModal={closeModal}
             title="Вы уверены, что хотите удалить курс... ?"
          >
             <StyledButton>
@@ -176,7 +196,7 @@ export const Courses = () => {
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={closeModalHandler}
+                  onClick={closeModal}
                >
                   Отмена
                </Button>
@@ -184,7 +204,7 @@ export const Courses = () => {
                   background="#C91E1E"
                   bgHover="#B62727"
                   bgActive="#E13A3A"
-                  onClick={deleteCourseHandler}
+                  onClick={deleteHandler}
                >
                   Удалить
                </Button>
@@ -199,6 +219,8 @@ export const Courses = () => {
                />
             </StyledPagination>
          )}
+         {isSuccess && <Notification message={isSuccess} />}
+         {error && <Notification message={error} status="error" />}
       </Wrapper>
    )
 }

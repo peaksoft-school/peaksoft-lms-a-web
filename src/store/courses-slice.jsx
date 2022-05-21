@@ -5,11 +5,13 @@ import { fileFetch } from '../api/fileFetch'
 const initState = {
    allCourses: [],
    courses: [],
-   singleCourse: null,
+   сourse: null,
    instructors: null,
    pages: null,
    presentPage: null,
    isLoading: null,
+   isSuccess: null,
+   error: null,
 }
 
 export const uploadFile = createAsyncThunk(
@@ -24,7 +26,6 @@ export const uploadFile = createAsyncThunk(
             method: 'POST',
             body: formData,
          })
-
          const data = await response.url.toString()
          if (data) {
             dispatch(addNewCourse({ ...courseData, image: data, currentPage }))
@@ -45,10 +46,11 @@ export const addNewCourse = createAsyncThunk(
             method: 'POST',
             body: newCourse,
          })
-         dispatch(getAllCourses())
          dispatch(pagination(newCourse.currentPage))
+         dispatch(coursesActions.showSuccessMessage('Курс успешно создан'))
          return response
       } catch (error) {
+         dispatch(coursesActions.showErrorMessage('Не удалось создать курс'))
          return rejectWithValue(error.message)
       }
    }
@@ -83,9 +85,7 @@ export const updateFile = createAsyncThunk(
             body: formData,
          })
          const data = await response.url.toString()
-         if (data) {
-            dispatch(editCourse({ ...course, image: data, currentPage }))
-         }
+         dispatch(onEditCourse({ ...course, image: data, currentPage }))
          return data
       } catch (error) {
          return rejectWithValue(error.message)
@@ -101,16 +101,17 @@ export const deleteCourse = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'DELETE',
          })
-         dispatch(getAllCourses())
          dispatch(pagination(currentPage))
+         dispatch(coursesActions.showSuccessMessage('Вы удалили курс'))
          return response
       } catch (error) {
+         dispatch(coursesActions.showErrorMessage('Не удалось удалить курс'))
          return rejectWithValue(error.message)
       }
    }
 )
 
-export const editCourse = createAsyncThunk(
+export const onEditCourse = createAsyncThunk(
    'courses/editCourse',
    async (course, { rejectWithValue, dispatch }) => {
       try {
@@ -119,10 +120,14 @@ export const editCourse = createAsyncThunk(
             method: 'PUT',
             body: course,
          })
-         dispatch(getAllCourses())
          dispatch(pagination(course.currentPage))
+         dispatch(
+            coursesActions.showSuccessMessage('Изменения успешно сохранены')
+         )
+
          return response
       } catch (error) {
+         dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
          return rejectWithValue(error.message)
       }
    }
@@ -196,6 +201,9 @@ export const pagination = createAsyncThunk(
          dispatch(coursesActions.getCoursesWithPagination(response))
          return response
       } catch (error) {
+         coursesActions.showErrorMessage(
+            'Что-то пошло не так, попробуйте еще раз'
+         )
          return rejectWithValue(error.message)
       }
    }
@@ -217,7 +225,7 @@ export const coursesSlice = createSlice({
          state.allCourses = action.payload
       },
       getCourse(state, action) {
-         state.singleCourse = action.payload
+         state.сourse = action.payload
       },
       getInstructors(state, action) {
          state.instructors = action.payload
@@ -229,6 +237,12 @@ export const coursesSlice = createSlice({
       },
       clearCourses(state) {
          state.singleCourse = null
+      },
+      showSuccessMessage(state, action) {
+         state.isSuccess = action.payload
+      },
+      showErrorMessage(state, action) {
+         state.error = action.payload
       },
    },
    extraReducers: {
@@ -250,9 +264,9 @@ export const coursesSlice = createSlice({
       [deleteCourse.pending]: setPending,
       [deleteCourse.fulfilled]: setIsLoading,
       [deleteCourse.rejected]: setIsLoading,
-      [editCourse.pending]: setPending,
-      [editCourse.fulfilled]: setIsLoading,
-      [editCourse.rejected]: setIsLoading,
+      [onEditCourse.pending]: setPending,
+      [onEditCourse.fulfilled]: setIsLoading,
+      [onEditCourse.rejected]: setIsLoading,
       [getInstructor.pending]: setPending,
       [getInstructor.fulfilled]: setIsLoading,
       [getInstructor.rejected]: setIsLoading,

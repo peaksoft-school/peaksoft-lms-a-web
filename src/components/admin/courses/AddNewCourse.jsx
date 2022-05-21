@@ -8,11 +8,10 @@ import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
 import { pagination, uploadFile } from '../../../store/courses-slice'
-import { Notification } from '../../UI/notification/Notification'
 import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
 
 export const AddNewCourse = ({
-   closeModalHandler,
+   closeModal,
    currentPage,
    addCourseHandler,
    isModalOpen,
@@ -22,7 +21,6 @@ export const AddNewCourse = ({
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
    const [formIsValid, setFormIsValid] = useState(false)
-   const [notification, setNotificaton] = useState(null)
 
    const { value, onChange, onClear } = useInput({
       courseName: '',
@@ -57,18 +55,14 @@ export const AddNewCourse = ({
       dispatch(
          uploadFile({ file: selectedFile, courseData: newCourse, currentPage })
       )
-      onClear()
+
       dispatch(pagination(currentPage))
+      onClear()
       setDateValue(null)
       setFile(null)
-      closeModalHandler()
-      setNotificaton(true)
+      closeModal()
    }
-   useEffect(() => {
-      setTimeout(() => {
-         setNotificaton(false)
-      }, 1000)
-   }, [notification])
+
    return (
       <>
          <StyledButton>
@@ -86,7 +80,7 @@ export const AddNewCourse = ({
          <BasicModal
             isModalOpen={!!isModalOpen}
             title="Создать курс"
-            onClose={closeModalHandler}
+            onClose={closeModal}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <StyledInput>
@@ -119,7 +113,7 @@ export const AddNewCourse = ({
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={closeModalHandler}
+                     onClick={closeModal}
                   >
                      Отмена
                   </Button>
@@ -137,7 +131,6 @@ export const AddNewCourse = ({
                </div>
             </ButtonContainer>
          </BasicModal>
-         {notification && <Notification message="Курс успешно создан" />}
       </>
    )
 }

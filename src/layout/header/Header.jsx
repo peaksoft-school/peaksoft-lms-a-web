@@ -12,6 +12,7 @@ export const Header = () => {
    const navigate = useNavigate()
    const dispatch = useDispatch()
    const { role } = useSelector((state) => state.auth.user)
+
    const logoutHandler = () => {
       dispatch(logOut())
       navigate(ROUTES.LOGIN)

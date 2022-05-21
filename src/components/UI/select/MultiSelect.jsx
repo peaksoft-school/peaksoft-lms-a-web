@@ -48,19 +48,23 @@ export const MultiSelect = ({
          </StyledSelect>
          {openMultiSelect && (
             <StyledMultiItems>
-               {userOptions.map((option) => (
-                  <li
-                     key={option.id}
-                     role="presentation"
-                     onClick={() => addMultiSelectHandler(option.id, option)}
-                  >
-                     <p>{option.name}</p>
-                     <label className="custom-checkbox">
-                        <input type="checkbox" />
-                        <span className="checkmark"> </span>
-                     </label>
-                  </li>
-               ))}
+               {userOptions.length > 0
+                  ? userOptions.map((option) => (
+                       <li
+                          key={option.id}
+                          role="presentation"
+                          onClick={() =>
+                             addMultiSelectHandler(option.id, option)
+                          }
+                       >
+                          <p>{option.name}</p>
+                          <label className="custom-checkbox">
+                             <input type="checkbox" />
+                             <span className="checkmark"> </span>
+                          </label>
+                       </li>
+                    ))
+                  : 'Teacher Not Found'}
             </StyledMultiItems>
          )}
       </Container>

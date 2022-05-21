@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { updateFile } from '../../../store/courses-slice'
+import { updateFile, onEditCourse } from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
@@ -10,12 +10,12 @@ import { Input } from '../../UI/input/Input'
 import { BasicModal } from '../../UI/modal/BasicModal'
 
 export const EditCourse = ({
-   singleCourse,
-   isEditModalOpen,
-   closeEditModalHandler,
+   сourse,
+   isModalOpen,
+   closeModal,
    currentPage,
 }) => {
-   const { courseName, dateOfStart, description, image } = singleCourse
+   const { courseName, dateOfStart, description, image } = сourse
 
    const dispatch = useDispatch()
    const [dateValue, setDateValue] = useState(dateOfStart)
@@ -37,23 +37,26 @@ export const EditCourse = ({
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
 
-   const editCourseHandler = () => {
+   const onEdit = () => {
       const course = {
          courseName: value.courseName,
          dateOfStart: dateValue,
          description: value.description,
-         id: singleCourse.id,
+         id: сourse.id,
       }
-      dispatch(updateFile({ file: selectedFile, course, currentPage }))
-      closeEditModalHandler()
+      if (selectedFile) {
+         dispatch(updateFile({ file: selectedFile, course, currentPage }))
+      }
+      dispatch(onEditCourse({ ...course, image, currentPage }))
+      closeModal()
    }
 
    return (
       <div>
          <BasicModal
-            isModalOpen={isEditModalOpen}
+            isModalOpen={isModalOpen}
             title="Редактировать курс"
-            onClose={closeEditModalHandler}
+            onClose={closeModal}
          >
             <ImagePicker onDrop={onDrop} file={file} />
             <ModalContentControl>
@@ -86,14 +89,14 @@ export const EditCourse = ({
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={() => closeEditModalHandler()}
+                     onClick={() => closeModal()}
                   >
                      Отмена
                   </Button>
                </div>
                <div>
                   <Button
-                     onClick={editCourseHandler}
+                     onClick={onEdit}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
