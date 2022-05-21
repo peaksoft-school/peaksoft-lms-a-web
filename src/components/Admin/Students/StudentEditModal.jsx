@@ -9,13 +9,13 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { Select } from '../../UI/select/Select'
 
 export const StudentsEditModal = ({
-   showEditStudentsModal,
-   closeEditStudentsModal,
-   editStudentsHandler,
-   singleStudent,
-   groupOptions,
+   showModal,
+   onClose,
+   onEdit,
+   student,
+   groups,
 }) => {
-   const { email, phoneNumber, studyFormat, fullName } = singleStudent
+   const { email, phoneNumber, studyFormat, fullName } = student
    const [firstName, lastName] = fullName.split(' ')
    const { value, onChange, onClear } = useInput({
       firstName: firstName || '',
@@ -30,8 +30,7 @@ export const StudentsEditModal = ({
    const [selectedOption, setSelectedOption] = useState('')
 
    const editStudents = () => {
-      editStudentsHandler(value, selectedOption)
-      closeEditStudentsModal()
+      onEdit(value, selectedOption)
       onClear()
    }
 
@@ -57,9 +56,9 @@ export const StudentsEditModal = ({
 
    return (
       <BasicModal
-         isModalOpen={Boolean(showEditStudentsModal)}
+         isModalOpen={Boolean(showModal)}
          title="Редактировать студента"
-         onClose={closeEditStudentsModal}
+         onClose={onClose}
       >
          <StyledChildrenOfModal>
             <Input
@@ -93,7 +92,7 @@ export const StudentsEditModal = ({
                onChange={onChange}
             />
             <Select
-               options={groupOptions[0]}
+               options={groups[0]}
                placeholder="Группа"
                name="groupName"
                selectedOption={seletedOptionHandler}
@@ -113,7 +112,7 @@ export const StudentsEditModal = ({
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={closeEditStudentsModal}
+                  onClick={onClose}
                >
                   Отмена
                </Button>

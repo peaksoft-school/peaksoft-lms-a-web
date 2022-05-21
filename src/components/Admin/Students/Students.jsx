@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
@@ -52,10 +52,11 @@ export const Students = () => {
       singleStudent,
       groups,
       totalPages,
-      isSuccess,
+      successMessage,
       presentPage,
       error,
       isLoading,
+      isSuccess,
    } = useSelector((state) => state.students)
 
    const [searchParams, setSearchParams] = useSearchParams()
@@ -72,7 +73,6 @@ export const Students = () => {
    const closeModals = () => {
       setSearchParams({ page: currentPage })
    }
-
    const openStudentsModal = () => {
       setSearchParams({ [CREATE_STUDENT]: true })
       dispatch(getGroups())
@@ -86,7 +86,6 @@ export const Students = () => {
       dispatch(
          addStudent({ value, id: groupId, page: currentPage, studyFormat })
       )
-      closeModals()
    }
 
    const sendEditedStudentInfo = (singleStudentsData, groupId) => {
@@ -110,7 +109,6 @@ export const Students = () => {
       dispatch(
          deleteStudent({ id: deletedStudentId, page: currentPage, studyFormat })
       )
-      closeModals()
    }
 
    const editStudentInfoHandler = (id) => {
@@ -120,6 +118,7 @@ export const Students = () => {
    }
 
    const uploadStudentsAsExcelFileHandler = (groupId, excelFile) => {
+      dispatch(getGroups())
       dispatch(
          sendStudentsAsExcel({
             file: excelFile,
@@ -128,7 +127,6 @@ export const Students = () => {
             studyFormat,
          })
       )
-      dispatch(getGroups())
    }
 
    const paginationHandler = (event, value) => {
@@ -165,7 +163,7 @@ export const Students = () => {
       setTimeout(() => {
          dispatch(studentsActions.showSuccessModal(false))
       }, 1555)
-   }, [isSuccess])
+   }, [successMessage])
 
    useEffect(() => {
       setTimeout(() => {
@@ -180,63 +178,75 @@ export const Students = () => {
       }
    }, [currentPage])
 
-   const COLUMNS = [
-      {
-         title: 'ID',
-         accessKey: 'id',
-         id: 1,
-      },
-      {
-         title: 'Имя Фамилия',
-         accessKey: 'fullName',
-         id: 2,
-      },
-      {
-         title: 'Группа',
-         accessKey: 'groupName',
-         id: 3,
-      },
-      {
-         title: 'Формат обучения',
-         accessKey: 'studyFormat',
-         id: 4,
-      },
-      {
-         title: 'Номер телефона',
-         accessKey: 'phoneNumber',
-         id: 5,
-      },
-      {
-         title: 'E-mail',
-         accessKey: 'email',
-         id: 6,
-      },
-      {
-         title: 'Действия',
-         accessKey: 'actions',
-         id: 7,
-         action: (item) => (
-            <StyledActions key={item.id}>
-               <EditIcon
-                  onClick={() => {
-                     if (item) {
-                        editStudentInfoHandler(item.id)
-                     }
-                  }}
-               />
-               <RemoveIcon onClick={() => deleteHandler(item.id)} />
-            </StyledActions>
-         ),
-      },
-   ]
-   const groupOptions = [
-      groups.map((el) => {
-         return {
-            id: el.id,
-            title: el.groupName,
-         }
-      }),
-   ]
+   useEffect(() => {
+      if (isSuccess) {
+         setSearchParams({ page: currentPage })
+      }
+   }, [isSuccess])
+
+   const COLUMNS = useMemo(
+      () => [
+         {
+            title: 'ID',
+            accessKey: 'id',
+            id: 1,
+         },
+         {
+            title: 'Имя Фамилия',
+            accessKey: 'fullName',
+            id: 2,
+         },
+         {
+            title: 'Группа',
+            accessKey: 'groupName',
+            id: 3,
+         },
+         {
+            title: 'Формат обучения',
+            accessKey: 'studyFormat',
+            id: 4,
+         },
+         {
+            title: 'Номер телефона',
+            accessKey: 'phoneNumber',
+            id: 5,
+         },
+         {
+            title: 'E-mail',
+            accessKey: 'email',
+            id: 6,
+         },
+         {
+            title: 'Действия',
+            accessKey: 'actions',
+            id: 7,
+            action: (item) => (
+               <StyledActions key={item.id}>
+                  <EditIcon
+                     onClick={() => {
+                        if (item) {
+                           editStudentInfoHandler(item.id)
+                        }
+                     }}
+                  />
+                  <RemoveIcon onClick={() => deleteHandler(item.id)} />
+               </StyledActions>
+            ),
+         },
+      ],
+      []
+   )
+   const groupOptions = useMemo(
+      () => [
+         groups.map((el) => {
+            return {
+               id: el.id,
+               title: el.groupName,
+            }
+         }),
+      ],
+      []
+   )
    return (
       <div>
          <StyledButtonsContainer>
@@ -254,30 +264,30 @@ export const Students = () => {
             />
          </StyledButtonsContainer>
          <StudentsModalForm
-            showAddStudentsModal={showAddStudentsModal}
-            showAddStudentsModalHandler={closeModals}
-            addStudentHandler={addStudentHandler}
-            groupOptions={groupOptions}
+            showModal={showAddStudentsModal}
+            onClose={closeModals}
+            onAdd={addStudentHandler}
+            groups={groupOptions}
          />
          {singleStudent && (
             <StudentsEditModal
-               showEditStudentsModal={Boolean(showEditStudentsModal)}
-               closeEditStudentsModal={closeModals}
-               editStudentsHandler={sendEditedStudentInfo}
-               singleStudent={singleStudent}
-               groupOptions={groupOptions}
+               showModal={Boolean(showEditStudentsModal)}
+               onClose={closeModals}
+               onEdit={sendEditedStudentInfo}
+               student={singleStudent}
+               groups={groupOptions}
             />
          )}
          <ConfirmModalOnDelete
-            showConfirmModal={Boolean(showConfirmModal)}
-            deleteStudentHandler={deleteStudentHandler}
-            closeConfirmModal={closeModals}
+            showModal={Boolean(showConfirmModal)}
+            onDelete={deleteStudentHandler}
+            onClose={closeModals}
          />
          <UploadExcel
-            uploadStudentsHandler={uploadStudentsAsExcelFileHandler}
-            colseUplaodStudentsModal={closeModals}
-            openUplaodModal={Boolean(showUploadStudentsModal)}
-            groupOptions={groupOptions}
+            onUpload={uploadStudentsAsExcelFileHandler}
+            onClose={closeModals}
+            showModal={Boolean(showUploadStudentsModal)}
+            groups={groupOptions}
          />
          <AppTable
             data={studentData}
@@ -289,7 +299,7 @@ export const Students = () => {
             }}
          />
          {isLoading && <Spinner />}
-         {isSuccess && <Notification message={isSuccess} />}
+         {successMessage && <Notification message={successMessage} />}
          {error && <Notification message={error} status="error" />}
       </div>
    )

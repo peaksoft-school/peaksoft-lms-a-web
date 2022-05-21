@@ -6,12 +6,7 @@ import { Input } from '../../UI/input/Input'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { Select } from '../../UI/select/Select'
 
-export const UploadExcel = ({
-   uploadStudentsHandler,
-   colseUplaodStudentsModal,
-   openUplaodModal,
-   groupOptions,
-}) => {
+export const UploadExcel = ({ onUpload, onClose, showModal, groups }) => {
    const { value, onChange, onClear } = useInput({ group: '' })
 
    const [disableButton, setDisableButton] = useState(false)
@@ -19,8 +14,7 @@ export const UploadExcel = ({
    const [selectedOption, setSelectedOption] = useState('')
 
    const uploadStudents = () => {
-      uploadStudentsHandler(selectedOption, selectedFile)
-      colseUplaodStudentsModal()
+      onUpload(selectedOption, selectedFile)
       onClear()
       setSelectedFile('')
    }
@@ -43,13 +37,13 @@ export const UploadExcel = ({
    }, [value])
    return (
       <BasicModal
-         isModalOpen={openUplaodModal}
+         isModalOpen={showModal}
          title="Импорт Excel в БД"
-         onClose={colseUplaodStudentsModal}
+         onClose={onClose}
       >
          <StyledChildrenOfModal>
             <Select
-               options={groupOptions[0]}
+               options={groups[0]}
                selectedOption={seletedOptionHandler}
                placeholder="Группа"
                name="group"
@@ -78,7 +72,7 @@ export const UploadExcel = ({
                   border="1px solid #3772FF"
                   color="#3772FF"
                   onClick={() => {
-                     colseUplaodStudentsModal()
+                     onClose()
                      setSelectedFile('')
                   }}
                >

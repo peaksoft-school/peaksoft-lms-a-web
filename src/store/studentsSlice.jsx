@@ -8,9 +8,10 @@ const initState = {
    isLoading: null,
    singleStudent: null,
    totalPages: null,
-   isSuccess: null,
+   successMessage: null,
    presentPage: null,
    error: null,
+   isSuccess: null,
 }
 
 export const addStudent = createAsyncThunk(
@@ -24,8 +25,10 @@ export const addStudent = createAsyncThunk(
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
          dispatch(studentsActions.showSuccessModal('Cтудент успешно создан'))
+         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(studentsActions.isSucceed(false))
          dispatch(
             studentsActions.showErrorMessage('Не удалось добавить cтудентa')
          )
@@ -75,8 +78,10 @@ export const deleteStudent = createAsyncThunk(
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
          dispatch(studentsActions.showSuccessModal('Cтудент успешно удален'))
+         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(studentsActions.isSucceed(false))
          dispatch(
             studentsActions.showErrorMessage('Не удалось удалить cтудентa')
          )
@@ -100,8 +105,10 @@ export const editStudent = createAsyncThunk(
          dispatch(
             studentsActions.showSuccessModal('Изменения успешно сохранены')
          )
+         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(studentsActions.isSucceed(false))
          dispatch(
             studentsActions.showErrorMessage('Не удалось изменить данные')
          )
@@ -122,8 +129,10 @@ export const sendStudentsAsExcel = createAsyncThunk(
          })
          dispatch(getStudentsWithPagination({ page, studyFormat }))
          dispatch(studentsActions.showSuccessModal('Данные успешно сохранены'))
+         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(studentsActions.isSucceed(false))
          dispatch(studentsActions.showErrorMessage(error.message))
          return rejectWithValue(error.message)
       }
@@ -201,10 +210,13 @@ export const studentsSlice = createSlice({
          state.presentPage = action.payload.currentPage
       },
       showSuccessModal(state, action) {
-         state.isSuccess = action.payload
+         state.successMessage = action.payload
       },
       showErrorMessage(state, action) {
          state.error = action.payload
+      },
+      isSucceed(state, action) {
+         state.isSuccess = action.payload
       },
    },
    extraReducers: {

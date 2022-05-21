@@ -2,23 +2,19 @@ import styled from '@emotion/styled'
 import { Button } from '../../UI/button/Button'
 import ConfirmModal from '../../UI/modal/ConfirmModal'
 
-export const ConfirmModalOnDelete = ({
-   showConfirmModal,
-   closeConfirmModal,
-   deleteStudentHandler,
-}) => {
+export const ConfirmModalOnDelete = ({ showModal, onClose, onDelete }) => {
    return (
       <ConfirmModal
          title="Вы уверены, что хотите удалить студента ... ?"
-         isConfirmModalOpen={Boolean(showConfirmModal)}
-         closeConfirmModal={closeConfirmModal}
+         isConfirmModalOpen={Boolean(showModal)}
+         closeConfirmModal={onClose}
       >
          <StyledButton>
             <Button
                background="none"
                border="1px solid #3772FF"
                color="#3772FF"
-               onClick={closeConfirmModal}
+               onClick={onClose}
             >
                Отмена
             </Button>
@@ -26,7 +22,7 @@ export const ConfirmModalOnDelete = ({
                background="#C91E1E"
                bgHover="#B62727"
                bgActive="#E13A3A"
-               onClick={deleteStudentHandler}
+               onClick={onDelete}
             >
                Удалить
             </Button>

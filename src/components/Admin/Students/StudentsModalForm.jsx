@@ -8,12 +8,7 @@ import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { Select } from '../../UI/select/Select'
 
-export const StudentsModalForm = ({
-   showAddStudentsModal,
-   showAddStudentsModalHandler,
-   addStudentsHandler,
-   groupOptions,
-}) => {
+export const StudentsModalForm = ({ showModal, onClose, onAdd, groups }) => {
    const { value, onChange, onClear } = useInput({
       firstName: '',
       lastName: '',
@@ -28,7 +23,7 @@ export const StudentsModalForm = ({
    const [selectedOption, setSelectedOption] = useState('')
 
    const addStudents = () => {
-      addStudentsHandler(value, selectedOption)
+      onAdd(value, selectedOption)
       onClear()
    }
 
@@ -54,9 +49,9 @@ export const StudentsModalForm = ({
 
    return (
       <BasicModal
-         isModalOpen={Boolean(showAddStudentsModal)}
+         isModalOpen={Boolean(showModal)}
          title="Добавить студента"
-         onClose={showAddStudentsModalHandler}
+         onClose={onClose}
       >
          <StyledChildrenOfModal>
             <Input
@@ -90,7 +85,7 @@ export const StudentsModalForm = ({
                onChange={onChange}
             />
             <Select
-               options={groupOptions[0]}
+               options={groups[0]}
                placeholder="Группа"
                name="group"
                value={value.group}
@@ -110,7 +105,7 @@ export const StudentsModalForm = ({
                   background="none"
                   border="1px solid #3772FF"
                   color="#3772FF"
-                  onClick={showAddStudentsModalHandler}
+                  onClick={onClose}
                >
                   Отмена
                </Button>
