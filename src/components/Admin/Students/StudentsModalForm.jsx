@@ -85,7 +85,7 @@ export const StudentsModalForm = ({ showModal, onClose, onAdd, groups }) => {
                onChange={onChange}
             />
             <Select
-               options={groups[0]}
+               options={groups}
                placeholder="Группа"
                name="group"
                value={value.group}

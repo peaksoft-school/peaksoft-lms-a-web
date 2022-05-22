@@ -43,7 +43,7 @@ export const UploadExcel = ({ onUpload, onClose, showModal, groups }) => {
       >
          <StyledChildrenOfModal>
             <Select
-               options={groups[0]}
+               options={groups}
                selectedOption={seletedOptionHandler}
                placeholder="Группа"
                name="group"

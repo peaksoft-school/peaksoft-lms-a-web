@@ -1,39 +1,24 @@
 import styled from '@emotion/styled/macro'
-import { Alert } from '@mui/material'
+import { Alert, Snackbar } from '@mui/material'
 
 export const Notification = (props) => {
    return (
-      <Container>
+      <Snackbar
+         open={props.open}
+         autoHideDuration={3000}
+         onClose={props.onClose}
+         anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+         }}
+      >
          <StyledAlert variant="filled" severity={props.status}>
             <StyledMessage>{props.message}</StyledMessage>
          </StyledAlert>
-      </Container>
+      </Snackbar>
    )
 }
-const Container = styled.div`
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   z-index: 10;
-   position: fixed;
-   right: 0%;
-   top: 10%;
-   animation: 1.5s slide-left;
-   @keyframes slide-left {
-      from {
-         margin-right: 0%;
-      }
-      to {
-         margin-right: 15%;
-      }
-   }
-   .MuiAlert-filledSuccess {
-      background-color: #36ac0c;
-   }
-   .MuiAlert-filledError {
-      background-color: #c91e1e;
-   }
-`
+
 const StyledAlert = styled(Alert)`
    border-radius: 12px;
    padding: 15px 28px;

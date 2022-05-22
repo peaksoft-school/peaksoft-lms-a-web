@@ -92,7 +92,7 @@ export const StudentsEditModal = ({
                onChange={onChange}
             />
             <Select
-               options={groups[0]}
+               options={groups}
                placeholder="Группа"
                name="groupName"
                selectedOption={seletedOptionHandler}

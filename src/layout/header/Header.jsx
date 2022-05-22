@@ -42,7 +42,7 @@ export const Header = () => {
             <StyledProfile>
                <BellIcon />
                <ProfileIcon />
-               <p>Инструктор</p>
+               <p>Student</p>
                <LogoutButton logoutHandler={logoutHandler} />
             </StyledProfile>
          )

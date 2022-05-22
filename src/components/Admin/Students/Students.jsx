@@ -12,7 +12,6 @@ import {
    getSingleStudent,
    getStudentsWithPagination,
    sendStudentsAsExcel,
-   studentsActions,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
 import { AppTable } from '../../UI/table/AppTable'
@@ -64,11 +63,22 @@ export const Students = () => {
    const [currentPage, setCurrentPage] = useState(1)
    const [studyFormat, setStudyFormat] = useState('ALL')
    const [deletedStudentId, setDeletedStudentId] = useState(null)
+   const [openNotification, setOpenNotification] = useState(false)
+   const [openErrorNotification, setOpenErrorNotification] = useState(false)
 
    const showConfirmModal = searchParams.get(DELETE_STUDENT)
    const showAddStudentsModal = searchParams.get(CREATE_STUDENT)
    const showEditStudentsModal = searchParams.get(EDIT_STUDENT)
    const showUploadStudentsModal = searchParams.get(UPLOAD_STUDENT)
+
+   const closeNotification = (event, reason) => {
+      if (reason === 'clickaway') {
+         return
+      }
+
+      setOpenNotification(false)
+      setOpenErrorNotification(false)
+   }
 
    const closeModals = () => {
       setSearchParams({ page: currentPage })
@@ -160,18 +170,6 @@ export const Students = () => {
    }, [])
 
    useEffect(() => {
-      setTimeout(() => {
-         dispatch(studentsActions.showSuccessModal(false))
-      }, 1555)
-   }, [successMessage])
-
-   useEffect(() => {
-      setTimeout(() => {
-         dispatch(studentsActions.showErrorMessage(false))
-      }, 2500)
-   }, [error])
-
-   useEffect(() => {
       const page = searchParams.get('page')
       if (page) {
          setSearchParams({ page: currentPage || '1' })
@@ -183,6 +181,18 @@ export const Students = () => {
          setSearchParams({ page: currentPage })
       }
    }, [isSuccess])
+
+   useEffect(() => {
+      if (successMessage) {
+         setOpenNotification(true)
+      }
+   }, [successMessage])
+
+   useEffect(() => {
+      if (error) {
+         setOpenErrorNotification(true)
+      }
+   }, [error])
 
    const COLUMNS = useMemo(
       () => [
@@ -221,7 +231,7 @@ export const Students = () => {
             accessKey: 'actions',
             id: 7,
             action: (item) => (
-               <StyledActions key={item.id}>
+               <StyledActions key={item.email}>
                   <EditIcon
                      onClick={() => {
                         if (item) {
@@ -236,17 +246,13 @@ export const Students = () => {
       ],
       []
    )
-   const groupOptions = useMemo(
-      () => [
-         groups.map((el) => {
-            return {
-               id: el.id,
-               title: el.groupName,
-            }
-         }),
-      ],
-      []
-   )
+   const groupOptions = groups.map((el) => {
+      return {
+         id: el.id,
+         title: el.groupName,
+      }
+   })
+
    return (
       <div>
          <StyledButtonsContainer>
@@ -299,8 +305,17 @@ export const Students = () => {
             }}
          />
          {isLoading && <Spinner />}
-         {successMessage && <Notification message={successMessage} />}
-         {error && <Notification message={error} status="error" />}
+         <Notification
+            message={successMessage}
+            onClose={closeNotification}
+            open={openNotification}
+         />
+         <Notification
+            message={error}
+            status="error"
+            onClose={closeNotification}
+            open={openErrorNotification}
+         />
       </div>
    )
 }
