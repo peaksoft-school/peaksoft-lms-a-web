@@ -13,6 +13,7 @@ export const MultiSelect = ({
 }) => {
    const [openMultiSelect, setOpenMultiSelect] = useState(false)
    const [userOptions, setUserOptions] = useState(options)
+   console.log(options)
 
    const toggleSelection = () => setOpenMultiSelect(!openMultiSelect)
 
@@ -25,13 +26,12 @@ export const MultiSelect = ({
       setSelectedOptions(selectedOptions.filter((option) => option.id !== id))
       setUserOptions((prev) => [...prev, selected])
    }
-
    return (
       <Container>
          <StyledUl>
             {selectedOptions.map((selected) => (
                <li key={selected.id}>
-                  <p>{selected.name}</p>
+                  <p>{selected.fullName}</p>
                   <RemoveSelect
                      style={{ marginTop: '3px' }}
                      role="presentation"
@@ -57,7 +57,7 @@ export const MultiSelect = ({
                              addMultiSelectHandler(option.id, option)
                           }
                        >
-                          <p>{option.name}</p>
+                          <p>{option.fullName}</p>
                           <label className="custom-checkbox">
                              <input type="checkbox" />
                              <span className="checkmark"> </span>
@@ -87,6 +87,7 @@ const StyledSelect = styled.div`
    margin: 13px 0;
    color: #00125b;
    font-weight: 600;
+   cursor: pointer;
 `
 const StyledMultiItems = styled.ul`
    display: flex;
@@ -168,6 +169,7 @@ const StyledUl = styled.ul`
       background: #3772ff;
    }
    li {
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
       list-style: none;

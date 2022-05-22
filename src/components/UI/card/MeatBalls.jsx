@@ -16,7 +16,7 @@ export const MeatBalls = (props) => {
       setAnchorEl(null)
    }
    const clickHandler = (action) => {
-      action(props.course)
+      action(props.id)
       setAnchorEl(null)
    }
    return (

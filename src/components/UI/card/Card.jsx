@@ -5,23 +5,26 @@ import {
    Typography,
    Card as MuiCard,
 } from '@mui/material'
+import { NavLink } from 'react-router-dom'
 import { MeatBalls } from './MeatBalls'
 
 export const Card = (props) => {
    return (
       <Wrapper>
-         <Container component="img" image={props.image} alt={props.title} />
-         <CardContent>
-            <StyledTitle>
-               <TitleContainer variant="h5">{props.title}</TitleContainer>
-               <StyledDate variant="p">{props.date}</StyledDate>
-            </StyledTitle>
-            <StyledDescription>
-               <Typography>{props.description}</Typography>
-            </StyledDescription>
-         </CardContent>
+         <StyledNavLink to={`id${props.id}/instructors`}>
+            <Container component="img" image={props.image} alt={props.title} />
+            <CardContent>
+               <StyledTitle>
+                  <TitleContainer variant="h5">{props.title}</TitleContainer>
+                  <StyledDate variant="p">{props.date}</StyledDate>
+               </StyledTitle>
+               <StyledDescription>
+                  <Typography>{props.description}</Typography>
+               </StyledDescription>
+            </CardContent>
+         </StyledNavLink>
          <StyledIcon>
-            <MeatBalls options={props.options} course={props.card} />
+            <MeatBalls options={props.options} id={props.id} />
          </StyledIcon>
       </Wrapper>
    )
@@ -43,6 +46,7 @@ const StyledTitle = styled.div`
    justify-content: space-between;
    align-items: center;
    padding-right: 18px;
+   height: 30px;
 `
 const TitleContainer = styled(Typography)`
    font-family: 'Open Sans', sans-serif;
@@ -55,12 +59,14 @@ const TitleContainer = styled(Typography)`
    display: -webkit-box;
    -webkit-line-clamp: 1;
    -webkit-box-orient: vertical;
+   width: 170px;
 `
 const StyledDate = styled(Typography)`
    font-family: 'Open Sans', sans-serif;
    font-size: 12px;
    line-height: 140.1%;
    color: #1d293f;
+   width: 70px;
 `
 const StyledDescription = styled.div`
    font-family: 'Open Sans', sans-serif;
@@ -69,7 +75,7 @@ const StyledDescription = styled.div`
    font-size: 16px;
    line-height: 22px;
    color: #1d293f;
-   height: 60px;
+   height: 65px;
    margin-top: 10px;
    width: 236px;
    padding: 0px 18px 0 0;
@@ -84,4 +90,7 @@ const StyledIcon = styled.div`
    flex-direction: end;
    justify-content: end;
    padding-bottom: 10px;
+`
+const StyledNavLink = styled(NavLink)`
+   text-decoration: none;
 `

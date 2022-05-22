@@ -38,6 +38,7 @@ const StyledCrumbs = styled(Breadcrumbs)`
    font-size: 14px;
    letter-spacing: 0.02em;
    font-family: sans-serif;
+   margin-left: 20px;
 `
 
 const LinkStyleControl = styled(Link)`

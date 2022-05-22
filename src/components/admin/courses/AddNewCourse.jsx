@@ -7,7 +7,7 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { pagination, uploadFile } from '../../../store/courses-slice'
+import { addNewCourse, getAllCourses } from '../../../store/courses-slice'
 import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
 
 export const AddNewCourse = ({
@@ -53,10 +53,14 @@ export const AddNewCourse = ({
       }
 
       dispatch(
-         uploadFile({ file: selectedFile, courseData: newCourse, currentPage })
+         addNewCourse({
+            file: selectedFile,
+            courseData: newCourse,
+            currentPage,
+         })
       )
 
-      dispatch(pagination(currentPage))
+      dispatch(getAllCourses(currentPage))
       onClear()
       setDateValue(null)
       setFile(null)

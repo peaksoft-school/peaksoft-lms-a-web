@@ -17,7 +17,6 @@ import {
    getAllCourses,
    getInstructor,
    getSingleCourse,
-   pagination,
 } from '../../../store/courses-slice'
 import {
    ADD_COURSE,
@@ -30,8 +29,15 @@ import { Notification } from '../../UI/notification/Notification'
 
 export const Courses = () => {
    const dispatch = useDispatch()
-   const { сourse, instructors, pages, courses, isSuccess, error } =
-      useSelector((state) => state.courses)
+   const {
+      сourse,
+      instructors,
+      pages,
+      courses,
+      isSuccess,
+      errorMessage,
+      successMessage,
+   } = useSelector((state) => state.courses)
 
    const [courseId, setCourseId] = useState()
    const [currentPage, setCurrentPage] = useState(1)
@@ -43,8 +49,6 @@ export const Courses = () => {
    const showConfirmModal = searchParams.get(DELETE_COURSE)
 
    useEffect(() => {
-      dispatch(getAllCourses())
-
       const courseId = searchParams.get('courseId')
       if (courseId) {
          dispatch(getSingleCourse(courseId))
@@ -55,7 +59,7 @@ export const Courses = () => {
          dispatch(getInstructor())
       }
 
-      dispatch(pagination(currentPage))
+      dispatch(getAllCourses(currentPage))
    }, [])
 
    const addCourseHandler = () => {
@@ -92,7 +96,7 @@ export const Courses = () => {
    const onChangeHandler = (currentPage) => {
       setSearchParams(`page=${currentPage}`)
       setCurrentPage(currentPage)
-      dispatch(pagination(currentPage))
+      dispatch(getAllCourses(currentPage))
    }
 
    const closeModal = () => {
@@ -103,19 +107,19 @@ export const Courses = () => {
       setTimeout(() => {
          dispatch(coursesActions.showSuccessMessage(false))
       }, 1555)
-   }, [isSuccess])
+   }, [successMessage])
 
    useEffect(() => {
       setTimeout(() => {
          dispatch(coursesActions.showErrorMessage(false))
       }, 2500)
-   }, [error])
+   }, [errorMessage])
 
    const options = useMemo(
       () => [
          {
             id: '1',
-            action: (course) => assignTeacher(course.id),
+            action: (id) => assignTeacher(id),
             content: (
                <StyledIcon>
                   <PinIcon />
@@ -125,7 +129,7 @@ export const Courses = () => {
          },
          {
             id: '2',
-            action: (course) => editCourse(course.id),
+            action: (id) => editCourse(id),
             content: (
                <StyledIcon>
                   <EditIcon />
@@ -135,7 +139,7 @@ export const Courses = () => {
          },
          {
             id: '3',
-            action: (course) => getCourseId(course.id),
+            action: (id) => getCourseId(id),
             content: (
                <StyledIcon>
                   <TrashIcon />
@@ -146,6 +150,7 @@ export const Courses = () => {
       ],
       []
    )
+
    return (
       <Wrapper>
          <AddNewCourse
@@ -156,16 +161,15 @@ export const Courses = () => {
          />
          <Container>
             {courses.map((course) => (
-               <StyledCard key={course.id}>
-                  <Card
-                     options={options}
-                     image={course.image}
-                     title={course.courseName}
-                     description={course.description}
-                     date={course.dateOfStart}
-                     card={course}
-                  />
-               </StyledCard>
+               <Card
+                  key={course.id}
+                  options={options}
+                  image={course.image}
+                  title={course.courseName}
+                  description={course.description}
+                  date={course.dateOfStart}
+                  id={course.id}
+               />
             ))}
          </Container>
          {instructors && (
@@ -219,8 +223,10 @@ export const Courses = () => {
                />
             </StyledPagination>
          )}
-         {isSuccess && <Notification message={isSuccess} />}
-         {error && <Notification message={error} status="error" />}
+         {successMessage && <Notification message={successMessage} />}
+         {errorMessage && (
+            <Notification message={errorMessage} status="error" />
+         )}
       </Wrapper>
    )
 }
@@ -233,21 +239,16 @@ const Wrapper = styled.div`
 const StyledPagination = styled.div`
    margin-top: 20px;
 `
-const StyledCard = styled.div`
-   min-width: 270px;
-   min-height: 300px;
-   max-height: 330px;
-`
+
 const Container = styled.div`
    cursor: pointer;
    flex-wrap: wrap;
-   gap: 40px;
-   grid-row: 40px;
+   grid-row: 30px;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
    grid-template-rows: repeat(2, 1fr);
-   grid-column-gap: 40px;
-   grid-row-gap: 40px;
+   grid-column-gap: 30px;
+   grid-row-gap: 30px;
 `
 const StyledIcon = styled.div`
    display: flex;

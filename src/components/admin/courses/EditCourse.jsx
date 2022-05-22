@@ -44,10 +44,8 @@ export const EditCourse = ({
          description: value.description,
          id: сourse.id,
       }
-      if (selectedFile) {
-         dispatch(updateFile({ file: selectedFile, course, currentPage }))
-      }
-      dispatch(onEditCourse({ ...course, image, currentPage }))
+
+      dispatch(onEditCourse({ file: selectedFile, image, course, currentPage }))
       closeModal()
    }
 

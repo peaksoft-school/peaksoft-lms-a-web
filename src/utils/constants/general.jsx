@@ -67,3 +67,14 @@ export const EDIT_COURSE = 'edit_course'
 export const ADD_TEACHERS = 'add_tachers'
 export const DELETE_TEACHER = 'delete_teacher'
 export const EDIT_TEACHER = 'edit_tacher'
+
+export const COURSE_INNER_TABS = [
+   {
+      title: 'Учителя',
+      to: 'instructors',
+   },
+   {
+      title: 'Студенты',
+      to: 'students',
+   },
+]

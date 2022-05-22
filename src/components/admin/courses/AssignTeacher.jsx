@@ -15,7 +15,7 @@ export const AssignTeacher = ({ instructors, id, closeModal, isModalOpen }) => {
 
    const newMultiSelect = (selected) => {
       setListOfTeacher((prev) => [...prev, Number(selected.id)])
-      setSelectedTeacher(selected.name)
+      setSelectedTeacher(selected.fullName)
    }
 
    const appointTeacher = () => {
@@ -27,15 +27,6 @@ export const AssignTeacher = ({ instructors, id, closeModal, isModalOpen }) => {
       )
       closeModal()
    }
-
-   const options = [
-      instructors.map((teacher) => {
-         return {
-            id: teacher.id,
-            name: teacher.fullName,
-         }
-      }),
-   ]
 
    useEffect(() => {
       setSelectIsValid(selectedOptions.length > 0)
@@ -49,7 +40,7 @@ export const AssignTeacher = ({ instructors, id, closeModal, isModalOpen }) => {
       >
          <MultiSelect
             title={selectedTeacher}
-            options={options[0]}
+            options={instructors}
             onSelected={newMultiSelect}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}

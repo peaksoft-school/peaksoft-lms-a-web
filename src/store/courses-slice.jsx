@@ -3,7 +3,6 @@ import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
 
 const initState = {
-   allCourses: [],
    courses: [],
    сourse: null,
    instructors: null,
@@ -11,83 +10,67 @@ const initState = {
    presentPage: null,
    isLoading: null,
    isSuccess: null,
-   error: null,
+   errorMessage: null,
+   successMessage: null,
 }
 
-export const uploadFile = createAsyncThunk(
-   'courses/sendFile',
+export const addNewCourse = createAsyncThunk(
+   'courses/addNewCourse',
    async ({ file, courseData, currentPage }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
 
-         const response = await fileFetch({
+         const res = await fileFetch({
             path: 'api/file',
             method: 'POST',
             body: formData,
          })
-         const data = await response.url.toString()
-         if (data) {
-            dispatch(addNewCourse({ ...courseData, image: data, currentPage }))
-         }
-         return data
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-   }
-)
-
-export const addNewCourse = createAsyncThunk(
-   'courses/addNewCourse',
-   async (newCourse, { rejectWithValue, dispatch }) => {
-      try {
+         const data = await res.url.toString()
          const response = await baseFetch({
             path: 'api/courses',
             method: 'POST',
-            body: newCourse,
+            body: { ...courseData, image: data },
          })
-         dispatch(pagination(newCourse.currentPage))
+         dispatch(getAllCourses(currentPage))
          dispatch(coursesActions.showSuccessMessage('Курс успешно создан'))
+         dispatch(coursesActions.isSucceed(true))
          return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось создать курс'))
+         dispatch(coursesActions.isSucceed(false))
          return rejectWithValue(error.message)
       }
    }
 )
 
-export const getAllCourses = createAsyncThunk(
-   'courses/getAllCourse',
-   async (_, { rejectWithValue, dispatch }) => {
-      try {
-         const response = await baseFetch({
-            path: 'api/courses',
-            method: 'GET',
-         })
-         dispatch(coursesActions.addNewCourse(response))
-         return response
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-   }
-)
-
-export const updateFile = createAsyncThunk(
-   'courses/updateFile',
+export const onEditCourse = createAsyncThunk(
+   'courses/editCourse',
    async ({ file, course, currentPage }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
 
-         const response = await fileFetch({
+         const res = await fileFetch({
             path: 'api/file',
             method: 'POST',
             body: formData,
          })
-         const data = await response.url.toString()
-         dispatch(onEditCourse({ ...course, image: data, currentPage }))
-         return data
+         const data = await res.url.toString()
+         const response = await baseFetch({
+            path: `api/courses/${course.id}`,
+            method: 'PUT',
+            body: { ...course, image: data },
+         })
+         dispatch(getAllCourses(currentPage))
+         dispatch(
+            coursesActions.showSuccessMessage('Изменения успешно сохранены')
+         )
+         dispatch(coursesActions.isSucceed(true))
+         return response
       } catch (error) {
+         dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
+         dispatch(coursesActions.isSucceed(false))
          return rejectWithValue(error.message)
       }
    }
@@ -101,33 +84,11 @@ export const deleteCourse = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'DELETE',
          })
-         dispatch(pagination(currentPage))
+         dispatch(getAllCourses(currentPage))
          dispatch(coursesActions.showSuccessMessage('Вы удалили курс'))
          return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось удалить курс'))
-         return rejectWithValue(error.message)
-      }
-   }
-)
-
-export const onEditCourse = createAsyncThunk(
-   'courses/editCourse',
-   async (course, { rejectWithValue, dispatch }) => {
-      try {
-         const response = await baseFetch({
-            path: `api/courses/${course.id}`,
-            method: 'PUT',
-            body: course,
-         })
-         dispatch(pagination(course.currentPage))
-         dispatch(
-            coursesActions.showSuccessMessage('Изменения успешно сохранены')
-         )
-
-         return response
-      } catch (error) {
-         dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
          return rejectWithValue(error.message)
       }
    }
@@ -152,7 +113,7 @@ export const getSingleCourse = createAsyncThunk(
 
 export const assignTeacherToCourse = createAsyncThunk(
    'courses/assignTeacherToCourse ',
-   async ({ courseId, instructorId }, { rejectWithValue, dispatch }) => {
+   async ({ courseId, instructorId }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: 'api/courses/assign',
@@ -162,7 +123,6 @@ export const assignTeacherToCourse = createAsyncThunk(
                teacherId: instructorId,
             },
          })
-         dispatch(getAllCourses())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -186,7 +146,7 @@ export const getInstructor = createAsyncThunk(
    }
 )
 
-export const pagination = createAsyncThunk(
+export const getAllCourses = createAsyncThunk(
    'courses/pagination',
    async (currentPage, { rejectWithValue, dispatch }) => {
       try {
@@ -198,7 +158,7 @@ export const pagination = createAsyncThunk(
                size: 8,
             },
          })
-         dispatch(coursesActions.getCoursesWithPagination(response))
+         dispatch(coursesActions.getAllCourses(response))
          return response
       } catch (error) {
          coursesActions.showErrorMessage(
@@ -221,16 +181,13 @@ export const coursesSlice = createSlice({
    name: 'courses',
    initialState: initState,
    reducers: {
-      addNewCourse(state, action) {
-         state.allCourses = action.payload
-      },
       getCourse(state, action) {
          state.сourse = action.payload
       },
       getInstructors(state, action) {
          state.instructors = action.payload
       },
-      getCoursesWithPagination(state, action) {
+      getAllCourses(state, action) {
          state.courses = action.payload.responseList
          state.pages = action.payload.totalPage
          state.presentPage = action.payload.currentPage
@@ -239,16 +196,16 @@ export const coursesSlice = createSlice({
          state.singleCourse = null
       },
       showSuccessMessage(state, action) {
-         state.isSuccess = action.payload
+         state.successMessage = action.payload
       },
       showErrorMessage(state, action) {
-         state.error = action.payload
+         state.errorMessage = action.payload
+      },
+      isSucceed(state, action) {
+         state.isSuccess = action.payload
       },
    },
    extraReducers: {
-      [uploadFile.pending]: setPending,
-      [uploadFile.fulfilled]: setIsLoading,
-      [uploadFile.rejected]: setIsLoading,
       [addNewCourse.pending]: setPending,
       [addNewCourse.fulfilled]: setIsLoading,
       [addNewCourse.rejected]: setIsLoading,
@@ -258,9 +215,6 @@ export const coursesSlice = createSlice({
       [getSingleCourse.pending]: setPending,
       [getSingleCourse.fulfilled]: setIsLoading,
       [getSingleCourse.rejected]: setIsLoading,
-      [updateFile.pending]: setPending,
-      [updateFile.fulfilled]: setIsLoading,
-      [updateFile.rejected]: setIsLoading,
       [deleteCourse.pending]: setPending,
       [deleteCourse.fulfilled]: setIsLoading,
       [deleteCourse.rejected]: setIsLoading,

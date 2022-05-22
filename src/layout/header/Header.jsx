@@ -1,12 +1,13 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { LogoutButton } from '../../components/UI/logoutButton/Logoutbutton'
 import { ReactComponent as BellIcon } from '../../assets/icons/Bell.svg'
 import { logOut } from '../../store/authSlice'
-import { ROUTES } from '../../utils/constants/general'
+import { COURSE_INNER_TABS, ROUTES } from '../../utils/constants/general'
+import NavTabs from '../../components/UI/tabs/Tabs'
 
 export const Header = () => {
    const navigate = useNavigate()
@@ -22,11 +23,22 @@ export const Header = () => {
    switch (role) {
       case 'ADMIN':
          content = (
-            <StyledProfile>
-               <ProfileIcon />
-               <p>Администратор</p>
-               <LogoutButton logoutHandler={logoutHandler} />
-            </StyledProfile>
+            <>
+               <Routes>
+                  <Route
+                     path={`${ROUTES.COURSES}/:id/*`}
+                     element={<NavTabs tabs={COURSE_INNER_TABS} />}
+                  />
+               </Routes>
+               <Container>
+                  <StyledProfile>
+                     <ProfileIcon />
+                     <p>Администратор</p>
+                     <LogoutButton logoutHandler={logoutHandler} />
+                  </StyledProfile>
+                  <Rectangle />
+               </Container>
+            </>
          )
          break
       case 'INSTRUCTOR':
@@ -51,12 +63,7 @@ export const Header = () => {
       default:
          break
    }
-   return (
-      <Container>
-         {content}
-         <Rectangle />
-      </Container>
-   )
+   return <div>{content}</div>
 }
 
 const Rectangle = styled.div`
