@@ -5,7 +5,7 @@ import { fileFetch } from '../api/fileFetch'
 const initState = {
    courses: [],
    сourse: null,
-   instructors: null,
+   instructors: [],
    pages: null,
    presentPage: null,
    isLoading: null,
@@ -154,7 +154,7 @@ export const getAllCourses = createAsyncThunk(
             path: `api/courses/pagination`,
             method: 'GET',
             params: {
-               page: currentPage,
+               page: currentPage || 1,
                size: 8,
             },
          })

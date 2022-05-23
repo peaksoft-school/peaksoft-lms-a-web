@@ -18,6 +18,8 @@ const StyledButton = styled.button`
    letter-spacing: 0.07em;
    font-family: 'Open Sans', sans-serif;
    font-style: normal;
+   display: ${({ display }) => display || 'flex'};
+   align-items: ${({ alignItems }) => alignItems || 'center'};
    cursor: pointer;
    &:hover {
       background: ${({ bgHover }) => bgHover || ''};

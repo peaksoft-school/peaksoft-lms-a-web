@@ -11,11 +11,10 @@ export const BreadCrumbs = (props) => {
 
    const crumbs = pathsHistory.map((crumb, index) => {
       const crumbHref = `/${paths.slice(0, index + 1).join('/')}`
-
-      const isLast = index === paths.length - 1
+      const isLast = index === paths.length - 2
 
       return isLast ? (
-         <LastPathStyle color="black" key={crumb.path}>
+         <LastPathStyle color="black" key={crumb.href}>
             {crumb.name}
          </LastPathStyle>
       ) : (
@@ -24,7 +23,6 @@ export const BreadCrumbs = (props) => {
          </LinkStyleControl>
       )
    })
-
    return (
       <StyledCrumbs aria-label="breadcrumbs" separator="\">
          {crumbs}

@@ -8,7 +8,7 @@ export const BASE_URL =
 
 export const ROUTES = {
    LOGIN: '/login',
-   ADMIN: '/admin/*',
+   ADMIN: 'admin/*',
    GROUPS: 'groups',
    TEACHERS: 'teachers',
    COURSES: 'courses',
