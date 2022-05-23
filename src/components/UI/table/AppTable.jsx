@@ -50,14 +50,15 @@ export const AppTable = ({ columns, data, pagination }) => {
                   })}
                </TableBody>
             </Table>
-            {pagination && (
-               <StyledPagination>
+            <StyledPaginationContainer>
+               {pagination && (
                   <Pagination
-                     count={pagination.count}
+                     count={pagination.count || 1}
                      onChange={pagination.onChange}
+                     defaultPage={pagination.defaultPage || 1}
                   />
-               </StyledPagination>
-            )}
+               )}
+            </StyledPaginationContainer>
          </Container>
       </ThemeProvider>
    )
@@ -66,15 +67,16 @@ export const AppTable = ({ columns, data, pagination }) => {
 const Container = styled(MuiTableContainer)`
    position: relative;
    min-width: 1140px;
-   min-height: 587px;
+   min-height: 687px;
    margin: 20px auto;
+   position: relative;
    background: #ffffff;
    border: 1px solid #d4d4d4;
    box-sizing: border-box;
    border-radius: 10px;
 `
 const TableRowContainer = styled(TableRow)`
-   border-bottom: 1.5px solid #f7f8fa; ;
+   border-bottom: 1.5px solid #f7f8fa;
 `
 const StyledTable = styled(TableCell)`
    border: none;
@@ -85,6 +87,11 @@ const StyledTable = styled(TableCell)`
    line-height: 22px;
    color: #1d293f;
    letter-spacing: 0.02em;
+`
+const StyledItemLabel = styled.span`
+   display: flex;
+   justify-content: center;
+   align-items: center;
 `
 const TableContainer = styled(TableCell)`
    font-family: 'Open Sans', sans-serif;
@@ -111,10 +118,14 @@ const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
    },
 }))
 
-const StyledItemLabel = styled.span`
-   display: flex;
-   justify-content: center;
-   align-items: center;
+const StyledPaginationContainer = styled.div`
+   width: 100%;
+   height: 15px;
+   position: absolute;
+   margin-bottom: 8px;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
 `
 const StyledPagination = styled.div`
    width: 100%;

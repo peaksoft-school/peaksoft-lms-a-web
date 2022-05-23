@@ -155,7 +155,7 @@ export const Teachers = () => {
    )
 }
 
-const StyledActions = styled.span`
+const StyledActions = styled.td`
    cursor: pointer;
    display: flex;
    border: none;
