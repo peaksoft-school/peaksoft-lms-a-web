@@ -1,5 +1,5 @@
 import { BASE_URL } from '../utils/constants/general'
-import { store } from '../store/index'
+import { store } from '../store'
 
 export const fileFetch = async (options) => {
    const { token } = store.getState().auth.user

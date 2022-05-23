@@ -23,8 +23,8 @@ const style = {
    top: '50%',
    left: '50%',
    transform: 'translate(-50%, -50%)',
-   width: '315px',
-   height: '145px',
+   width: '335px',
+   height: '160px',
    bgcolor: 'background.paper',
    boxShadow: 24,
    p: 4,
@@ -39,15 +39,13 @@ const TitleStyle = styled(Typography)`
    text-align: center;
 `
 const ButtonStyle = styled(Typography)`
-<<<<<<< HEAD
    display: flex;
    align-items: center;
    justify-content: space-between;
-=======
    border-radius: 10px;
    display: flex;
    align-items: center;
    justify-content: space-around;
->>>>>>> 346b8abe0dbc75dfa928315eb4d11f32bc2c844d
    margin: 10px;
+   margin-top: 20px;
 `
