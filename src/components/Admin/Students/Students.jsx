@@ -12,6 +12,7 @@ import {
    getSingleStudent,
    getStudentsWithPagination,
    sendStudentsAsExcel,
+   studentsActions,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
 import { AppTable } from '../../UI/table/AppTable'
@@ -180,17 +181,26 @@ export const Students = () => {
       if (isSuccess) {
          setSearchParams({ page: currentPage })
       }
+      return () => {
+         dispatch(studentsActions.isSucceed(false))
+      }
    }, [isSuccess])
 
    useEffect(() => {
       if (successMessage) {
          setOpenNotification(true)
       }
+      return () => {
+         setOpenNotification(false)
+      }
    }, [successMessage])
 
    useEffect(() => {
       if (error) {
          setOpenErrorNotification(true)
+      }
+      return () => {
+         setOpenErrorNotification(false)
       }
    }, [error])
 
