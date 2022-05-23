@@ -4,7 +4,8 @@ import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 
 export const Students = () => {
-   const { studentData } = useSelector((state) => state.students)
+   const studentData = useSelector((state) => state.students)
+   console.log(studentData)
    return (
       <div>
          <BreadCrumbs pathsArray={pathsArray} />

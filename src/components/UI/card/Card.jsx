@@ -11,7 +11,7 @@ import { MeatBalls } from './MeatBalls'
 export const Card = (props) => {
    return (
       <Wrapper>
-         <StyledNavLink to={`id${props.id}/instructors`}>
+         <StyledNavLink to={`${props.id}/instructors`}>
             <Container component="img" image={props.image} alt={props.title} />
             <CardContent>
                <StyledTitle>

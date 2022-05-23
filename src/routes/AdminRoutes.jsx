@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Courses } from '../components/admin/courses/Courses'
 import { Teachers } from '../components/admin/teachers/Teachers'
 import { Instructors } from '../pages/ADMIN/courses/courseInnnerPage/Instructors'

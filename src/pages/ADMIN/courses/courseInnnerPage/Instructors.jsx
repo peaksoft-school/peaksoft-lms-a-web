@@ -1,14 +1,31 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { baseFetch } from '../../../../api/baseFetch'
 import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 
 export const Instructors = () => {
-   const { teachersData } = useSelector((state) => state.teachers)
+   const params = useParams()
+   const [teachers, setTeachers] = useState([])
+
+   useEffect(() => {
+      const getCourseTeachers = async () => {
+         try {
+            const response = await baseFetch({
+               path: `api/courses/teachers/${params.id}`,
+               method: 'GET',
+            })
+            setTeachers(response)
+         } catch (error) {
+            console.log(error)
+         }
+      }
+      getCourseTeachers()
+   }, [])
    return (
       <div>
          <BreadCrumbs pathsArray={pathsArray} />
-         <AppTable columns={COLUMNS} data={teachersData} />
+         <AppTable columns={COLUMNS} data={teachers} />
       </div>
    )
 }
