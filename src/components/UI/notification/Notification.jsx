@@ -1,49 +1,42 @@
 import styled from '@emotion/styled/macro'
-import { Alert } from '@mui/material'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-export const Notification = (props) => {
+export const showSuccessMessage = (msg) => toast.success(msg)
+export const showErrorMessage = (msg) => toast.error(msg)
+
+export const Notification = () => {
    return (
-      <Container>
-         <StyledAlert variant="filled" severity={props.status}>
-            <StyledMessage>{props.message}</StyledMessage>
-         </StyledAlert>
-      </Container>
+      <StyledToastContainer
+         position="top-right"
+         autoClose={3000}
+         hideProgressBar
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover
+         closeButton={false}
+      />
    )
 }
-const Container = styled.div`
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   z-index: 10;
-   position: fixed;
-   right: 0%;
-   top: 10%;
-   animation: 1.5s slide-left;
-   @keyframes slide-left {
-      from {
-         margin-right: 0%;
-      }
-      to {
-         margin-right: 15%;
-      }
-   }
-   .MuiAlert-filledSuccess {
-      background-color: #36ac0c;
-   }
-   .MuiAlert-filledError {
-      background-color: #c91e1e;
-   }
-`
-const StyledAlert = styled(Alert)`
-   border-radius: 12px;
-   padding: 15px 28px;
-`
 
-const StyledMessage = styled.p`
-   font-family: 'Open Sans', sans-serif;
-   font-style: normal;
-   font-weight: 400;
-   font-size: 16px;
-   line-height: 22px;
-   color: #ffffff;
+const StyledToastContainer = styled(ToastContainer)`
+   .Toastify__toast--success {
+      background: #36ac0c;
+      border-radius: 10px;
+      color: #fff;
+      svg {
+         fill: #fff;
+      }
+   }
+   .Toastify__toast--error {
+      background: #c91e1e;
+      border-radius: 10px;
+      color: #fff;
+      svg {
+         fill: #fff;
+      }
+   }
 `

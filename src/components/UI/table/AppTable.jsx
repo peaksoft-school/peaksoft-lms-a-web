@@ -11,8 +11,9 @@ import {
    ThemeProvider,
    createTheme,
 } from '@mui/material'
+import { Pagination } from '../pagination/Pagination'
 
-export const AppTable = ({ columns, data }) => {
+export const AppTable = ({ columns, data, pagination }) => {
    return (
       <ThemeProvider theme={customTheme}>
          <Container component={Paper}>
@@ -49,6 +50,15 @@ export const AppTable = ({ columns, data }) => {
                   })}
                </TableBody>
             </Table>
+            <StyledPaginationContainer>
+               {pagination && (
+                  <Pagination
+                     count={pagination.count || 1}
+                     onChange={pagination.onChange}
+                     defaultPage={pagination.defaultPage || 1}
+                  />
+               )}
+            </StyledPaginationContainer>
          </Container>
       </ThemeProvider>
    )
@@ -56,18 +66,16 @@ export const AppTable = ({ columns, data }) => {
 
 const Container = styled(MuiTableContainer)`
    min-width: 1140px;
-   min-height: 587px;
+   min-height: 687px;
    margin: 20px auto;
-   left: 10%;
-   right: 0%;
-   top: 137px;
+   position: relative;
    background: #ffffff;
    border: 1px solid #d4d4d4;
    box-sizing: border-box;
    border-radius: 10px;
 `
 const TableRowContainer = styled(TableRow)`
-   border-bottom: 1.5px solid #f7f8fa; ;
+   border-bottom: 1.5px solid #f7f8fa;
 `
 const StyledTable = styled(TableCell)`
    border: none;
@@ -78,6 +86,11 @@ const StyledTable = styled(TableCell)`
    line-height: 22px;
    color: #1d293f;
    letter-spacing: 0.02em;
+`
+const StyledItemLabel = styled.span`
+   display: flex;
+   justify-content: center;
+   align-items: center;
 `
 const TableContainer = styled(TableCell)`
    font-family: 'Open Sans', sans-serif;
@@ -104,8 +117,12 @@ const StyledTableRow = muiStyled(TableRow)(({ theme }) => ({
    },
 }))
 
-const StyledItemLabel = styled.span`
-   display: flex;
-   justify-content: center;
-   align-items: center;
+const StyledPaginationContainer = styled.div`
+   width: 100%;
+   height: 15px;
+   position: absolute;
+   margin-bottom: 8px;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
 `

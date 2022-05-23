@@ -59,6 +59,22 @@ export const STUDENTTABS = [
 ]
 export const AUTH_KEY = '@peaksoft-lms-a-auth-info'
 
+export const CREATE_STUDENT = 'create-student'
+export const EDIT_STUDENT = 'edit-student'
+export const UPLOAD_STUDENT = 'upload-student'
+export const DELETE_STUDENT = 'delete-student-confirmation'
+export const STUDY_FORMAT = 'study-format'
+
+export const STUDY_FORMAT_OPTION = [
+   {
+      id: 'ONLINE',
+      title: 'ONLINE',
+   },
+   {
+      id: 'OFFLINE',
+      title: 'OFFLINE',
+   },
+]
 export const ADD_TEACHERS = 'add_tachers'
 export const DELETE_TEACHER = 'delete_teacher'
 export const EDIT_TEACHER = 'edit_tacher'
