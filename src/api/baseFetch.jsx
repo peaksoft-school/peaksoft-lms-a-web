@@ -24,7 +24,6 @@ export const baseFetch = async (options) => {
          const queryParamsStringValue = Object.keys(params)
             .map((paramKey) => `${paramKey}=${params[paramKey]}`)
             .join('&')
-
          url = `${path}?${queryParamsStringValue}`
       }
       const response = await fetch(`${BASE_URL}/${url}`, requestOptions)

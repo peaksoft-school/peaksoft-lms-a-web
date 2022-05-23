@@ -31,7 +31,7 @@ export const MultiSelect = ({
          <StyledUl>
             {selectedOptions.map((selected) => (
                <li key={selected.id}>
-                  <p>{selected.fullName}</p>
+                  <p>{selected.title}</p>
                   <RemoveSelect
                      style={{ marginTop: '3px' }}
                      role="presentation"
@@ -57,7 +57,7 @@ export const MultiSelect = ({
                              addMultiSelectHandler(option.id, option)
                           }
                        >
-                          <p>{option.fullName}</p>
+                          <p>{option.title}</p>
                           <label className="custom-checkbox">
                              <input type="checkbox" />
                              <span className="checkmark"> </span>

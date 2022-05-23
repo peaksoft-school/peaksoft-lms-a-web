@@ -46,7 +46,6 @@ export const EditCourse = ({
       }
 
       dispatch(onEditCourse({ file: selectedFile, image, course, currentPage }))
-      closeModal()
    }
 
    return (

@@ -12,7 +12,7 @@ export const InstructorRoutes = () => {
             />
             <Route
                path={ROUTES.INSTRUCTOR_COURSES}
-               element={<div>course</div>}
+               element={<div>Instuctor</div>}
             />
          </Routes>
       </div>

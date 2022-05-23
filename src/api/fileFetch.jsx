@@ -14,7 +14,6 @@ export const fileFetch = async (options) => {
       if (method !== 'GET') {
          requestOptions.body = body || {}
       }
-
       const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
       const result = await response.json()
       if (!response.ok) {

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { LogoutButton } from '../../components/UI/logoutButton/Logoutbutton'
@@ -55,7 +55,7 @@ export const Header = () => {
             <StyledProfile>
                <BellIcon />
                <ProfileIcon />
-               <p>Инструктор</p>
+               <p>Student</p>
                <LogoutButton logoutHandler={logoutHandler} />
             </StyledProfile>
          )
@@ -68,7 +68,7 @@ export const Header = () => {
 
 const Rectangle = styled.div`
    position: absolute;
-   min-width: 83%;
+   width: 83%;
    height: 1px;
    top: 78px;
    left: 260px;

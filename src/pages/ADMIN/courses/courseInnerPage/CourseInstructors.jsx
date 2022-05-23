@@ -7,20 +7,24 @@ import { AppTable } from '../../../../components/UI/table/AppTable'
 import { baseFetch } from '../../../../api/baseFetch'
 import { Button } from '../../../../components/UI/button/Button'
 import { ReactComponent as PinIcon } from '../../../../assets/icons/pinnedIcon.svg'
-import { APPOINT_TEACHER } from '../../../../utils/constants/general'
+import {
+   APPOINT_TEACHER,
+   COURSE_INSTRUCTORS,
+} from '../../../../utils/constants/general'
 import { BasicModal } from '../../../../components/UI/modal/BasicModal'
 import { MultiSelect } from '../../../../components/UI/select/MultiSelect'
 import { assignTeacherToCourse } from '../../../../store/courses-slice'
+import { showErrorMessage } from '../../../../components/UI/notification/Notification'
 
-export const Instructors = () => {
+export const CourseInstructors = () => {
    const params = useParams()
    const dispatch = useDispatch()
 
    const { instructors, courses } = useSelector((state) => state.courses)
 
    const [searchParams, setSearchParams] = useSearchParams()
-   const [teachers, setTeachers] = useState([])
 
+   const [teachers, setTeachers] = useState([])
    const [selectedOptions, setSelectedOptions] = useState([])
    const [listOfTeacher, setListOfTeacher] = useState([])
    const [selectedTeacher, setSelectedTeacher] = useState('')
@@ -30,6 +34,8 @@ export const Instructors = () => {
    const [course, setCourse] = useState('')
 
    useEffect(() => {
+      getCourseTeachers()
+
       courses.filter((el) => {
          if (el.id == params.id) {
             setCourse(el.courseName)
@@ -37,6 +43,18 @@ export const Instructors = () => {
          return el
       })
    }, [])
+
+   const getCourseTeachers = async () => {
+      try {
+         const response = await baseFetch({
+            path: `api/courses/teachers/${params.id}`,
+            method: 'GET',
+         })
+         setTeachers(response)
+      } catch (error) {
+         showErrorMessage(error)
+      }
+   }
 
    const newMultiSelect = (selected) => {
       setListOfTeacher((prev) => [...prev, Number(selected.id)])
@@ -51,6 +69,7 @@ export const Instructors = () => {
          })
       )
       closeModal()
+      setSelectedOptions([])
    }
 
    useEffect(() => {
@@ -67,28 +86,14 @@ export const Instructors = () => {
    const closeModal = () => {
       setSearchParams(false)
    }
-   useEffect(() => {
-      getCourseTeachers()
-   }, [])
 
-   const getCourseTeachers = async () => {
-      try {
-         const response = await baseFetch({
-            path: `api/courses/teachers/${params.id}`,
-            method: 'GET',
-         })
-         setTeachers(response)
-      } catch (error) {
-         console.log(error)
-      }
-   }
    const pathsArray = [
       {
          path: 'admin/courses',
          name: 'курсы',
       },
       {
-         path: 'id1',
+         path: 'courses',
          name: course,
       },
       {
@@ -96,6 +101,7 @@ export const Instructors = () => {
          name: 'Учителя',
       },
    ]
+
    return (
       <div>
          <StyledButton>
@@ -107,7 +113,9 @@ export const Instructors = () => {
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
                >
-                  <PinIcon /> Назначить учителя
+                  <StyledSpan>
+                     <PinIcon /> Назначить учителя
+                  </StyledSpan>
                </Button>
             </span>
          </StyledButton>
@@ -147,7 +155,7 @@ export const Instructors = () => {
                </div>
             </BtnStyleControl>
          </BasicModal>
-         <AppTable columns={COLUMNS} data={teachers} />
+         <AppTable columns={COURSE_INSTRUCTORS} data={teachers} />
       </div>
    )
 }
@@ -173,31 +181,8 @@ const BtnStyleControl = styled.div`
       margin-left: 10px;
    }
 `
-
-const COLUMNS = [
-   {
-      id: 1,
-      title: 'ID',
-      accessKey: 'id',
-   },
-   {
-      id: 2,
-      title: 'Имя Фамилия',
-      accessKey: 'fullName',
-   },
-   {
-      id: 3,
-      title: 'Специализация',
-      accessKey: 'specialization',
-   },
-   {
-      id: 4,
-      title: 'Номер телефона',
-      accessKey: 'phoneNumber',
-   },
-   {
-      id: 5,
-      title: 'E-mail',
-      accessKey: 'email',
-   },
-]
+const StyledSpan = styled.span`
+   height: 30px;
+   display: flex;
+   align-items: center;
+`

@@ -9,7 +9,7 @@ const initState = {
    pages: null,
    presentPage: null,
    isLoading: null,
-   isSuccess: null,
+   isModalOpen: false,
    errorMessage: null,
    successMessage: null,
 }
@@ -34,11 +34,11 @@ export const addNewCourse = createAsyncThunk(
          })
          dispatch(getAllCourses(currentPage))
          dispatch(coursesActions.showSuccessMessage('Курс успешно создан'))
-         dispatch(coursesActions.isSucceed(true))
+         dispatch(coursesActions.openModal(true))
          return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось создать курс'))
-         dispatch(coursesActions.isSucceed(false))
+         dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
       }
    }
@@ -66,11 +66,11 @@ export const onEditCourse = createAsyncThunk(
          dispatch(
             coursesActions.showSuccessMessage('Изменения успешно сохранены')
          )
-         dispatch(coursesActions.isSucceed(true))
+         dispatch(coursesActions.openModal(true))
          return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
-         dispatch(coursesActions.isSucceed(false))
+         dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
       }
    }
@@ -113,7 +113,7 @@ export const getSingleCourse = createAsyncThunk(
 
 export const assignTeacherToCourse = createAsyncThunk(
    'courses/assignTeacherToCourse ',
-   async ({ courseId, instructorId }, { rejectWithValue }) => {
+   async ({ courseId, instructorId }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: 'api/courses/assign',
@@ -123,8 +123,10 @@ export const assignTeacherToCourse = createAsyncThunk(
                teacherId: instructorId,
             },
          })
+         dispatch(coursesActions.openModal(true))
          return response
       } catch (error) {
+         dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
       }
    }
@@ -147,7 +149,7 @@ export const getInstructor = createAsyncThunk(
 )
 
 export const getAllCourses = createAsyncThunk(
-   'courses/pagination',
+   'courses/getAllCourses',
    async (currentPage, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
@@ -201,8 +203,8 @@ export const coursesSlice = createSlice({
       showErrorMessage(state, action) {
          state.errorMessage = action.payload
       },
-      isSucceed(state, action) {
-         state.isSuccess = action.payload
+      openModal(state, action) {
+         state.isModalOpen = action.payload
       },
    },
    extraReducers: {
@@ -224,6 +226,9 @@ export const coursesSlice = createSlice({
       [getInstructor.pending]: setPending,
       [getInstructor.fulfilled]: setIsLoading,
       [getInstructor.rejected]: setIsLoading,
+      [assignTeacherToCourse.pending]: setPending,
+      [assignTeacherToCourse.fulfilled]: setIsLoading,
+      [assignTeacherToCourse.rejected]: setIsLoading,
    },
 })
 

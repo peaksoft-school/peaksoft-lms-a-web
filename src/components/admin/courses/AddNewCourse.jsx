@@ -45,7 +45,7 @@ export const AddNewCourse = ({
       setFile(URL.createObjectURL(acceptedFiles[0]))
    }, [])
 
-   const addNewCourseHandler = async () => {
+   const addNewCourseHandler = () => {
       const newCourse = {
          courseName: value.courseName,
          dateOfStart: dateValue,
@@ -64,7 +64,6 @@ export const AddNewCourse = ({
       onClear()
       setDateValue(null)
       setFile(null)
-      closeModal()
    }
 
    return (

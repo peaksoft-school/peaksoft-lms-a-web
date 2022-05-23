@@ -8,7 +8,7 @@ export const BASE_URL =
 
 export const ROUTES = {
    LOGIN: '/login',
-   ADMIN: 'admin/*',
+   ADMIN: '/admin/*',
    GROUPS: 'groups',
    TEACHERS: 'teachers',
    COURSES: 'courses',
@@ -64,6 +64,22 @@ export const DELETE_COURSE = 'delete_course'
 export const APPOINT_TEACHER = 'apppoint_teacher'
 export const ADD_COURSE = 'add_course'
 export const EDIT_COURSE = 'edit_course'
+export const CREATE_STUDENT = 'create-student'
+export const EDIT_STUDENT = 'edit-student'
+export const UPLOAD_STUDENT = 'upload-student'
+export const DELETE_STUDENT = 'delete-student-confirmation'
+export const STUDY_FORMAT = 'study-format'
+
+export const STUDY_FORMAT_OPTION = [
+   {
+      id: 'ONLINE',
+      title: 'ONLINE',
+   },
+   {
+      id: 'OFFLINE',
+      title: 'OFFLINE',
+   },
+]
 export const ADD_TEACHERS = 'add_tachers'
 export const DELETE_TEACHER = 'delete_teacher'
 export const EDIT_TEACHER = 'edit_tacher'
@@ -71,10 +87,71 @@ export const EDIT_TEACHER = 'edit_tacher'
 export const COURSE_INNER_TABS = [
    {
       title: 'Учителя',
-      to: 'instructors',
+      to: 'course_instructors',
    },
    {
       title: 'Студенты',
-      to: 'students',
+      to: 'course_students',
+   },
+]
+
+export const COURSE_INSTRUCTORS = [
+   {
+      id: 1,
+      title: 'ID',
+      accessKey: 'id',
+   },
+   {
+      id: 2,
+      title: 'Имя Фамилия',
+      accessKey: 'fullName',
+   },
+   {
+      id: 3,
+      title: 'Специализация',
+      accessKey: 'specialization',
+   },
+   {
+      id: 4,
+      title: 'Номер телефона',
+      accessKey: 'phoneNumber',
+   },
+   {
+      id: 5,
+      title: 'E-mail',
+      accessKey: 'email',
+   },
+]
+
+export const COURSE_STUDENTS = [
+   {
+      title: 'ID',
+      accessKey: 'id',
+      id: 1,
+   },
+   {
+      title: 'Имя Фамилия',
+      accessKey: 'fullName',
+      id: 2,
+   },
+   {
+      title: 'Группа',
+      accessKey: 'groupName',
+      id: 3,
+   },
+   {
+      title: 'Формат обучения',
+      accessKey: 'studyFormat',
+      id: 4,
+   },
+   {
+      title: 'Номер телефона',
+      accessKey: 'phoneNumber',
+      id: 5,
+   },
+   {
+      title: 'E-mail',
+      accessKey: 'email',
+      id: 6,
    },
 ]

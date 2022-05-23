@@ -9,6 +9,9 @@ const StyledButton = styled.button`
    color: ${({ color }) => color || 'white'};
    background: ${({ background }) => background || ''};
    border: ${({ border }) => border || 'none'};
+   display: flex;
+   justify-content: center;
+   align-items: center;
    padding: 10px 24px 10px 24px;
    border-radius: 8px;
    outline: none;
@@ -18,8 +21,6 @@ const StyledButton = styled.button`
    letter-spacing: 0.07em;
    font-family: 'Open Sans', sans-serif;
    font-style: normal;
-   display: ${({ display }) => display || 'flex'};
-   align-items: ${({ alignItems }) => alignItems || 'center'};
    cursor: pointer;
    &:hover {
       background: ${({ bgHover }) => bgHover || ''};

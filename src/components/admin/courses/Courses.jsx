@@ -25,7 +25,11 @@ import {
    EDIT_COURSE,
 } from '../../../utils/constants/general'
 import { Pagination } from '../../UI/pagination/Pagination'
-import { Notification } from '../../UI/notification/Notification'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
+import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const Courses = () => {
    const dispatch = useDispatch()
@@ -34,7 +38,8 @@ export const Courses = () => {
       instructors,
       pages,
       courses,
-      isSuccess,
+      isModalOpen,
+      isLoading,
       errorMessage,
       successMessage,
    } = useSelector((state) => state.courses)
@@ -54,10 +59,7 @@ export const Courses = () => {
          dispatch(getSingleCourse(courseId))
       }
 
-      const teacherId = searchParams.get('teacherId')
-      if (teacherId) {
-         dispatch(getInstructor())
-      }
+      dispatch(getInstructor())
 
       dispatch(getAllCourses(currentPage))
    }, [])
@@ -104,15 +106,30 @@ export const Courses = () => {
    }
 
    useEffect(() => {
-      setTimeout(() => {
-         dispatch(coursesActions.showSuccessMessage(false))
-      }, 1555)
+      if (isModalOpen) {
+         setSearchParams(false)
+      }
+      return () => {
+         dispatch(coursesActions.openModal(false))
+      }
+   }, [isModalOpen])
+
+   useEffect(() => {
+      if (successMessage) {
+         showSuccessMessage(successMessage)
+      }
+      return () => {
+         dispatch(coursesActions.showSuccessMessage(null))
+      }
    }, [successMessage])
 
    useEffect(() => {
-      setTimeout(() => {
-         dispatch(coursesActions.showErrorMessage(false))
-      }, 2500)
+      if (errorMessage) {
+         showErrorMessage(errorMessage)
+      }
+      return () => {
+         dispatch(coursesActions.showErrorMessage(null))
+      }
    }, [errorMessage])
 
    const options = useMemo(
@@ -169,12 +186,13 @@ export const Courses = () => {
                   description={course.description}
                   date={course.dateOfStart}
                   id={course.id}
+                  path={`${course.id}/course_instructors`}
                />
             ))}
          </Container>
          {instructors && (
             <AssignTeacher
-               isModalOpen={Boolean(showAppointTeacherModal)}
+               isModalOpen={showAppointTeacherModal}
                closeModal={closeModal}
                instructors={instructors}
                id={courseId}
@@ -223,10 +241,7 @@ export const Courses = () => {
                />
             </StyledPagination>
          )}
-         {successMessage && <Notification message={successMessage} />}
-         {errorMessage && (
-            <Notification message={errorMessage} status="error" />
-         )}
+         {isLoading && <Spinner />}
       </Wrapper>
    )
 }
