@@ -39,8 +39,15 @@ const TitleStyle = styled(Typography)`
    text-align: center;
 `
 const ButtonStyle = styled(Typography)`
+<<<<<<< HEAD
    display: flex;
    align-items: center;
    justify-content: space-between;
+=======
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+>>>>>>> 346b8abe0dbc75dfa928315eb4d11f32bc2c844d
    margin: 10px;
 `

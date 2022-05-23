@@ -34,10 +34,7 @@
       "react-hooks/exhaustive-deps": "off",
       "react/function-component-definition": "off",
       "import/no-cycle": "off",
-      "import/no-extraneous-dependencies": [
-         "error",
-         { "devDependencies": true }
-      ],
+      "react/no-unstable-nested-components": "off",
       "max-len": [
          "error",
          {

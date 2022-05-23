@@ -1,13 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { baseFetch } from '../api/baseFetch'
-import { fileFetch } from '../api/fileFetch'
+import { baseFetch } from '../../../api/baseFetch'
+import { fileFetch } from '../../../api/fileFetch'
 
 const initialState = {
    newGroupData: [],
    isLoading: null,
    singleGroup: null,
-   currentPage: null,
-   allPages: null,
+   instructors: null,
 }
 export const addNewGroup = createAsyncThunk(
    'groups/addNewGroup',
@@ -134,19 +133,36 @@ export const updateSingleGroup = createAsyncThunk(
       }
    }
 )
-export const groupsPagination = createAsyncThunk(
-   'groups/groupsPagination',
-   async (page, { rejectWithValue, dispatch }) => {
+
+export const getListOfTeachers = createAsyncThunk(
+   'groups/getListOfTeachers',
+   async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: 'api/groups/pagination',
+            path: 'api/instructors',
             method: 'GET',
-            params: {
-               page,
-               size: 8,
+         })
+         dispatch(groupActions.getTeachers(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
+export const assignTeacherToGroup = createAsyncThunk(
+   'groups/assignTeacherToGroup',
+   async ({ currentGroupId, instructorId }, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/groups/accept-to-course',
+            method: 'PUT',
+            body: {
+               groupId: currentGroupId,
+               courseId: instructorId,
             },
          })
-         dispatch(groupActions.pagination(response))
+         dispatch(fetchNewGroups())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -164,10 +180,8 @@ export const groupsSlice = createSlice({
       singleGroupNull: (state) => {
          state.singleGroup = null
       },
-      pagination: (state, action) => {
-         state.newGroupData = action.payload.responseList
-         state.currentPage = action.payload.currentPage
-         state.allPages = action.payload.totalPage
+      getTeachers(state, action) {
+         state.instructors = action.payload
       },
    },
    extraReducers: {

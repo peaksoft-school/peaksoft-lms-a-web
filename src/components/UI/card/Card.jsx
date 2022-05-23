@@ -25,6 +25,7 @@ export const Card = (props) => {
                options={props.options}
                action={props.action}
                card={props.cards}
+               id={props.id}
             />
          </StyledIcon>
       </Wrapper>

@@ -1,34 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from '@emotion/styled'
-import { Card } from '../UI/card/Card'
-import { Notification } from '../UI/notification/Notification'
+import { Card } from '../../UI/card/Card'
+import { Notification } from '../../UI/notification/Notification'
 import {
    deleteGroup,
    fetchNewGroups,
    getSingleGroup,
-} from '../../store/groupSlice'
-import { ReactComponent as PinIcon } from '../../assets/icons/pinnedIcon.svg'
-import { ReactComponent as EditIcon } from '../../assets/icons/edit.svg'
-import { ReactComponent as DeleteIcon } from '../../assets/icons/trashIcon.svg'
+   groupsPagination,
+} from '../../../store/groupSlice'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
+import { ReactComponent as DeleteIcon } from '../../../assets/icons/trashIcon.svg'
 import GroupCreate from './GroupCreate'
 import GroupDeleteConfirm from './GroupDeleteConfirm'
 
 import GroupEdit from './GroupEdit'
-import GroupSelectTeacher from './GroupSelectTeacher'
+import { Pagination } from '../../UI/pagination/Pagination'
 
 export const GroupsPanel = () => {
-   const options = [
-      {
-         id: 'wqqw',
-         action: () => alert('hello'),
-         content: (
-            <Container>
-               <PinIcon />
-               <p>Назначить учителя</p>
-            </Container>
-         ),
-      },
+   const options = useMemo(() => [
       {
          id: 'wqqdfcfw',
          action: (group) => editGroupHandler(group.id),
@@ -49,20 +39,25 @@ export const GroupsPanel = () => {
             </Container>
          ),
       },
-   ]
-   const groups = useSelector((state) => state.group.newGroupData)
+   ])
+   const groups = useSelector((state) => state.groups.newGroupData)
 
-   const { singleGroup } = useSelector((state) => state.group)
+   const { singleGroup, currentPage, allPages } = useSelector(
+      (state) => state.groups
+   )
 
    const dispatch = useDispatch()
 
    const [isModalOpen, setIsModalOpen] = useState(false)
-   const [groupId, setGroupId] = useState(null)
+   const [groupId, setGroupId] = useState()
    const [isLoading, setIsLoading] = useState(false)
    const [openEditGroupModal, setOpenEditGroupModal] = useState(false)
+   const [page, setPage] = useState(1)
 
    useEffect(() => {
-      dispatch(fetchNewGroups())
+      // dispatch(fetchNewGroups())
+      // setPage(page)
+      dispatch(groupsPagination(page))
    }, [])
 
    const getGroupId = (id) => {
@@ -80,6 +75,11 @@ export const GroupsPanel = () => {
       setOpenEditGroupModal(true)
    }
 
+   const groupsPaginationHandler = (page) => {
+      setPage(page)
+      dispatch(groupsPagination(page))
+   }
+
    return (
       <div>
          <GroupCreate setIsLoading={setIsLoading} />
@@ -94,6 +94,7 @@ export const GroupsPanel = () => {
                      date={group.dateOfStart}
                      key={group.id}
                      cards={group}
+                     id={group.id}
                   />
                )
             })}
@@ -110,8 +111,16 @@ export const GroupsPanel = () => {
                   setOpenEditGroupModal={setOpenEditGroupModal}
                />
             )}
-            <GroupSelectTeacher />
          </CardContentStyleControl>
+         {allPages && (
+            <PaginationStyleControl>
+               <Pagination
+                  count={allPages}
+                  page={page}
+                  onChange={(_, num) => groupsPaginationHandler(num)}
+               />
+            </PaginationStyleControl>
+         )}
       </div>
    )
 }
@@ -122,6 +131,7 @@ const CardContentStyleControl = styled.div`
    grid-template-columns: repeat(4, 1fr);
    grid-column-gap: 20px;
    grid-row-gap: 20px;
+   margin-bottom: 20px;
 `
 const Container = styled.div`
    width: 180px;
@@ -134,4 +144,8 @@ const Container = styled.div`
    p {
       margin-left: 20px;
    }
+`
+const PaginationStyleControl = styled.div`
+   width: fit-content;
+   margin: 0 auto;
 `

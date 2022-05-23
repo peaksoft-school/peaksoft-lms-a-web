@@ -3,11 +3,11 @@ import { BASE_URL } from '../utils/constants/general'
 
 export const baseFetch = async (options) => {
    const { token } = store.getState().auth.user
-
    try {
       const { path, body, method, params } = options
+      let url = path
       const requestOptions = {
-         method: method || 'GET',
+         method: options.method || 'GET',
          headers: token
             ? {
                  'Content-Type': 'application/json',
@@ -17,7 +17,6 @@ export const baseFetch = async (options) => {
                  'Content-Type': 'application/json',
               },
       }
-
       if (method !== 'GET') {
          requestOptions.body = JSON.stringify(body || {})
       }
@@ -25,9 +24,9 @@ export const baseFetch = async (options) => {
          const queryParamsStringValue = Object.keys(params)
             .map((paramKey) => `${paramKey}=${params[paramKey]}`)
             .join('&')
-         const path = `${path}?${queryParamsStringValue}`
+         url = `${path}?${queryParamsStringValue}`
       }
-      const response = await fetch(`${BASE_URL}/${path}`, requestOptions)
+      const response = await fetch(`${BASE_URL}/${url}`, requestOptions)
       const result = await response.json()
       if (!response.ok) {
          let errorMessage = 'Some thing went wrong'

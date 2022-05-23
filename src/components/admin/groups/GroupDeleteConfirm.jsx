@@ -1,6 +1,6 @@
 import React from 'react'
-import ConfirmModal from '../UI/modal/ConfirmModal'
-import { Button } from '../UI/button/Button'
+import ConfirmModal from '../../UI/modal/ConfirmModal'
+import { Button } from '../../UI/button/Button'
 
 const GroupDeleteConfirm = (props) => {
    return (

@@ -2,13 +2,13 @@ import React, { useState, useCallback } from 'react'
 import { format } from 'date-fns'
 import { useDispatch } from 'react-redux'
 import styled from '@emotion/styled'
-import { Button } from '../UI/button/Button'
-import { BasicModal } from '../UI/modal/BasicModal'
-import { ImagePicker } from '../UI/imagePicker/ImagePicker'
-import DatepickerUi from '../UI/DatePickerUi'
-import { useInput } from '../../hooks/usuInput/useInput'
-import { postFileToBase } from '../../store/groupSlice'
-import { Input } from '../UI/input/Input'
+import { Button } from '../../UI/button/Button'
+import { BasicModal } from '../../UI/modal/BasicModal'
+import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
+import DatepickerUi from '../../UI/DatePickerUi'
+import { useInput } from '../../../hooks/usuInput/useInput'
+import { postFileToBase } from '../../../store/groupSlice'
+import { Input } from '../../UI/input/Input'
 
 const GroupCreate = (props) => {
    const dispatch = useDispatch()
@@ -17,6 +17,7 @@ const GroupCreate = (props) => {
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
    const [selectedFile, setSelectedFile] = useState(null)
+
    const { value, onChange, onClear } = useInput({
       groupName: '',
       description: '',
@@ -51,7 +52,7 @@ const GroupCreate = (props) => {
    return (
       <>
          <Button
-            style={{ marginLeft: '960px' }}
+            style={{ marginLeft: '1026px' }}
             background="#3772FF"
             bgHover="#1D60FF"
             bgActive="#6190FF"
