@@ -1,6 +1,5 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { MaterialCard } from '../components/UI/materialCards/MaterialCard'
 import { ROUTES } from '../utils/constants/general'
 
 export const InstructorRoutes = () => {
@@ -13,7 +12,7 @@ export const InstructorRoutes = () => {
             />
             <Route
                path={ROUTES.INSTRUCTOR_COURSES}
-               element={<MaterialCard />}
+               element={<div>Instuctor</div>}
             />
          </Routes>
       </div>
