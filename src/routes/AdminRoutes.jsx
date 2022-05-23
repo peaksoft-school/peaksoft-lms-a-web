@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Students } from '../components/Admin/Students/Students'
-import { Teachers } from '../components/Admin/teachers/Teachers'
+import { Students } from '../components/admin/Students/Students'
+import { Teachers } from '../components/admin/teachers/Teachers'
 import { ROUTES } from '../utils/constants/general'
 
 export const AdminRoutes = () => {
