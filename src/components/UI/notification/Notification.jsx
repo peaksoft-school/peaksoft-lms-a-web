@@ -1,34 +1,42 @@
 import styled from '@emotion/styled/macro'
-import { Alert, Snackbar } from '@mui/material'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-export const Notification = (props) => {
+export const showSuccessMessage = (msg) => toast.success(msg)
+export const showErrorMessage = (msg) => toast.error(msg)
+
+export const Notification = () => {
    return (
-      <Snackbar
-         open={props.open}
-         autoHideDuration={3000}
-         onClose={props.onClose}
-         anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-         }}
-      >
-         <StyledAlert variant="filled" severity={props.status}>
-            <StyledMessage>{props.message}</StyledMessage>
-         </StyledAlert>
-      </Snackbar>
+      <StyledToastContainer
+         position="top-right"
+         autoClose={3000}
+         hideProgressBar
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover
+         closeButton={false}
+      />
    )
 }
 
-const StyledAlert = styled(Alert)`
-   border-radius: 12px;
-   padding: 15px 28px;
-`
-
-const StyledMessage = styled.p`
-   font-family: 'Open Sans', sans-serif;
-   font-style: normal;
-   font-weight: 400;
-   font-size: 16px;
-   line-height: 22px;
-   color: #ffffff;
+const StyledToastContainer = styled(ToastContainer)`
+   .Toastify__toast--success {
+      background: #36ac0c;
+      border-radius: 10px;
+      color: #fff;
+      svg {
+         fill: #fff;
+      }
+   }
+   .Toastify__toast--error {
+      background: #c91e1e;
+      border-radius: 10px;
+      color: #fff;
+      svg {
+         fill: #fff;
+      }
+   }
 `

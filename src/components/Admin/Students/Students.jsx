@@ -27,7 +27,11 @@ import {
 } from '../../../utils/constants/general'
 import { UploadExcel } from './UploadExcelModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
-import { Notification } from '../../UI/notification/Notification'
+import {
+   Notification,
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
 const STUDY_FORMAT_OPTION = [
@@ -64,26 +68,16 @@ export const Students = () => {
    const [currentPage, setCurrentPage] = useState(1)
    const [studyFormat, setStudyFormat] = useState('ALL')
    const [deletedStudentId, setDeletedStudentId] = useState(null)
-   const [openNotification, setOpenNotification] = useState(false)
-   const [openErrorNotification, setOpenErrorNotification] = useState(false)
 
    const showConfirmModal = searchParams.get(DELETE_STUDENT)
    const showAddStudentsModal = searchParams.get(CREATE_STUDENT)
    const showEditStudentsModal = searchParams.get(EDIT_STUDENT)
    const showUploadStudentsModal = searchParams.get(UPLOAD_STUDENT)
 
-   const closeNotification = (event, reason) => {
-      if (reason === 'clickaway') {
-         return
-      }
-
-      setOpenNotification(false)
-      setOpenErrorNotification(false)
-   }
-
    const closeModals = () => {
       setSearchParams({ page: currentPage })
    }
+
    const openStudentsModal = () => {
       setSearchParams({ [CREATE_STUDENT]: true })
       dispatch(getGroups())
@@ -188,19 +182,19 @@ export const Students = () => {
 
    useEffect(() => {
       if (successMessage) {
-         setOpenNotification(true)
+         showSuccessMessage(successMessage)
       }
       return () => {
-         setOpenNotification(false)
+         dispatch(studentsActions.showSuccessModal(null))
       }
    }, [successMessage])
 
    useEffect(() => {
       if (error) {
-         setOpenErrorNotification(true)
+         showErrorMessage(error)
       }
       return () => {
-         setOpenErrorNotification(false)
+         dispatch(studentsActions.showErrorMessage(null))
       }
    }, [error])
 
@@ -315,17 +309,7 @@ export const Students = () => {
             }}
          />
          {isLoading && <Spinner />}
-         <Notification
-            message={successMessage}
-            onClose={closeNotification}
-            open={openNotification}
-         />
-         <Notification
-            message={error}
-            status="error"
-            onClose={closeNotification}
-            open={openErrorNotification}
-         />
+         <Notification />
       </div>
    )
 }
