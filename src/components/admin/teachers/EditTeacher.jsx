@@ -18,6 +18,7 @@ export const EditTeacher = ({
    const handleClose = () => {
       setEditSearchParams()
    }
+
    const [firstName, lastName] = fullName.split(' ')
    const { value, onChange } = useInput({
       firstName: firstName || '',

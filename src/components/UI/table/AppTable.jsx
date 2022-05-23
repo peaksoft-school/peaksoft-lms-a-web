@@ -11,8 +11,9 @@ import {
    ThemeProvider,
    createTheme,
 } from '@mui/material'
+import { Pagination } from '../pagination/Pagination'
 
-export const AppTable = ({ columns, data }) => {
+export const AppTable = ({ columns, data, pagination }) => {
    return (
       <ThemeProvider theme={customTheme}>
          <Container component={Paper}>
@@ -49,18 +50,24 @@ export const AppTable = ({ columns, data }) => {
                   })}
                </TableBody>
             </Table>
+            {pagination && (
+               <StyledPagination>
+                  <Pagination
+                     count={pagination.count}
+                     onChange={pagination.onChange}
+                  />
+               </StyledPagination>
+            )}
          </Container>
       </ThemeProvider>
    )
 }
 
 const Container = styled(MuiTableContainer)`
+   position: relative;
    min-width: 1140px;
    min-height: 587px;
    margin: 20px auto;
-   left: 10%;
-   right: 0%;
-   top: 137px;
    background: #ffffff;
    border: 1px solid #d4d4d4;
    box-sizing: border-box;
@@ -108,4 +115,13 @@ const StyledItemLabel = styled.span`
    display: flex;
    justify-content: center;
    align-items: center;
+`
+const StyledPagination = styled.div`
+   width: 100%;
+   height: 15px;
+   position: absolute;
+   margin-bottom: 8px;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
 `

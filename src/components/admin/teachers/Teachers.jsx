@@ -11,6 +11,7 @@ import {
    deleteTeacher,
    getAllTeachers,
    getSingleTeacher,
+   getTeachersPagination,
 } from '../../../store/teachers-slice'
 import { EditTeacher } from './EditTeacher'
 import { DELETE_TEACHER, EDIT_TEACHER } from '../../../utils/constants/general'
@@ -28,13 +29,15 @@ export const Teachers = () => {
    const [deleteSearchParams, setDeleteSearchParams] = useSearchParams()
    const [editSearchParams, setEditSearchParams] = useSearchParams()
 
+   const [currentPage, setCurrentPage] = useState(1)
+
    const deleteTeacherModal = deleteSearchParams.get(DELETE_TEACHER)
    const editTeacherModal = editSearchParams.get(EDIT_TEACHER)
 
    const deleteHandler = () => {
       setDeleteSearchParams({ [DELETE_TEACHER]: true, teacher: teacherId })
-      setDeleteSearchParams()
       dispatch(deleteTeacher(teacherId))
+      setDeleteSearchParams()
    }
 
    const handleClose = () => {
@@ -94,6 +97,11 @@ export const Teachers = () => {
       dispatch(getSingleTeacher(id))
    }
 
+   const paginationHandler = (event, value) => {
+      setCurrentPage(value)
+      dispatch(getTeachersPagination({ page: value }))
+   }
+
    useEffect(() => {
       const teacherId = editSearchParams.get('teacherId')
       if (teacherId) {
@@ -138,7 +146,11 @@ export const Teachers = () => {
                Удалить
             </Button>
          </ConfirmModal>
-         <AppTable columns={COLUMNS} data={teachersData} />
+         <AppTable
+            columns={COLUMNS}
+            data={teachersData}
+            pagination={{ count: 3, onChange: paginationHandler }}
+         />
       </>
    )
 }

@@ -5,6 +5,8 @@ const initialState = {
    teachersData: [],
    isLoading: null,
    singleTeacher: null,
+   currentPage: null,
+   totalPage: null,
 }
 
 export const addTeacher = createAsyncThunk(
@@ -16,6 +18,7 @@ export const addTeacher = createAsyncThunk(
             method: 'POST',
             body: teacherInfo,
          })
+         // dispatch(getDataStudentPagination({ page }))
          dispatch(getAllTeachers())
          return response
       } catch (error) {
@@ -47,6 +50,7 @@ export const deleteTeacher = createAsyncThunk(
             path: `api/instructors/${id}`,
             method: 'DELETE',
          })
+         // dispatch(getDataStudentPagination({ page }))
          dispatch(getAllTeachers())
          return response
       } catch (error) {
@@ -88,7 +92,25 @@ export const editTeacher = createAsyncThunk(
       }
    }
 )
-
+export const getTeachersPagination = createAsyncThunk(
+   'teachers/getTeachersPagination',
+   async (page, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/instructors/pagination',
+            method: 'GET',
+            params: {
+               page,
+               size: 10,
+            },
+         })
+         dispatch(getDataStudentPagination(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
 const setIsLoading = (state) => {
    state.isLoading = false
 }
@@ -105,6 +127,10 @@ export const teachersSlice = createSlice({
       },
       clearTeacher(state) {
          state.singleTeacher = null
+      },
+      getDataStudentPagination(state, action) {
+         state.teachersData = action.payload.responseList
+         state.currentPage = action
       },
    },
    extraReducers: {
@@ -125,6 +151,10 @@ export const teachersSlice = createSlice({
    },
 })
 
-export const { removeTeacher, clearTeacher, setSingleTeacher } =
-   teachersSlice.actions
+export const {
+   removeTeacher,
+   clearTeacher,
+   setSingleTeacher,
+   getDataStudentPagination,
+} = teachersSlice.actions
 export const instructorActions = teachersSlice.actions
