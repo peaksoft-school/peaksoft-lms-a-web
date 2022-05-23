@@ -28,7 +28,6 @@ import {
 import { UploadExcel } from './UploadExcelModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import {
-   Notification,
    showErrorMessage,
    showSuccessMessage,
 } from '../../UI/notification/Notification'
@@ -309,7 +308,6 @@ export const Students = () => {
             }}
          />
          {isLoading && <Spinner />}
-         <Notification />
       </div>
    )
 }
