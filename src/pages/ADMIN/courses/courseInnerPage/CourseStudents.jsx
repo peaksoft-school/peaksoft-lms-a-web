@@ -1,29 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { baseFetch } from '../../../../api/baseFetch'
 import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { showErrorMessage } from '../../../../components/UI/notification/Notification'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 import { COURSE_STUDENTS } from '../../../../utils/constants/general'
+import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseStudents = () => {
    const params = useParams()
 
-   const { courses } = useSelector((state) => state.courses)
-
    const [students, setStudents] = useState([])
-   const [course, setCourse] = useState('')
 
+   const course = localStorageHelper.laod('course')
    useEffect(() => {
       getCourseStudents()
-
-      courses.filter((el) => {
-         if (el.id == params.id) {
-            setCourse(el.courseName)
-         }
-         return el
-      })
    }, [])
 
    const getCourseStudents = async () => {

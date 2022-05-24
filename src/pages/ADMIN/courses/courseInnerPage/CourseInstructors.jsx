@@ -13,8 +13,12 @@ import {
 } from '../../../../utils/constants/general'
 import { BasicModal } from '../../../../components/UI/modal/BasicModal'
 import { MultiSelect } from '../../../../components/UI/select/MultiSelect'
-import { assignTeacherToCourse } from '../../../../store/courses-slice'
+import {
+   assignTeacherToCourse,
+   getInstructor,
+} from '../../../../store/courses-slice'
 import { showErrorMessage } from '../../../../components/UI/notification/Notification'
+import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseInstructors = () => {
    const params = useParams()
@@ -31,14 +35,16 @@ export const CourseInstructors = () => {
    const [selectIsValid, setSelectIsValid] = useState(false)
 
    const showAppointTeacherModal = searchParams.get(APPOINT_TEACHER)
-   const [course, setCourse] = useState('')
+
+   const courseName = localStorageHelper.laod('course')
 
    useEffect(() => {
       getCourseTeachers()
+      dispatch(getInstructor())
 
       courses.filter((el) => {
          if (el.id == params.id) {
-            setCourse(el.courseName)
+            localStorageHelper.store('course', el.courseName)
          }
          return el
       })
@@ -62,6 +68,7 @@ export const CourseInstructors = () => {
    }
 
    const appointTeacher = () => {
+      dispatch(getInstructor())
       dispatch(
          assignTeacherToCourse({
             courseId: params.id,
@@ -73,10 +80,15 @@ export const CourseInstructors = () => {
    }
 
    useEffect(() => {
+      getCourseTeachers()
+   }, [appointTeacher])
+
+   useEffect(() => {
       setSelectIsValid(selectedOptions.length > 0)
    }, [selectedOptions])
 
    const assignTeacher = () => {
+      dispatch(getInstructor())
       setSearchParams({
          [APPOINT_TEACHER]: true,
          teacherId: params.id,
@@ -94,14 +106,19 @@ export const CourseInstructors = () => {
       },
       {
          path: 'courses',
-         name: course,
+         name: courseName,
       },
       {
          path: '/instructors',
          name: 'Учителя',
       },
    ]
-
+   const options = instructors.map((instructor) => {
+      return {
+         id: instructor.id,
+         title: instructor.fullName,
+      }
+   })
    return (
       <div>
          <StyledButton>
@@ -126,7 +143,7 @@ export const CourseInstructors = () => {
          >
             <MultiSelect
                title={selectedTeacher}
-               options={instructors}
+               options={options}
                onSelected={newMultiSelect}
                selectedOptions={selectedOptions}
                setSelectedOptions={setSelectedOptions}

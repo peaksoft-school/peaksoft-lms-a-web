@@ -1,19 +1,11 @@
 import React, { useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 function LinkTab(props) {
-   return (
-      <StyledTab
-         component={NavLink}
-         // onClick={(event) => {
-         //    event.preventDefault()
-         // }}
-         {...props}
-      />
-   )
+   return <StyledTab component={NavLink} {...props} />
 }
 
 export default function NavTabs({ tabs }) {

@@ -143,6 +143,9 @@ const StyledButton = styled.div`
    align-items: center;
    justify-content: flex-end;
    height: 80px;
+   svg {
+      margin-right: 9px;
+   }
 `
 const StyledTextArea = styled.div`
    textarea {

@@ -13,7 +13,6 @@ export const MultiSelect = ({
 }) => {
    const [openMultiSelect, setOpenMultiSelect] = useState(false)
    const [userOptions, setUserOptions] = useState(options)
-   console.log(options)
 
    const toggleSelection = () => setOpenMultiSelect(!openMultiSelect)
 

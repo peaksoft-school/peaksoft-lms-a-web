@@ -133,7 +133,7 @@ export const assignTeacherToCourse = createAsyncThunk(
 )
 
 export const getInstructor = createAsyncThunk(
-   'courses/getTeachers',
+   'courses/getInstructor',
    async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
