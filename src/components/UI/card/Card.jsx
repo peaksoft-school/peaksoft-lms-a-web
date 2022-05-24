@@ -5,21 +5,25 @@ import {
    Typography,
    Card as MuiCard,
 } from '@mui/material'
+import { NavLink } from 'react-router-dom'
 import { MeatBalls } from './MeatBalls'
 
 export const Card = (props) => {
    return (
       <Wrapper>
-         <Container component="img" image={props.image} alt={props.title} />
-         <CardContent>
-            <StyledTitle>
-               <TitleContainer variant="h5">{props.title}</TitleContainer>
-               <StyledDate variant="p">{props.date}</StyledDate>
-            </StyledTitle>
-            <StyledDescription>
-               <Typography>{props.description}</Typography>
-            </StyledDescription>
-         </CardContent>
+         <StyledNavLink to={props.path}>
+            <Container component="img" image={props.image} alt={props.title} />
+            <CardContent>
+               <StyledTitle>
+                  <TitleContainer variant="h5">{props.title}</TitleContainer>
+                  <StyledDate variant="p">{props.date}</StyledDate>
+               </StyledTitle>
+               <StyledDescription>
+                  <Typography>{props.description}</Typography>
+               </StyledDescription>
+            </CardContent>
+         </StyledNavLink>
+
          <StyledIcon>
             <MeatBalls
                options={props.options}
@@ -77,4 +81,7 @@ const StyledIcon = styled.div`
    flex-direction: end;
    justify-content: end;
    padding-bottom: 10px;
+`
+const StyledNavLink = styled(NavLink)`
+   text-decoration: none;
 `

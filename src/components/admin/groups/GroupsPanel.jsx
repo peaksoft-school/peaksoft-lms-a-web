@@ -12,6 +12,7 @@ import {
    getSingleGroup,
    groupsPagination,
    groupActions,
+   getStudents,
 } from '../../../store/groupSlice'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/trashIcon.svg'
@@ -46,10 +47,8 @@ export const GroupsPanel = () => {
    ])
    const groups = useSelector((state) => state.groups.newGroupData)
 
-   const { singleGroup, allPages, successMessage, error } = useSelector(
-      (state) => state.groups
-   )
-
+   const { singleGroup, allPages, successMessage, error, studentsIState } =
+      useSelector((state) => state.groups)
    const dispatch = useDispatch()
 
    const [isModalOpen, setIsModalOpen] = useState(false)
@@ -116,6 +115,7 @@ export const GroupsPanel = () => {
                         key={group.id}
                         cards={group}
                         id={group.id}
+                        path={`${group.id}/group_students`}
                      />
                   )
                })}

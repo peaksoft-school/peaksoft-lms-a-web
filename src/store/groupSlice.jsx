@@ -4,6 +4,7 @@ import { fileFetch } from '../api/fileFetch'
 
 const initialState = {
    newGroupData: [],
+   studentsIState: [],
    isLoading: null,
    singleGroup: null,
    allPages: null,
@@ -126,6 +127,22 @@ export const groupsPagination = createAsyncThunk(
       }
    }
 )
+export const getStudents = createAsyncThunk(
+   'groups/getStudents',
+   async (_, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/students',
+            method: 'GET',
+         })
+         dispatch(groupActions.getStudents(response))
+         console.log(response)
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
 
 export const groupsSlice = createSlice({
    name: 'groups',
@@ -147,6 +164,9 @@ export const groupsSlice = createSlice({
       },
       showErrorMessage(state, action) {
          state.error = action.payload
+      },
+      getStudents(state, action) {
+         state.studentsIState = action.payload
       },
    },
    extraReducers: {
