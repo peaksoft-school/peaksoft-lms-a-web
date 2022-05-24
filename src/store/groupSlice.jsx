@@ -6,58 +6,35 @@ const initialState = {
    newGroupData: [],
    isLoading: null,
    singleGroup: null,
-   currentPage: null,
    allPages: null,
+   successMessage: null,
+   error: null,
 }
 export const addNewGroup = createAsyncThunk(
    'groups/addNewGroup',
-   async (newGroup, { rejectWithValue, dispatch }) => {
-      try {
-         const response = await baseFetch({
-            path: 'api/groups',
-            method: 'POST',
-            body: newGroup,
-         })
-         dispatch(fetchNewGroups())
-         return response
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-   }
-)
-
-export const postFileToBase = createAsyncThunk(
-   'groups/postFileToBase',
-   async ({ file, groupData }, { dispatch }) => {
+   async ({ groupData, file }, { rejectWithValue, dispatch }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
-         const response = await fileFetch({
+         const fileResponse = await fileFetch({
             path: 'api/file',
             method: 'POST',
             body: formData,
          })
-         const data = await response.url.toString()
-         if (data) {
-            dispatch(addNewGroup({ ...groupData, image: data }))
-         }
-         return response
-      } catch (error) {
-         return error.message
-      }
-   }
-)
 
-export const fetchNewGroups = createAsyncThunk(
-   'groups/fetchNewGroups',
-   async (_, { rejectWithValue }) => {
-      try {
+         const data = await fileResponse.url.toString()
          const response = await baseFetch({
             path: 'api/groups',
-            method: 'GET',
+            method: 'POST',
+            body: { ...groupData, image: data },
          })
+         dispatch(groupsPagination(groupData.page))
+         dispatch(groupActions.showSuccessModal('Группа успешно создана'))
+         dispatch(groupActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(groupActions.isSucceed(false))
+         dispatch(groupActions.showErrorMessage('Не удалось добавить группу'))
          return rejectWithValue(error.message)
       }
    }
@@ -65,15 +42,19 @@ export const fetchNewGroups = createAsyncThunk(
 
 export const deleteGroup = createAsyncThunk(
    'groups/deleteGroup',
-   async (id, { rejectWithValue, dispatch }) => {
+   async ({ id, page }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: `api/groups/${id}`,
             method: 'DELETE',
          })
-         dispatch(fetchNewGroups())
+         dispatch(groupsPagination(page))
+         dispatch(groupActions.showSuccessModal('Группа успешно удалена'))
+         dispatch(groupActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(groupActions.isSucceed(false))
+         dispatch(groupActions.showErrorMessage('Не удалось удалить группу'))
          return rejectWithValue(error.message)
       }
    }
@@ -96,44 +77,36 @@ export const getSingleGroup = createAsyncThunk(
    }
 )
 
-export const updateFile = createAsyncThunk(
-   'groups/updateFile',
-   async ({ file, groupUpdateInfo }, { dispatch }) => {
+export const updateSingleGroup = createAsyncThunk(
+   'groups/updateSingleGroup',
+   async ({ groupUpdateInfo, file }, { rejectWithValue, dispatch }) => {
       try {
          const editedGroup = new FormData()
          editedGroup.append('file', file)
-         const response = await fileFetch({
+         const fileResponse = await fileFetch({
             path: 'api/file',
             method: 'POST',
             body: editedGroup,
          })
-         const data = await response.url.toString()
-         if (data) {
-            dispatch(updateSingleGroup({ ...groupUpdateInfo, image: data }))
-         }
-         return response
-      } catch (error) {
-         return error.message
-      }
-   }
-)
+         const data = await fileResponse.url.toString()
 
-export const updateSingleGroup = createAsyncThunk(
-   'groups/updateSingleGroup',
-   async (groupUpdateInfo, { rejectWithValue, dispatch }) => {
-      try {
          const response = await baseFetch({
             path: `api/groups/${groupUpdateInfo.id}`,
             method: 'PUT',
-            body: groupUpdateInfo,
+            body: { ...groupUpdateInfo, image: data },
          })
-         dispatch(fetchNewGroups())
+         dispatch(groupsPagination(groupUpdateInfo.page))
+         dispatch(groupActions.showSuccessModal('Изменения успешно сохранены'))
+         dispatch(groupActions.isSucceed(true))
          return response
       } catch (error) {
+         dispatch(groupActions.isSucceed(false))
+         dispatch(groupActions.showErrorMessage('Не удалось изменить данные'))
          return rejectWithValue(error.message)
       }
    }
 )
+
 export const groupsPagination = createAsyncThunk(
    'groups/groupsPagination',
    async (page, { rejectWithValue, dispatch }) => {
@@ -169,6 +142,12 @@ export const groupsSlice = createSlice({
          state.currentPage = action.payload.currentPage
          state.allPages = action.payload.totalPage
       },
+      showSuccessModal(state, action) {
+         state.successMessage = action.payload
+      },
+      showErrorMessage(state, action) {
+         state.error = action.payload
+      },
    },
    extraReducers: {
       [addNewGroup.pending]: (state) => {
@@ -178,16 +157,6 @@ export const groupsSlice = createSlice({
          state.isLoading = false
       },
       [addNewGroup.rejected]: (state) => {
-         state.isLoading = false
-      },
-      [fetchNewGroups.pending]: (state) => {
-         state.isLoading = true
-      },
-      [fetchNewGroups.fulfilled]: (state, action) => {
-         state.isLoading = false
-         state.newGroupData = action.payload
-      },
-      [fetchNewGroups.rejected]: (state) => {
          state.isLoading = false
       },
       [updateSingleGroup.fulfilled]: (state, action) => {

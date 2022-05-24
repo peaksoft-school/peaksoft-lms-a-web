@@ -8,7 +8,7 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import DatepickerUi from '../../UI/DatePickerUi'
 import { Input } from '../../UI/input/Input'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { updateFile } from '../../UI/store/groupSlice'
+import { updateSingleGroup } from '../../../store/groupSlice'
 
 const GroupEdit = (props) => {
    const dispatch = useDispatch()
@@ -39,8 +39,11 @@ const GroupEdit = (props) => {
          dateOfStart: result,
          description: value.description,
          id,
+         page: props.page,
       }
-      dispatch(updateFile({ file: selectedFile, groupUpdateInfo: updateInfo }))
+      dispatch(
+         updateSingleGroup({ file: selectedFile, groupUpdateInfo: updateInfo })
+      )
       onClear()
       props.setOpenEditGroupModal(false)
    }

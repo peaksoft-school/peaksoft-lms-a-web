@@ -7,8 +7,8 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import DatepickerUi from '../../UI/DatePickerUi'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { postFileToBase } from '../../../store/groupSlice'
 import { Input } from '../../UI/input/Input'
+import { addNewGroup } from '../../../store/groupSlice'
 
 const GroupCreate = (props) => {
    const dispatch = useDispatch()
@@ -42,15 +42,21 @@ const GroupCreate = (props) => {
          groupName: value.groupName,
          dateOfStart: result,
          description: value.description,
+         page: props.page,
       }
-      dispatch(postFileToBase({ groupData: newGroup, file: selectedFile }))
+      dispatch(
+         addNewGroup({
+            groupData: newGroup,
+            file: selectedFile,
+         })
+      )
       onClear()
       setOpenCreateGroupModal(false)
       props.setIsLoading(true)
    }
 
    return (
-      <>
+      <WrapperForButton>
          <Button
             style={{ marginLeft: '1026px' }}
             background="#3772FF"
@@ -116,9 +122,14 @@ const GroupCreate = (props) => {
                </BtnStyleControl>
             </BasicModal>
          )}
-      </>
+      </WrapperForButton>
    )
 }
+const WrapperForButton = styled.div`
+   width: 100%;
+   display: flex;
+   justify-content: end;
+`
 const ModalContentControl = styled.div`
    width: 338px;
    display: flex;

@@ -2,12 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from '@emotion/styled'
 import { Card } from '../../UI/card/Card'
-import { Notification } from '../../UI/notification/Notification'
+import {
+   Notification,
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 import {
    deleteGroup,
-   fetchNewGroups,
    getSingleGroup,
    groupsPagination,
+   groupActions,
 } from '../../../store/groupSlice'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/trashIcon.svg'
@@ -42,7 +46,7 @@ export const GroupsPanel = () => {
    ])
    const groups = useSelector((state) => state.groups.newGroupData)
 
-   const { singleGroup, currentPage, allPages } = useSelector(
+   const { singleGroup, allPages, successMessage, error } = useSelector(
       (state) => state.groups
    )
 
@@ -55,10 +59,26 @@ export const GroupsPanel = () => {
    const [page, setPage] = useState(1)
 
    useEffect(() => {
-      // dispatch(fetchNewGroups())
-      // setPage(page)
       dispatch(groupsPagination(page))
    }, [])
+
+   useEffect(() => {
+      if (successMessage) {
+         showSuccessMessage(successMessage)
+      }
+      return () => {
+         dispatch(groupActions.showSuccessModal(null))
+      }
+   }, [successMessage])
+
+   useEffect(() => {
+      if (error) {
+         showErrorMessage(error)
+      }
+      return () => {
+         dispatch(groupActions.showErrorMessage(null))
+      }
+   }, [error])
 
    const getGroupId = (id) => {
       setIsModalOpen(true)
@@ -66,7 +86,7 @@ export const GroupsPanel = () => {
    }
 
    const deletingModalHandler = () => {
-      dispatch(deleteGroup(groupId))
+      dispatch(deleteGroup({ id: groupId, page }))
       setIsModalOpen(false)
    }
 
@@ -81,57 +101,60 @@ export const GroupsPanel = () => {
    }
 
    return (
-      <div>
-         <GroupCreate setIsLoading={setIsLoading} />
-         <CardContentStyleControl>
-            {groups.map((group) => {
-               return (
-                  <Card
-                     image={group.image}
-                     options={options}
-                     title={group.groupName}
-                     description={group.description}
-                     date={group.dateOfStart}
-                     key={group.id}
-                     cards={group}
-                     id={group.id}
+      <>
+         <GroupCreate setIsLoading={setIsLoading} page={page} />
+         <StyledContainer>
+            <CardContentStyleControl>
+               {groups.map((group) => {
+                  return (
+                     <Card
+                        image={group.image}
+                        options={options}
+                        title={group.groupName}
+                        description={group.description}
+                        date={group.dateOfStart}
+                        key={group.id}
+                        cards={group}
+                        id={group.id}
+                     />
+                  )
+               })}
+               {isLoading && <Notification message="Группа успешно создана" />}
+               <GroupDeleteConfirm
+                  isModalOpen={isModalOpen}
+                  deletingModalHandler={deletingModalHandler}
+                  setIsModalOpen={setIsModalOpen}
+               />
+               {singleGroup && (
+                  <GroupEdit
+                     singleGroup={singleGroup}
+                     openEditGroupModal={openEditGroupModal}
+                     setOpenEditGroupModal={setOpenEditGroupModal}
+                     page={page}
                   />
-               )
-            })}
-            {isLoading && <Notification message="Группа успешно создана" />}
-            <GroupDeleteConfirm
-               isModalOpen={isModalOpen}
-               deletingModalHandler={deletingModalHandler}
-               setIsModalOpen={setIsModalOpen}
-            />
-            {singleGroup && (
-               <GroupEdit
-                  singleGroup={singleGroup}
-                  openEditGroupModal={openEditGroupModal}
-                  setOpenEditGroupModal={setOpenEditGroupModal}
-               />
+               )}
+            </CardContentStyleControl>
+            {allPages && (
+               <PaginationStyleControl>
+                  <Pagination
+                     count={allPages}
+                     page={page}
+                     onChange={(_, num) => groupsPaginationHandler(num)}
+                  />
+               </PaginationStyleControl>
             )}
-         </CardContentStyleControl>
-         {allPages && (
-            <PaginationStyleControl>
-               <Pagination
-                  count={allPages}
-                  page={page}
-                  onChange={(_, num) => groupsPaginationHandler(num)}
-               />
-            </PaginationStyleControl>
-         )}
-      </div>
+         </StyledContainer>
+      </>
    )
 }
 
 const CardContentStyleControl = styled.div`
-   width: 270px;
+   margin-top: 30px;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
    grid-column-gap: 20px;
    grid-row-gap: 20px;
-   margin-bottom: 20px;
+   margin-bottom: 10px;
 `
 const Container = styled.div`
    width: 180px;
@@ -146,6 +169,10 @@ const Container = styled.div`
    }
 `
 const PaginationStyleControl = styled.div`
-   width: fit-content;
-   margin: 0 auto;
+   margin-top: 20px;
+`
+const StyledContainer = styled.div`
+   margin-top: 20px;
+   height: 880px;
+   position: relative;
 `
