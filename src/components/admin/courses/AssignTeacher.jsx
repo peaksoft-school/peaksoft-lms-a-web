@@ -1,12 +1,21 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { assignTeacherToCourse } from '../../../store/courses-slice'
+import {
+   assignTeacherToCourse,
+   getCourseTeachers,
+} from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { MultiSelect } from '../../UI/select/MultiSelect'
 
-export const AssignTeacher = ({ instructors, id, closeModal, isModalOpen }) => {
+export const AssignTeacher = ({
+   instructors,
+   id,
+   closeModal,
+   isModalOpen,
+   courseTeachers,
+}) => {
    const dispatch = useDispatch()
    const [selectedOptions, setSelectedOptions] = useState([])
    const [listOfTeacher, setListOfTeacher] = useState([])
@@ -25,21 +34,23 @@ export const AssignTeacher = ({ instructors, id, closeModal, isModalOpen }) => {
             instructorId: listOfTeacher,
          })
       )
+      dispatch(getCourseTeachers(id))
       closeModal()
       setSelectedOptions([])
    }
-
    useEffect(() => {
       setSelectIsValid(selectedOptions.length > 0)
    }, [selectedOptions])
 
-   const options = instructors.map((instructor) => {
+   const filteredTeachers = instructors.filter(
+      (item) => !courseTeachers.some((el) => item.id === el.id)
+   )
+   const options = filteredTeachers.map((teacher) => {
       return {
-         id: instructor.id,
-         title: instructor.fullName,
+         id: teacher.id,
+         title: teacher.fullName,
       }
    })
-
    return (
       <BasicModal
          title="Назначить учителя"

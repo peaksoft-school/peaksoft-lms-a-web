@@ -12,6 +12,8 @@ const initState = {
    isModalOpen: false,
    errorMessage: null,
    successMessage: null,
+   courseName: null,
+   courseTeachers: [],
 }
 
 export const addNewCourse = createAsyncThunk(
@@ -32,10 +34,12 @@ export const addNewCourse = createAsyncThunk(
             method: 'POST',
             body: { ...courseData, image: data },
          })
+         const result = await response
          dispatch(getAllCourses(currentPage))
+
          dispatch(coursesActions.showSuccessMessage('Курс успешно создан'))
          dispatch(coursesActions.openModal(true))
-         return response
+         return result
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось создать курс'))
          dispatch(coursesActions.openModal(false))
@@ -62,12 +66,13 @@ export const onEditCourse = createAsyncThunk(
             method: 'PUT',
             body: { ...course, image: data },
          })
+         const result = await response
          dispatch(getAllCourses(currentPage))
          dispatch(
             coursesActions.showSuccessMessage('Изменения успешно сохранены')
          )
          dispatch(coursesActions.openModal(true))
-         return response
+         return result
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
          dispatch(coursesActions.openModal(false))
@@ -84,9 +89,10 @@ export const deleteCourse = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'DELETE',
          })
+         const result = await response
          dispatch(getAllCourses(currentPage))
          dispatch(coursesActions.showSuccessMessage('Вы удалили курс'))
-         return response
+         return result
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось удалить курс'))
          return rejectWithValue(error.message)
@@ -103,8 +109,9 @@ export const getSingleCourse = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'GET',
          })
+         const result = await response
          dispatch(coursesActions.getCourse(response))
-         return response
+         return result
       } catch (error) {
          return rejectWithValue(error.message)
       }
@@ -123,8 +130,9 @@ export const assignTeacherToCourse = createAsyncThunk(
                teacherId: instructorId,
             },
          })
+         const result = await response
          dispatch(coursesActions.openModal(true))
-         return response
+         return result
       } catch (error) {
          dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
@@ -160,12 +168,29 @@ export const getAllCourses = createAsyncThunk(
                size: 8,
             },
          })
-         dispatch(coursesActions.getAllCourses(response))
+         const data = await response
+         dispatch(coursesActions.getAllCourses(data))
          return response
       } catch (error) {
          coursesActions.showErrorMessage(
             'Что-то пошло не так, попробуйте еще раз'
          )
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
+export const getCourseTeachers = createAsyncThunk(
+   'courses/getCourseTeachers',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/courses/teachers/${id}`,
+            method: 'GET',
+         })
+         dispatch(coursesActions.getCourseTeachers(response))
+         return response
+      } catch (error) {
          return rejectWithValue(error.message)
       }
    }
@@ -195,7 +220,7 @@ export const coursesSlice = createSlice({
          state.presentPage = action.payload.currentPage
       },
       clearCourses(state) {
-         state.singleCourse = null
+         state.сourse = null
       },
       showSuccessMessage(state, action) {
          state.successMessage = action.payload
@@ -205,6 +230,12 @@ export const coursesSlice = createSlice({
       },
       openModal(state, action) {
          state.isModalOpen = action.payload
+      },
+      courseName(state, action) {
+         state.courseName = action.payload
+      },
+      getCourseTeachers(state, action) {
+         state.courseTeachers = action.payload
       },
    },
    extraReducers: {
@@ -229,6 +260,9 @@ export const coursesSlice = createSlice({
       [assignTeacherToCourse.pending]: setPending,
       [assignTeacherToCourse.fulfilled]: setIsLoading,
       [assignTeacherToCourse.rejected]: setIsLoading,
+      [getCourseTeachers.pending]: setPending,
+      [getCourseTeachers.fulfilled]: setIsLoading,
+      [getCourseTeachers.rejected]: setIsLoading,
    },
 })
 

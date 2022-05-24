@@ -59,8 +59,6 @@ export const AddNewCourse = ({
             currentPage,
          })
       )
-
-      dispatch(getAllCourses(currentPage))
       onClear()
       setDateValue(null)
       setFile(null)
