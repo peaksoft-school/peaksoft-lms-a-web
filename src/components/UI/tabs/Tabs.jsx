@@ -1,19 +1,11 @@
 import React, { useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 function LinkTab(props) {
-   return (
-      <StyledTab
-         component={Link}
-         onClick={(event) => {
-            event.preventDefault()
-         }}
-         {...props}
-      />
-   )
+   return <StyledTab component={NavLink} {...props} />
 }
 
 export default function NavTabs({ tabs }) {
@@ -29,7 +21,7 @@ export default function NavTabs({ tabs }) {
          aria-label="nav tabs example"
       >
          {tabs.map((tab) => (
-            <LinkTab label={tab.title} to={tab.to} />
+            <LinkTab label={tab.title} to={tab.to} key={tab.title} />
          ))}
       </StyledTabs>
    )
