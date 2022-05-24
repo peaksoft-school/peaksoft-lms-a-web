@@ -1,10 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {
-   assignTeacherToCourse,
-   getCourseTeachers,
-} from '../../../store/courses-slice'
+import { assignTeacherToCourse } from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { MultiSelect } from '../../UI/select/MultiSelect'
@@ -34,7 +31,6 @@ export const AssignTeacher = ({
             instructorId: listOfTeacher,
          })
       )
-      dispatch(getCourseTeachers(id))
       closeModal()
       setSelectedOptions([])
    }

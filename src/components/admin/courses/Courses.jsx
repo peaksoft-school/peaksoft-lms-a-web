@@ -42,6 +42,7 @@ export const Courses = () => {
       isLoading,
       errorMessage,
       successMessage,
+      courseTeachers,
    } = useSelector((state) => state.courses)
 
    const [courseId, setCourseId] = useState()
@@ -195,6 +196,7 @@ export const Courses = () => {
                isModalOpen={showAppointTeacherModal}
                closeModal={closeModal}
                instructors={instructors}
+               courseTeachers={courseTeachers}
                id={courseId}
             />
          )}

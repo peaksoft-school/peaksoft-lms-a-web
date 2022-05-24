@@ -21,7 +21,7 @@ export default function NavTabs({ tabs }) {
          aria-label="nav tabs example"
       >
          {tabs.map((tab) => (
-            <LinkTab label={tab.title} to={tab.to} />
+            <LinkTab label={tab.title} to={tab.to} key={tab.title} />
          ))}
       </StyledTabs>
    )

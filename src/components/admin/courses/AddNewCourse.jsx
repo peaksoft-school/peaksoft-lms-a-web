@@ -7,7 +7,7 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/usuInput/useInput'
-import { addNewCourse, getAllCourses } from '../../../store/courses-slice'
+import { addNewCourse } from '../../../store/courses-slice'
 import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
 
 export const AddNewCourse = ({

@@ -11,22 +11,25 @@ import {
    COURSE_INSTRUCTORS,
 } from '../../../../utils/constants/general'
 import {
-   coursesActions,
    getCourseTeachers,
    getInstructor,
 } from '../../../../store/courses-slice'
 import { AssignTeacher } from '../../../../components/admin/courses/AssignTeacher'
+import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseInstructors = () => {
    const params = useParams()
    const dispatch = useDispatch()
 
-   const { instructors, courses, courseName, courseTeachers, isLoading } =
-      useSelector((state) => state.courses)
+   const { instructors, courses, courseTeachers } = useSelector(
+      (state) => state.courses
+   )
 
    const [searchParams, setSearchParams] = useSearchParams()
 
    const showAppointTeacherModal = searchParams.get(APPOINT_TEACHER)
+
+   const courseName = localStorageHelper.laod('course')
 
    useEffect(() => {
       dispatch(getCourseTeachers(params.id))
@@ -34,7 +37,7 @@ export const CourseInstructors = () => {
 
       courses.filter((el) => {
          if (el.id == params.id) {
-            dispatch(coursesActions.courseName(el.courseName))
+            localStorageHelper.store('course', el.courseName)
          }
          return el
       })

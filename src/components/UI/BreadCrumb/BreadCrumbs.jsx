@@ -14,7 +14,7 @@ export const BreadCrumbs = (props) => {
       const isLast = index === paths.length - 2
 
       return isLast ? (
-         <LastPathStyle color="black" key={crumb.href}>
+         <LastPathStyle color="black" key={crumb.path}>
             {crumb.name}
          </LastPathStyle>
       ) : (

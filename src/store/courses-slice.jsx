@@ -12,7 +12,6 @@ const initState = {
    isModalOpen: false,
    errorMessage: null,
    successMessage: null,
-   courseName: null,
    courseTeachers: [],
 }
 
@@ -34,12 +33,10 @@ export const addNewCourse = createAsyncThunk(
             method: 'POST',
             body: { ...courseData, image: data },
          })
-         const result = await response
          dispatch(getAllCourses(currentPage))
-
          dispatch(coursesActions.showSuccessMessage('Курс успешно создан'))
          dispatch(coursesActions.openModal(true))
-         return result
+         return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось создать курс'))
          dispatch(coursesActions.openModal(false))
@@ -66,13 +63,12 @@ export const onEditCourse = createAsyncThunk(
             method: 'PUT',
             body: { ...course, image: data },
          })
-         const result = await response
          dispatch(getAllCourses(currentPage))
          dispatch(
             coursesActions.showSuccessMessage('Изменения успешно сохранены')
          )
          dispatch(coursesActions.openModal(true))
-         return result
+         return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
          dispatch(coursesActions.openModal(false))
@@ -89,10 +85,9 @@ export const deleteCourse = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'DELETE',
          })
-         const result = await response
          dispatch(getAllCourses(currentPage))
          dispatch(coursesActions.showSuccessMessage('Вы удалили курс'))
-         return result
+         return response
       } catch (error) {
          dispatch(coursesActions.showErrorMessage('Не удалось удалить курс'))
          return rejectWithValue(error.message)
@@ -109,9 +104,8 @@ export const getSingleCourse = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'GET',
          })
-         const result = await response
          dispatch(coursesActions.getCourse(response))
-         return result
+         return response
       } catch (error) {
          return rejectWithValue(error.message)
       }
@@ -130,9 +124,8 @@ export const assignTeacherToCourse = createAsyncThunk(
                teacherId: instructorId,
             },
          })
-         const result = await response
          dispatch(coursesActions.openModal(true))
-         return result
+         return response
       } catch (error) {
          dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
@@ -168,8 +161,7 @@ export const getAllCourses = createAsyncThunk(
                size: 8,
             },
          })
-         const data = await response
-         dispatch(coursesActions.getAllCourses(data))
+         dispatch(coursesActions.getAllCourses(response))
          return response
       } catch (error) {
          coursesActions.showErrorMessage(
@@ -230,9 +222,6 @@ export const coursesSlice = createSlice({
       },
       openModal(state, action) {
          state.isModalOpen = action.payload
-      },
-      courseName(state, action) {
-         state.courseName = action.payload
       },
       getCourseTeachers(state, action) {
          state.courseTeachers = action.payload
