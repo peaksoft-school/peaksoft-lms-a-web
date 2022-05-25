@@ -10,7 +10,6 @@ import {
    deleteGroup,
    getSingleGroup,
    groupsPagination,
-   groupActions,
 } from '../../../store/groupSlice'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/trashIcon.svg'
@@ -25,7 +24,7 @@ export const GroupsPanel = () => {
    const options = useMemo(() => [
       {
          id: 'wqqdfcfw',
-         action: (id) => editGroupHandler(id),
+         action: (id) => getSingleGroupId(id),
          content: (
             <Container>
                <EditIcon />
@@ -46,8 +45,9 @@ export const GroupsPanel = () => {
    ])
    const groups = useSelector((state) => state.groups.newGroupData)
 
-   const { singleGroup, allPages, successMessage, error, isLoading } =
-      useSelector((state) => state.groups)
+   const { singleGroup, allPages, isLoading } = useSelector(
+      (state) => state.groups
+   )
    const dispatch = useDispatch()
 
    const [isModalOpen, setIsModalOpen] = useState(false)
@@ -59,24 +59,6 @@ export const GroupsPanel = () => {
       dispatch(groupsPagination(page))
    }, [])
 
-   useEffect(() => {
-      if (successMessage) {
-         showSuccessMessage(successMessage)
-      }
-      return () => {
-         dispatch(groupActions.showSuccessModal(null))
-      }
-   }, [successMessage])
-
-   useEffect(() => {
-      if (error) {
-         showErrorMessage(error)
-      }
-      return () => {
-         dispatch(groupActions.showErrorMessage(null))
-      }
-   }, [error])
-
    const getGroupId = (id) => {
       setIsModalOpen(true)
       setGroupId(id)
@@ -84,10 +66,17 @@ export const GroupsPanel = () => {
 
    const deletingModalHandler = () => {
       dispatch(deleteGroup({ id: groupId, page }))
-      setIsModalOpen(false)
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Группа успешно удалена')
+            setIsModalOpen(false)
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить группу')
+         })
    }
 
-   const editGroupHandler = (id) => {
+   const getSingleGroupId = (id) => {
       dispatch(getSingleGroup(id))
       setOpenEditGroupModal(true)
    }
@@ -99,6 +88,8 @@ export const GroupsPanel = () => {
 
    return (
       <>
+         {isLoading && <Spinner />}
+
          <GroupCreate page={page} />
          <StyledContainer>
             <CardContentStyleControl>
@@ -140,7 +131,6 @@ export const GroupsPanel = () => {
                </PaginationStyleControl>
             )}
          </StyledContainer>
-         {isLoading && <Spinner />}
       </>
    )
 }

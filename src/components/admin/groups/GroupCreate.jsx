@@ -9,6 +9,10 @@ import DatepickerUi from '../../UI/DatePickerUi'
 import { useInput } from '../../../hooks/usuInput/useInput'
 import { Input } from '../../UI/input/Input'
 import { addNewGroup } from '../../../store/groupSlice'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 
 const GroupCreate = (props) => {
    const dispatch = useDispatch()
@@ -50,8 +54,15 @@ const GroupCreate = (props) => {
             file: selectedFile,
          })
       )
-      onClear()
-      setOpenCreateGroupModal(false)
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Группа успешно создана')
+            setOpenCreateGroupModal(false)
+            onClear()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось добавить группу')
+         })
    }
 
    return (

@@ -30,12 +30,9 @@ export const addNewGroup = createAsyncThunk(
             body: { ...groupData, image: data },
          })
          dispatch(groupsPagination(groupData.page))
-         dispatch(groupActions.showSuccessModal('Группа успешно создана'))
-         dispatch(groupActions.isSucceed(true))
+
          return response
       } catch (error) {
-         dispatch(groupActions.isSucceed(false))
-         dispatch(groupActions.showErrorMessage('Не удалось добавить группу'))
          return rejectWithValue(error.message)
       }
    }
@@ -50,12 +47,8 @@ export const deleteGroup = createAsyncThunk(
             method: 'DELETE',
          })
          dispatch(groupsPagination(page))
-         dispatch(groupActions.showSuccessModal('Группа успешно удалена'))
-         dispatch(groupActions.isSucceed(true))
          return response
       } catch (error) {
-         dispatch(groupActions.isSucceed(false))
-         dispatch(groupActions.showErrorMessage('Не удалось удалить группу'))
          return rejectWithValue(error.message)
       }
    }
@@ -97,12 +90,9 @@ export const updateSingleGroup = createAsyncThunk(
             body: { ...groupUpdateInfo, image: data },
          })
          dispatch(groupsPagination(groupUpdateInfo.page))
-         dispatch(groupActions.showSuccessModal('Изменения успешно сохранены'))
-         dispatch(groupActions.isSucceed(true))
+
          return response
       } catch (error) {
-         dispatch(groupActions.isSucceed(false))
-         dispatch(groupActions.showErrorMessage('Не удалось изменить данные'))
          return rejectWithValue(error.message)
       }
    }
@@ -159,12 +149,12 @@ export const groupsSlice = createSlice({
          state.currentPage = action.payload.currentPage
          state.allPages = action.payload.totalPage
       },
-      showSuccessModal(state, action) {
-         state.successMessage = action.payload
-      },
-      showErrorMessage(state, action) {
-         state.error = action.payload
-      },
+      // showSuccessModal(state, action) {
+      //    state.successMessage = action.payload
+      // },
+      // showErrorMessage(state, action) {
+      //    state.error = action.payload
+      // },
       getStudentsList(state, action) {
          state.studentsIState = action.payload
       },

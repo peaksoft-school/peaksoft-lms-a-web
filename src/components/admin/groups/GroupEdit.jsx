@@ -9,6 +9,10 @@ import DatepickerUi from '../../UI/DatePickerUi'
 import { Input } from '../../UI/input/Input'
 import { useInput } from '../../../hooks/usuInput/useInput'
 import { updateSingleGroup } from '../../../store/groupSlice'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 
 const GroupEdit = (props) => {
    const dispatch = useDispatch()
@@ -44,8 +48,15 @@ const GroupEdit = (props) => {
       dispatch(
          updateSingleGroup({ file: selectedFile, groupUpdateInfo: updateInfo })
       )
-      onClear()
-      props.setOpenEditGroupModal(false)
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            onClear()
+            props.setOpenEditGroupModal(false)
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
    }
    return (
       <BasicModal
