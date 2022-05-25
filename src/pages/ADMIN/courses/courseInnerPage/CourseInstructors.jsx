@@ -36,7 +36,7 @@ export const CourseInstructors = () => {
       dispatch(getInstructor())
 
       courses.filter((el) => {
-         if (el.id == params.id) {
+         if (el.id === params.id) {
             localStorageHelper.store('course', el.courseName)
          }
          return el
