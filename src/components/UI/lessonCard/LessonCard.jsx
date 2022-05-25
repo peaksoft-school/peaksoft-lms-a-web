@@ -16,6 +16,7 @@ export const LessonCard = ({
    link,
    task,
    test,
+   onEditTitle,
 }) => {
    const STUDY_FORMAT_OPTION = [
       {
@@ -48,7 +49,7 @@ export const LessonCard = ({
       <StyledContainer>
          <StyledTitleContainer>
             <StyledTitle>
-               <StyledEditIcon>
+               <StyledEditIcon onClick={onEditTitle}>
                   <EditTitle />
                </StyledEditIcon>
                <h1>{title}</h1>
@@ -70,7 +71,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <VideoIcon />
                </StyledContentIcon>
-               <h2>Видеоурок</h2>
+               <StyledDiv>
+                  <h2>Видеоурок</h2>
+               </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
                      <StyledEditContainer>
@@ -90,7 +93,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <PresentationIcon />
                </StyledContentIcon>
-               <h2>Презентация</h2>
+               <StyledDiv>
+                  <h2>Презентация</h2>
+               </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
                      <StyledEditContainer>
@@ -110,7 +115,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <TaskIcon />
                </StyledContentIcon>
-               <h2>Задание</h2>
+               <StyledDiv>
+                  <h2>Задание</h2>
+               </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
                      <StyledEditContainer>
@@ -130,7 +137,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <LinkIcon />
                </StyledContentIcon>
-               <h2>Ссылка</h2>
+               <StyledDiv>
+                  <h2>Ссылка</h2>
+               </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
                      <StyledEditContainer>
@@ -150,7 +159,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <TestIcon />
                </StyledContentIcon>
-               <h2>Тест</h2>
+               <StyledDiv>
+                  <h2>Тест</h2>
+               </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
                      <StyledEditContainer>
@@ -221,6 +232,7 @@ const StyledEditIcon = styled.div`
    display: flex;
    justify-content: center;
    align-items: center;
+   cursor: pointer;
 `
 const StyledManageContainer = styled.div`
    width: 45%;
@@ -232,6 +244,10 @@ const StyledManageContainer = styled.div`
 const StyledContentItem = styled.div`
    min-width: 520px;
    height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: start;
+   border-radius: 6px;
    h2 {
       width: 107px;
       font-family: 'Open Sans' sans-serif;
@@ -242,9 +258,6 @@ const StyledContentItem = styled.div`
       color: ${({ disabled }) => (disabled && 'grey') || 'black'};
       cursor: pointer;
    }
-   display: flex;
-   align-items: center;
-   justify-content: start;
    :hover {
       background: rgba(26, 35, 126, 0.07);
    }
@@ -256,6 +269,8 @@ const StyledContentItem = styled.div`
    }
    pointer-events: ${({ disabled }) => (disabled && 'none') || ''};
 `
+const StyledDiv = styled.div``
+
 const StyledContentIcon = styled.div`
    margin-right: 24px;
    width: 24px;
@@ -292,7 +307,6 @@ const StyledEditContainer = styled.div`
    display: flex;
    justify-content: space-around;
    align-items: center;
-   background: #d4d4d4;
    border-radius: 6px;
    gap: 4px;
    padding: 0 10px;
@@ -305,13 +319,17 @@ const StyledEditContainer = styled.div`
       line-height: 22px;
       color: #292929;
    }
+   :hover {
+      background: #d4d4d4;
+   }
 `
 const StyledDeleteContainer = styled.div`
-   width: 88px;
+   width: 108px;
    height: 30px;
    display: flex;
    justify-content: space-between;
    align-items: center;
+   padding: 0 10px;
    cursor: pointer;
    h3 {
       font-family: 'Open Sans' sans-serif;
@@ -321,4 +339,8 @@ const StyledDeleteContainer = styled.div`
       line-height: 22px;
       color: #292929;
    }
+   :hover {
+      background: #d4d4d4;
+   }
+   border-radius: 6px;
 `

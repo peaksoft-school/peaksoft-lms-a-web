@@ -8,6 +8,5 @@ export const store = configureStore({
       auth: authSlice.reducer,
       students: studentsSlice.reducer,
       teachers: teachersSlice.reducer,
-      
    },
 })
