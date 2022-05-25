@@ -30,8 +30,7 @@ export const StudentsEditModal = ({
    const [selectedOption, setSelectedOption] = useState('')
 
    const editStudents = () => {
-      onEdit(value, selectedOption)
-      onClear()
+      onEdit(value, selectedOption, onClear)
    }
 
    const seletedOptionHandler = (option) => {
