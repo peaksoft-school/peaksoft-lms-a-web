@@ -11,8 +11,7 @@ export const BreadCrumbs = (props) => {
 
    const crumbs = pathsHistory.map((crumb, index) => {
       const crumbHref = `/${paths.slice(0, index + 1).join('/')}`
-
-      const isLast = index === paths.length - 1
+      const isLast = index === paths.length - 2
 
       return isLast ? (
          <LastPathStyle color="black" key={crumb.path}>
@@ -24,7 +23,6 @@ export const BreadCrumbs = (props) => {
          </LinkStyleControl>
       )
    })
-
    return (
       <StyledCrumbs aria-label="breadcrumbs" separator="\">
          {crumbs}
@@ -38,6 +36,7 @@ const StyledCrumbs = styled(Breadcrumbs)`
    font-size: 14px;
    letter-spacing: 0.02em;
    font-family: sans-serif;
+   margin-left: 20px;
 `
 
 const LinkStyleControl = styled(Link)`
