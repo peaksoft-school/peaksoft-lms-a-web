@@ -23,14 +23,8 @@ export const Card = (props) => {
                </StyledDescription>
             </CardContent>
          </StyledNavLink>
-
          <StyledIcon>
-            <MeatBalls
-               options={props.options}
-               action={props.action}
-               card={props.cards}
-               id={props.id}
-            />
+            <MeatBalls options={props.options} id={props.id} />
          </StyledIcon>
       </Wrapper>
    )
@@ -38,6 +32,7 @@ export const Card = (props) => {
 
 const Wrapper = styled(MuiCard)`
    min-width: 270px;
+   height: auto;
    border-radius: 10px;
    margin: 10px;
 `
@@ -51,6 +46,7 @@ const StyledTitle = styled.div`
    justify-content: space-between;
    align-items: center;
    padding-right: 18px;
+   height: 30px;
 `
 const TitleContainer = styled(Typography)`
    font-family: 'Open Sans', sans-serif;
@@ -58,12 +54,19 @@ const TitleContainer = styled(Typography)`
    font-size: 19px;
    color: #1d293f;
    padding-right: 18px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 1;
+   -webkit-box-orient: vertical;
+   width: 170px;
 `
 const StyledDate = styled(Typography)`
    font-family: 'Open Sans', sans-serif;
    font-size: 12px;
    line-height: 140.1%;
    color: #1d293f;
+   width: 70px;
 `
 const StyledDescription = styled.div`
    font-family: 'Open Sans', sans-serif;
@@ -72,9 +75,15 @@ const StyledDescription = styled.div`
    font-size: 16px;
    line-height: 22px;
    color: #1d293f;
+   height: 65px;
    margin-top: 10px;
    width: 236px;
    padding: 0px 18px 0 0;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
 `
 const StyledIcon = styled.div`
    display: flex;

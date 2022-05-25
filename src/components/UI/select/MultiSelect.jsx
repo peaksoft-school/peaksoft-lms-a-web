@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ReactComponent as CloseSelect } from '../../../assets/icons/selected.svg'
 import { ReactComponent as RemoveSelect } from '../../../assets/icons/removeSelect.svg'
 import { ReactComponent as OpenSelect } from '../../../assets/icons/Arrows.svg'
+// import { ReactComponent as OpenSelect } from '../../../assets/icons/arrow.svg'
 
 export const MultiSelect = ({
    options,
@@ -13,6 +14,7 @@ export const MultiSelect = ({
 }) => {
    const [openMultiSelect, setOpenMultiSelect] = useState(false)
    const [userOptions, setUserOptions] = useState(options)
+
    const toggleSelection = () => setOpenMultiSelect(!openMultiSelect)
    const addMultiSelectHandler = (id, option) => {
       setSelectedOptions((prev) => [...prev, option])
@@ -28,7 +30,7 @@ export const MultiSelect = ({
          <StyledUl>
             {selectedOptions.map((selected) => (
                <li key={selected.id}>
-                  <p>{selected.name}</p>
+                  <p>{selected.title}</p>
                   <RemoveSelect
                      style={{ marginTop: '3px' }}
                      role="presentation"
@@ -45,19 +47,23 @@ export const MultiSelect = ({
          </StyledSelect>
          {openMultiSelect && (
             <StyledMultiItems>
-               {userOptions.map((option) => (
-                  <li
-                     key={option.id}
-                     role="presentation"
-                     onClick={() => addMultiSelectHandler(option.id, option)}
-                  >
-                     <p>{option.name}</p>
-                     <label className="custom-checkbox">
-                        <input type="checkbox" />
-                        <span className="checkmark"> </span>
-                     </label>
-                  </li>
-               ))}
+               {userOptions.length > 0
+                  ? userOptions.map((option) => (
+                       <li
+                          key={option.id}
+                          role="presentation"
+                          onClick={() =>
+                             addMultiSelectHandler(option.id, option)
+                          }
+                       >
+                          <p>{option.title}</p>
+                          <label className="custom-checkbox">
+                             <input type="checkbox" />
+                             <span className="checkmark"> </span>
+                          </label>
+                       </li>
+                    ))
+                  : 'Teacher Not Found'}
             </StyledMultiItems>
          )}
       </Container>
@@ -79,6 +85,10 @@ const StyledSelect = styled.div`
    margin: 13px 0;
    color: #00125b;
    font-weight: 600;
+<<<<<<< HEAD
+=======
+   cursor: pointer;
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
 `
 const StyledMultiItems = styled.ul`
    display: flex;
@@ -93,14 +103,26 @@ const StyledMultiItems = styled.ul`
    ::-webkit-scrollbar {
       width: 8px;
    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
       border-radius: 10px;
    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb {
       background: #3772ff;
       border-radius: 10px;
    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb:hover {
       background: #3772ff;
    }
@@ -142,18 +164,31 @@ const StyledUl = styled.ul`
    ::-webkit-scrollbar {
       width: 8px;
    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
       border-radius: 8px;
    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb {
       background: #3772ff;
       border-radius: 10px;
    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb:hover {
       background: #3772ff;
    }
    li {
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
       list-style: none;

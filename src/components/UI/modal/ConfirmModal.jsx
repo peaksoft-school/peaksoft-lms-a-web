@@ -38,10 +38,7 @@ const TitleStyle = styled(Typography)`
    line-height: 22px;
    text-align: center;
 `
-const ButtonStyle = styled(Typography)`
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
+const ButtonStyle = styled.div`
    border-radius: 10px;
    display: flex;
    align-items: center;
