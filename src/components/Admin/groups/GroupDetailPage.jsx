@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+// import { useNavigate, useParams } from 'react-router-dom'
 import { AppTable } from '../../UI/table/AppTable'
 import { getStudents } from '../../../store/studentsSlice'
 
@@ -12,7 +12,7 @@ export const GroupDetailPage = () => {
       dispatch(getStudents())
    }
 
-   const { id } = useParams()
+   // const { id } = useParams()
    //    const navigate = useNavigate()
 
    const STUDENTS_INFO = useMemo(() => [
@@ -46,7 +46,6 @@ export const GroupDetailPage = () => {
 
    return (
       <div>
-         {`${id}`}
          {studentsIState && (
             <AppTable data={studentsIState} columns={STUDENTS_INFO} />
          )}
