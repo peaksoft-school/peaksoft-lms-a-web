@@ -1,11 +1,11 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Courses } from '../components/admin/courses/Courses'
+import { Students } from '../components/admin/Students/Students'
 import { Teachers } from '../components/admin/teachers/Teachers'
+import { Courses } from '../components/admin/courses/Courses'
 import { CourseInstructors } from '../pages/ADMIN/courses/courseInnerPage/CourseInstructors'
 import { CourseStudents } from '../pages/ADMIN/courses/courseInnerPage/CourseStudents'
 import { ROUTES } from '../utils/constants/general'
-import { Students } from '../components/admin/Students/Students'
 
 export const AdminRoutes = () => {
    return (

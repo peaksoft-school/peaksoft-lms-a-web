@@ -12,7 +12,6 @@ import {
    getSingleStudent,
    getStudentsWithPagination,
    sendStudentsAsExcel,
-   studentsActions,
 } from '../../../store/studentsSlice'
 import { Select } from '../../UI/select/Select'
 import { AppTable } from '../../UI/table/AppTable'
@@ -55,11 +54,8 @@ export const Students = () => {
       singleStudent,
       groups,
       totalPages,
-      successMessage,
       presentPage,
-      error,
       isLoading,
-      isSuccess,
    } = useSelector((state) => state.students)
 
    const [searchParams, setSearchParams] = useSearchParams()
@@ -86,22 +82,42 @@ export const Students = () => {
       setSearchParams({ [UPLOAD_STUDENT]: true })
    }
 
-   const addStudentHandler = (value, groupId) => {
-      dispatch(
-         addStudent({ value, id: groupId, page: currentPage, studyFormat })
-      )
+   const addStudentHandler = (value, groupId, onClear) => {
+      dispatch(addStudent({ value, id: groupId }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Cтудент успешно создан')
+            closeModals()
+            dispatch(
+               getStudentsWithPagination({ page: currentPage, studyFormat })
+            )
+            onClear()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось добавить cтудентa')
+         })
    }
 
-   const sendEditedStudentInfo = (singleStudentsData, groupId) => {
+   const sendEditedStudentInfo = (singleStudentsData, groupId, onClear) => {
       dispatch(
          editStudent({
             id: singleStudent.id,
             data: singleStudentsData,
             groupid: groupId,
-            page: currentPage,
-            studyFormat,
          })
       )
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            closeModals()
+            dispatch(
+               getStudentsWithPagination({ page: currentPage, studyFormat })
+            )
+            onClear()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
    }
 
    const deleteHandler = (id) => {
@@ -110,9 +126,18 @@ export const Students = () => {
    }
 
    const deleteStudentHandler = () => {
-      dispatch(
-         deleteStudent({ id: deletedStudentId, page: currentPage, studyFormat })
-      )
+      dispatch(deleteStudent(deletedStudentId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Cтудент успешно удален')
+            closeModals()
+            dispatch(
+               getStudentsWithPagination({ page: currentPage, studyFormat })
+            )
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить cтудентa')
+         })
    }
 
    const editStudentInfoHandler = (id) => {
@@ -127,10 +152,19 @@ export const Students = () => {
          sendStudentsAsExcel({
             file: excelFile,
             id: groupId,
-            page: currentPage,
-            studyFormat,
          })
       )
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Данные успешно сохранены')
+            closeModals()
+            dispatch(
+               getStudentsWithPagination({ page: currentPage, studyFormat })
+            )
+         })
+         .catch((error) => {
+            showErrorMessage(error)
+         })
    }
 
    const paginationHandler = (event, value) => {
@@ -146,6 +180,10 @@ export const Students = () => {
             studyFormat: option.title,
          })
       )
+         .unwrap()
+         .catch(() => {
+            showErrorMessage('Что-то пошло не так, попробуйте еще раз')
+         })
    }
 
    useEffect(() => {
@@ -169,33 +207,6 @@ export const Students = () => {
          setSearchParams({ page: currentPage || '1' })
       }
    }, [currentPage])
-
-   useEffect(() => {
-      if (isSuccess) {
-         setSearchParams({ page: currentPage })
-      }
-      return () => {
-         dispatch(studentsActions.isSucceed(false))
-      }
-   }, [isSuccess])
-
-   useEffect(() => {
-      if (successMessage) {
-         showSuccessMessage(successMessage)
-      }
-      return () => {
-         dispatch(studentsActions.showSuccessModal(null))
-      }
-   }, [successMessage])
-
-   useEffect(() => {
-      if (error) {
-         showErrorMessage(error)
-      }
-      return () => {
-         dispatch(studentsActions.showErrorMessage(null))
-      }
-   }, [error])
 
    const COLUMNS = useMemo(
       () => [
@@ -298,16 +309,17 @@ export const Students = () => {
             showModal={Boolean(showUploadStudentsModal)}
             groups={groupOptions}
          />
-         <AppTable
-            data={studentData}
-            columns={COLUMNS}
-            pagination={{
-               count: totalPages,
-               onChange: paginationHandler,
-               defaultPage: presentPage,
-            }}
-         />
-         {isLoading && <Spinner />}
+         {(isLoading && <Spinner />) || (
+            <AppTable
+               data={studentData}
+               columns={COLUMNS}
+               pagination={{
+                  count: totalPages,
+                  onChange: paginationHandler,
+                  defaultPage: presentPage,
+               }}
+            />
+         )}
       </div>
    )
 }
