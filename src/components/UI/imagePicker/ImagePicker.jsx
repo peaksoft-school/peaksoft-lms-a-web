@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useDropzone } from 'react-dropzone'
-import Image from '../../assets/images/ImagePicker.png'
+import Image from '../../../assets/images/ImagePicker.png'
 
 export const ImagePicker = ({ onDrop, file }) => {
    const { getRootProps, getInputProps } = useDropzone({ onDrop })
