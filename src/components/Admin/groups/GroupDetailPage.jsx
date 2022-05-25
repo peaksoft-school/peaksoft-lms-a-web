@@ -1,19 +1,18 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-// import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { AppTable } from '../../UI/table/AppTable'
-import { getStudents } from '../../../store/studentsSlice'
+import { getGroupsStudents } from '../../../store/groupSlice'
 
 export const GroupDetailPage = () => {
    const dispatch = useDispatch()
    const { studentsIState } = useSelector((state) => state.groups)
 
-   const getGroupIncludedStudents = () => {
-      dispatch(getStudents())
-   }
+   const { id } = useParams()
 
-   // const { id } = useParams()
-   //    const navigate = useNavigate()
+   useEffect(() => {
+      dispatch(getGroupsStudents(id))
+   }, [])
 
    const STUDENTS_INFO = useMemo(() => [
       { title: 'ID', accessKey: 'id', id: 1 },
@@ -46,9 +45,7 @@ export const GroupDetailPage = () => {
 
    return (
       <div>
-         {studentsIState && (
-            <AppTable data={studentsIState} columns={STUDENTS_INFO} />
-         )}
+         <AppTable data={studentsIState} columns={STUDENTS_INFO} />
       </div>
    )
 }

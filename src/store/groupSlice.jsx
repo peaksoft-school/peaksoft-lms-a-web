@@ -6,7 +6,7 @@ const initialState = {
    newGroupData: [],
    studentsIState: [],
    isLoading: null,
-   singleGroup: null,
+   singleGroup: [],
    allPages: null,
    successMessage: null,
    error: null,
@@ -127,16 +127,16 @@ export const groupsPagination = createAsyncThunk(
       }
    }
 )
-export const getStudents = createAsyncThunk(
+export const getGroupsStudents = createAsyncThunk(
    'groups/getStudents',
-   async (_, { rejectWithValue, dispatch }) => {
+   async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: 'api/students',
+            path: `api/groups/students/${id}`,
             method: 'GET',
          })
-         dispatch(groupActions.getStudents(response))
-         console.log(response)
+
+         dispatch(groupActions.getStudentsList(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -165,7 +165,7 @@ export const groupsSlice = createSlice({
       showErrorMessage(state, action) {
          state.error = action.payload
       },
-      getStudents(state, action) {
+      getStudentsList(state, action) {
          state.studentsIState = action.payload
       },
    },

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from '@emotion/styled'
 import { Card } from '../../UI/card/Card'
 import {
-   Notification,
    showErrorMessage,
    showSuccessMessage,
 } from '../../UI/notification/Notification'
@@ -12,7 +11,6 @@ import {
    getSingleGroup,
    groupsPagination,
    groupActions,
-   getStudents,
 } from '../../../store/groupSlice'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit.svg'
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/trashIcon.svg'
@@ -21,12 +19,13 @@ import GroupDeleteConfirm from './GroupDeleteConfirm'
 
 import GroupEdit from './GroupEdit'
 import { Pagination } from '../../UI/pagination/Pagination'
+import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const GroupsPanel = () => {
    const options = useMemo(() => [
       {
          id: 'wqqdfcfw',
-         action: (group) => editGroupHandler(group.id),
+         action: (id) => editGroupHandler(id),
          content: (
             <Container>
                <EditIcon />
@@ -36,7 +35,7 @@ export const GroupsPanel = () => {
       },
       {
          id: 'wqqdfvfvw',
-         action: (group) => getGroupId(group.id),
+         action: (id) => getGroupId(id),
          content: (
             <Container>
                <DeleteIcon />
@@ -47,13 +46,12 @@ export const GroupsPanel = () => {
    ])
    const groups = useSelector((state) => state.groups.newGroupData)
 
-   const { singleGroup, allPages, successMessage, error, studentsIState } =
+   const { singleGroup, allPages, successMessage, error, isLoading } =
       useSelector((state) => state.groups)
    const dispatch = useDispatch()
 
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [groupId, setGroupId] = useState()
-   const [isLoading, setIsLoading] = useState(false)
    const [openEditGroupModal, setOpenEditGroupModal] = useState(false)
    const [page, setPage] = useState(1)
 
@@ -101,7 +99,7 @@ export const GroupsPanel = () => {
 
    return (
       <>
-         <GroupCreate setIsLoading={setIsLoading} page={page} />
+         <GroupCreate page={page} />
          <StyledContainer>
             <CardContentStyleControl>
                {groups.map((group) => {
@@ -113,13 +111,11 @@ export const GroupsPanel = () => {
                         description={group.description}
                         date={group.dateOfStart}
                         key={group.id}
-                        cards={group}
                         id={group.id}
                         path={`${group.id}/group_students`}
                      />
                   )
                })}
-               {isLoading && <Notification message="Группа успешно создана" />}
                <GroupDeleteConfirm
                   isModalOpen={isModalOpen}
                   deletingModalHandler={deletingModalHandler}
@@ -144,6 +140,7 @@ export const GroupsPanel = () => {
                </PaginationStyleControl>
             )}
          </StyledContainer>
+         {isLoading && <Spinner />}
       </>
    )
 }

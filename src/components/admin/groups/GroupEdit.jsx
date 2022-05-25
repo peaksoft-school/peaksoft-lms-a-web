@@ -31,7 +31,7 @@ const GroupEdit = (props) => {
       setSelectedFile(acceptedFiles[0])
    }, [])
 
-   const result = format(new Date(dateValue), 'yyyy-MM-dd')
+   const result = format(Date.now(dateValue), 'yyyy-MM-dd')
 
    const saveEditGroupHandler = () => {
       const updateInfo = {

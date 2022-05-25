@@ -43,21 +43,27 @@ export const Header = () => {
          break
       case 'INSTRUCTOR':
          content = (
-            <StyledProfile>
-               <ProfileIcon />
-               <p>Инструктор</p>
-               <LogoutButton logoutHandler={logoutHandler} />
-            </StyledProfile>
+            <Container>
+               <StyledProfile>
+                  <ProfileIcon />
+                  <p>Инструктор</p>
+                  <LogoutButton logoutHandler={logoutHandler} />
+               </StyledProfile>
+               <Rectangle />
+            </Container>
          )
          break
       case 'STUDENT':
          content = (
-            <StyledProfile>
-               <BellIcon />
-               <ProfileIcon />
-               <p>Student</p>
-               <LogoutButton logoutHandler={logoutHandler} />
-            </StyledProfile>
+            <Container>
+               <StyledProfile>
+                  <BellIcon />
+                  <ProfileIcon />
+                  <p>Student</p>
+                  <LogoutButton logoutHandler={logoutHandler} />
+               </StyledProfile>
+               <Rectangle />
+            </Container>
          )
          break
       default:

@@ -85,10 +85,7 @@ const StyledSelect = styled.div`
    margin: 13px 0;
    color: #00125b;
    font-weight: 600;
-<<<<<<< HEAD
-=======
    cursor: pointer;
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
 `
 const StyledMultiItems = styled.ul`
    display: flex;
@@ -103,26 +100,14 @@ const StyledMultiItems = styled.ul`
    ::-webkit-scrollbar {
       width: 8px;
    }
-<<<<<<< HEAD
-=======
-
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
       border-radius: 10px;
    }
-<<<<<<< HEAD
-=======
-
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb {
       background: #3772ff;
       border-radius: 10px;
    }
-<<<<<<< HEAD
-=======
-
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb:hover {
       background: #3772ff;
    }
@@ -164,26 +149,14 @@ const StyledUl = styled.ul`
    ::-webkit-scrollbar {
       width: 8px;
    }
-<<<<<<< HEAD
-=======
-
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
       border-radius: 8px;
    }
-<<<<<<< HEAD
-=======
-
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb {
       background: #3772ff;
       border-radius: 10px;
    }
-<<<<<<< HEAD
-=======
-
->>>>>>> dbe5b9032443071fac1a532c5f00a7259424dcef
    ::-webkit-scrollbar-thumb:hover {
       background: #3772ff;
    }

@@ -35,7 +35,7 @@ const GroupCreate = (props) => {
       setSelectedFile(acceptedFiles[0])
    }, [])
 
-   const result = format(new Date(dateValue), 'yyyy-MM-dd')
+   const result = format(Date.now(dateValue), 'yyyy-MM-dd')
 
    const createNewGroupHandler = () => {
       const newGroup = {
@@ -52,7 +52,6 @@ const GroupCreate = (props) => {
       )
       onClear()
       setOpenCreateGroupModal(false)
-      props.setIsLoading(true)
    }
 
    return (
