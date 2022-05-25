@@ -127,12 +127,3 @@ const StyledPaginationContainer = styled.div`
    left: 50%;
    transform: translateX(-50%);
 `
-const StyledPagination = styled.div`
-   width: 100%;
-   height: 15px;
-   position: absolute;
-   margin-bottom: 8px;
-   bottom: 0;
-   left: 50%;
-   transform: translateX(-50%);
-`

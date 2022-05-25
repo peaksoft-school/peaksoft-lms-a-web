@@ -5,35 +5,18 @@ const initialState = {
    teachersData: [],
    isLoading: null,
    singleTeacher: null,
-   currentPage: null,
-   totalPage: null,
+   actualPage: null,
+   generalPage: null,
 }
 
 export const addTeacher = createAsyncThunk(
    'teachers/addTeachers',
-   async (teacherInfo, { rejectWithValue, dispatch }) => {
+   async ({ value }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: 'api/instructors',
             method: 'POST',
-            body: teacherInfo,
-         })
-         // dispatch(getDataStudentPagination({ page }))
-         dispatch(getAllTeachers())
-         return response
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-   }
-)
-
-export const getAllTeachers = createAsyncThunk(
-   'teachers/getTeachers',
-   async (_, { rejectWithValue }) => {
-      try {
-         const response = await baseFetch({
-            path: 'api/instructors',
-            method: 'GET',
+            body: value,
          })
          return response
       } catch (error) {
@@ -44,14 +27,14 @@ export const getAllTeachers = createAsyncThunk(
 
 export const deleteTeacher = createAsyncThunk(
    'teachers/deleteTeacher',
-   async (id, { rejectWithValue, dispatch }) => {
+   async (id, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/instructors/${id}`,
             method: 'DELETE',
          })
          // dispatch(getDataStudentPagination({ page }))
-         dispatch(getAllTeachers())
+         // dispatch(getAllTeachers())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -78,33 +61,32 @@ export const getSingleTeacher = createAsyncThunk(
 
 export const editTeacher = createAsyncThunk(
    'teachers/updateTeacher',
-   async ({ id, teacherInfo }, { rejectWithValue, dispatch }) => {
+   async ({ id, value }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/instructors/${id}`,
             method: 'PUT',
-            body: teacherInfo,
+            body: value,
          })
-         dispatch(getAllTeachers())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
       }
    }
 )
-export const getTeachersPagination = createAsyncThunk(
-   'teachers/getTeachersPagination',
-   async (page, { rejectWithValue, dispatch }) => {
+export const getTeachersWithPagination = createAsyncThunk(
+   'teachers/getTeachersWithPagination',
+   async ({ page, size }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: 'api/instructors/pagination',
             method: 'GET',
             params: {
                page,
-               size: 10,
+               size,
             },
          })
-         dispatch(getDataStudentPagination(response))
+         dispatch(getTeacherData(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -122,6 +104,10 @@ export const teachersSlice = createSlice({
    name: 'teachers',
    initialState,
    reducers: {
+      getTeacherData(state, action) {
+         state.teachersData = action.payload.responseList
+         state.generalPage = action.payload.totalPage
+      },
       setSingleTeacher(state, action) {
          state.singleTeacher = action.payload
       },
@@ -130,21 +116,24 @@ export const teachersSlice = createSlice({
       },
       getDataStudentPagination(state, action) {
          state.teachersData = action.payload.responseList
-         state.currentPage = action
+         state.actualPage = action.payload.currentPage
+         state.generalPage = action.payload.totalPage
       },
    },
    extraReducers: {
       [addTeacher.pending]: (state) => {
          state.isLoading = true
       },
-      [addTeacher.fulfilled]: setPending,
-      [addTeacher.rejected]: setIsLoading,
-      [getAllTeachers.pending]: setPending,
-      [getAllTeachers.fulfilled]: (state, action) => {
-         state.teachersData = action.payload
+      [addTeacher.fulfilled]: (state) => {
          state.isLoading = false
       },
-      [getAllTeachers.rejected]: setIsLoading,
+      [addTeacher.rejected]: setIsLoading,
+      // [getAllTeachers.pending]: setPending,
+      // [getAllTeachers.fulfilled]: (state, action) => {
+      //    state.teachersData = action.payload
+      //    state.isLoading = false
+      // },
+      // [getAllTeachers.rejected]: setIsLoading,
       [editTeacher.fulfilled]: (state, action) => {
          state.singleTeacher = action.payload
       },
@@ -152,7 +141,7 @@ export const teachersSlice = createSlice({
 })
 
 export const {
-   removeTeacher,
+   getTeacherData,
    clearTeacher,
    setSingleTeacher,
    getDataStudentPagination,

@@ -1,21 +1,14 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { addTeacher } from '../../../store/teachers-slice'
 import { ADD_TEACHERS } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
-import { Notification } from '../../UI/notification/Notification'
 
-export const AddNewTeachers = ({
-   setSuccessNotification,
-   successNotification,
-}) => {
-   const dispatch = useDispatch()
+export const AddNewTeachers = ({ onAdd }) => {
    const [registerIsValid, setRegisterIsValid] = useState(false)
    const [addSearchParams, setAddSearchParams] = useSearchParams()
    const addTeachersModal = addSearchParams.get(ADD_TEACHERS)
@@ -37,9 +30,8 @@ export const AddNewTeachers = ({
       setAddSearchParams()
    }
 
-   const onSubmit = () => {
-      setSuccessNotification(true)
-      dispatch(addTeacher(value))
+   const addTeacher = () => {
+      onAdd(value)
       onClear()
       setAddSearchParams()
    }
@@ -53,16 +45,10 @@ export const AddNewTeachers = ({
             value.password.length > 0 &&
             value.specialization.length > 0
       )
-      setTimeout(() => {
-         setSuccessNotification(false)
-      }, 1400)
-   }, [value, successNotification])
+   }, [value])
 
    return (
       <>
-         {successNotification && (
-            <Notification message="Учителя успешно созданы" />
-         )}
          <StyledButton>
             <Button
                background="#3772FF"
@@ -133,7 +119,7 @@ export const AddNewTeachers = ({
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={onSubmit}
+                     onClick={addTeacher}
                      disabled={!registerIsValid}
                   >
                      Добавить

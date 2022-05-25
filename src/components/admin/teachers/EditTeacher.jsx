@@ -30,7 +30,7 @@ export const EditTeacher = ({
    })
 
    const onSubmit = () => {
-      dispatch(editTeacher({ id, teacherInfo: value }))
+      dispatch(editTeacher({ id, value }))
       setEditSearchParams()
    }
 
