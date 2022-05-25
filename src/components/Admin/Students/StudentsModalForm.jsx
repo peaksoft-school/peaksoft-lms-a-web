@@ -23,8 +23,7 @@ export const StudentsModalForm = ({ showModal, onClose, onAdd, groups }) => {
    const [selectedOption, setSelectedOption] = useState('')
 
    const addStudents = () => {
-      onAdd(value, selectedOption)
-      onClear()
+      onAdd(value, selectedOption, onClear)
    }
 
    const seletedOptionHandler = (option) => {

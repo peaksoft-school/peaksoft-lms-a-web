@@ -8,30 +8,20 @@ const initState = {
    isLoading: null,
    singleStudent: null,
    totalPages: null,
-   successMessage: null,
    presentPage: null,
-   error: null,
-   isSuccess: null,
 }
 
 export const addStudent = createAsyncThunk(
    'students/addStudents',
-   async ({ value, id, page, studyFormat }, { rejectWithValue, dispatch }) => {
+   async ({ value, id }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: 'api/students/withGroup',
             method: 'POST',
             body: { ...value, groupId: id },
          })
-         dispatch(getStudentsWithPagination({ page, studyFormat }))
-         dispatch(studentsActions.showSuccessModal('Cтудент успешно создан'))
-         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
-         dispatch(studentsActions.isSucceed(false))
-         dispatch(
-            studentsActions.showErrorMessage('Не удалось добавить cтудентa')
-         )
          return rejectWithValue(error.message)
       }
    }
@@ -70,55 +60,36 @@ export const getSingleStudent = createAsyncThunk(
 )
 export const deleteStudent = createAsyncThunk(
    'students/deleteStudent',
-   async ({ id, page, studyFormat }, { rejectWithValue, dispatch }) => {
+   async (id, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/students/${id}`,
             method: 'DELETE',
          })
-         dispatch(getStudentsWithPagination({ page, studyFormat }))
-         dispatch(studentsActions.showSuccessModal('Cтудент успешно удален'))
-         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
-         dispatch(studentsActions.isSucceed(false))
-         dispatch(
-            studentsActions.showErrorMessage('Не удалось удалить cтудентa')
-         )
          return rejectWithValue(error.message)
       }
    }
 )
 export const editStudent = createAsyncThunk(
    'students/editStudent',
-   async (
-      { id, data, groupid, page, studyFormat },
-      { rejectWithValue, dispatch }
-   ) => {
+   async ({ id, data, groupid }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/students/${id}`,
             method: 'PUT',
             body: { ...data, groupId: groupid },
          })
-         dispatch(getStudentsWithPagination({ page, studyFormat }))
-         dispatch(
-            studentsActions.showSuccessModal('Изменения успешно сохранены')
-         )
-         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
-         dispatch(studentsActions.isSucceed(false))
-         dispatch(
-            studentsActions.showErrorMessage('Не удалось изменить данные')
-         )
          return rejectWithValue(error.message)
       }
    }
 )
 export const sendStudentsAsExcel = createAsyncThunk(
    'students/sendStudents',
-   async ({ file, id, page, studyFormat }, { rejectWithValue, dispatch }) => {
+   async ({ file, id }, { rejectWithValue }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
@@ -127,13 +98,8 @@ export const sendStudentsAsExcel = createAsyncThunk(
             method: 'POST',
             body: formData,
          })
-         dispatch(getStudentsWithPagination({ page, studyFormat }))
-         dispatch(studentsActions.showSuccessModal('Данные успешно сохранены'))
-         dispatch(studentsActions.isSucceed(true))
          return response
       } catch (error) {
-         dispatch(studentsActions.isSucceed(false))
-         dispatch(studentsActions.showErrorMessage(error.message))
          return rejectWithValue(error.message)
       }
    }
@@ -169,11 +135,6 @@ export const getStudentsWithPagination = createAsyncThunk(
          dispatch(studentsActions.getStudentDataWithPagination(response))
          return response
       } catch (error) {
-         dispatch(
-            studentsActions.showErrorMessage(
-               'Что-то пошло не так, попробуйте еще раз'
-            )
-         )
          return rejectWithValue(error.message)
       }
    }
@@ -209,32 +170,8 @@ export const studentsSlice = createSlice({
          state.totalPages = action.payload.totalPage
          state.presentPage = action.payload.currentPage
       },
-      showSuccessModal(state, action) {
-         state.successMessage = action.payload
-      },
-      showErrorMessage(state, action) {
-         state.error = action.payload
-      },
-      isSucceed(state, action) {
-         state.isSuccess = action.payload
-      },
    },
    extraReducers: {
-      [addStudent.pending]: setPending,
-      [addStudent.fulfilled]: setFulfilled,
-      [addStudent.rejected]: setError,
-      [getStudents.pending]: setPending,
-      [getStudents.fulfilled]: setFulfilled,
-      [getStudents.rejected]: setError,
-      [deleteStudent.pending]: setPending,
-      [deleteStudent.fulfilled]: setFulfilled,
-      [deleteStudent.rejected]: setError,
-      [editStudent.pending]: setPending,
-      [editStudent.fulfilled]: setFulfilled,
-      [editStudent.rejected]: setError,
-      [sendStudentsAsExcel.pending]: setPending,
-      [sendStudentsAsExcel.fulfilled]: setFulfilled,
-      [sendStudentsAsExcel.rejected]: setError,
       [getStudentsWithPagination.pending]: setPending,
       [getStudentsWithPagination.fulfilled]: setFulfilled,
       [getStudentsWithPagination.rejected]: setError,
