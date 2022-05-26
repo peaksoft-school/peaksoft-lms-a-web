@@ -7,17 +7,9 @@ import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 
-export const EditTeacher = ({
-   setEditSearchParams,
-   editTeacherModal,
-   singleTeacher,
-}) => {
+export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
    const dispatch = useDispatch()
    const { id, fullName, phoneNumber, email, specialization } = singleTeacher
-
-   const handleClose = () => {
-      setEditSearchParams()
-   }
 
    const [firstName, lastName] = fullName.split(' ')
    const { value, onChange } = useInput({
@@ -29,15 +21,14 @@ export const EditTeacher = ({
       specialization: specialization || '',
    })
 
-   const onSubmit = () => {
-      dispatch(editTeacher({ id, value }))
-      setEditSearchParams()
+   const editHandler = () => {
+      dispatch(editTeacher({ value }))
    }
 
    return (
       <BasicModal
-         isModalOpen={Boolean(editTeacherModal)}
-         onClose={handleClose}
+         isModalOpen={Boolean(onEdit)}
+         onClose={onClose}
          title="Редактировать учителя"
       >
          <StyledInput
@@ -88,7 +79,7 @@ export const EditTeacher = ({
                   bgActive="#6190FF4D"
                   border="1px solid #1D60FF"
                   color="#3772FF"
-                  onClick={() => setEditSearchParams()}
+                  onClick={onClose}
                >
                   Отмена
                </Button>
@@ -96,7 +87,7 @@ export const EditTeacher = ({
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
-                  onClick={onSubmit}
+                  onClick={editHandler}
                >
                   Сохранить
                </Button>

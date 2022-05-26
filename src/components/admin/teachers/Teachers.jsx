@@ -16,33 +16,49 @@ import {
 import { EditTeacher } from './EditTeacher'
 import { DELETE_TEACHER, EDIT_TEACHER } from '../../../utils/constants/general'
 import { AddNewTeachers } from './AddNewTeachers'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 
 export const Teachers = () => {
    const dispatch = useDispatch()
-   const { teachersData, singleTeacher, generalPage, actualPage } = useSelector(
-      (state) => state.teachers
-   )
-
-   const [teacherId, setTeacherId] = useState()
+   const { teachersData, singleTeacher, generalPage, actualPage, isLoading } =
+      useSelector((state) => state.teachers)
 
    const [searchParams, setSearchParams] = useSearchParams()
 
    const [currentPage, setCurrentPage] = useState(1)
+   const [teacherId, setTeacherId] = useState(null)
 
    const deleteTeacherModal = searchParams.get(DELETE_TEACHER)
    const editTeacherModal = searchParams.get(EDIT_TEACHER)
 
-   const addTeacherHandler = (value) => {
-      dispatch(addTeacher({ value, page: currentPage }))
+   const handleClose = () => {
+      setSearchParams({ page: currentPage })
    }
 
+   const addTeacherHandler = (value, onClear) => {
+      dispatch(addTeacher(value))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Учителя успешно созданы')
+            handleClose()
+            dispatch(getTeachersWithPagination({ page: currentPage }))
+            onClear()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось добавить учителя')
+         })
+   }
+
+   const editHandler = (id) => {
+      dispatch(getSingleTeacher(id))
+      setSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
+   }
    const deleteHandler = () => {
       setSearchParams({ [DELETE_TEACHER]: true, teacher: teacherId })
-      dispatch(deleteTeacher(teacherId))
-      setSearchParams()
-   }
-
-   const handleClose = () => {
+      dispatch(deleteTeacher({ id: teacherId, page: 1, size: 10 }))
       setSearchParams()
    }
 
@@ -51,9 +67,24 @@ export const Teachers = () => {
       setTeacherId(id)
    }
 
-   const editTeacherHandler = (id) => {
-      setSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
-      dispatch(getSingleTeacher(id))
+   const saveTeacherInfo = (singleTeacgersData, onClear) => {
+      // setSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
+      dispatch(
+         getSingleTeacher({
+            id: singleTeacgersData.id,
+            data: singleTeacgersData,
+         })
+      )
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            handleClose()
+            dispatch(getTeachersWithPagination({ page: currentPage }))
+            onClear()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
    }
 
    const paginationHandler = (event, value) => {
@@ -101,7 +132,7 @@ export const Teachers = () => {
          accessKey: '',
          action: (teacher) => (
             <StyledActions key={teacher.id}>
-               <EditIcon onClick={() => editTeacherHandler(teacher.id)} />
+               <EditIcon onClick={() => editHandler(teacher.id)} />
                <RemoveIcon
                   onClick={() => {
                      deleteTeacherHandler(teacher.id)
@@ -117,9 +148,10 @@ export const Teachers = () => {
          <AddNewTeachers onAdd={addTeacherHandler} />
          {singleTeacher && (
             <EditTeacher
+               showModal={Boolean(editTeacherModal)}
                singleTeacher={singleTeacher}
-               editTeacherModal={editTeacherModal}
-               setEditSearchParams={setSearchParams}
+               onClose={handleClose}
+               onEdit={saveTeacherInfo}
             />
          )}
          <ConfirmModal

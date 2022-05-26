@@ -31,9 +31,7 @@ export const AddNewTeachers = ({ onAdd }) => {
    }
 
    const addTeacher = () => {
-      onAdd(value)
-      onClear()
-      setAddSearchParams()
+      onAdd(value, onClear)
    }
 
    useEffect(() => {
