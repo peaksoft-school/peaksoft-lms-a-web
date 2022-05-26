@@ -26,7 +26,7 @@ export const LessonEditModal = ({ showModal, onAdd, onClose, lesson }) => {
    return (
       <BasicModal
          isModalOpen={Boolean(showModal)}
-         title="Добавить урок"
+         title="Редактировать урок"
          onClose={onClose}
       >
          <StyledChildrenOfModal>

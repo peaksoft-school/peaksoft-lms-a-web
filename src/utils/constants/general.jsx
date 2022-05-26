@@ -98,6 +98,17 @@ export const COURSE_INNER_TABS = [
    },
 ]
 
+export const MATERIALS_INNER_TABS = [
+   {
+      title: 'Материалы',
+      to: 'materials',
+   },
+   {
+      title: 'Студенты',
+      to: 'materials',
+   },
+]
+
 export const COURSE_INSTRUCTORS = [
    {
       id: 1,

@@ -11,7 +11,14 @@ export const InstructorRoutes = () => {
                path="/*"
                element={<Navigate to={ROUTES.INSTRUCTOR_COURSES} />}
             />
-            <Route path={ROUTES.INSTRUCTOR_COURSES} element={<Materials />} />
+            <Route
+               path={ROUTES.INSTRUCTOR_COURSES}
+               element={<div>Courses</div>}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
+               element={<Materials />}
+            />
          </Routes>
       </div>
    )

@@ -25,21 +25,8 @@ import {
 import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
+import { LessonCard } from '../../../UI/lessonCard/LessonCard'
 
-const pathsArray = [
-   {
-      path: 'admin/courses',
-      name: 'Kурсы',
-   },
-   {
-      path: 'materials',
-      name: 'Materials',
-   },
-   {
-      path: '/instructors',
-      name: 'Учителя',
-   },
-]
 export const Materials = () => {
    const dispatch = useDispatch()
    const { lessons, isLoading, lesson } = useSelector(
@@ -124,6 +111,20 @@ export const Materials = () => {
       dispatch(getLessons())
    }, [])
 
+   const pathsArray = [
+      {
+         path: '/instructor_course',
+         name: 'Kурсы',
+      },
+      {
+         path: '/materials',
+         name: 'Materials',
+      },
+      {
+         path: '/instructors',
+         name: 'Материалы',
+      },
+   ]
    return (
       <div>
          <StyledButtonContainer>
@@ -140,21 +141,12 @@ export const Materials = () => {
          <Container>
             {(isLoading && <Spinner />) ||
                lessons.map((lesson) => (
-                  <Card key={lesson.id}>
-                     {lesson.lessonName}
-                     <button
-                        type="button"
-                        onClick={() => openEditModal(lesson.id)}
-                     >
-                        edit
-                     </button>
-                     <button
-                        type="button"
-                        onClick={() => deleteHandler(lesson.id)}
-                     >
-                        Delete
-                     </button>
-                  </Card>
+                  <LessonCard
+                     title={lesson.lessonName}
+                     key={lesson.id}
+                     onEditTitle={() => openEditModal(lesson.id)}
+                     onDeleteLesson={() => deleteHandler(lesson.id)}
+                  />
                ))}
          </Container>
          <LessonCreateModal
@@ -196,14 +188,4 @@ const StyledButtonContainer = styled.div`
 `
 const StyledAddIcon = styled(AddIcon)`
    margin-right: 5px;
-`
-const Card = styled.div`
-   min-width: 560px;
-   height: 306px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   background: red;
-   font-size: 20px;
-   border-radius: 10px;
 `
