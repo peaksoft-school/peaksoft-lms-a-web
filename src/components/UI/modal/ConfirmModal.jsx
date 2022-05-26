@@ -23,8 +23,8 @@ const style = {
    top: '50%',
    left: '50%',
    transform: 'translate(-50%, -50%)',
-   width: '315px',
-   height: '145px',
+   width: '335px',
+   height: '160px',
    bgcolor: 'background.paper',
    boxShadow: 24,
    p: 4,
@@ -38,10 +38,10 @@ const TitleStyle = styled(Typography)`
    line-height: 22px;
    text-align: center;
 `
-const ButtonStyle = styled(Typography)`
+const ButtonStyle = styled.div`
    border-radius: 10px;
    display: flex;
    align-items: center;
    justify-content: space-around;
-   margin: 10px;
+   margin-top: 20px;
 `

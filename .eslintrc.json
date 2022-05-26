@@ -33,8 +33,6 @@
       "no-shadow": "off",
       "react-hooks/exhaustive-deps": "off",
       "react/function-component-definition": "off",
-      "import/no-cycle": "off",
-      "react/no-unstable-nested-components": "off",
       "max-len": [
          "error",
          {
@@ -62,6 +60,9 @@
          { "props": true, "ignorePropertyModificationsFor": ["state"] }
       ],
       "react/destructuring-assignment": "off",
-      "no-unused-vars": "warn"
+      "no-unused-vars": "warn",
+      "react/no-unstable-nested-components": "off",
+      "import/no-cycle": "off",
+      "eqeqeq": "off"
    }
 }

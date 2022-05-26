@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import styled from '@emotion/styled/macro'
-import { ReactComponent as MeatBallIcon } from '../../assets/icons/meatballs.svg'
+import { ReactComponent as MeatBallIcon } from '../../../assets/icons/meatballs.svg'
 
 export const MeatBalls = (props) => {
    const [anchorEl, setAnchorEl] = useState(null)
@@ -12,11 +12,13 @@ export const MeatBalls = (props) => {
    const handleClick = (event) => {
       setAnchorEl(event.currentTarget)
    }
-   const handleClose = (action) => {
-      action()
+   const handleClose = () => {
       setAnchorEl(null)
    }
-
+   const clickHandler = (action) => {
+      action(props.id)
+      setAnchorEl(null)
+   }
    return (
       <div>
          <Button
@@ -40,7 +42,7 @@ export const MeatBalls = (props) => {
             {props.options.map((option) => {
                return (
                   <Container
-                     onClick={() => handleClose(option.action)}
+                     onClick={() => clickHandler(option.action)}
                      key={option.id}
                   >
                      {option.content}
@@ -58,7 +60,7 @@ const MenuContainer = styled(Menu)`
    }
    .MuiMenu-paper {
       border-radius: 10px;
-      width: 218px;
+      min-width: 218px;
    }
 `
 const Container = styled(MenuItem)`
