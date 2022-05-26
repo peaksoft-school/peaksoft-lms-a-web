@@ -88,8 +88,6 @@ export const GroupsPanel = () => {
 
    return (
       <>
-         {isLoading && <Spinner />}
-
          <GroupCreate page={page} />
          <StyledContainer>
             <CardContentStyleControl>

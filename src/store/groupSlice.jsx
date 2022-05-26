@@ -107,7 +107,7 @@ export const groupsPagination = createAsyncThunk(
             method: 'GET',
             params: {
                page,
-               size: 8,
+               size: 3,
             },
          })
          dispatch(groupActions.pagination(response))
@@ -149,12 +149,6 @@ export const groupsSlice = createSlice({
          state.currentPage = action.payload.currentPage
          state.allPages = action.payload.totalPage
       },
-      // showSuccessModal(state, action) {
-      //    state.successMessage = action.payload
-      // },
-      // showErrorMessage(state, action) {
-      //    state.error = action.payload
-      // },
       getStudentsList(state, action) {
          state.studentsIState = action.payload
       },

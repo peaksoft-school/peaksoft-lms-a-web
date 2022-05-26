@@ -1,17 +1,24 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { AppTable } from '../../UI/table/AppTable'
-import { getGroupsStudents } from '../../../store/groupSlice'
+import {
+   getGroupsStudents,
+   getSingleGroup,
+   groupsPagination,
+} from '../../../store/groupSlice'
+import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
 
 export const GroupDetailPage = () => {
    const dispatch = useDispatch()
-   const { studentsIState } = useSelector((state) => state.groups)
+   const { studentsIState, singleGroup } = useSelector((state) => state.groups)
 
    const { id } = useParams()
 
    useEffect(() => {
       dispatch(getGroupsStudents(id))
+      dispatch(groupsPagination(1))
+      dispatch(getSingleGroup(id))
    }, [])
 
    const STUDENTS_INFO = useMemo(() => [
@@ -42,9 +49,24 @@ export const GroupDetailPage = () => {
          id: 6,
       },
    ])
+   const pathsArray = [
+      {
+         path: 'admin/groups',
+         name: 'Группы',
+      },
+      {
+         path: 'admin/group_students',
+         name: singleGroup?.groupName,
+      },
+      {
+         path: 'admin/groups',
+         name: 'Студенты',
+      },
+   ]
 
    return (
       <div>
+         <BreadCrumbs pathsArray={pathsArray} />
          <AppTable data={studentsIState} columns={STUDENTS_INFO} />
       </div>
    )

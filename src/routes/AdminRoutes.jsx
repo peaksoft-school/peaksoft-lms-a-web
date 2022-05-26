@@ -8,16 +8,12 @@ import { GroupDetailPage } from '../components/admin/groups/GroupDetailPage'
 import { Courses } from '../components/admin/courses/Courses'
 import { CourseStudents } from '../pages/ADMIN/courses/courseInnerPage/CourseStudents'
 import { CourseInstructors } from '../pages/ADMIN/courses/courseInnerPage/CourseInstructors'
-import { VideoPresentationPage } from '../pages/INSTRUCTOR/VideoPresentationPage'
-// import { AddLinkModal } from '../components/insructor/AddLinkModal'
 
 export const AdminRoutes = () => {
    return (
       <Routes>
          <Route path="/*" element={<Navigate to={ROUTES.GROUPS} />} />
          <Route path={ROUTES.GROUPS} element={<GroupsPanel />} />
-         {/* <Route path={ROUTES.GROUPS} element={<VideoPresentationPage />} /> */}
-         {/* <Route path={ROUTES.GROUPS} element={<AddLinkModal />} /> */}
          <Route
             path={`/${ROUTES.GROUPS}/:id/group_students`}
             element={<GroupDetailPage />}
