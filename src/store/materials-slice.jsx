@@ -12,7 +12,7 @@ export const addLesson = createAsyncThunk(
    async (lessonData, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
-            path: 'api/lessons/3',
+            path: 'api/lessons/1',
             method: 'POST',
             body: lessonData,
          })
