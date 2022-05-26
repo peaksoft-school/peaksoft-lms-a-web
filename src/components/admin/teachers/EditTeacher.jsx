@@ -1,18 +1,16 @@
 import styled from '@emotion/styled'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { editTeacher } from '../../../store/teachers-slice'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 
 export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
-   const dispatch = useDispatch()
-   const { id, fullName, phoneNumber, email, specialization } = singleTeacher
+   const { fullName, phoneNumber, email, specialization } = singleTeacher
 
    const [firstName, lastName] = fullName.split(' ')
-   const { value, onChange } = useInput({
+   const { value, onChange, onClear } = useInput({
       firstName: firstName || '',
       lastName: lastName || '',
       phoneNumber: phoneNumber || '',
@@ -21,13 +19,26 @@ export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
       specialization: specialization || '',
    })
 
-   const editHandler = () => {
-      dispatch(editTeacher({ value }))
+   const [registerIsValid, setRegisterIsValid] = useState(false)
+
+   const editTeacher = () => {
+      onEdit(value, onClear)
    }
+
+   useEffect(() => {
+      setRegisterIsValid(
+         value.firstName.length > 0 &&
+            value.lastName.length > 0 &&
+            value.phoneNumber.length > 0 &&
+            value.email.length > 0 &&
+            value.password.length > 0 &&
+            value.specialization.length > 0
+      )
+   }, [value])
 
    return (
       <BasicModal
-         isModalOpen={Boolean(onEdit)}
+         isModalOpen={Boolean(showModal)}
          onClose={onClose}
          title="Редактировать учителя"
       >
@@ -87,7 +98,8 @@ export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
-                  onClick={editHandler}
+                  onClick={editTeacher}
+                  disabled={!registerIsValid}
                >
                   Сохранить
                </Button>

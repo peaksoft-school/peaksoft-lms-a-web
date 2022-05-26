@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 
 const initialState = {
-   teachersData: [],
+   teacherData: [],
    isLoading: null,
    singleTeacher: null,
    actualPage: null,
@@ -18,7 +18,6 @@ export const addTeacher = createAsyncThunk(
             method: 'POST',
             body: value,
          })
-         // dispatch(getTeachersWithPagination({ page, size }))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -34,7 +33,6 @@ export const deleteTeacher = createAsyncThunk(
             path: `api/instructors/${id}`,
             method: 'DELETE',
          })
-         // dispatch(getTeachersWithPagination({ page, size }))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -43,7 +41,7 @@ export const deleteTeacher = createAsyncThunk(
 )
 
 export const getSingleTeacher = createAsyncThunk(
-   'teachers/getSingleTeachers',
+   'teachers/getSingleTeacher',
    async (id, { rejectWithValue, dispatch }) => {
       dispatch(clearTeacher())
       try {
@@ -61,12 +59,12 @@ export const getSingleTeacher = createAsyncThunk(
 
 export const editTeacher = createAsyncThunk(
    'teachers/updateTeacher',
-   async ({ id, value }, { rejectWithValue }) => {
+   async ({ id, data }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/instructors/${id}`,
             method: 'PUT',
-            body: value,
+            body: data,
          })
          return response
       } catch (error) {
@@ -109,7 +107,7 @@ export const teachersSlice = createSlice({
    initialState,
    reducers: {
       getTeacherData(state, action) {
-         state.teachersData = action.payload.responseList
+         state.teacherData = action.payload.responseList
          state.generalPage = action.payload.totalPage
          state.actualPage = action.payload.currentPage
       },
@@ -122,15 +120,12 @@ export const teachersSlice = createSlice({
    },
    extraReducers: {
       [getTeachersWithPagination.pending]: setPending,
-      [getTeachersWithPagination.pending]: setFulfilled,
-      [getTeachersWithPagination.pending]: setError,
+      [getTeachersWithPagination.fulfilled]: setFulfilled,
+      [getTeachersWithPagination.error]: setError,
    },
 })
 
-export const {
-   getTeacherData,
-   clearTeacher,
-   setSingleTeacher,
-   getDataStudentPagination,
-} = teachersSlice.actions
+export const { getTeacherData, clearTeacher, setSingleTeacher } =
+   teachersSlice.actions
+
 export const instructorActions = teachersSlice.actions

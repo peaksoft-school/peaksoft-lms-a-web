@@ -1,18 +1,13 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { ADD_TEACHERS } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
+import { ReactComponent as AddIcon } from '../../../assets/icons/AddIcon.svg'
 
-export const AddNewTeachers = ({ onAdd }) => {
-   const [registerIsValid, setRegisterIsValid] = useState(false)
-   const [addSearchParams, setAddSearchParams] = useSearchParams()
-   const addTeachersModal = addSearchParams.get(ADD_TEACHERS)
-
+export const AddNewTeacher = ({ onAdd, showModal, onClose, addHandler }) => {
    const { value, onChange, onClear } = useInput({
       firstName: '',
       lastName: '',
@@ -22,13 +17,7 @@ export const AddNewTeachers = ({ onAdd }) => {
       specialization: '',
    })
 
-   const addTeachersHandler = () => {
-      setAddSearchParams({ [ADD_TEACHERS]: true })
-   }
-
-   const handleClose = () => {
-      setAddSearchParams()
-   }
+   const [registerIsValid, setRegisterIsValid] = useState(false)
 
    const addTeacher = () => {
       onAdd(value, onClear)
@@ -52,14 +41,14 @@ export const AddNewTeachers = ({ onAdd }) => {
                background="#3772FF"
                bgHover="#1D60FF"
                bgActive="#6190FF"
-               onClick={addTeachersHandler}
+               onClick={addHandler}
             >
-               + Добавить учителя
+               <StyledAddIcon /> Добавить учителя
             </Button>
          </StyledButton>
          <BasicModal
-            isModalOpen={Boolean(addTeachersModal)}
-            onClose={handleClose}
+            isModalOpen={Boolean(showModal)}
+            onClose={onClose}
             title="Добавить учителя"
          >
             <StyledInput
@@ -109,7 +98,7 @@ export const AddNewTeachers = ({ onAdd }) => {
                      bgActive="#6190FF4D"
                      border="1px solid #1D60FF"
                      color="#3772FF"
-                     onClick={() => setAddSearchParams()}
+                     onClick={onClose}
                   >
                      Отмена
                   </Button>
@@ -141,6 +130,9 @@ const StyledInput = styled(Input)`
 `
 const StyledMaskedInput = styled(MaskedInput)`
    margin: 5px;
+`
+const StyledAddIcon = styled(AddIcon)`
+   margin-right: 4px;
 `
 const StyledModalButton = styled.div`
    display: flex;

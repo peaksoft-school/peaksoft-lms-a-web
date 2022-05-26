@@ -7,15 +7,21 @@ import { ReactComponent as RemoveIcon } from '../../../assets/icons/removeIcon.s
 import { Button } from '../../UI/button/Button'
 import ConfirmModal from '../../UI/modal/ConfirmModal'
 import { AppTable } from '../../UI/table/AppTable'
+import { Spinner } from '../../UI/Spinner/Spinner'
 import {
    addTeacher,
    deleteTeacher,
+   editTeacher,
    getSingleTeacher,
    getTeachersWithPagination,
 } from '../../../store/teachers-slice'
 import { EditTeacher } from './EditTeacher'
-import { DELETE_TEACHER, EDIT_TEACHER } from '../../../utils/constants/general'
-import { AddNewTeachers } from './AddNewTeachers'
+import {
+   ADD_TEACHERS,
+   DELETE_TEACHER,
+   EDIT_TEACHER,
+} from '../../../utils/constants/general'
+import { AddNewTeacher } from './AddNewTeacher'
 import {
    showErrorMessage,
    showSuccessMessage,
@@ -23,7 +29,7 @@ import {
 
 export const Teachers = () => {
    const dispatch = useDispatch()
-   const { teachersData, singleTeacher, generalPage, actualPage, isLoading } =
+   const { teacherData, singleTeacher, generalPage, actualPage, isLoading } =
       useSelector((state) => state.teachers)
 
    const [searchParams, setSearchParams] = useSearchParams()
@@ -32,14 +38,31 @@ export const Teachers = () => {
    const [teacherId, setTeacherId] = useState(null)
 
    const deleteTeacherModal = searchParams.get(DELETE_TEACHER)
+   const addTeacherModal = searchParams.get(ADD_TEACHERS)
    const editTeacherModal = searchParams.get(EDIT_TEACHER)
 
    const handleClose = () => {
       setSearchParams({ page: currentPage })
    }
 
+   const addModalHandler = () => {
+      setSearchParams({ [ADD_TEACHERS]: true })
+   }
+   const editModalHandler = (id) => {
+      dispatch(getSingleTeacher(id))
+      setSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
+   }
+   const deleteModalHandler = (id) => {
+      setTeacherId(id)
+      setSearchParams({ [DELETE_TEACHER]: true })
+   }
+   const paginationHandler = (event, value) => {
+      setCurrentPage(value)
+      dispatch(getTeachersWithPagination({ page: value, size: 10 }))
+   }
+
    const addTeacherHandler = (value, onClear) => {
-      dispatch(addTeacher(value))
+      dispatch(addTeacher({ value }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Учителя успешно созданы')
@@ -52,27 +75,11 @@ export const Teachers = () => {
          })
    }
 
-   const editHandler = (id) => {
-      dispatch(getSingleTeacher(id))
-      setSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
-   }
-   const deleteHandler = () => {
-      setSearchParams({ [DELETE_TEACHER]: true, teacher: teacherId })
-      dispatch(deleteTeacher({ id: teacherId, page: 1, size: 10 }))
-      setSearchParams()
-   }
-
-   const deleteTeacherHandler = (id) => {
-      setSearchParams({ [DELETE_TEACHER]: true, teacher: id })
-      setTeacherId(id)
-   }
-
-   const saveTeacherInfo = (singleTeacgersData, onClear) => {
-      // setSearchParams({ [EDIT_TEACHER]: true, teacherId: id })
+   const editTeacherHandler = (singleTeacherData, onClear) => {
       dispatch(
-         getSingleTeacher({
-            id: singleTeacgersData.id,
-            data: singleTeacgersData,
+         editTeacher({
+            id: singleTeacher.id,
+            data: singleTeacherData,
          })
       )
          .unwrap()
@@ -87,18 +94,38 @@ export const Teachers = () => {
          })
    }
 
-   const paginationHandler = (event, value) => {
-      setCurrentPage(value)
-      dispatch(getTeachersWithPagination({ page: value, size: 10 }))
+   const deleteTeacherHandler = () => {
+      dispatch(deleteTeacher(teacherId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Учителя успешно удалены')
+            handleClose()
+            dispatch(getTeachersWithPagination({ page: currentPage }))
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить учителя')
+         })
    }
 
    useEffect(() => {
       const teacherId = searchParams.get('teacherId')
+      const pageNumber = searchParams.get('page')
+
+      paginationHandler('', pageNumber || 1)
       if (teacherId) {
          dispatch(getSingleTeacher(teacherId))
       }
-      dispatch(getTeachersWithPagination({ page: currentPage, size: 10 }))
+      if (deleteTeacherModal) {
+         handleClose()
+      }
    }, [])
+
+   useEffect(() => {
+      const page = searchParams.get('page')
+      if (page) {
+         setSearchParams({ page: currentPage || '1' })
+      }
+   }, [currentPage])
 
    const COLUMNS = [
       {
@@ -132,10 +159,10 @@ export const Teachers = () => {
          accessKey: '',
          action: (teacher) => (
             <StyledActions key={teacher.id}>
-               <EditIcon onClick={() => editHandler(teacher.id)} />
+               <EditIcon onClick={() => editModalHandler(teacher.id)} />
                <RemoveIcon
                   onClick={() => {
-                     deleteTeacherHandler(teacher.id)
+                     deleteModalHandler(teacher.id)
                   }}
                />
             </StyledActions>
@@ -145,13 +172,18 @@ export const Teachers = () => {
 
    return (
       <>
-         <AddNewTeachers onAdd={addTeacherHandler} />
+         <AddNewTeacher
+            onAdd={addTeacherHandler}
+            showModal={addTeacherModal}
+            onClose={handleClose}
+            addHandler={addModalHandler}
+         />
          {singleTeacher && (
             <EditTeacher
                showModal={Boolean(editTeacherModal)}
                singleTeacher={singleTeacher}
                onClose={handleClose}
-               onEdit={saveTeacherInfo}
+               onEdit={editTeacherHandler}
             />
          )}
          <ConfirmModal
@@ -172,20 +204,22 @@ export const Teachers = () => {
                background="#C91E1E"
                bgHover="#B62727"
                bgActive="#E13A3A"
-               onClick={deleteHandler}
+               onClick={deleteTeacherHandler}
             >
                Удалить
             </Button>
          </ConfirmModal>
-         <AppTable
-            columns={COLUMNS}
-            data={teachersData}
-            pagination={{
-               count: generalPage,
-               onChange: paginationHandler,
-               defaultPage: actualPage,
-            }}
-         />
+         {(isLoading && <Spinner />) || (
+            <AppTable
+               data={teacherData}
+               columns={COLUMNS}
+               pagination={{
+                  count: generalPage,
+                  onChange: paginationHandler,
+                  defaultPage: actualPage,
+               }}
+            />
+         )}
       </>
    )
 }
