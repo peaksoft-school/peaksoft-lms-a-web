@@ -47,22 +47,20 @@ export const Header = () => {
          break
       case 'INSTRUCTOR':
          content = (
-            <>
+            <Container tabs>
                <Routes>
                   <Route
                      path={`${ROUTES.INSTRUCTOR_COURSES}/:id/*`}
                      element={<NavTabs tabs={MATERIALS_INNER_TABS} />}
                   />
                </Routes>
-               <InstructorConatiner>
-                  <StyledProfile>
-                     <ProfileIcon />
-                     <p>Инструктор</p>
-                     <LogoutButton logoutHandler={logoutHandler} />
-                  </StyledProfile>
-                  <Rectangle />
-               </InstructorConatiner>
-            </>
+               <StyledProfile>
+                  <ProfileIcon />
+                  <p>Инструктор</p>
+                  <LogoutButton logoutHandler={logoutHandler} />
+               </StyledProfile>
+               <Rectangle />
+            </Container>
          )
          break
       case 'STUDENT':
@@ -114,11 +112,6 @@ const StyledProfile = styled.div`
 const Container = styled.div`
    width: 100%;
    height: 70px;
-   display: flex;
-   justify-content: flex-end;
-`
-const InstructorConatiner = styled.div`
-   width: 100%;
    display: flex;
    justify-content: flex-end;
 `
