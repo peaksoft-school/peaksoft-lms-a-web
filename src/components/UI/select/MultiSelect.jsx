@@ -2,7 +2,8 @@ import styled from '@emotion/styled'
 import { useState } from 'react'
 import { ReactComponent as CloseSelect } from '../../../assets/icons/selected.svg'
 import { ReactComponent as RemoveSelect } from '../../../assets/icons/removeSelect.svg'
-import { ReactComponent as OpenSelect } from '../../../assets/icons/arrow.svg'
+import { ReactComponent as OpenSelect } from '../../../assets/icons/Arrows.svg'
+// import { ReactComponent as OpenSelect } from '../../../assets/icons/arrow.svg'
 
 export const MultiSelect = ({
    options,
@@ -15,7 +16,6 @@ export const MultiSelect = ({
    const [userOptions, setUserOptions] = useState(options)
 
    const toggleSelection = () => setOpenMultiSelect(!openMultiSelect)
-
    const addMultiSelectHandler = (id, option) => {
       setSelectedOptions((prev) => [...prev, option])
       onSelected(option)
@@ -69,7 +69,6 @@ export const MultiSelect = ({
       </Container>
    )
 }
-
 const Container = styled.div`
    font-size: 16px;
    font-weight: 400;
@@ -101,17 +100,14 @@ const StyledMultiItems = styled.ul`
    ::-webkit-scrollbar {
       width: 8px;
    }
-
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
       border-radius: 10px;
    }
-
    ::-webkit-scrollbar-thumb {
       background: #3772ff;
       border-radius: 10px;
    }
-
    ::-webkit-scrollbar-thumb:hover {
       background: #3772ff;
    }
@@ -153,17 +149,14 @@ const StyledUl = styled.ul`
    ::-webkit-scrollbar {
       width: 8px;
    }
-
    ::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #3772ff;
       border-radius: 8px;
    }
-
    ::-webkit-scrollbar-thumb {
       background: #3772ff;
       border-radius: 10px;
    }
-
    ::-webkit-scrollbar-thumb:hover {
       background: #3772ff;
    }
