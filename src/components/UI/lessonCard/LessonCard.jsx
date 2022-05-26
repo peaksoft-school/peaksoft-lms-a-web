@@ -183,7 +183,7 @@ export const LessonCard = ({
 }
 
 const StyledContainer = styled.div`
-   width: 560px;
+   min-width: 560px;
    height: 306px;
    display: flex;
    justify-content: center;
