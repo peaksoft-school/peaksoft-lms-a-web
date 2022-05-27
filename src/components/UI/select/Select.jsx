@@ -28,6 +28,7 @@ export function Select({
                <MenuItem
                   key={option.id}
                   value={option.title}
+                  disabled={option.disabled}
                   onClick={() => selectedOption(option)}
                >
                   {option.title}
