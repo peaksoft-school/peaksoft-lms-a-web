@@ -142,10 +142,12 @@ export const Materials = () => {
             {(isLoading && <Spinner />) ||
                lessons.map((lesson) => (
                   <LessonCard
+                     lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
+                     video={lesson.video}
                   />
                ))}
          </Container>
