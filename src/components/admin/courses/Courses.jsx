@@ -251,7 +251,6 @@ export const Courses = () => {
 const Wrapper = styled.div`
    position: relative;
    height: 880px;
-   margin: 0 auto;
 `
 const StyledPagination = styled.div`
    margin-top: 20px;
