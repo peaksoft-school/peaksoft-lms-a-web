@@ -126,7 +126,7 @@ export const Materials = () => {
       },
    ]
    return (
-      <div>
+      <>
          <StyledButtonContainer>
             <BreadCrumbs pathsArray={pathsArray} />
             <Button
@@ -147,7 +147,6 @@ export const Materials = () => {
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
-                     video={lesson.video}
                   />
                ))}
          </Container>
@@ -169,7 +168,7 @@ export const Materials = () => {
             onClose={closeModals}
             onDelete={deleteLessonHandler}
          />
-      </div>
+      </>
    )
 }
 
