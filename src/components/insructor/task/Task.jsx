@@ -9,7 +9,7 @@ import { ReactComponent as PictureIcon } from '../../../assets/icons/picture.svg
 import { ReactComponent as LinkIcon } from '../../../assets/icons/linkIcon.svg'
 import { ReactComponent as CodeIcon } from '../../../assets/icons/code.svg'
 import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
-import { TextEditor } from './TaskEditor'
+import { TextEditor } from './TextEditor/TextEditor'
 import { File } from './File'
 import { Image } from './Image'
 import { Link as TaskLink } from './Link'
@@ -36,6 +36,14 @@ export const Task = () => {
    const showCodeHandler = () => {
       setShowCode(true)
    }
+   const [selectedFile, setSelectedFile] = useState()
+   const [isFilePicked, setIsFilePicked] = useState(false)
+
+   const changeHandler = (event) => {
+      setSelectedFile(event.target.files[0])
+      // setIsSelected(true)
+   }
+   console.log(selectedFile)
    return (
       <>
          <StyledBreadCrumbs>
@@ -52,8 +60,15 @@ export const Task = () => {
                      </StyledIcon>
                   </StyledTooltip>
                   <StyledTooltip title="Прикрепить файл" placement="top">
-                     <StyledIcon>
-                        <FileIcon onClick={showFileHandler} />
+                     <StyledIcon onClick={showFileHandler}>
+                        <label htmlFor="upload">
+                           <FileIcon />
+                        </label>
+                        <input
+                           type="file"
+                           id="upload"
+                           onChange={changeHandler}
+                        />
                      </StyledIcon>
                   </StyledTooltip>
                   <StyledTooltip title="Добавить картинку" placement="top">
@@ -200,6 +215,9 @@ const StyledIcon = styled.div`
    display: flex;
    align-items: center;
    justify-content: center;
+   & input {
+      display: none;
+   }
    &:hover {
       background: #d4d4d4;
       border-radius: 6px;
