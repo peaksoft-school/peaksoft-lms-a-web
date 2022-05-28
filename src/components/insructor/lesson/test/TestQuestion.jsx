@@ -11,7 +11,7 @@ export const TestQuestion = () => {
          <QuestionContainer>
             <StyledNumberInList>1</StyledNumberInList>
             <StyledQuestion>
-               <Input placeholder="Вариант 1" />
+               <Input placeholder="Вопрос" />
             </StyledQuestion>
             <StyledOptionsContainer>
                <OneOfList>
@@ -26,15 +26,7 @@ export const TestQuestion = () => {
          </QuestionContainer>
          <StyledOptions>
             <RadioButton />
-            <Options />
-         </StyledOptions>
-         <StyledOptions>
-            <RadioButton />
-            <Options />
-         </StyledOptions>
-         <StyledOptions>
-            <RadioButton />
-            <Options />
+            <Options placeholder="Вариант 1" />
          </StyledOptions>
          <StyledFooterConatiner>
             <StyledAddOption>
