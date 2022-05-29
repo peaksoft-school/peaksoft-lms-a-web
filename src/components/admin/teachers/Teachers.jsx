@@ -65,7 +65,7 @@ export const Teachers = () => {
       dispatch(addTeacher({ value }))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Учителя успешно созданы')
+            showSuccessMessage('Учитель успешно создан')
             handleClose()
             dispatch(getTeachersWithPagination({ page: currentPage }))
             onClear()
@@ -98,7 +98,7 @@ export const Teachers = () => {
       dispatch(deleteTeacher(teacherId))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Учителя успешно удалены')
+            showSuccessMessage('Учитель успешно удален')
             handleClose()
             dispatch(getTeachersWithPagination({ page: currentPage }))
          })
