@@ -1,59 +1,56 @@
 import styled from '@emotion/styled'
+import { Tooltip } from '@mui/material'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Button } from '../../UI/button/Button'
+import { ReactComponent as PictureIcon } from '../../../assets/icons/picture.svg'
+import { taskActions } from '../../../store/task-slice'
 
-export const Image = () => {
+export const Image = ({ onClick }) => {
+   const dispatch = useDispatch()
+   const onDrop = (event) => {
+      const image = URL.createObjectURL(event.target.files[0])
+      dispatch(taskActions.selectImage(image))
+      console.log(image)
+   }
    return (
-      <ImageContainer>
-         <img
-            src="https://thumbs.dreamstime.com/b/madrid-spain-famous-street-gran-via-top-view-madrid-spain-famous-streets-gran-via-calle-de-alcala-crossroads-downtown-top-154525872.jpg"
-            alt=""
-         />
-         <Overlay>
-            <Button id="delete" background="#C91E1E">
-               Удалить
-            </Button>
-         </Overlay>
-      </ImageContainer>
+      <StyledTooltip title="Добавить картинку" placement="top">
+         <StyledIcon>
+            <label htmlFor="upload">
+               <PictureIcon />
+            </label>
+            <input type="file" id="upload" onClick={onDrop} accept="image/*" />
+         </StyledIcon>
+      </StyledTooltip>
    )
 }
-const ImageContainer = styled.div`
-   width: 792px;
-   height: 450px;
-   margin: 30px 0;
-   position: relative;
 
-   & img {
-      display: block;
-      border-radius: 7px;
-      background-size: cover;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      background-blend-mode: saturation;
+const StyledTooltip = styled(({ className, ...props }) => (
+   <Tooltip {...props} classes={{ popper: className }} />
+))`
+   & .MuiTooltip-tooltip {
+      background: #8d949e;
+      border-radius: 8px;
+      height: 28px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 8px;
+      gap: 10px;
    }
 `
-const Overlay = styled.div`
-   position: absolute;
-   top: 0px;
-   left: 0px;
-   width: 100%;
-   height: 100%;
+const StyledIcon = styled.div`
+   width: 34px;
+   height: 28px;
    display: flex;
-   justify-content: center;
    align-items: center;
-   border-radius: 7px;
-   opacity: 0;
-   transition-delay: 0.3s;
-   &:hover {
-      opacity: 1;
-      background-color: #00000075;
+   justify-content: center;
+   & input {
+      display: none;
    }
-   &:hover #delete {
-      transition-delay: 0.6s;
-      position: absolute;
-      z-index: 20;
-      display: block;
-      opacity: 1;
+   &:hover {
+      background: #d4d4d4;
+      border-radius: 6px;
    }
 `

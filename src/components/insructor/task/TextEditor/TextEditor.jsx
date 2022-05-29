@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
@@ -85,7 +85,7 @@ const Leaf = ({ attributes, children, leaf }) => {
 }
 
 const TextEditorContainer = styled.div`
-   height: 136px;
+   min-height: 136px;
 `
 
 const StyledTextEditor = styled.div`
@@ -104,5 +104,5 @@ const StyledEditable = styled(Editable)`
    border: 1px solid #d4d4d4;
    border-radius: 10px;
    width: 100%;
-   min-height: 100%;
+   height: 100%;
 `
