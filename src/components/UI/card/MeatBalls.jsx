@@ -69,6 +69,7 @@ const Container = styled(MenuItem)`
    display: flex;
    align-items: center;
    justify-content: start;
+   /* flex-direction: column; */
    font-family: 'Open Sans', sans-serif;
    font-weight: 400;
    font-size: 16px;

@@ -69,6 +69,9 @@ export const EDIT_STUDENT = 'edit-student'
 export const UPLOAD_STUDENT = 'upload-student'
 export const DELETE_STUDENT = 'delete-student-confirmation'
 export const STUDY_FORMAT = 'study-format'
+export const ADD_STUDENT = 'add_student'
+export const ADD_GROUP = 'add_group'
+export const ADD_COURSES = 'add_courses'
 
 export const STUDY_FORMAT_OPTION = [
    {

@@ -41,22 +41,14 @@ export const Header = () => {
          break
       case 'INSTRUCTOR':
          content = (
-            <>
-               <Routes>
-                  <Route
-                     path={`${ROUTES.COURSES}/:id/*`}
-                     element={<NavTabs tabs={COURSE_INNER_TABS} />}
-                  />
-               </Routes>
-               <Container>
-                  <StyledProfile>
-                     <ProfileIcon />
-                     <p>Инструктор</p>
-                     <LogoutButton logoutHandler={logoutHandler} />
-                  </StyledProfile>
-                  <Rectangle />
-               </Container>
-            </>
+            <Container>
+               <StyledProfile>
+                  <ProfileIcon />
+                  <p>Инструктор</p>
+                  <LogoutButton logoutHandler={logoutHandler} />
+               </StyledProfile>
+               <Rectangle />
+            </Container>
          )
          break
       case 'STUDENT':

@@ -6,58 +6,70 @@ import { Card } from '../../UI/card/Card'
 import { ReactComponent as CourseStudent } from '../../../assets/icons/courseStudent.svg'
 import { ReactComponent as CourseGroup } from '../../../assets/icons/courseGroup.svg'
 import {
-   APPOINT_TEACHER,
-   DELETE_COURSE,
-   EDIT_COURSE,
+   ADD_COURSES,
+   ADD_GROUP,
+   ADD_STUDENT,
 } from '../../../utils/constants/general'
-import { getSingleCourse } from '../../../store/courses-slice'
-import { getInstructorCourses } from '../../../store/primer-page-slice'
+import {
+   addGroupToCourse,
+   getGroupStudents,
+   // addGroupToCourse,
+   getInstructorCourses,
+   getStudents,
+} from '../../../store/primer-page-slice'
+import { AddStudent } from './AddStudent'
+import { AddGroup } from './AddGroup'
 
 export const PrimerPage = () => {
    const dispatch = useDispatch()
-   const { instructorCourseData } = useSelector(
+
+   const { instructorCourseData, groupStudents, students } = useSelector(
       (state) => state.instructorCourses
    )
-   const [searchParams, setSearchParams] = useSearchParams()
+   console.log(instructorCourseData)
    const [courseId, setCourseId] = useState()
+   const [searchParams, setSearchParams] = useSearchParams()
+   const [groupId, setGroupId] = useState()
+   const showAddStudentModal = searchParams.get(ADD_STUDENT)
+   const showAddGroupModal = searchParams.get(ADD_GROUP)
 
-   const assignTeacher = (id) => {
-      setSearchParams({
-         [APPOINT_TEACHER]: true,
-         teacherId: id,
-      })
-      setCourseId(id)
-   }
-   useEffect(() => {
-      dispatch(getInstructorCourses())
-   }, [])
-   const getCourseId = (id) => {
-      setSearchParams({ [DELETE_COURSE]: true })
-      setCourseId(id)
+   const showAddCourses = searchParams.get(ADD_COURSES)
+
+   const addGroupHandler = (value, groupId) => {
+      dispatch(addGroupToCourse({ value, groupId, courseId: 1 }))
    }
 
-   const editCourse = (id) => {
-      dispatch(getSingleCourse(id))
+   const addStudent = () => {
       setSearchParams({
-         [EDIT_COURSE]: true,
-         courseId: id,
+         [ADD_STUDENT]: true,
       })
+      dispatch(getStudents())
+   }
+   const addGroup = (id) => {
+      setSearchParams({
+         [ADD_GROUP]: true,
+      })
+      dispatch(getGroupStudents())
+      setGroupId(id)
+   }
+   const handleClose = () => {
+      setSearchParams(false)
    }
 
    const options = useMemo(() => [
       {
          id: 'one',
-         action: (id) => assignTeacher(id),
+         action: () => addStudent(),
          content: (
             <StyledIcon>
                <CourseStudent />
-               <p>Добавить студента в курс</p>ы
+               <p>Добавить студента в курс</p>
             </StyledIcon>
          ),
       },
       {
          id: 'two',
-         action: (id) => editCourse(id),
+         action: (id) => addGroup(id),
          content: (
             <StyledIcon>
                <CourseGroup />
@@ -66,6 +78,20 @@ export const PrimerPage = () => {
          ),
       },
    ])
+
+   useEffect(() => {
+      dispatch(getInstructorCourses())
+      dispatch(getGroupStudents())
+      dispatch(getStudents())
+   }, [])
+
+   const groupOptions = groupStudents.map((el) => {
+      return {
+         id: el.id,
+         title: el.groupName,
+      }
+   })
+
    return (
       <Wrapper>
          <Container>
@@ -78,10 +104,21 @@ export const PrimerPage = () => {
                   description={course.description}
                   date={course.dateOfStart}
                   id={course.id}
-                  path={`${course.id}/course_instructors`}
+                  path={`${course.id}/primer_page`}
                />
             ))}
          </Container>
+         <AddStudent
+            isModalOpen={Boolean(showAddStudentModal)}
+            onClose={handleClose}
+            students={students}
+         />
+         <AddGroup
+            isModalOpen={Boolean(showAddGroupModal)}
+            onClose={handleClose}
+            groups={groupOptions}
+            onAdd={addGroupHandler}
+         />
       </Wrapper>
    )
 }
