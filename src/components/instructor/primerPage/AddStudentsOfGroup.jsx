@@ -5,13 +5,13 @@ import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { Select } from '../../UI/select/Select'
 
-export const AddGroup = ({ isModalOpen, onClose, groups, onAdd }) => {
+export const AddStudentsOfGroup = ({ isModalOpen, onClose, groups, onAdd }) => {
    const { value, onChange, onClear } = useInput({
       group: '',
    })
 
    const addGroups = () => {
-      onAdd(value, selectedOption, onClear)
+      onAdd(selectedOption, onClear)
    }
    const [selectedOption, setSelectedOption] = useState('')
 

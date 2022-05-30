@@ -25,11 +25,6 @@ const Container = styled.div`
    display: flex;
    flex-direction: column;
    margin: 20px;
-<<<<<<< HEAD
-   width: 80%;
-   margin-left: 260px;
-=======
    width: 83%;
    margin-left: 270px;
->>>>>>> 4fb46b84df5e2c95c825d8e1f7983f64d341527c
 `

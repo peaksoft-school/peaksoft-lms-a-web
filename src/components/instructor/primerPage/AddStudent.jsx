@@ -1,10 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
+import { useDispatch } from 'react-redux'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ReactComponent as Search } from '../../../assets/icons/search.svg'
 import { Button } from '../../UI/button/Button'
+import { useDebounce } from '../../../hooks/useDebounce/useDebounce'
+import { getSearchName } from '../../../store/primer-page-slice'
 
-export const AddStudent = ({ isModalOpen, onClose, students }) => {
+export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
+   const dispatch = useDispatch()
+   const searchStudents = useDebounce(searchStudentsHandler, 600)
+   const [name, setName] = useState('')
+   function searchStudentsHandler() {
+      if (name !== '') {
+         dispatch(getSearchName(name))
+      }
+   }
+   useEffect(() => {
+      searchStudents()
+   }, [searchStudents])
+
+   const addStudents = (id) => {
+      onAdd(id)
+   }
+
    return (
       <BasicModal
          isModalOpen={Boolean(isModalOpen)}
@@ -13,13 +32,21 @@ export const AddStudent = ({ isModalOpen, onClose, students }) => {
       >
          <StyledSearch>
             <StyledSearchIcon />
-            <input placeholder="Введите имя студента" />
+            <input
+               placeholder="Введите имя студента"
+               type="text"
+               onChange={(e) => setName(e.target.value)}
+            />
          </StyledSearch>
          <StyledUl>
             {students.map((el) => (
                <li key={el.id}>
                   <p>{el.fullName}</p>
-                  <Button color="#3772FF" background="none">
+                  <Button
+                     color="#3772FF"
+                     background="none"
+                     onClick={() => addStudents(el.id)}
+                  >
                      Добавить
                   </Button>
                </li>

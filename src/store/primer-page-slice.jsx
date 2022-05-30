@@ -2,69 +2,106 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 
 const initialState = {
-   instructorCourseData: [],
+   courses: [],
    newGroupStudents: [],
-   groupStudents: [],
-   singleGroup: [],
+   newStudents: [],
+   groupOfStudents: [],
+   singleCourse: [],
    students: [],
    isLoading: null,
 }
 
-export const getInstructorCourses = createAsyncThunk(
-   'instructorCourses/getInstructorsCourses',
-   async (id, { rejectWithValue, dispatch }) => {
+export const getCoursesOfInstructor = createAsyncThunk(
+   'instructorCourses/getCoursesOfInstructor',
+   async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: `api/instructors/courses`,
             method: 'GET',
          })
-         dispatch(instructorCoursesData(response))
+         dispatch(setCoursesOfInstructor(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
       }
    }
 )
-export const getSingleGroup = createAsyncThunk(
-   'instructorCourses/getSingleGroup',
-   async (id, { dispatch }) => {
-      dispatch(singleGroupNull)
+export const addGroupToCourse = createAsyncThunk(
+   'instructorCourses/addGroupToCourse',
+   async ({ groupId, courseId }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
-            path: `api/groups/${id}`,
+            path: `api/groups/accept-to-course`,
+            method: 'PUT',
+            params: {
+               groupId,
+               courseId,
+            },
          })
-         dispatch(getSingleGroupValue(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const addStudentToCourse = createAsyncThunk(
+   'instructorCourses/addStudentToCourse',
+   async ({ studentId, courseId }, { rejectWithValue }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/students/accept-to-course`,
+            method: 'PUT',
+            params: {
+               courseId,
+               studentId,
+            },
+         })
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const getSingleCourses = createAsyncThunk(
+   'instructorCourses/getSingleCourses',
+   async (id, { dispatch }) => {
+      dispatch(clearCourse)
+      try {
+         const response = await baseFetch({
+            path: `api/courses/${id}`,
+            method: 'GET',
+         })
+         dispatch(getSingleCourse(response))
          return response
       } catch (error) {
          return error.message
       }
    }
 )
-export const addGroupToCourse = createAsyncThunk(
-   'instructorCourses/addGroupToCourse',
-   async ({ value, groupId, courseId }, { rejectWithValue, dispatch }) => {
-      try {
-         const response = await baseFetch({
-            path: `api/groups/accept-to-course`,
-            method: 'PUT',
-            body: { ...value, groupId, courseId },
-         })
-         dispatch(addGroupToCourse(response))
-         return response
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-   }
-)
-export const getGroupStudents = createAsyncThunk(
-   'instructorCourses/getGroupStudents',
+export const getGroupOfStudents = createAsyncThunk(
+   'instructorCourses/getGroupOfStudents',
    async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: 'api/groups',
             method: 'GET',
          })
-         dispatch(setStudentGroupData(response))
+         dispatch(setGroupOfStudents(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const getStudentsByGroup = createAsyncThunk(
+   'instructorCourses/getStudentsByGroup',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/courses/students/${id}`,
+            method: 'GET',
+         })
+         dispatch(setCourseByStudents(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -79,13 +116,29 @@ export const getStudents = createAsyncThunk(
             path: 'api/students',
             method: 'GET',
          })
-         dispatch(setStudentData(response))
+         dispatch(setStudents(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
       }
    }
 )
+export const getSearchName = createAsyncThunk(
+   'instructorCourses/getSearchName',
+   async (name, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/students/firstname/${name}`,
+            method: 'GET',
+         })
+         dispatch(getSearchResults(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
 const setIsLoading = (state) => {
    state.isLoading = false
 }
@@ -97,35 +150,39 @@ export const instructorCoursesSlice = createSlice({
    name: 'instructorCourses',
    initialState,
    reducers: {
-      instructorCoursesData(state, action) {
-         state.instructorCourseData = action.payload
+      setCoursesOfInstructor(state, action) {
+         state.courses = action.payload
       },
-      addGroupToCourse(state, action) {
+      setCourseByStudents(state, action) {
+         console.log(action.payload)
          state.newGroupStudents = action.payload
       },
-      setStudentGroupData(state, action) {
-         state.groupStudents = action.payload
+      setGroupOfStudents(state, action) {
+         state.groupOfStudents = action.payload
       },
-      setStudentData(state, action) {
+      setStudents(state, action) {
          state.students = action.payload
       },
-      singleGroupNull(state) {
-         state.singleGroup = null
+      getSearchResults(state, action) {
+         state.students = action.payload
       },
-      getSingleGroupValue(state, action) {
-         state.singleGroup = action.payload
+      clearCourse(state) {
+         state.singleCourse = null
+      },
+      getSingleCourse(state, action) {
+         state.singleCourse = action.payload
       },
    },
    extraReducers: {
-      [getInstructorCourses.pending]: setPending,
-      [getInstructorCourses.rejected]: setIsLoading,
-      [getInstructorCourses.fulfilled]: setPending,
+      [getCoursesOfInstructor.pending]: setPending,
+      [getCoursesOfInstructor.rejected]: setIsLoading,
+      [getCoursesOfInstructor.fulfilled]: setPending,
       [addGroupToCourse.pending]: setPending,
       [addGroupToCourse.rejected]: setIsLoading,
       [addGroupToCourse.fulfilled]: setPending,
-      [getGroupStudents.pending]: setPending,
-      [getGroupStudents.rejected]: setIsLoading,
-      [getGroupStudents.fulfilled]: setPending,
+      [getGroupOfStudents.pending]: setPending,
+      [getGroupOfStudents.rejected]: setIsLoading,
+      [getGroupOfStudents.fulfilled]: setPending,
       [getStudents.pending]: setPending,
       [getStudents.rejected]: setIsLoading,
       [getStudents.fulfilled]: setPending,
@@ -133,9 +190,11 @@ export const instructorCoursesSlice = createSlice({
 })
 
 export const {
-   instructorCoursesData,
-   setStudentGroupData,
-   setStudentData,
-   singleGroupNull,
-   getSingleGroupValue,
+   setCoursesOfInstructor,
+   setCourseByStudents,
+   setGroupOfStudents,
+   getSearchResults,
+   getSingleCourse,
+   setStudents,
+   clearCourse,
 } = instructorCoursesSlice.actions

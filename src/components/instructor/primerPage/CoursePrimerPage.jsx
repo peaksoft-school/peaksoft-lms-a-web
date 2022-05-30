@@ -5,61 +5,79 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Card } from '../../UI/card/Card'
 import { ReactComponent as CourseStudent } from '../../../assets/icons/courseStudent.svg'
 import { ReactComponent as CourseGroup } from '../../../assets/icons/courseGroup.svg'
-import {
-   ADD_COURSES,
-   ADD_GROUP,
-   ADD_STUDENT,
-} from '../../../utils/constants/general'
+import { ADD_GROUP, ADD_STUDENT } from '../../../utils/constants/general'
 import {
    addGroupToCourse,
-   getGroupStudents,
-   // addGroupToCourse,
-   getInstructorCourses,
+   addStudentToCourse,
+   getCoursesOfInstructor,
+   getGroupOfStudents,
    getStudents,
 } from '../../../store/primer-page-slice'
 import { AddStudent } from './AddStudent'
-import { AddGroup } from './AddGroup'
+import { AddStudentsOfGroup } from './AddStudentsOfGroup'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 
-export const PrimerPage = () => {
+export const CoursePrimerPage = () => {
    const dispatch = useDispatch()
-
-   const { instructorCourseData, groupStudents, students } = useSelector(
+   const { courses, groupOfStudents, students } = useSelector(
       (state) => state.instructorCourses
    )
-   console.log(instructorCourseData)
+
    const [courseId, setCourseId] = useState()
    const [searchParams, setSearchParams] = useSearchParams()
-   const [groupId, setGroupId] = useState()
+
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
-   const showAddCourses = searchParams.get(ADD_COURSES)
-
-   const addGroupHandler = (value, groupId) => {
-      dispatch(addGroupToCourse({ value, groupId, courseId: 1 }))
+   const handleClose = () => {
+      setSearchParams(false)
    }
 
-   const addStudent = () => {
+   const addGroupHandler = (groupId) => {
+      dispatch(addGroupToCourse({ groupId, courseId }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Группа успешно добавлена')
+            handleClose()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось добавить группу')
+         })
+   }
+   const addStudentHandler = (studentId) => {
+      dispatch(addStudentToCourse({ studentId, courseId }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Студент успешно добавлен')
+            handleClose()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось добавить студента')
+         })
+   }
+
+   const addStudent = (id) => {
       setSearchParams({
          [ADD_STUDENT]: true,
       })
       dispatch(getStudents())
+      setCourseId(id)
    }
    const addGroup = (id) => {
       setSearchParams({
          [ADD_GROUP]: true,
       })
-      dispatch(getGroupStudents())
-      setGroupId(id)
-   }
-   const handleClose = () => {
-      setSearchParams(false)
+      dispatch(getGroupOfStudents())
+      setCourseId(id)
    }
 
    const options = useMemo(() => [
       {
          id: 'one',
-         action: () => addStudent(),
+         action: (id) => addStudent(id),
          content: (
             <StyledIcon>
                <CourseStudent />
@@ -80,12 +98,12 @@ export const PrimerPage = () => {
    ])
 
    useEffect(() => {
-      dispatch(getInstructorCourses())
-      dispatch(getGroupStudents())
+      dispatch(getCoursesOfInstructor())
+      dispatch(getGroupOfStudents())
       dispatch(getStudents())
    }, [])
 
-   const groupOptions = groupStudents.map((el) => {
+   const groupOptions = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
@@ -95,7 +113,7 @@ export const PrimerPage = () => {
    return (
       <Wrapper>
          <Container>
-            {instructorCourseData.map((course) => (
+            {courses.map((course) => (
                <Card
                   key={course.id}
                   options={options}
@@ -104,7 +122,7 @@ export const PrimerPage = () => {
                   description={course.description}
                   date={course.dateOfStart}
                   id={course.id}
-                  path={`${course.id}/primer_page`}
+                  path={`${course.id}/materials`}
                />
             ))}
          </Container>
@@ -112,8 +130,9 @@ export const PrimerPage = () => {
             isModalOpen={Boolean(showAddStudentModal)}
             onClose={handleClose}
             students={students}
+            onAdd={addStudentHandler}
          />
-         <AddGroup
+         <AddStudentsOfGroup
             isModalOpen={Boolean(showAddGroupModal)}
             onClose={handleClose}
             groups={groupOptions}
@@ -140,6 +159,7 @@ const Container = styled.div`
 `
 const StyledIcon = styled.div`
    display: flex;
+   justify-content: start;
    & p {
       margin-left: 8px;
    }
