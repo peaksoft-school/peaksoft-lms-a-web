@@ -30,9 +30,9 @@ export const TestQuestion = () => {
             </QuestionContainer>
             <OptionsContainer>
                <OneOfTheList name="question-1" placeholder="Вариант 1" />
-               <OneOfTheList name="question-1" placeholder="Вариант 2" />
-               <FewFromTheList name="question-1" placeholder="Вариант 3" />
-               <FewFromTheList name="question-1" placeholder="Вариант 4" />
+               {/* <OneOfTheList name="question-1" placeholder="Вариант 2" /> */}
+               {/* <FewFromTheList name="question-1" placeholder="Вариант 3" /> */}
+               {/* <FewFromTheList name="question-1" placeholder="Вариант 4" /> */}
             </OptionsContainer>
             <StyledFooterConatiner>
                <StyledAddOption>
