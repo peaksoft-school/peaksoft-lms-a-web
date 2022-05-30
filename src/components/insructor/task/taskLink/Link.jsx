@@ -1,12 +1,15 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { ReactComponent as LinkIcon } from '../../../assets/icons/linkIcon.svg'
+import { useSelector } from 'react-redux'
+import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.svg'
 
 export const Link = () => {
+   const { linkText } = useSelector((state) => state.tasks)
+   console.log(linkText)
    return (
       <LinkContainer>
          <LinkIcon />
-         <p>Название ссылки</p>
+         <p>{linkText}</p>
       </LinkContainer>
    )
 }

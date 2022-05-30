@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { Input } from '../../UI/input/Input'
-import { ReactComponent as CodeIcon } from '../../../assets/icons/code.svg'
+import { Input } from '../../../UI/input/Input'
+import { ReactComponent as CodeIcon } from '../../../../assets/icons/code.svg'
 
 export const Code = () => {
    return (

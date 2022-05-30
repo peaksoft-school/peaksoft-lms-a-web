@@ -121,7 +121,7 @@ export const assignTeacherToCourse = createAsyncThunk(
             method: 'POST',
             body: {
                courseId,
-               teacherId: instructorId,
+               instructorsId: instructorId,
             },
          })
          dispatch(coursesActions.openModal(true))
@@ -177,7 +177,7 @@ export const getCourseTeachers = createAsyncThunk(
    async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/courses/teachers/${id}`,
+            path: `api/courses/instructors/${id}`,
             method: 'GET',
          })
          dispatch(coursesActions.getCourseTeachers(response))

@@ -5,25 +5,24 @@ import { useSelector } from 'react-redux'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { ReactComponent as TextIcon } from '../../../assets/icons/text.svg'
-import { ReactComponent as FileIcon } from '../../../assets/icons/Frame.svg'
-import { ReactComponent as PictureIcon } from '../../../assets/icons/picture.svg'
-import { ReactComponent as LinkIcon } from '../../../assets/icons/linkIcon.svg'
 import { ReactComponent as CodeIcon } from '../../../assets/icons/code.svg'
 import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
 import { TextEditor } from './TextEditor/TextEditor'
-import { File } from './File'
-import { Image } from './Image'
-import { Link as TaskLink } from './Link'
-import { Code } from './Code'
+import { SelectFile } from './taskFile/SelectFile'
+import { SelectImage } from './taskImage/SelectImage'
+import { Link as TaskLink } from './taskLink/Link'
+import { Code } from './taskCode/Code'
+import { Image } from './taskImage/Image'
+import { File } from './taskFile/File'
+import { AddLinkModal } from './taskLink/AddLink'
 
 export const Task = () => {
-   const { file, image } = useSelector((state) => state.tasks)
    const [showTextEditor, setShowTextEditor] = useState(false)
    const [showFile, setShowFile] = useState(false)
    const [showLink, setShowLink] = useState(false)
    const [showImage, setShowImage] = useState(false)
    const [showCode, setShowCode] = useState(false)
-   console.log(image)
+
    const showText = () => {
       setShowTextEditor(true)
    }
@@ -55,13 +54,9 @@ export const Task = () => {
                         <TextIcon onClick={showText} />
                      </StyledIcon>
                   </StyledTooltip>
-                  <File showFileHandler={showFileHandler} />
-                  <Image />
-                  <StyledTooltip title="Вставить ссылку" placement="top">
-                     <StyledIcon>
-                        <LinkIcon onClick={showLinkHandler} />
-                     </StyledIcon>
-                  </StyledTooltip>
+                  <SelectFile showFileHandler={showFileHandler} />
+                  <SelectImage />
+                  <AddLinkModal />
                   <StyledTooltip title="Код" placement="top">
                      <StyledIcon>
                         <CodeIcon onClick={showCodeHandler} />
@@ -71,20 +66,9 @@ export const Task = () => {
             </Title>
             <StyledContainer>
                {showTextEditor && <TextEditor />}
-               <FileContainer>
-                  <FileIcon />
-                  <p>{file}</p>
-               </FileContainer>
-               <ImageContainer>
-                  <img alt="" src={image} />
-                  <Overlay>
-                     <Button id="delete" background="#C91E1E">
-                        Удалить
-                     </Button>
-                  </Overlay>
-               </ImageContainer>
-               {showLink && <TaskLink />}
-               {showImage && <Image />}
+               <File />
+               <Image />
+               <TaskLink />
                {showCode && <Code />}
             </StyledContainer>
             <ButtonContainer>
@@ -185,12 +169,7 @@ const StyledBreadCrumbs = styled.div`
    display: flex;
    align-items: flex-end;
 `
-const FileContainer = styled.div`
-   display: flex;
-   align-items: center;
-   margin-left: 5px;
-   height: 30pxs;
-`
+
 const StyledTooltip = styled(({ className, ...props }) => (
    <Tooltip {...props} classes={{ popper: className }} />
 ))`
@@ -218,45 +197,5 @@ const StyledIcon = styled.div`
    &:hover {
       background: #d4d4d4;
       border-radius: 6px;
-   }
-`
-const ImageContainer = styled.div`
-   width: 792px;
-   height: 450px;
-   margin: 30px 0;
-   position: relative;
-
-   & img {
-      display: block;
-      border-radius: 7px;
-      background-size: cover;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      background-blend-mode: saturation;
-   }
-`
-const Overlay = styled.div`
-   position: absolute;
-   top: 0px;
-   left: 0px;
-   width: 100%;
-   height: 100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   border-radius: 7px;
-   opacity: 0;
-   transition-delay: 0.3s;
-   &:hover {
-      opacity: 1;
-      background-color: #00000075;
-   }
-   &:hover #delete {
-      transition-delay: 0.6s;
-      position: absolute;
-      z-index: 20;
-      display: block;
-      opacity: 1;
    }
 `

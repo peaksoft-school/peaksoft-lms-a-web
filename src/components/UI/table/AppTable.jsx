@@ -65,6 +65,7 @@ export const AppTable = ({ columns, data, pagination }) => {
 }
 
 const Container = styled(MuiTableContainer)`
+   position: relative;
    min-width: 1140px;
    min-height: 687px;
    margin: 20px auto;

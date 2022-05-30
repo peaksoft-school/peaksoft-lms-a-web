@@ -1,28 +1,30 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { Tooltip } from '@mui/material'
+import React from 'react'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as FileIcon } from '../../../assets/icons/Frame.svg'
-import { taskActions } from '../../../store/task-slice'
+import { ReactComponent as PictureIcon } from '../../../../assets/icons/picture.svg'
+import { taskActions } from '../../../../store/task-slice'
 
-export const File = ({ showFileHandler }) => {
+export const SelectImage = () => {
    const dispatch = useDispatch()
 
-   const changeHandler = (event) => {
-      const file = event.target.files[0]
-      dispatch(taskActions.selectFile(file.name))
+   function uploadSingleFile(e) {
+      const image = URL.createObjectURL(e.target.files[0])
+      dispatch(taskActions.selectImage(image))
    }
+
    return (
-      <StyledTooltip title="Прикрепить файл" placement="top">
-         <StyledIcon /* onClick={showFileHandler} */>
-            <label htmlFor="upload">
-               <FileIcon />
+      <StyledTooltip title="Добавить картинку" placement="top">
+         <StyledIcon>
+            <label htmlFor="uploadImage">
+               <PictureIcon />
             </label>
-            <input type="file" id="upload" onChange={changeHandler} />
+            <input type="file" id="uploadImage" onChange={uploadSingleFile} />
          </StyledIcon>
       </StyledTooltip>
    )
 }
+
 const StyledTooltip = styled(({ className, ...props }) => (
    <Tooltip {...props} classes={{ popper: className }} />
 ))`

@@ -90,11 +90,11 @@ const TextEditorContainer = styled.div`
 
 const StyledTextEditor = styled.div`
    display: flex;
-   align-items: center;
    width: 100%;
-   height: 40px;
+   min-height: 40px;
    margin-top: 20px;
    svg {
+      margin-top: 9px;
       margin-right: 8px;
    }
 `

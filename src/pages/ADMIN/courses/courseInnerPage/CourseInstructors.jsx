@@ -25,6 +25,7 @@ export const CourseInstructors = () => {
       (state) => state.courses
    )
 
+   console.log(courses)
    const [searchParams, setSearchParams] = useSearchParams()
 
    const showAppointTeacherModal = searchParams.get(APPOINT_TEACHER)
