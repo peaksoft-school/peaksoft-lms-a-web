@@ -1,12 +1,18 @@
 import styled from '@emotion/styled'
 import { ReactComponent as Cancel } from '../../../../assets/icons/Cancel.svg'
+import { Checkbox } from '../../../UI/checkbox/Checkbox'
 
-export const Options = (props) => {
+export const FewFromTheList = (props) => {
    return (
-      <StyledInputWithIcon id="input">
-         <StyledInput {...props} />
-         <Cancel />
-      </StyledInputWithIcon>
+      <StyledOptions>
+         <StyledCheckbox>
+            <Checkbox />
+         </StyledCheckbox>
+         <StyledInputWithIcon>
+            <StyledInput {...props} />
+            <Cancel />
+         </StyledInputWithIcon>
+      </StyledOptions>
    )
 }
 const StyledInputWithIcon = styled.div`
@@ -52,4 +58,22 @@ const StyledInput = styled.input`
    font-size: 16px;
    line-height: 22px;
    gap: 10px;
+`
+const StyledOptions = styled.div`
+   width: 100%;
+   height: 56px;
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   input {
+      margin-right: 12px;
+   }
+`
+const StyledCheckbox = styled.div`
+   width: 24px;
+   height: 24px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-right: 12px;
 `

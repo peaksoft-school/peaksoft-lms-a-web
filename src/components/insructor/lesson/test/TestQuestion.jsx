@@ -1,44 +1,66 @@
 import styled from '@emotion/styled'
 import { Input } from '../../../UI/input/Input'
+import { Button } from '../../../UI/button/Button'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 import { ReactComponent as Clone } from '../../../../assets/icons/clone.svg'
 import { ReactComponent as Delete } from '../../../../assets/icons/Delete.svg'
-import { Options } from './Options'
+import { ReactComponent as AddIcon } from '../../../../assets/icons/VectorAdd.svg'
+import { OneOfTheList } from './OneOfTheList'
+import { FewFromTheList } from './FewFromTheList'
 
 export const TestQuestion = () => {
    return (
-      <StyledQuestionContainer>
-         <QuestionContainer>
-            <StyledNumberInList>1</StyledNumberInList>
-            <StyledQuestion>
-               <Input placeholder="Вопрос" />
-            </StyledQuestion>
-            <StyledOptionsContainer>
-               <OneOfList>
-                  <RadioButton />
-                  <p>Один из списка</p>
-               </OneOfList>
-               <MoreOfList>
-                  <RadioButton />
-                  <p>Несколько из списка</p>
-               </MoreOfList>
-            </StyledOptionsContainer>
-         </QuestionContainer>
-         <StyledOptions>
-            <RadioButton />
-            <Options placeholder="Вариант 1" />
-         </StyledOptions>
-         <StyledFooterConatiner>
-            <StyledAddOption>
-               <AddOption>Добавить вариант</AddOption> или{' '}
-               <AnotherOption>добавить вариант “Другое”</AnotherOption>
-            </StyledAddOption>
-            <StyledActions>
-               <Clone />
-               <Delete />
-            </StyledActions>
-         </StyledFooterConatiner>
-      </StyledQuestionContainer>
+      <>
+         <StyledQuestionContainer>
+            <QuestionContainer>
+               <StyledNumberInList>1</StyledNumberInList>
+               <StyledQuestion>
+                  <Input placeholder="Вопрос" />
+               </StyledQuestion>
+               <StyledOptionsContainer>
+                  <OneOfList>
+                     <RadioButton id="one" name="option of variants" />
+                     <label htmlFor="one">Один из списка</label>
+                  </OneOfList>
+                  <MoreOfList>
+                     <RadioButton id="more" name="option of variants" />
+                     <label htmlFor="more">Несколько из списка</label>
+                  </MoreOfList>
+               </StyledOptionsContainer>
+            </QuestionContainer>
+            <OptionsContainer>
+               <OneOfTheList name="question-1" placeholder="Вариант 1" />
+               <OneOfTheList name="question-1" placeholder="Вариант 2" />
+               <FewFromTheList name="question-1" placeholder="Вариант 3" />
+               <FewFromTheList name="question-1" placeholder="Вариант 4" />
+            </OptionsContainer>
+            <StyledFooterConatiner>
+               <StyledAddOption>
+                  <AddOption>Добавить вариант</AddOption> или
+                  <AnotherOption>добавить вариант “Другое”</AnotherOption>
+               </StyledAddOption>
+               <StyledActions>
+                  <Clone />
+                  <Delete />
+               </StyledActions>
+            </StyledFooterConatiner>
+         </StyledQuestionContainer>
+         <StyledButtonContainer>
+            <Button
+               background="none"
+               border="1px solid #3772FF"
+               color="#3772FF"
+            >
+               Отмена
+            </Button>
+            <Button background="#3772FF" bgHover="#1D60FF" bgActive="#6190FF">
+               Сохранить
+            </Button>
+         </StyledButtonContainer>
+         <StyledAddOptionIcon>
+            <AddIcon />
+         </StyledAddOptionIcon>
+      </>
    )
 }
 
@@ -46,9 +68,6 @@ const StyledQuestionContainer = styled.div`
    min-width: 1140px;
    min-height: 210px;
    display: grid;
-   grid-template-columns: 1fr;
-   grid-template-rows: repeat(3, 1fr);
-   grid-column-gap: 0px;
    grid-row-gap: 24px;
    padding: 20px;
    background: #ffffff;
@@ -99,7 +118,7 @@ const OneOfList = styled.div`
    display: flex;
    justify-content: space-between;
    align-items: center;
-   p {
+   label {
       font-family: 'Open Sans' sans-serif;
       font-style: normal;
       font-weight: 400;
@@ -136,6 +155,7 @@ const StyledAddOption = styled.div`
    display: flex;
    justify-content: space-between;
    align-items: center;
+   margin-left: 35px;
 `
 const StyledActions = styled.div`
    width: 68px;
@@ -166,13 +186,38 @@ const AnotherOption = styled.span`
    letter-spacing: 0.002em;
    color: #258aff;
 `
-const StyledOptions = styled.div`
+const OptionsContainer = styled.div`
    width: 100%;
-   height: 56px;
+   min-height: 56px;
    display: flex;
-   justify-content: flex-start;
    align-items: center;
-   input {
-      margin-right: 12px;
+   flex-direction: column;
+   gap: 10px;
+`
+const StyledButtonContainer = styled.div`
+   width: 100%;
+   height: 45px;
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   button {
+      margin-left: 10px;
+   }
+`
+const StyledAddOptionIcon = styled.button`
+   position: fixed;
+   width: 58px;
+   height: 58px;
+   left: 93%;
+   top: 80%;
+   border-radius: 50%;
+   border: none;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: linear-gradient(225deg, #fa2b56 0%, #f91c3d 100%);
+   svg {
+      width: 21px;
+      height: 21px;
    }
 `
