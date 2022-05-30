@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
@@ -15,6 +15,7 @@ import {
    addLesson,
    deleteLesson,
    editLesson,
+   getCourse,
    getLesson,
    getLessons,
 } from '../../../../store/materials-slice'
@@ -29,7 +30,8 @@ import { LessonCard } from '../../../UI/lessonCard/LessonCard'
 
 export const Materials = () => {
    const dispatch = useDispatch()
-   const { lessons, isLoading, lesson } = useSelector(
+   const { id } = useParams()
+   const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
 
@@ -60,7 +62,7 @@ export const Materials = () => {
    }
 
    const addLessonHandler = (value, onClear) => {
-      dispatch(addLesson(value))
+      dispatch(addLesson({ lessonData: value, id }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Урок успешно создан')
@@ -109,6 +111,7 @@ export const Materials = () => {
          closeModals()
       }
       dispatch(getLessons())
+      dispatch(getCourse(id))
    }, [])
 
    const pathsArray = [
@@ -118,7 +121,7 @@ export const Materials = () => {
       },
       {
          path: '/materials',
-         name: 'Materials',
+         name: course?.courseName,
       },
       {
          path: '/instructors',

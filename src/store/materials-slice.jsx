@@ -4,15 +4,16 @@ import { baseFetch } from '../api/baseFetch'
 const initState = {
    lessons: [],
    lesson: null,
+   course: null,
    isLoading: null,
 }
 
 export const addLesson = createAsyncThunk(
    'materials/addLesson',
-   async (lessonData, { rejectWithValue }) => {
+   async ({ lessonData, id }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
-            path: 'api/lessons/1',
+            path: `api/lessons/${id}`,
             method: 'POST',
             body: lessonData,
          })
@@ -54,6 +55,21 @@ export const getLesson = createAsyncThunk(
       }
    }
 )
+export const getCourse = createAsyncThunk(
+   'materials/getCourse',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/courses/${id}`,
+            method: 'GET',
+         })
+         dispatch(materialsActions.getCourse(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
 
 export const editLesson = createAsyncThunk(
    'materials/editLesson',
@@ -85,6 +101,7 @@ export const deleteLesson = createAsyncThunk(
       }
    }
 )
+
 const setFulfilled = (state) => {
    state.isLoading = false
 }
@@ -104,6 +121,9 @@ export const materialsSlice = createSlice({
       },
       getLesson(state, action) {
          state.lesson = action.payload
+      },
+      getCourse(state, action) {
+         state.course = action.payload
       },
    },
    extraReducers: {

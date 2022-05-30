@@ -105,7 +105,7 @@ export const MATERIALS_INNER_TABS = [
    },
    {
       title: 'Студенты',
-      to: 'materials',
+      to: 'students',
    },
 ]
 
