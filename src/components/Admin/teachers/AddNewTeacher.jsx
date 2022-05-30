@@ -1,25 +1,13 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
-import { useInput } from '../../../hooks/useInput/useInput'
-import { addTeacher } from '../../../store/teachers-slice'
-import { ADD_TEACHERS } from '../../../utils/constants/general'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
-import { Notification } from '../../UI/notification/Notification'
+import { ReactComponent as AddIcon } from '../../../assets/icons/AddIcon.svg'
+import { useInput } from '../../../hooks/usuInput/useInput'
 
-export const AddNewTeachers = ({
-   setSuccessNotification,
-   successNotification,
-}) => {
-   const dispatch = useDispatch()
-   const [registerIsValid, setRegisterIsValid] = useState(false)
-   const [addSearchParams, setAddSearchParams] = useSearchParams()
-   const addTeachersModal = addSearchParams.get(ADD_TEACHERS)
-
+export const AddNewTeacher = ({ onAdd, showModal, onClose, addHandler }) => {
    const { value, onChange, onClear } = useInput({
       firstName: '',
       lastName: '',
@@ -29,19 +17,10 @@ export const AddNewTeachers = ({
       specialization: '',
    })
 
-   const addTeachersHandler = () => {
-      setAddSearchParams({ [ADD_TEACHERS]: true })
-   }
+   const [registerIsValid, setRegisterIsValid] = useState(false)
 
-   const handleClose = () => {
-      setAddSearchParams()
-   }
-
-   const onSubmit = () => {
-      setSuccessNotification(true)
-      dispatch(addTeacher(value))
-      onClear()
-      setAddSearchParams()
+   const addTeacher = () => {
+      onAdd(value, onClear)
    }
 
    useEffect(() => {
@@ -53,29 +32,23 @@ export const AddNewTeachers = ({
             value.password.length > 0 &&
             value.specialization.length > 0
       )
-      setTimeout(() => {
-         setSuccessNotification(false)
-      }, 1400)
-   }, [value, successNotification])
+   }, [value])
 
    return (
       <>
-         {successNotification && (
-            <Notification message="Учителя успешно созданы" />
-         )}
          <StyledButton>
             <Button
                background="#3772FF"
                bgHover="#1D60FF"
                bgActive="#6190FF"
-               onClick={addTeachersHandler}
+               onClick={addHandler}
             >
-               + Добавить учителя
+               <StyledAddIcon /> Добавить учителя
             </Button>
          </StyledButton>
          <BasicModal
-            isModalOpen={Boolean(addTeachersModal)}
-            onClose={handleClose}
+            isModalOpen={Boolean(showModal)}
+            onClose={onClose}
             title="Добавить учителя"
          >
             <StyledInput
@@ -125,7 +98,7 @@ export const AddNewTeachers = ({
                      bgActive="#6190FF4D"
                      border="1px solid #1D60FF"
                      color="#3772FF"
-                     onClick={() => setAddSearchParams()}
+                     onClick={onClose}
                   >
                      Отмена
                   </Button>
@@ -133,7 +106,7 @@ export const AddNewTeachers = ({
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={onSubmit}
+                     onClick={addTeacher}
                      disabled={!registerIsValid}
                   >
                      Добавить
@@ -157,6 +130,9 @@ const StyledInput = styled(Input)`
 `
 const StyledMaskedInput = styled(MaskedInput)`
    margin: 5px;
+`
+const StyledAddIcon = styled(AddIcon)`
+   margin-right: 4px;
 `
 const StyledModalButton = styled.div`
    display: flex;
