@@ -8,7 +8,7 @@ import { ReactComponent as TestIcon } from '../../../assets/icons/Test.svg'
 import { ReactComponent as VideoIcon } from '../../../assets/icons/Video.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { Select } from '../select/Select'
-import { AddLinkModal } from '../../insructor/AddLinkModal'
+// import { AddLinkModal } from '../../insructor/AddLinkModal'
 
 export const LessonCard = ({
    title,

@@ -21,7 +21,7 @@ export const AddLinkModal = () => {
    })
    const addLinkToLessonHandler = () => {
       const newLinkData = {
-         lessonId: 11,
+         lessonId: 1,
          text: value.text,
          link: value.link,
       }
@@ -96,6 +96,7 @@ const BtnStyleControl = styled.div`
    margin-top: 10px;
    margin-bottom: 1px;
    padding: 1px;
+
    button {
       margin-left: 10px;
    }

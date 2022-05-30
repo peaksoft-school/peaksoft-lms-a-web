@@ -10,13 +10,14 @@ const initialState = {
 
 export const addLinkToLesson = createAsyncThunk(
    'lessons/addLinkToLesson',
-   async ({ lessonId, text, link }, { rejectWithValue }) => {
+   async ({ lessonId, text, link }, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/lesson/link${lessonId}`,
+            path: `api/links/${lessonId}`,
             method: 'POST',
             body: { text, link },
          })
+         dispatch(linkActions.getLinkData(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -27,7 +28,11 @@ export const addLinkToLesson = createAsyncThunk(
 export const linkSlice = createSlice({
    name: 'lessons',
    initialState,
-   reducers: {},
+   reducers: {
+      getLinkData: (state, action) => {
+         state.newLinkData = action.payload
+      },
+   },
    extraReducers: {
       [addLinkToLesson.pending]: (state) => {
          state.isLoading = true
