@@ -121,7 +121,7 @@ export const assignTeacherToCourse = createAsyncThunk(
             method: 'POST',
             body: {
                courseId,
-               teacherId: instructorId,
+               instructorsId: instructorId,
             },
          })
          dispatch(coursesActions.openModal(true))

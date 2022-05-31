@@ -7,11 +7,14 @@ import {
    getSingleGroup,
    groupsPagination,
 } from '../../../store/groupSlice'
-import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
+import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const GroupDetailPage = () => {
    const dispatch = useDispatch()
-   const { studentsIState, singleGroup } = useSelector((state) => state.groups)
+   const { studentsIState, singleGroup, isLoading } = useSelector(
+      (state) => state.groups
+   )
 
    const { id } = useParams()
 
@@ -67,7 +70,9 @@ export const GroupDetailPage = () => {
    return (
       <div>
          <BreadCrumbs pathsArray={pathsArray} />
-         <AppTable data={studentsIState} columns={STUDENTS_INFO} />
+         {(isLoading && <Spinner />) || (
+            <AppTable data={studentsIState} columns={STUDENTS_INFO} />
+         )}
       </div>
    )
 }
