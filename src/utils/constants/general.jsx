@@ -69,6 +69,9 @@ export const EDIT_STUDENT = 'edit-student'
 export const UPLOAD_STUDENT = 'upload-student'
 export const DELETE_STUDENT = 'delete-student-confirmation'
 export const STUDY_FORMAT = 'study-format'
+export const ADD_LESSON = 'create_lesson'
+export const EDIT_LESSON = 'edit_lesson'
+export const DELETE_LESSON = 'delete-lesson-confirmation'
 
 export const STUDY_FORMAT_OPTION = [
    {
@@ -92,6 +95,17 @@ export const COURSE_INNER_TABS = [
    {
       title: 'Студенты',
       to: 'course_students',
+   },
+]
+
+export const MATERIALS_INNER_TABS = [
+   {
+      title: 'Материалы',
+      to: 'materials',
+   },
+   {
+      title: 'Студенты',
+      to: 'students',
    },
 ]
 
