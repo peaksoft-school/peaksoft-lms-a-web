@@ -1,65 +1,55 @@
 import styled from '@emotion/styled'
 import { Input } from '../../../UI/input/Input'
-import { Button } from '../../../UI/button/Button'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 import { ReactComponent as Clone } from '../../../../assets/icons/clone.svg'
 import { ReactComponent as Delete } from '../../../../assets/icons/Delete.svg'
-import { ReactComponent as AddIcon } from '../../../../assets/icons/VectorAdd.svg'
 import { OneOfTheList } from './OneOfTheList'
 import { FewFromTheList } from './FewFromTheList'
 
-export const TestQuestion = () => {
+export const TestQuestion = ({ questions, onAddOption }) => {
    return (
       <>
-         <StyledQuestionContainer>
-            <QuestionContainer>
-               <StyledNumberInList>1</StyledNumberInList>
-               <StyledQuestion>
-                  <Input placeholder="Вопрос" />
-               </StyledQuestion>
-               <StyledOptionsContainer>
-                  <OneOfList>
-                     <RadioButton id="one" name="option of variants" />
-                     <label htmlFor="one">Один из списка</label>
-                  </OneOfList>
-                  <MoreOfList>
-                     <RadioButton id="more" name="option of variants" />
-                     <label htmlFor="more">Несколько из списка</label>
-                  </MoreOfList>
-               </StyledOptionsContainer>
-            </QuestionContainer>
-            <OptionsContainer>
-               <OneOfTheList name="question-1" placeholder="Вариант 1" />
-               {/* <OneOfTheList name="question-1" placeholder="Вариант 2" /> */}
-               {/* <FewFromTheList name="question-1" placeholder="Вариант 3" /> */}
-               {/* <FewFromTheList name="question-1" placeholder="Вариант 4" /> */}
-            </OptionsContainer>
-            <StyledFooterConatiner>
-               <StyledAddOption>
-                  <AddOption>Добавить вариант</AddOption> или
-                  <AnotherOption>добавить вариант “Другое”</AnotherOption>
-               </StyledAddOption>
-               <StyledActions>
-                  <Clone />
-                  <Delete />
-               </StyledActions>
-            </StyledFooterConatiner>
-         </StyledQuestionContainer>
-         <StyledButtonContainer>
-            <Button
-               background="none"
-               border="1px solid #3772FF"
-               color="#3772FF"
-            >
-               Отмена
-            </Button>
-            <Button background="#3772FF" bgHover="#1D60FF" bgActive="#6190FF">
-               Сохранить
-            </Button>
-         </StyledButtonContainer>
-         <StyledAddOptionIcon>
-            <AddIcon />
-         </StyledAddOptionIcon>
+         {questions.map((question) => (
+            <StyledQuestionContainer key={question.id}>
+               <QuestionContainer>
+                  <StyledNumberInList>{question.id}</StyledNumberInList>
+                  <StyledQuestion>
+                     <Input placeholder="Вопрос" />
+                  </StyledQuestion>
+                  <StyledOptionsContainer>
+                     <OneOfList>
+                        <RadioButton id="one" name="option of variants" />
+                        <label htmlFor="one">Один из списка</label>
+                     </OneOfList>
+                     <MoreOfList>
+                        <RadioButton id="more" name="option of variants" />
+                        <label htmlFor="more">Несколько из списка</label>
+                     </MoreOfList>
+                  </StyledOptionsContainer>
+               </QuestionContainer>
+               {question.options.map((option) => (
+                  <OptionsContainer key={option.id}>
+                     <OneOfTheList
+                        name={`option ${option.id}`}
+                        placeholder={`Вариант ${option.id}`}
+                     />
+                  </OptionsContainer>
+               ))}
+               <StyledFooterConatiner>
+                  <StyledAddOption>
+                     <AddOption onClick={() => onAddOption(question.id)}>
+                        Добавить вариант
+                     </AddOption>
+                     или
+                     <AnotherOption>добавить вариант “Другое”</AnotherOption>
+                  </StyledAddOption>
+                  <StyledActions>
+                     <Clone />
+                     <Delete />
+                  </StyledActions>
+               </StyledFooterConatiner>
+            </StyledQuestionContainer>
+         ))}
       </>
    )
 }
@@ -176,6 +166,7 @@ const AddOption = styled.span`
    line-height: 25px;
    letter-spacing: 0.002em;
    color: #7a7a7a;
+   cursor: pointer;
 `
 const AnotherOption = styled.span`
    font-family: 'Nunito' sans-serif;
@@ -185,6 +176,7 @@ const AnotherOption = styled.span`
    line-height: 25px;
    letter-spacing: 0.002em;
    color: #258aff;
+   cursor: pointer;
 `
 const OptionsContainer = styled.div`
    width: 100%;
@@ -193,31 +185,4 @@ const OptionsContainer = styled.div`
    align-items: center;
    flex-direction: column;
    gap: 10px;
-`
-const StyledButtonContainer = styled.div`
-   width: 100%;
-   height: 45px;
-   display: flex;
-   align-items: center;
-   justify-content: flex-end;
-   button {
-      margin-left: 10px;
-   }
-`
-const StyledAddOptionIcon = styled.button`
-   position: fixed;
-   width: 58px;
-   height: 58px;
-   left: 93%;
-   top: 80%;
-   border-radius: 50%;
-   border: none;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   background: linear-gradient(225deg, #fa2b56 0%, #f91c3d 100%);
-   svg {
-      width: 21px;
-      height: 21px;
-   }
 `
