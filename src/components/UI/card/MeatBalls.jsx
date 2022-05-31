@@ -60,7 +60,7 @@ const MenuContainer = styled(Menu)`
    }
    .MuiMenu-paper {
       border-radius: 10px;
-      width: 218px;
+      min-width: 218px;
    }
 `
 const Container = styled(MenuItem)`
@@ -69,7 +69,7 @@ const Container = styled(MenuItem)`
    display: flex;
    align-items: center;
    justify-content: start;
-   flex-direction: column;
+   /* flex-direction: column; */
    font-family: 'Open Sans', sans-serif;
    font-weight: 400;
    font-size: 16px;

@@ -19,7 +19,6 @@ export const AdminRoutes = () => {
             element={<GroupDetailPage />}
          />
          <Route path={ROUTES.COURSES} element={<Courses />} />
-
          <Route path={ROUTES.TEACHERS} element={<Teachers />} />
          <Route path={ROUTES.STUDENTS} element={<Students />} />
          <Route
