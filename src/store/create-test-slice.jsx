@@ -31,6 +31,16 @@ export const createTestSlice = createSlice({
             id: option.id + 1,
          })
       },
+      deleteOption(state, action) {
+         const { optionId, questionId } = action.payload
+         const question = state.questions.find(
+            (question) => question.id === questionId
+         )
+         const filteredOptions = question.options.filter(
+            (option) => option.id !== optionId
+         )
+         question.options = filteredOptions
+      },
       addQuestion(state) {
          const question = state.questions.at(-1)
          state.questions.push({
@@ -45,6 +55,12 @@ export const createTestSlice = createSlice({
                },
             ],
          })
+      },
+      deleteQuestion(state, action) {
+         const filteredQuestions = state.questions.filter(
+            (question) => question.id !== action.payload
+         )
+         state.questions = filteredQuestions
       },
    },
 })

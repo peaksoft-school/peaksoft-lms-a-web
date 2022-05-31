@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from '@emotion/styled'
 import { Input } from '../../../UI/input/Input'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
@@ -6,7 +7,18 @@ import { ReactComponent as Delete } from '../../../../assets/icons/Delete.svg'
 import { OneOfTheList } from './OneOfTheList'
 import { FewFromTheList } from './FewFromTheList'
 
-export const TestQuestion = ({ questions, onAddOption }) => {
+export const TestQuestion = ({
+   questions,
+   onAddOption,
+   onDeleteOption,
+   onDeleteQuestion,
+}) => {
+   const [variantsOption, setVariantsOption] = useState(false)
+
+   const onChooseVariantsOption = () => {
+      setVariantsOption((prevState) => !prevState)
+   }
+
    return (
       <>
          {questions.map((question) => (
@@ -18,21 +30,43 @@ export const TestQuestion = ({ questions, onAddOption }) => {
                   </StyledQuestion>
                   <StyledOptionsContainer>
                      <OneOfList>
-                        <RadioButton id="one" name="option of variants" />
+                        <RadioButton
+                           id="one"
+                           name={`option of variants ${question.id}`}
+                           onChange={onChooseVariantsOption}
+                           checked={!variantsOption}
+                        />
                         <label htmlFor="one">Один из списка</label>
                      </OneOfList>
                      <MoreOfList>
-                        <RadioButton id="more" name="option of variants" />
+                        <RadioButton
+                           id="more"
+                           name={`option of variants ${question.id}`}
+                           onChange={onChooseVariantsOption}
+                           checked={variantsOption}
+                        />
                         <label htmlFor="more">Несколько из списка</label>
                      </MoreOfList>
                   </StyledOptionsContainer>
                </QuestionContainer>
                {question.options.map((option) => (
                   <OptionsContainer key={option.id}>
-                     <OneOfTheList
-                        name={`option ${option.id}`}
-                        placeholder={`Вариант ${option.id}`}
-                     />
+                     {(!variantsOption && (
+                        <OneOfTheList
+                           name={`option ${question.id}`}
+                           placeholder={`Вариант ${option.id}`}
+                           onClick={() =>
+                              onDeleteOption(option.id, question.id)
+                           }
+                        />
+                     )) || (
+                        <FewFromTheList
+                           placeholder={`Вариант ${option.id}`}
+                           onClick={() =>
+                              onDeleteOption(option.id, question.id)
+                           }
+                        />
+                     )}
                   </OptionsContainer>
                ))}
                <StyledFooterConatiner>
@@ -45,7 +79,10 @@ export const TestQuestion = ({ questions, onAddOption }) => {
                   </StyledAddOption>
                   <StyledActions>
                      <Clone />
-                     <Delete />
+                     <Delete
+                        onClick={() => onDeleteQuestion(question.id)}
+                        cursor="pointer"
+                     />
                   </StyledActions>
                </StyledFooterConatiner>
             </StyledQuestionContainer>

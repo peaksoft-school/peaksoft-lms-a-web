@@ -18,10 +18,23 @@ export const LessonTest = () => {
       dispatch(testActions.addQuestion())
    }
 
+   const deleteOptionHandler = (optionId, questionId) => {
+      dispatch(testActions.deleteOption({ optionId, questionId }))
+   }
+
+   const deleteQuestionHandler = (id) => {
+      dispatch(testActions.deleteQuestion(id))
+   }
+
    return (
       <StyledContainer>
          <TestTitle />
-         <TestQuestion questions={questions} onAddOption={addOptionHandler} />
+         <TestQuestion
+            questions={questions}
+            onAddOption={addOptionHandler}
+            onDeleteOption={deleteOptionHandler}
+            onDeleteQuestion={deleteQuestionHandler}
+         />
          <StyledButtonContainer>
             <Button
                background="none"

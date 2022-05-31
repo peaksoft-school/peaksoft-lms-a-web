@@ -2,13 +2,13 @@ import styled from '@emotion/styled'
 import { ReactComponent as Cancel } from '../../../../assets/icons/Cancel.svg'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 
-export const OneOfTheList = (props) => {
+export const OneOfTheList = ({ name, onClick, placeholder }) => {
    return (
       <StyledOptions>
-         <RadioButton {...props} />
+         <RadioButton name={name} />
          <StyledInputWithIcon>
-            <StyledInput {...props} />
-            <Cancel />
+            <StyledInput placeholder={placeholder} />
+            <Cancel onClick={onClick} cursor="pointer" />
          </StyledInputWithIcon>
       </StyledOptions>
    )
