@@ -1,4 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+/* eslint-disable no-param-reassign */
+import { createSlice, current } from '@reduxjs/toolkit'
+import { TEST_KEY } from '../utils/constants/general'
+import { localStorageHelper } from '../utils/helpers/general'
 
 const initState = {
    testName: '',
@@ -19,9 +22,14 @@ const initState = {
    ],
 }
 // questions.filter((obj) => Object.keys(obj).filter((key) => key !== 'id'))
+
+const testData = localStorageHelper.laod(TEST_KEY)
+   ? localStorageHelper.laod(TEST_KEY)
+   : initState
+
 export const createTestSlice = createSlice({
    name: 'test',
-   initialState: initState,
+   initialState: testData,
    reducers: {
       addOption(state, action) {
          const question = state.questions.find(
@@ -52,10 +60,12 @@ export const createTestSlice = createSlice({
          const question = state.questions.find(
             (question) => question.id === questionId
          )
-         const filteredOptions = question.options.filter(
-            (option) => option.id !== optionId
-         )
-         question.options = filteredOptions
+         if (question.options.length > 1) {
+            const filteredOptions = question.options.filter(
+               (option) => option.id !== optionId
+            )
+            question.options = filteredOptions
+         }
       },
       addQuestion(state) {
          const question = state.questions.at(-1)
@@ -73,10 +83,12 @@ export const createTestSlice = createSlice({
          })
       },
       deleteQuestion(state, action) {
-         const filteredQuestions = state.questions.filter(
-            (question) => question.id !== action.payload
-         )
-         state.questions = filteredQuestions
+         if (state.questions.length > 1) {
+            const filteredQuestions = state.questions.filter(
+               (question) => question.id !== action.payload
+            )
+            state.questions = filteredQuestions
+         }
       },
       changeOptionToMore(state, action) {
          const question = state.questions.find(
@@ -126,6 +138,34 @@ export const createTestSlice = createSlice({
          )
          const questionId = state.questions.at(-1)
          state.questions.push({ ...question, id: questionId.id + 1 })
+      },
+      test(state) {
+         let newState = {
+            questionType: '',
+            question: '',
+         }
+         let newState1 = {
+            option: '',
+            isTrue: '',
+         }
+         state.questions.map((question) => {
+            newState = {
+               questionType: question.questionType,
+               question: question.question,
+            }
+            question.options.map((option) => {
+               newState1 = {
+                  option: option.option,
+                  isTrue: option.isTrue,
+               }
+               return option
+            })
+            return question
+         })
+         const newData = {
+            testName: state.testName,
+            questions: [{ ...newState, options: [{ ...newState1 }] }],
+         }
       },
    },
 })

@@ -8,6 +8,7 @@ import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
+   ADD_TEST,
    DELETE_LESSON,
    EDIT_LESSON,
 } from '../../../../utils/constants/general'
@@ -27,6 +28,7 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { LessonTest } from '../../lesson/test/LessonTest'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -40,8 +42,15 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showAddTestPage = searchParams.get(ADD_TEST)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+
+   const selectedOption = (option) => {
+      if (option.id === 'test') {
+         setSearchParams({ [ADD_TEST]: true, lessonId: option.lessonId })
+      }
+   }
 
    const closeModals = () => {
       setSearchParams('')
@@ -83,6 +92,7 @@ export const Materials = () => {
             closeModals()
             onClear()
             dispatch(getLessons())
+            dispatch(getLesson(lesson.id))
          })
          .catch(() => {
             showErrorMessage('Не удалось изменить данные')
@@ -148,6 +158,7 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
+                     selectedOption={selectedOption}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
                   />

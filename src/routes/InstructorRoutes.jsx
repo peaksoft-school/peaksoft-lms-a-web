@@ -14,15 +14,15 @@ export const InstructorRoutes = () => {
                path="/*"
                element={<Navigate to={ROUTES.INSTRUCTOR_COURSES} />}
             />
-            {/* <Route
+            <Route
                path={ROUTES.INSTRUCTOR_COURSES}
                element={<InstrutorCourses />}
-            /> */}
+            />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
                element={<Materials />}
             />
-            <Route path={ROUTES.INSTRUCTOR_COURSES} element={<LessonTest />} />
+            {/* <Route path={ROUTES.INSTRUCTOR_COURSES} element={<LessonTest />} /> */}
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/students`}
                element={<Students />}

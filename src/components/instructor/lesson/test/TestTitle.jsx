@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { testActions } from '../../../../store/create-test-slice'
 import { Input } from '../../../UI/input/Input'
 
-export const TestTitle = () => {
+export const TestTitle = ({ testName }) => {
    const dispatch = useDispatch()
 
    const onGetTestTitle = (e) => {
@@ -15,6 +15,7 @@ export const TestTitle = () => {
          <Input
             placeholder="Введите название теста"
             name="testName"
+            value={testName}
             onChange={onGetTestTitle}
          />
       </StyledTitleContainer>
