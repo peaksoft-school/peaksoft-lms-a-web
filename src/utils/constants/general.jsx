@@ -69,6 +69,9 @@ export const EDIT_STUDENT = 'edit-student'
 export const UPLOAD_STUDENT = 'upload-student'
 export const DELETE_STUDENT = 'delete-student-confirmation'
 export const STUDY_FORMAT = 'study-format'
+export const ADD_STUDENT = 'add_student'
+export const ADD_GROUP = 'add_group'
+export const ADD_COURSES = 'add_courses'
 export const ADD_LESSON = 'create_lesson'
 export const EDIT_LESSON = 'edit_lesson'
 export const DELETE_LESSON = 'delete-lesson-confirmation'
@@ -168,4 +171,13 @@ export const COURSE_STUDENTS = [
       accessKey: 'email',
       id: 6,
    },
+]
+
+export const STUDENTS_INFO = [
+   { title: 'N', accessKey: 'id', id: 'one' },
+   { title: 'Имя Фамилия', accessKey: 'fullName', id: 'two' },
+   { title: 'Группа', accessKey: 'groupName', id: 'three' },
+   { title: 'Формат обучения', accessKey: 'studyFormat', id: 'four' },
+   { title: 'Номер телефона', accessKey: 'phoneNumber', id: 'five' },
+   { title: 'E-mail', accessKey: 'email', id: 'six' },
 ]

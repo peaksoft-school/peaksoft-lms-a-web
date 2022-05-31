@@ -17,12 +17,10 @@ export const Header = () => {
    const navigate = useNavigate()
    const dispatch = useDispatch()
    const { role } = useSelector((state) => state.auth.user)
-
    const logoutHandler = () => {
       dispatch(logOut())
       navigate(ROUTES.LOGIN)
    }
-
    let content
    switch (role) {
       case 'ADMIN':
@@ -81,7 +79,6 @@ export const Header = () => {
    }
    return <div>{content}</div>
 }
-
 const Rectangle = styled.div`
    position: absolute;
    width: 83%;
