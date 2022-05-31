@@ -2,12 +2,32 @@ import styled from '@emotion/styled'
 import { ReactComponent as Cancel } from '../../../../assets/icons/Cancel.svg'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 
-export const OneOfTheList = ({ name, onClick, placeholder }) => {
+export const OneOfTheList = ({
+   optionName,
+   onClick,
+   placeholder,
+   onChangeOption,
+   inputName,
+   onGetInputValue,
+   inputValue,
+   checked,
+   inputDisabled,
+}) => {
    return (
       <StyledOptions>
-         <RadioButton name={name} />
+         <RadioButton
+            name={optionName}
+            onChange={onChangeOption}
+            checked={checked}
+         />
          <StyledInputWithIcon>
-            <StyledInput placeholder={placeholder} />
+            <StyledInput
+               placeholder={placeholder}
+               name={inputName}
+               onChange={onGetInputValue}
+               value={inputValue}
+               disabled={inputDisabled}
+            />
             <Cancel onClick={onClick} cursor="pointer" />
          </StyledInputWithIcon>
       </StyledOptions>

@@ -1,11 +1,22 @@
 import styled from '@emotion/styled'
+import { useDispatch } from 'react-redux'
+import { testActions } from '../../../../store/create-test-slice'
 import { Input } from '../../../UI/input/Input'
 
 export const TestTitle = () => {
+   const dispatch = useDispatch()
+
+   const onGetTestTitle = (e) => {
+      dispatch(testActions.saveTestTitle(e.target.value))
+   }
    return (
       <StyledTitleContainer>
          <StyledTitle>Название теста</StyledTitle>
-         <Input placeholder="Введите название теста" />
+         <Input
+            placeholder="Введите название теста"
+            name="testName"
+            onChange={onGetTestTitle}
+         />
       </StyledTitleContainer>
    )
 }

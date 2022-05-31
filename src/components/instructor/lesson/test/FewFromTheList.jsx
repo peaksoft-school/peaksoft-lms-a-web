@@ -2,14 +2,27 @@ import styled from '@emotion/styled'
 import { ReactComponent as Cancel } from '../../../../assets/icons/Cancel.svg'
 import { Checkbox } from '../../../UI/checkbox/Checkbox'
 
-export const FewFromTheList = ({ placeholder, onClick }) => {
+export const FewFromTheList = ({
+   placeholder,
+   onClick,
+   onChangeOption,
+   onGetInputValue,
+   inputValue,
+   checked,
+   inputDisabled,
+}) => {
    return (
       <StyledOptions>
          <StyledCheckbox>
-            <Checkbox />
+            <Checkbox onChange={onChangeOption} checked={checked} />
          </StyledCheckbox>
          <StyledInputWithIcon>
-            <StyledInput placeholder={placeholder} />
+            <StyledInput
+               placeholder={placeholder}
+               onChange={onGetInputValue}
+               value={inputValue}
+               disabled={inputDisabled}
+            />
             <Cancel onClick={onClick} cursor="pointer" />
          </StyledInputWithIcon>
       </StyledOptions>

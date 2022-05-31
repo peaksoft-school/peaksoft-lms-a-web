@@ -8,33 +8,19 @@ import { testActions } from '../../../../store/create-test-slice'
 
 export const LessonTest = () => {
    const dispatch = useDispatch()
-   const { questions } = useSelector((state) => state.createTest)
-
-   const addOptionHandler = (id) => {
-      dispatch(testActions.addOption(id))
-   }
+   const state = useSelector((state) => state.createTest)
 
    const addQuestionHandler = () => {
       dispatch(testActions.addQuestion())
    }
-
-   const deleteOptionHandler = (optionId, questionId) => {
-      dispatch(testActions.deleteOption({ optionId, questionId }))
-   }
-
-   const deleteQuestionHandler = (id) => {
-      dispatch(testActions.deleteQuestion(id))
+   const handler = () => {
+      console.log(state)
    }
 
    return (
       <StyledContainer>
          <TestTitle />
-         <TestQuestion
-            questions={questions}
-            onAddOption={addOptionHandler}
-            onDeleteOption={deleteOptionHandler}
-            onDeleteQuestion={deleteQuestionHandler}
-         />
+         <TestQuestion />
          <StyledButtonContainer>
             <Button
                background="none"
@@ -43,7 +29,12 @@ export const LessonTest = () => {
             >
                Отмена
             </Button>
-            <Button background="#3772FF" bgHover="#1D60FF" bgActive="#6190FF">
+            <Button
+               background="#3772FF"
+               bgHover="#1D60FF"
+               bgActive="#6190FF"
+               onClick={handler}
+            >
                Сохранить
             </Button>
          </StyledButtonContainer>

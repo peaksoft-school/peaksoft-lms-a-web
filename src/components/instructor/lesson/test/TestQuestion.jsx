@@ -1,22 +1,66 @@
-import { useState } from 'react'
 import styled from '@emotion/styled'
+import { useDispatch, useSelector } from 'react-redux'
 import { Input } from '../../../UI/input/Input'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 import { ReactComponent as Clone } from '../../../../assets/icons/clone.svg'
 import { ReactComponent as Delete } from '../../../../assets/icons/Delete.svg'
 import { OneOfTheList } from './OneOfTheList'
 import { FewFromTheList } from './FewFromTheList'
+import { testActions } from '../../../../store/create-test-slice'
 
-export const TestQuestion = ({
-   questions,
-   onAddOption,
-   onDeleteOption,
-   onDeleteQuestion,
-}) => {
-   const [variantsOption, setVariantsOption] = useState(false)
+export const TestQuestion = () => {
+   const dispatch = useDispatch()
+   const { questions } = useSelector((state) => state.createTest)
 
-   const onChooseVariantsOption = () => {
-      setVariantsOption((prevState) => !prevState)
+   const onGetOptionValue = (event, questionId, optionId) => {
+      dispatch(
+         testActions.saveOptionData({
+            optionValue: event.target.value,
+            questionId,
+            optionId,
+         })
+      )
+   }
+
+   const onGetQuestionValue = (e, questionId) => {
+      dispatch(
+         testActions.saveQuestionData({
+            questionValue: e.target.value,
+            questionId,
+         })
+      )
+   }
+
+   const addOption = (id) => {
+      dispatch(testActions.addOption(id))
+   }
+
+   const addVariantAnother = (id) => {
+      dispatch(testActions.addOptionAnother(id))
+   }
+
+   const deleteOption = (optionId, questionId) => {
+      dispatch(testActions.deleteOption({ optionId, questionId }))
+   }
+
+   const deleteQuestion = (id) => {
+      dispatch(testActions.deleteQuestion(id))
+   }
+
+   const onChooseVariantOne = (id) => {
+      dispatch(testActions.changeOptionToMore(id))
+   }
+
+   const onChooseVariantMore = (id) => {
+      dispatch(testActions.changeOptionToOne(id))
+   }
+
+   const chooseCorrectOptionHandler = (questionId, optionId) => {
+      dispatch(testActions.chooseOption({ questionId, optionId }))
+   }
+
+   const onCloneQuestion = (id) => {
+      dispatch(testActions.cloneQuestion(id))
    }
 
    return (
@@ -26,15 +70,19 @@ export const TestQuestion = ({
                <QuestionContainer>
                   <StyledNumberInList>{question.id}</StyledNumberInList>
                   <StyledQuestion>
-                     <Input placeholder="Вопрос" />
+                     <Input
+                        placeholder="Вопрос"
+                        value={question.question}
+                        onChange={(e) => onGetQuestionValue(e, question.id)}
+                     />
                   </StyledQuestion>
                   <StyledOptionsContainer>
                      <OneOfList>
                         <RadioButton
                            id="one"
                            name={`option of variants ${question.id}`}
-                           onChange={onChooseVariantsOption}
-                           checked={!variantsOption}
+                           onChange={() => onChooseVariantMore(question.id)}
+                           checked={question.questionType === 'ONE'}
                         />
                         <label htmlFor="one">Один из списка</label>
                      </OneOfList>
@@ -42,8 +90,8 @@ export const TestQuestion = ({
                         <RadioButton
                            id="more"
                            name={`option of variants ${question.id}`}
-                           onChange={onChooseVariantsOption}
-                           checked={variantsOption}
+                           onChange={() => onChooseVariantOne(question.id)}
+                           checked={question.questionType === 'MORE'}
                         />
                         <label htmlFor="more">Несколько из списка</label>
                      </MoreOfList>
@@ -51,19 +99,33 @@ export const TestQuestion = ({
                </QuestionContainer>
                {question.options.map((option) => (
                   <OptionsContainer key={option.id}>
-                     {(!variantsOption && (
+                     {(question.questionType === 'ONE' && (
                         <OneOfTheList
-                           name={`option ${question.id}`}
+                           optionName={`option ${question.id}`}
                            placeholder={`Вариант ${option.id}`}
-                           onClick={() =>
-                              onDeleteOption(option.id, question.id)
+                           checked={option.isTrue}
+                           onClick={() => deleteOption(option.id, question.id)}
+                           inputValue={option.option}
+                           inputDisabled={option.another}
+                           onChangeOption={() =>
+                              chooseCorrectOptionHandler(question.id, option.id)
+                           }
+                           onGetInputValue={(e) =>
+                              onGetOptionValue(e, question.id, option.id)
                            }
                         />
                      )) || (
                         <FewFromTheList
                            placeholder={`Вариант ${option.id}`}
-                           onClick={() =>
-                              onDeleteOption(option.id, question.id)
+                           onClick={() => deleteOption(option.id, question.id)}
+                           inputValue={option.option}
+                           checked={option.isTrue}
+                           inputDisabled={option.another}
+                           onChangeOption={() =>
+                              chooseCorrectOptionHandler(question.id, option.id)
+                           }
+                           onGetInputValue={(e) =>
+                              onGetOptionValue(e, question.id, option.id)
                            }
                         />
                      )}
@@ -71,16 +133,23 @@ export const TestQuestion = ({
                ))}
                <StyledFooterConatiner>
                   <StyledAddOption>
-                     <AddOption onClick={() => onAddOption(question.id)}>
+                     <AddOption onClick={() => addOption(question.id)}>
                         Добавить вариант
                      </AddOption>
                      или
-                     <AnotherOption>добавить вариант “Другое”</AnotherOption>
+                     <AnotherOption
+                        onClick={() => addVariantAnother(question.id)}
+                     >
+                        добавить вариант “Другое”
+                     </AnotherOption>
                   </StyledAddOption>
                   <StyledActions>
-                     <Clone />
+                     <Clone
+                        onClick={() => onCloneQuestion(question.id)}
+                        cursor="pointer"
+                     />
                      <Delete
-                        onClick={() => onDeleteQuestion(question.id)}
+                        onClick={() => deleteQuestion(question.id)}
                         cursor="pointer"
                      />
                   </StyledActions>
