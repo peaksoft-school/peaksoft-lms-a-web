@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
-import { useInput } from '../../../hooks/useInput/useInput'
+import { useInput } from '../../../hooks/usuInput/useInput'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
@@ -70,7 +70,6 @@ export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
          />
          <StyledInput
             placeholder="Пароль"
-            type="password"
             name="password"
             value={value.password}
             onChange={onChange}

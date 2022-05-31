@@ -18,8 +18,10 @@ export const LessonCard = ({
    task,
    test,
    onEditTitle,
+   onDeleteLesson,
+   lessonId,
 }) => {
-   const STUDY_FORMAT_OPTION = [
+   const ADD_OPTIONS = [
       {
          id: 'video',
          title: 'Видеоурок',
@@ -46,6 +48,7 @@ export const LessonCard = ({
          disabled: Boolean(test),
       },
    ]
+
    return (
       <StyledContainer>
          <StyledTitleContainer>
@@ -57,12 +60,9 @@ export const LessonCard = ({
             </StyledTitle>
             <StyledManageContainer>
                <StyledSelectContainer>
-                  <Select
-                     placeholder="Добавить"
-                     options={STUDY_FORMAT_OPTION}
-                  />
+                  <Select placeholder="Добавить" options={ADD_OPTIONS} />
                </StyledSelectContainer>
-               <StyledDeleteIcon>
+               <StyledDeleteIcon onClick={onDeleteLesson}>
                   <DeleteIcon />
                </StyledDeleteIcon>
             </StyledManageContainer>
@@ -205,7 +205,6 @@ const StyledContentContainer = styled.div`
    height: 226px;
    display: flex;
    justify-content: space-between;
-   align-items: center;
    flex-direction: column;
    padding: 18px 20px;
 `
@@ -247,7 +246,7 @@ const StyledContentItem = styled.div`
    height: 30px;
    display: flex;
    align-items: center;
-   justify-content: start;
+   justify-content: flex-start;
    border-radius: 6px;
    h2 {
       width: 107px;
@@ -288,6 +287,7 @@ const StyledDeleteIcon = styled.div`
    width: 26px;
    height: 26px;
    margin-right: 5px;
+   cursor: pointer;
 `
 const ActionsContainer = styled.div`
    width: 270px;

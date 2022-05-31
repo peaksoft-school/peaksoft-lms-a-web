@@ -155,13 +155,22 @@ export const groupsSlice = createSlice({
       },
    },
    extraReducers: {
-      [addNewGroup.pending]: (state) => {
+      [groupsPagination.pending]: (state) => {
          state.isLoading = true
       },
-      [addNewGroup.fulfilled]: (state) => {
+      [groupsPagination.fulfilled]: (state) => {
          state.isLoading = false
       },
-      [addNewGroup.rejected]: (state) => {
+      [groupsPagination.rejected]: (state) => {
+         state.isLoading = false
+      },
+      [getGroupsStudents.pending]: (state) => {
+         state.isLoading = true
+      },
+      [getGroupsStudents.fulfilled]: (state) => {
+         state.isLoading = false
+      },
+      [getGroupsStudents.rejected]: (state) => {
          state.isLoading = false
       },
       [updateSingleGroup.fulfilled]: (state, action) => {

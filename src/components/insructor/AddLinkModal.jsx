@@ -9,7 +9,7 @@ import {
    showErrorMessage,
    showSuccessMessage,
 } from '../UI/notification/Notification'
-import { useInput } from '../../hooks/useInput/useInput'
+import { useInput } from '../../hooks/usuInput/useInput'
 
 export const AddLinkModal = () => {
    const dispatch = useDispatch()

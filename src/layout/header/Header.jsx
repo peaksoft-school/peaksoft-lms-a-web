@@ -6,19 +6,21 @@ import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { LogoutButton } from '../../components/UI/logoutButton/Logoutbutton'
 import { ReactComponent as BellIcon } from '../../assets/icons/Bell.svg'
 import { logOut } from '../../store/authSlice'
-import { COURSE_INNER_TABS, ROUTES } from '../../utils/constants/general'
+import {
+   COURSE_INNER_TABS,
+   MATERIALS_INNER_TABS,
+   ROUTES,
+} from '../../utils/constants/general'
 import NavTabs from '../../components/UI/tabs/Tabs'
 
 export const Header = () => {
    const navigate = useNavigate()
    const dispatch = useDispatch()
    const { role } = useSelector((state) => state.auth.user)
-
    const logoutHandler = () => {
       dispatch(logOut())
       navigate(ROUTES.LOGIN)
    }
-
    let content
    switch (role) {
       case 'ADMIN':
@@ -43,7 +45,13 @@ export const Header = () => {
          break
       case 'INSTRUCTOR':
          content = (
-            <Container>
+            <Container tabs>
+               <Routes>
+                  <Route
+                     path={`${ROUTES.INSTRUCTOR_COURSES}/:id/*`}
+                     element={<NavTabs tabs={MATERIALS_INNER_TABS} />}
+                  />
+               </Routes>
                <StyledProfile>
                   <ProfileIcon />
                   <p>Инструктор</p>
@@ -71,7 +79,6 @@ export const Header = () => {
    }
    return <div>{content}</div>
 }
-
 const Rectangle = styled.div`
    position: absolute;
    width: 83%;
