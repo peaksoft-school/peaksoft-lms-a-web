@@ -12,7 +12,7 @@ import {
    getCoursesOfInstructor,
    getGroupOfStudents,
    getStudents,
-} from '../../../store/primer-page-slice'
+} from '../../../store/instructor-courses'
 import { AddStudent } from './AddStudent'
 import { AddStudentsOfGroup } from './AddStudentsOfGroup'
 import {
@@ -20,7 +20,7 @@ import {
    showSuccessMessage,
 } from '../../UI/notification/Notification'
 
-export const CoursePrimerPage = () => {
+export const InstrutorCourses = () => {
    const dispatch = useDispatch()
    const { courses, groupOfStudents, students } = useSelector(
       (state) => state.instructorCourses
@@ -74,28 +74,31 @@ export const CoursePrimerPage = () => {
       setCourseId(id)
    }
 
-   const options = useMemo(() => [
-      {
-         id: 'one',
-         action: (id) => addStudent(id),
-         content: (
-            <StyledIcon>
-               <CourseStudent />
-               <p>Добавить студента в курс</p>
-            </StyledIcon>
-         ),
-      },
-      {
-         id: 'two',
-         action: (id) => addGroup(id),
-         content: (
-            <StyledIcon>
-               <CourseGroup />
-               <p>Добавить группу в курс</p>
-            </StyledIcon>
-         ),
-      },
-   ])
+   const options = useMemo(
+      () => [
+         {
+            id: 'one',
+            action: (id) => addStudent(id),
+            content: (
+               <StyledIcon>
+                  <CourseStudent />
+                  <p>Добавить студента в курс</p>
+               </StyledIcon>
+            ),
+         },
+         {
+            id: 'two',
+            action: (id) => addGroup(id),
+            content: (
+               <StyledIcon>
+                  <CourseGroup />
+                  <p>Добавить группу в курс</p>
+               </StyledIcon>
+            ),
+         },
+      ],
+      []
+   )
 
    useEffect(() => {
       dispatch(getCoursesOfInstructor())

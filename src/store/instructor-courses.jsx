@@ -62,7 +62,7 @@ export const addStudentToCourse = createAsyncThunk(
       }
    }
 )
-export const getSingleCourses = createAsyncThunk(
+export const getSingleCourse = createAsyncThunk(
    'instructorCourses/getSingleCourses',
    async (id, { dispatch }) => {
       dispatch(clearCourse)
@@ -71,7 +71,7 @@ export const getSingleCourses = createAsyncThunk(
             path: `api/courses/${id}`,
             method: 'GET',
          })
-         dispatch(getSingleCourse(response))
+         dispatch(setSingleCourse(response))
          return response
       } catch (error) {
          return error.message
@@ -123,8 +123,8 @@ export const getStudents = createAsyncThunk(
       }
    }
 )
-export const getSearchName = createAsyncThunk(
-   'instructorCourses/getSearchName',
+export const searchStudentsByName = createAsyncThunk(
+   'instructorCourses/searchStudentsByName',
    async (name, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
@@ -154,7 +154,6 @@ export const instructorCoursesSlice = createSlice({
          state.courses = action.payload
       },
       setCourseByStudents(state, action) {
-         console.log(action.payload)
          state.newGroupStudents = action.payload
       },
       setGroupOfStudents(state, action) {
@@ -169,7 +168,7 @@ export const instructorCoursesSlice = createSlice({
       clearCourse(state) {
          state.singleCourse = null
       },
-      getSingleCourse(state, action) {
+      setSingleCourse(state, action) {
          state.singleCourse = action.payload
       },
    },
@@ -194,7 +193,7 @@ export const {
    setCourseByStudents,
    setGroupOfStudents,
    getSearchResults,
-   getSingleCourse,
+   setSingleCourse,
    setStudents,
    clearCourse,
 } = instructorCoursesSlice.actions

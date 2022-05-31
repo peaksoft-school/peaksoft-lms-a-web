@@ -5,7 +5,7 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { ReactComponent as Search } from '../../../assets/icons/search.svg'
 import { Button } from '../../UI/button/Button'
 import { useDebounce } from '../../../hooks/useDebounce/useDebounce'
-import { getSearchName } from '../../../store/primer-page-slice'
+import { searchStudentsByName } from '../../../store/instructor-courses'
 
 export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const dispatch = useDispatch()
@@ -13,7 +13,7 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const [name, setName] = useState('')
    function searchStudentsHandler() {
       if (name !== '') {
-         dispatch(getSearchName(name))
+         dispatch(searchStudentsByName(name))
       }
    }
    useEffect(() => {
