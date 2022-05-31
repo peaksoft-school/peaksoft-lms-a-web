@@ -80,6 +80,9 @@ const Leaf = ({ attributes, children, leaf }) => {
    if (leaf.underline) {
       children = <u>{children}</u>
    }
+   // if (leaf.text) {
+   //    children = <h1>{children}</h1>
+   // }
 
    return <span {...attributes}>{children}</span>
 }
@@ -99,6 +102,7 @@ const StyledTextEditor = styled.div`
    }
 `
 const StyledEditable = styled(Editable)`
+   margin-left: 5px;
    padding: 10px 8px 10px 18px;
    background: #ffffff;
    border: 1px solid #d4d4d4;

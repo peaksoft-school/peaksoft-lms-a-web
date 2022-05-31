@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux'
 import { ReactComponent as PictureIcon } from '../../../../assets/icons/picture.svg'
 import { taskActions } from '../../../../store/task-slice'
 
-export const SelectImage = () => {
+export const SelectImage = ({ setShowImage }) => {
    const dispatch = useDispatch()
 
    function uploadSingleFile(e) {
       const image = URL.createObjectURL(e.target.files[0])
       dispatch(taskActions.selectImage(image))
+      setShowImage(true)
    }
 
    return (
@@ -52,5 +53,8 @@ const StyledIcon = styled.div`
    &:hover {
       background: #d4d4d4;
       border-radius: 6px;
+   }
+   svg {
+      margin-top: 4px;
    }
 `

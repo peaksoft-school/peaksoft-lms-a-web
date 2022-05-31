@@ -9,7 +9,7 @@ import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.sv
 import { useInput } from '../../../../hooks/useInput/useInput'
 import { taskActions } from '../../../../store/task-slice'
 
-export const AddLinkModal = () => {
+export const AddLinkModal = ({ setShowLink }) => {
    const dispatch = useDispatch()
    const [modalIsOpen, setModalIsOpen] = useState(false)
 
@@ -23,6 +23,7 @@ export const AddLinkModal = () => {
          taskActions.addlink({ link: value.link, linkText: value.linkText })
       )
       setModalIsOpen(false)
+      setShowLink(true)
    }
 
    return (

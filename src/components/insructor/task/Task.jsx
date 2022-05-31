@@ -23,22 +23,6 @@ export const Task = () => {
    const [showImage, setShowImage] = useState(false)
    const [showCode, setShowCode] = useState(false)
 
-   const showText = () => {
-      setShowTextEditor(true)
-   }
-   const showFileHandler = () => {
-      setShowFile(true)
-   }
-   const showLinkHandler = () => {
-      setShowLink(true)
-   }
-   const showImageHandler = () => {
-      setShowImage(true)
-   }
-   const showCodeHandler = () => {
-      setShowCode(true)
-   }
-
    return (
       <>
          <StyledBreadCrumbs>
@@ -51,24 +35,24 @@ export const Task = () => {
                <StyledIcons>
                   <StyledTooltip title="Текстовое поле" placement="top">
                      <StyledIcon>
-                        <TextIcon onClick={showText} />
+                        <TextIcon onClick={() => setShowTextEditor(true)} />
                      </StyledIcon>
                   </StyledTooltip>
-                  <SelectFile showFileHandler={showFileHandler} />
-                  <SelectImage />
-                  <AddLinkModal />
+                  <SelectFile setShowFile={setShowFile} />
+                  <SelectImage setShowImage={setShowImage} />
+                  <AddLinkModal setShowLink={setShowLink} />
                   <StyledTooltip title="Код" placement="top">
                      <StyledIcon>
-                        <CodeIcon onClick={showCodeHandler} />
+                        <CodeIcon onClick={() => setShowCode(true)} />
                      </StyledIcon>
                   </StyledTooltip>
                </StyledIcons>
             </Title>
             <StyledContainer>
                {showTextEditor && <TextEditor />}
-               <File />
-               <Image />
-               <TaskLink />
+               {showFile && <File />}
+               {showLink && <TaskLink />}
+               {showImage && <Image setShowImage={setShowImage} />}
                {showCode && <Code />}
             </StyledContainer>
             <ButtonContainer>
@@ -145,7 +129,6 @@ const StyledIcons = styled.div`
 const StyledContainer = styled.div`
    margin-top: 20px;
    width: 100%;
-   /* min-height: 822px; */
    background: #ffffff;
    border: 1px solid #d4d4d4;
    border-radius: 10px;

@@ -18,4 +18,7 @@ const FileContainer = styled.div`
    align-items: center;
    margin-left: 5px;
    height: 30pxs;
+   svg {
+      margin-right: 13px;
+   }
 `

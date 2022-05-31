@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { taskActions } from '../../../../store/task-slice'
 import { Button } from '../../../UI/button/Button'
 
-export const Image = () => {
+export const Image = ({ setShowImage }) => {
    const dispatch = useDispatch()
    const { image } = useSelector((state) => state.tasks)
 
    const removeImage = () => {
       dispatch(taskActions.selectImage(null))
+      setShowImage(false)
    }
    return (
       <ImageContainer>
@@ -28,7 +29,7 @@ const ImageContainer = styled.div`
    height: 450px;
    margin: 30px 0;
    position: relative;
-
+   margin-left: 5px;
    & img {
       display: block;
       border-radius: 7px;

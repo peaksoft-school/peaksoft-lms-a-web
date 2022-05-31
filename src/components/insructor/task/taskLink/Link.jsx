@@ -20,6 +20,6 @@ const LinkContainer = styled.div`
    height: 30px;
    margin-top: 25px;
    svg {
-      margin-right: 17px;
+      margin-right: 13px;
    }
 `

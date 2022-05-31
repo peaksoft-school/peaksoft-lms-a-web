@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux'
 import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
 import { taskActions } from '../../../../store/task-slice'
 
-export const SelectFile = () => {
+export const SelectFile = ({ setShowFile }) => {
    const dispatch = useDispatch()
 
    const changeHandler = (event) => {
       const file = event.target.files[0]
       dispatch(taskActions.selectFile(file.name))
+      setShowFile(true)
    }
    return (
       <StyledTooltip title="Прикрепить файл" placement="top">
@@ -50,5 +51,8 @@ const StyledIcon = styled.div`
    &:hover {
       background: #d4d4d4;
       border-radius: 6px;
+   }
+   svg {
+      margin-top: 4px;
    }
 `
