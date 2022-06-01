@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Tooltip } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
 import { ReactComponent as PictureIcon } from '../../../../assets/icons/picture.svg'

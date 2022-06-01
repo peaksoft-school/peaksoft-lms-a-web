@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
@@ -17,12 +17,16 @@ export const TextEditor = () => {
       },
    ])
 
+   useEffect(() => {
+      dispatch(taskActions.addtext(value))
+   }, [value])
+
    const editorRef = useRef()
    if (!editorRef.current) editorRef.current = withReact(createEditor())
    const editor = editorRef.current
 
    const renderElement = useCallback((props) => <Element {...props} />, [])
-   dispatch(taskActions.addtext(value))
+
    const renderLeaf = useCallback((props) => {
       return <Leaf {...props} />
    }, [])

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
@@ -15,13 +16,15 @@ const initState = {
    },
    link: {
       linkText: [],
-      link: [],
+      links: [],
    },
+   code: null,
 }
 
 export const uploadImages = createAsyncThunk(
-   'listing/uploadImageListing',
-   async ({ images, lessonTask }, { rejectWithValue, dispatch }) => {
+   'task/uploadImage',
+   async ({ images, taskName }, { rejectWithValue, dispatch }) => {
+      console.log(images)
       const formData = new FormData()
       try {
          const promise = await Promise.all(
@@ -32,21 +35,19 @@ export const uploadImages = createAsyncThunk(
                   body: formData,
                   method: 'POST',
                })
-               console.log(result)
                return result
             })
          )
-         const imagesId = promise.map((image) => image.url)
-         console.log(imagesId)
+         const imageUrl = promise.map((image) => {
+            return {
+               value: image,
+               taskType: 'IMAGE',
+            }
+         })
          dispatch(
-            addListing({
-               listingData: {
-                  ...lessonTask,
-                  taskTypeEntity: [
-                     ...lessonTask.taskTypeEntity,
-                     { ...lessonTask.taskTypeEntity[0], value: imagesId },
-                  ],
-               },
+            addTask({
+               taskName,
+               taskTypeEntity: [...imageUrl],
             })
          )
       } catch (error) {
@@ -55,45 +56,66 @@ export const uploadImages = createAsyncThunk(
    }
 )
 
-export const addListing = createAsyncThunk(
-   'listing/addListing',
-   // eslint-disable-next-line consistent-return
-   async ({ listingData }, { rejectWithValue }) => {
+export const addTask = createAsyncThunk(
+   'task/addTask',
+   async (tasks, { rejectWithValue }) => {
       try {
-         const result = await baseFetch({
+         const response = await baseFetch({
             path: 'api/task/2',
             method: 'POST',
-            body: { ...listingData },
+            body: { ...tasks },
          })
-         return result
+         console.log(response)
+         return response
       } catch (error) {
          rejectWithValue(error)
       }
    }
 )
+
 export const taskSlice = createSlice({
    name: 'task',
    initialState: initState,
    reducers: {
-      selectFile(state, action) {
-         state.file = action.payload
-      },
-      selectImage(state, action) {
-         state.image.images = state.image.images.concat(action.payload.images)
-         state.image.files = state.image.files.concat(action.payload.files)
-      },
-      addlink(state, action) {
-         const { link, linkText } = action.payload
-         state.linkText = linkText
-         state.link = link
-      },
       addtext(state, action) {
          state.text = action.payload
       },
-      deleteFile(state, action) {
+      selectFile(state, action) {
+         const { nameOfFile, files } = action.payload
+         state.file.fileName = state.file.fileName.concat(nameOfFile)
+         state.file.files = state.file.files.concat(files)
+      },
+      selectImage(state, action) {
+         const { images, files } = action.payload
+         state.image.images = state.image.images.concat(images)
+         state.image.files = state.image.files.concat(files)
+      },
+      addlink(state, action) {
+         const { link, textLink } = action.payload
+         state.link.linkText = state.link.linkText.concat(textLink)
+         state.link.links = state.link.links.concat(link)
+      },
+      addCode(state, action) {
+         state.code = action.payload
+      },
+      deleteImage(state, action) {
          const index = action.payload
          state.image.images = state.image.images.filter((el, i) => i !== index)
          state.image.files = state.image.files.filter((el, i) => i !== index)
+      },
+      deleteFile(state, action) {
+         const index = action.payload
+         state.file.fileName = state.file.fileName.filter(
+            (el, i) => i !== index
+         )
+         state.file.files = state.file.files.filter((el, i) => i !== index)
+      },
+      deleteLink(state, action) {
+         const index = action.payload
+         state.link.linkText = state.link.linkText.filter(
+            (el, i) => i !== index
+         )
+         state.link.links = state.link.links.filter((el, i) => i !== index)
       },
    },
 })

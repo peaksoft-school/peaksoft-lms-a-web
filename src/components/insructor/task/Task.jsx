@@ -30,18 +30,11 @@ export const Task = () => {
    const onChangeHandler = (e) => {
       setTaskName(e.target.value)
    }
+
    const submitHandler = () => {
-      const lessonTask = {
-         taskName,
-         taskTypeEntity: [
-            {
-               id: '1',
-               taskType: 'IMAGE',
-            },
-         ],
-      }
-      dispatch(uploadImages({ images: image.files, lessonTask }))
+      dispatch(uploadImages({ images: image.files, taskName }))
    }
+
    return (
       <>
          <StyledBreadCrumbs>

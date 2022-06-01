@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { Tooltip } from '@mui/material'
 import { useDispatch } from 'react-redux'
@@ -13,29 +13,25 @@ import { taskActions } from '../../../../store/task-slice'
 export const AddLinkModal = ({ setShowLink }) => {
    const dispatch = useDispatch()
    const [modalIsOpen, setModalIsOpen] = useState(false)
-   const [taskLink, setTaskLink] = useState({
-      linkText: [],
-      link: [],
-   })
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
       linkText: '',
       link: '',
    })
 
+   useEffect(() => {
+      setFormIsValid(value.linkText.length > 0 && value.link.length > 0)
+   }, [value])
+
    const addLink = () => {
-      setTaskLink({
-         linkText: [
-            ...taskLink.linkText,
-            { linkText: value.linkText, id: uuid() },
-         ],
-         link: [...taskLink.link, { link: value.link }],
-      })
+      const { linkText, link } = value
       dispatch(
-         taskActions.addlink({ link: value.link, linkText: value.linkText })
+         taskActions.addlink({ textLink: { linkText, id: uuid() }, link })
       )
       setModalIsOpen(false)
       setShowLink(true)
+      onClear()
    }
 
    return (
@@ -83,6 +79,7 @@ export const AddLinkModal = ({ setShowLink }) => {
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
                      onClick={addLink}
+                     disabled={!formIsValid}
                   >
                      Добавить
                   </Button>

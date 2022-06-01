@@ -1,17 +1,26 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
+import { taskActions } from '../../../../store/task-slice'
 
 export const File = () => {
-   const { file } = useSelector((state) => state.tasks)
+   const dispatch = useDispatch()
+   const { fileName } = useSelector((state) => state.tasks.file)
+
+   const deleteFileHandler = (index) => {
+      dispatch(taskActions.deleteFile(index))
+   }
    return (
       <>
-         {file.fileName.map((el) => (
-            <Container>
+         {fileName.map((el, i) => (
+            <Container key={el.id}>
                <StyledIcon id="container">
-                  <RemoveIcon id="remove" />
+                  <RemoveIcon
+                     id="remove"
+                     onClick={() => deleteFileHandler(i)}
+                  />
                   <FileIcon id="file" />
                </StyledIcon>
                <p>{el.fileName}</p>

@@ -9,13 +9,13 @@ export const Image = () => {
    const { images } = useSelector((state) => state.tasks.image)
 
    const deleteImageHandler = (index) => {
-      dispatch(taskActions.deleteFile(index))
+      dispatch(taskActions.deleteImage(index))
    }
 
    return (
       <>
          {images.map((el, i) => (
-            <ImageContainer>
+            <ImageContainer key={el.id}>
                <img alt="" src={el.image} />
                <Overlay>
                   <Button

@@ -1,20 +1,32 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
+import { taskActions } from '../../../../store/task-slice'
 
 export const Link = () => {
-   const { linkText } = useSelector((state) => state.tasks)
+   const dispatch = useDispatch()
+   const { linkText } = useSelector((state) => state.tasks.link)
 
+   const deleteLinkHandler = (index) => {
+      dispatch(taskActions.deleteLink(index))
+   }
    return (
-      <Container>
-         <StyledIcon id="container">
-            <RemoveIcon id="remove" />
-            <LinkIcon id="link" />
-         </StyledIcon>
-         <p>{linkText}</p>
-      </Container>
+      <>
+         {linkText.map((el, i) => (
+            <Container key={el.id}>
+               <StyledIcon id="container">
+                  <RemoveIcon
+                     id="remove"
+                     onClick={() => deleteLinkHandler(i)}
+                  />
+                  <LinkIcon id="link" />
+               </StyledIcon>
+               <p>{el.linkText}</p>
+            </Container>
+         ))}
+      </>
    )
 }
 const Container = styled.div`

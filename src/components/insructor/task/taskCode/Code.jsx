@@ -1,13 +1,21 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { Input } from '../../../UI/input/Input'
+import { useDispatch } from 'react-redux'
 import { ReactComponent as CodeIcon } from '../../../../assets/icons/code.svg'
+import { taskActions } from '../../../../store/task-slice'
 
 export const Code = () => {
+   const dispatch = useDispatch()
+   const onChangeHandler = (e) => {
+      dispatch(taskActions.addCode(e.target.value))
+   }
    return (
       <CodeContainer>
          <CodeIcon />
-         <StyledTextArea placeholder="Вставьте код" />
+         <StyledTextArea
+            placeholder="Вставьте код"
+            onChange={onChangeHandler}
+         />
       </CodeContainer>
    )
 }
