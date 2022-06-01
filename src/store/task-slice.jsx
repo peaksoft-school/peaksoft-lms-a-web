@@ -4,39 +4,49 @@ import { fileFetch } from '../api/fileFetch'
 
 const initState = {
    taskName: '',
-   file: null,
-   image: null,
-   linkText: null,
-   link: null,
    text: null,
+   file: {
+      fileName: [],
+      files: [],
+   },
+   image: {
+      images: [],
+      files: [],
+   },
+   link: {
+      linkText: [],
+      link: [],
+   },
 }
 
 export const uploadImages = createAsyncThunk(
    'listing/uploadImageListing',
-   async ({ listOfImg, data }, { rejectWithValue, dispatch }) => {
+   async ({ images, lessonTask }, { rejectWithValue, dispatch }) => {
       const formData = new FormData()
       try {
          const promise = await Promise.all(
-            listOfImg.map((image) => {
+            images.map((image) => {
                formData.set('file', image)
-               const images = fileFetch({
+               const result = fileFetch({
                   path: 'api/file',
                   body: formData,
                   method: 'POST',
                })
-               console.log(images)
-               return images
+               console.log(result)
+               return result
             })
          )
-         const images = promise.map((image) => image.id)
-         console.log(images)
+         const imagesId = promise.map((image) => image.url)
+         console.log(imagesId)
          dispatch(
             addListing({
                listingData: {
-                  ...data,
-                  images,
+                  ...lessonTask,
+                  taskTypeEntity: [
+                     ...lessonTask.taskTypeEntity,
+                     { ...lessonTask.taskTypeEntity[0], value: imagesId },
+                  ],
                },
-               // navigateAfterSuccessUpload,
             })
          )
       } catch (error) {
@@ -69,7 +79,8 @@ export const taskSlice = createSlice({
          state.file = action.payload
       },
       selectImage(state, action) {
-         state.image = action.payload
+         state.image.images = state.image.images.concat(action.payload.images)
+         state.image.files = state.image.files.concat(action.payload.files)
       },
       addlink(state, action) {
          const { link, linkText } = action.payload
@@ -78,6 +89,11 @@ export const taskSlice = createSlice({
       },
       addtext(state, action) {
          state.text = action.payload
+      },
+      deleteFile(state, action) {
+         const index = action.payload
+         state.image.images = state.image.images.filter((el, i) => i !== index)
+         state.image.files = state.image.files.filter((el, i) => i !== index)
       },
    },
 })

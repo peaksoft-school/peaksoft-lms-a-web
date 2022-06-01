@@ -19,7 +19,7 @@ import { uploadImages } from '../../../store/task-slice'
 
 export const Task = () => {
    const dispatch = useDispatch()
-   const { file, image, text } = useSelector((state) => state.tasks)
+   const { image } = useSelector((state) => state.tasks)
    const [taskName, setTaskName] = useState('')
    const [showTextEditor, setShowTextEditor] = useState(false)
    const [showFile, setShowFile] = useState(false)
@@ -31,17 +31,16 @@ export const Task = () => {
       setTaskName(e.target.value)
    }
    const submitHandler = () => {
-      // const lessonTask = {
-      //    taskName,
-      //    taskTypeEntity: [
-      //       {
-      //          id: '1',
-      //          value: text,
-      //          taskType: 'TEXT',
-      //       },
-      //    ],
-      // }
-      dispatch(uploadImages(image.files))
+      const lessonTask = {
+         taskName,
+         taskTypeEntity: [
+            {
+               id: '1',
+               taskType: 'IMAGE',
+            },
+         ],
+      }
+      dispatch(uploadImages({ images: image.files, lessonTask }))
    }
    return (
       <>

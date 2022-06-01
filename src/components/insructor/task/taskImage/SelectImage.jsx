@@ -8,23 +8,21 @@ import { taskActions } from '../../../../store/task-slice'
 
 export const SelectImage = ({ setShowImage }) => {
    const dispatch = useDispatch()
-   const [selectedImages, setSelectedImages] = useState({
-      images: [],
-      files: [],
-   })
 
    function onDrop(e) {
       const image = URL.createObjectURL(e.target.files[0])
       const files = e.target.files[0]
-      setSelectedImages({
-         images: [...selectedImages.images, { image, id: uuid() }],
-         files: [...selectedImages.files, files],
-      })
+      dispatch(
+         taskActions.selectImage({
+            images: {
+               image,
+               id: uuid(),
+            },
+            files,
+         })
+      )
       setShowImage(true)
    }
-   useEffect(() => {
-      dispatch(taskActions.selectImage(selectedImages))
-   }, [onDrop])
 
    return (
       <StyledTooltip title="Добавить картинку" placement="top">
