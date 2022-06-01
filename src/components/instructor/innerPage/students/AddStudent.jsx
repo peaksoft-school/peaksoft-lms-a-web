@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { BasicModal } from '../../UI/modal/BasicModal'
-import { ReactComponent as Search } from '../../../assets/icons/search.svg'
-import { Button } from '../../UI/button/Button'
-import { useDebounce } from '../../../hooks/useDebounce/useDebounce'
-import { searchStudentsByName } from '../../../store/instructor-courses'
+import { ReactComponent as Search } from '../../../../assets/icons/search.svg'
+import { useDebounce } from '../../../../hooks/useDebounce/useDebounce'
+import { searchStudentsByName } from '../../../../store/instructor-courses'
+import { Button } from '../../../UI/button/Button'
+import { BasicModal } from '../../../UI/modal/BasicModal'
 
 export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const dispatch = useDispatch()
@@ -23,7 +23,6 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const addStudents = (id) => {
       onAdd(id)
    }
-
    return (
       <BasicModal
          isModalOpen={Boolean(isModalOpen)}

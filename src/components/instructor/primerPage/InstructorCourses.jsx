@@ -22,7 +22,7 @@ import {
 
 export const InstrutorCourses = () => {
    const dispatch = useDispatch()
-   const { courses, groupOfStudents, students } = useSelector(
+   const { courses, students, groupOfStudents } = useSelector(
       (state) => state.instructorCourses
    )
 
@@ -37,7 +37,7 @@ export const InstrutorCourses = () => {
    }
 
    const addGroupHandler = (groupId) => {
-      dispatch(addGroupToCourse({ groupId, courseId }))
+      dispatch(addGroupToCourse({ groupId, id: courseId }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Группа успешно добавлена')
@@ -48,7 +48,7 @@ export const InstrutorCourses = () => {
          })
    }
    const addStudentHandler = (studentId) => {
-      dispatch(addStudentToCourse({ studentId, courseId }))
+      dispatch(addStudentToCourse({ studentId, id: courseId }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
