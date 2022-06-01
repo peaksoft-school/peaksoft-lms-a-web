@@ -5,8 +5,8 @@ import styled from '@emotion/styled'
 import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
-import DatepickerUi from '../../UI/DatePickerUi'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { Datepicker } from '../../UI/datePicker/Datepicker'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { Input } from '../../UI/input/Input'
 import { addNewGroup } from '../../../store/groupSlice'
 import {
@@ -92,7 +92,7 @@ const GroupCreate = (props) => {
                      />
                   </div>
                   <div>
-                     <DatepickerUi
+                     <Datepicker
                         dateValue={dateValue}
                         onChange={dateChangehandler}
                      />

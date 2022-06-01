@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { onEditCourse } from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'

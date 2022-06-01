@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import { Tooltip } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { ReactComponent as TextIcon } from '../../../assets/icons/text.svg'
@@ -15,14 +15,34 @@ import { Code } from './taskCode/Code'
 import { Image } from './taskImage/Image'
 import { File } from './taskFile/File'
 import { AddLinkModal } from './taskLink/AddLink'
+import { uploadImages } from '../../../store/task-slice'
 
 export const Task = () => {
+   const dispatch = useDispatch()
+   const { file, image, text } = useSelector((state) => state.tasks)
+   const [taskName, setTaskName] = useState('')
    const [showTextEditor, setShowTextEditor] = useState(false)
    const [showFile, setShowFile] = useState(false)
    const [showLink, setShowLink] = useState(false)
    const [showImage, setShowImage] = useState(false)
    const [showCode, setShowCode] = useState(false)
 
+   const onChangeHandler = (e) => {
+      setTaskName(e.target.value)
+   }
+   const submitHandler = () => {
+      // const lessonTask = {
+      //    taskName,
+      //    taskTypeEntity: [
+      //       {
+      //          id: '1',
+      //          value: text,
+      //          taskType: 'TEXT',
+      //       },
+      //    ],
+      // }
+      dispatch(uploadImages(image.files))
+   }
    return (
       <>
          <StyledBreadCrumbs>
@@ -31,7 +51,10 @@ export const Task = () => {
          <Container>
             <StyledTitle>Создать задание</StyledTitle>
             <Title>
-               <StyledText placeholder="Название задания" />
+               <StyledText
+                  placeholder="Название задания"
+                  onChange={onChangeHandler}
+               />
                <StyledIcons>
                   <StyledTooltip title="Текстовое поле" placement="top">
                      <StyledIcon>
@@ -68,6 +91,7 @@ export const Task = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
+                     onClick={submitHandler}
                   >
                      Сохранить
                   </Button>

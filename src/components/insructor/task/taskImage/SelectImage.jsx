@@ -1,18 +1,30 @@
 import styled from '@emotion/styled'
 import { Tooltip } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 import { ReactComponent as PictureIcon } from '../../../../assets/icons/picture.svg'
 import { taskActions } from '../../../../store/task-slice'
 
 export const SelectImage = ({ setShowImage }) => {
    const dispatch = useDispatch()
+   const [selectedImages, setSelectedImages] = useState({
+      images: [],
+      files: [],
+   })
 
-   function uploadSingleFile(e) {
+   function onDrop(e) {
       const image = URL.createObjectURL(e.target.files[0])
-      dispatch(taskActions.selectImage(image))
+      const files = e.target.files[0]
+      setSelectedImages({
+         images: [...selectedImages.images, { image, id: uuid() }],
+         files: [...selectedImages.files, files],
+      })
       setShowImage(true)
    }
+   useEffect(() => {
+      dispatch(taskActions.selectImage(selectedImages))
+   }, [onDrop])
 
    return (
       <StyledTooltip title="Добавить картинку" placement="top">
@@ -20,7 +32,7 @@ export const SelectImage = ({ setShowImage }) => {
             <label htmlFor="uploadImage">
                <PictureIcon />
             </label>
-            <input type="file" id="uploadImage" onChange={uploadSingleFile} />
+            <input type="file" id="uploadImage" onChange={onDrop} />
          </StyledIcon>
       </StyledTooltip>
    )

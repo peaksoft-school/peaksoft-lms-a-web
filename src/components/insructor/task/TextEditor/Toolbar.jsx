@@ -152,7 +152,7 @@ const StyledTooltip = styled(({ className, ...props }) => (
 const toolbar = [
    {
       id: 2,
-      format: 'text',
+      format: 'heading',
       type: 'mark',
       icon: <TextIcon />,
       title: 'Заголовок',

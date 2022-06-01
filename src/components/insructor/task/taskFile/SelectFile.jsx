@@ -1,18 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { Tooltip } from '@mui/material'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
 import { taskActions } from '../../../../store/task-slice'
 
 export const SelectFile = ({ setShowFile }) => {
    const dispatch = useDispatch()
+   const [selectedFiles, setSelectedFiles] = useState({
+      fileName: [],
+      files: [],
+   })
 
    const changeHandler = (event) => {
       const file = event.target.files[0]
-      dispatch(taskActions.selectFile(file.name))
+      const fileName = file.name
+      setSelectedFiles({
+         fileName: [...selectedFiles.fileName, { fileName, id: uuid() }],
+         files: [...selectedFiles.files, file],
+      })
       setShowFile(true)
    }
+
+   useEffect(() => {
+      dispatch(taskActions.selectFile(selectedFiles))
+   }, [changeHandler])
    return (
       <StyledTooltip title="Прикрепить файл" placement="top">
          <StyledIcon>

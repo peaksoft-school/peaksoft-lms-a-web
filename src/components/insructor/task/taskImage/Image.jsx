@@ -1,26 +1,42 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { taskActions } from '../../../../store/task-slice'
 import { Button } from '../../../UI/button/Button'
 
-export const Image = ({ setShowImage }) => {
+export const Image = () => {
    const dispatch = useDispatch()
    const { image } = useSelector((state) => state.tasks)
+   const [filteredImage, setfilteredImage] = useState(image)
 
-   const removeImage = () => {
-      dispatch(taskActions.selectImage(null))
-      setShowImage(false)
+   const deleteImageHandler = (index) => {
+      setfilteredImage({
+         ...filteredImage,
+         images: filteredImage.images.filter((image, i) => i !== index),
+         files: filteredImage.files.filter((file, i) => i !== index),
+      })
+
+      // dispatch(taskActions.deleteFile(id))
    }
+   // console.log(image.images)
+   // console.log(filteredImage)
    return (
-      <ImageContainer>
-         <img alt="" src={image} />
-         <Overlay>
-            <Button id="delete" background="#C91E1E" onClick={removeImage}>
-               Удалить
-            </Button>
-         </Overlay>
-      </ImageContainer>
+      <>
+         {image.images.map((el) => (
+            <ImageContainer>
+               <img alt="" src={el.image} />
+               <Overlay>
+                  <Button
+                     id="delete"
+                     background="#C91E1E"
+                     onClick={deleteImageHandler}
+                  >
+                     Удалить
+                  </Button>
+               </Overlay>
+            </ImageContainer>
+         ))}
+      </>
    )
 }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Tooltip } from '@mui/material'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 import { Input } from '../../../UI/input/Input'
 import { BasicModal } from '../../../UI/modal/BasicModal'
 import { Button } from '../../../UI/button/Button'
@@ -12,6 +13,10 @@ import { taskActions } from '../../../../store/task-slice'
 export const AddLinkModal = ({ setShowLink }) => {
    const dispatch = useDispatch()
    const [modalIsOpen, setModalIsOpen] = useState(false)
+   const [taskLink, setTaskLink] = useState({
+      linkText: [],
+      link: [],
+   })
 
    const { value, onChange, onClear } = useInput({
       linkText: '',
@@ -19,6 +24,13 @@ export const AddLinkModal = ({ setShowLink }) => {
    })
 
    const addLink = () => {
+      setTaskLink({
+         linkText: [
+            ...taskLink.linkText,
+            { linkText: value.linkText, id: uuid() },
+         ],
+         link: [...taskLink.link, { link: value.link }],
+      })
       dispatch(
          taskActions.addlink({ link: value.link, linkText: value.linkText })
       )

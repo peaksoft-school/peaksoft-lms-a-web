@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { useInput } from '../../../hooks/useInput/useInput'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ReactComponent as AddIcon } from '../../../assets/icons/AddIcon.svg'
+import { useInput } from '../../../hooks/useInput/useInput'
 
 export const AddNewTeacher = ({ onAdd, showModal, onClose, addHandler }) => {
    const { value, onChange, onClear } = useInput({

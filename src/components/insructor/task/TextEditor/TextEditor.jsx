@@ -3,24 +3,26 @@ import React, { useCallback, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
+import { useDispatch } from 'react-redux'
 import { ReactComponent as IconText } from '../../../../assets/icons/text.svg'
 import { Toolbar } from './Toolbar'
+import { taskActions } from '../../../../store/task-slice'
 
 export const TextEditor = () => {
+   const dispatch = useDispatch()
+   const [value, setValue] = useState([
+      {
+         type: 'paragraph',
+         children: [{ text: 'A line of text in a paragraph.' }],
+      },
+   ])
+
    const editorRef = useRef()
    if (!editorRef.current) editorRef.current = withReact(createEditor())
    const editor = editorRef.current
 
-   const [value, setValue] = useState(
-      JSON.parse(localStorage.getItem('content')) || [
-         {
-            type: 'paragraph',
-            children: [{ text: 'A line of text in a paragraph.' }],
-         },
-      ]
-   )
    const renderElement = useCallback((props) => <Element {...props} />, [])
-
+   dispatch(taskActions.addtext(value))
    const renderLeaf = useCallback((props) => {
       return <Leaf {...props} />
    }, [])
@@ -30,8 +32,7 @@ export const TextEditor = () => {
          editor={editor}
          value={value}
          onChange={(value) => {
-            const content = JSON.stringify(value)
-            localStorage.setItem('content', content)
+            setValue(value)
          }}
       >
          <TextEditorContainer>
@@ -80,9 +81,9 @@ const Leaf = ({ attributes, children, leaf }) => {
    if (leaf.underline) {
       children = <u>{children}</u>
    }
-   // if (leaf.text) {
-   //    children = <h1>{children}</h1>
-   // }
+   if (leaf.heading) {
+      children = <h1>{children}</h1>
+   }
 
    return <span {...attributes}>{children}</span>
 }
