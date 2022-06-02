@@ -9,13 +9,16 @@ import { searchStudentsByName } from '../../../store/instructor-courses'
 
 export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const dispatch = useDispatch()
-   const searchStudents = useDebounce(searchStudentsHandler, 600)
    const [name, setName] = useState('')
+
+   const searchStudents = useDebounce(searchStudentsHandler, 600)
+
    function searchStudentsHandler() {
       if (name !== '') {
          dispatch(searchStudentsByName(name))
       }
    }
+
    useEffect(() => {
       searchStudents()
    }, [searchStudents])
@@ -81,7 +84,23 @@ const StyledUl = styled.ul`
    display: flex;
    flex-direction: column;
    width: 491px;
-   padding: 2px;
+   max-height: 180px;
+   padding: 10px;
+   overflow-y: scroll;
+   ::-webkit-scrollbar {
+      width: 8px;
+   }
+   ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px #3772ff;
+      border-radius: 10px;
+   }
+   ::-webkit-scrollbar-thumb {
+      background: #3772ff;
+      border-radius: 10px;
+   }
+   ::-webkit-scrollbar-thumb:hover {
+      background: #3772ff;
+   }
    p {
       font-size: 18px;
       margin-left: 20px;

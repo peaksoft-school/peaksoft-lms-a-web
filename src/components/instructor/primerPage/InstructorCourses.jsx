@@ -22,9 +22,8 @@ import {
 
 export const InstrutorCourses = () => {
    const dispatch = useDispatch()
-   const { courses, students, groupOfStudents } = useSelector(
-      (state) => state.instructorCourses
-   )
+   const { courses, students, groupOfStudents, newStudentsOfCourse } =
+      useSelector((state) => state.instructorCourses)
 
    const [courseId, setCourseId] = useState()
    const [searchParams, setSearchParams] = useSearchParams()
@@ -100,18 +99,21 @@ export const InstrutorCourses = () => {
       []
    )
 
-   useEffect(() => {
-      dispatch(getCoursesOfInstructor())
-      dispatch(getGroupOfStudents())
-      dispatch(getStudents())
-   }, [])
-
+   const filteredStudents = students.filter(
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
+   )
    const groupOptions = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
       }
    })
+
+   useEffect(() => {
+      dispatch(getCoursesOfInstructor())
+      dispatch(getGroupOfStudents())
+      dispatch(getStudents())
+   }, [])
 
    return (
       <Wrapper>
@@ -132,7 +134,7 @@ export const InstrutorCourses = () => {
          <AddStudent
             isModalOpen={Boolean(showAddStudentModal)}
             onClose={handleClose}
-            students={students}
+            students={filteredStudents}
             onAdd={addStudentHandler}
          />
          <AddStudentsOfGroup

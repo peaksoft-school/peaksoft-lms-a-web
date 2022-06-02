@@ -18,19 +18,18 @@ import {
    addGroupToCourse,
    addStudentToCourse,
    getGroupOfStudents,
-   getStudentsByGroup,
    getSingleCourse,
    getStudents,
    getStudentsByCourse,
 } from '../../../../store/instructor-courses'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
-import { AddStudent } from './AddStudent'
-import { AddStudentsOfGroup } from './AddGroup'
+import { AddStudent } from '../../primerPage/AddStudent'
+import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'
 
 export const Students = () => {
    const dispatch = useDispatch()
-   const { newGroupStudents, singleCourse, students, groupOfStudents } =
+   const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
 
@@ -55,14 +54,13 @@ export const Students = () => {
             showErrorMessage('Не удалось добавить студента')
          })
    }
-
    const addGroupHandler = (groupId) => {
       dispatch(addGroupToCourse({ groupId, id }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Группа успешно добавлена')
             handleClose()
-            dispatch(getStudentsByGroup(groupId))
+            dispatch(getStudentsByCourse(id))
          })
          .catch(() => {
             showErrorMessage('Не удалось добавить группу')
@@ -90,14 +88,12 @@ export const Students = () => {
       ],
       []
    )
+
    const filteredStudents = students.filter(
-      (item) => !newGroupStudents.some((el) => item.id === el.id)
-   )
-   const filteredGroups = groupOfStudents.filter(
-      (item) => !newGroupStudents.some((el) => item.id === el.id)
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const groupOptions = filteredGroups.map((group) => {
+   const groupOptions = groupOfStudents.map((group) => {
       return {
          id: group.id,
          title: group.groupName,
@@ -105,9 +101,8 @@ export const Students = () => {
    })
 
    useEffect(() => {
-      dispatch(getStudentsByCourse(id))
       dispatch(getSingleCourse(id))
-      dispatch(getStudentsByGroup())
+      dispatch(getStudentsByCourse(id))
    }, [])
 
    return (
@@ -150,7 +145,7 @@ export const Students = () => {
                onAdd={addGroupHandler}
             />
          </Container>
-         <AppTable data={newGroupStudents} columns={STUDENTS_INFO} />
+         <AppTable data={newStudentsOfCourse} columns={STUDENTS_INFO} />
       </>
    )
 }
