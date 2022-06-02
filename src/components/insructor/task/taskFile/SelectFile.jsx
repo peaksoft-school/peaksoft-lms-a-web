@@ -10,15 +10,13 @@ export const SelectFile = ({ setShowFile }) => {
    const dispatch = useDispatch()
 
    const onDrop = (e) => {
-      const files = e.target.files[0]
-      const fileName = files.name
+      const selectedFile = e.target.files[0]
+      const fileName = selectedFile.name
       dispatch(
          taskActions.selectFile({
-            nameOfFile: {
-               fileName,
-               id: uuid(),
-            },
-            files,
+            selectedFile,
+            fileName,
+            id: uuid(),
          })
       )
       setShowFile(true)

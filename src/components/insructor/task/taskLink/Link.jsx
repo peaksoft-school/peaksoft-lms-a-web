@@ -7,14 +7,14 @@ import { taskActions } from '../../../../store/task-slice'
 
 export const Link = () => {
    const dispatch = useDispatch()
-   const { linkText } = useSelector((state) => state.tasks.link)
+   const { links } = useSelector((state) => state.tasks)
 
    const deleteLinkHandler = (index) => {
       dispatch(taskActions.deleteLink(index))
    }
    return (
       <>
-         {linkText.map((el, i) => (
+         {links.map((el, i) => (
             <Container key={el.id}>
                <StyledIcon id="container">
                   <RemoveIcon
@@ -23,7 +23,7 @@ export const Link = () => {
                   />
                   <LinkIcon id="link" />
                </StyledIcon>
-               <p>{el.linkText}</p>
+               <a href={el.link}>{el.linkText}</a>
             </Container>
          ))}
       </>

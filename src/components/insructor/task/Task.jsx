@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import { Tooltip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { ReactComponent as TextIcon } from '../../../assets/icons/text.svg'
@@ -19,7 +20,8 @@ import { uploadImages } from '../../../store/task-slice'
 
 export const Task = () => {
    const dispatch = useDispatch()
-   const { image } = useSelector((state) => state.tasks)
+   const { lessonId } = useParams()
+   const { image, files } = useSelector((state) => state.tasks)
    const [taskName, setTaskName] = useState('')
    const [showTextEditor, setShowTextEditor] = useState(false)
    const [showFile, setShowFile] = useState(false)
@@ -30,11 +32,16 @@ export const Task = () => {
    const onChangeHandler = (e) => {
       setTaskName(e.target.value)
    }
-
    const submitHandler = () => {
-      dispatch(uploadImages({ images: image.files, taskName }))
+      dispatch(
+         uploadImages({
+            images: image.files,
+            files,
+            taskName,
+            lessonId,
+         })
+      )
    }
-
    return (
       <>
          <StyledBreadCrumbs>

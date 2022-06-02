@@ -2,9 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Task } from '../components/insructor/task/Task'
 import { InstrutorCourses } from '../components/instructor/primerPage/InstructorCourses'
-import { LessonCard } from '../components/UI/lessonCard/LessonCard'
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
-import { Mockcourses } from '../components/instructor/innerPage/materials/MockCourses'
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
 
@@ -20,8 +18,6 @@ export const InstructorRoutes = () => {
                path={ROUTES.INSTRUCTOR_COURSES}
                element={<InstrutorCourses />}
             />
-            {/* <Route path={ROUTES.INSTRUCTOR_COURSES} element={<LessonCard />} />
-            <Route path={ROUTES.INSTRUCTOR_COURSES} element={<Mockcourses />} /> */}
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
                element={<Materials />}
@@ -31,7 +27,7 @@ export const InstructorRoutes = () => {
                element={<Students />}
             />
             <Route
-               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/task`}
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_task/:lessonId`}
                element={<Task />}
             />
          </Routes>

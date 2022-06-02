@@ -7,14 +7,14 @@ import { taskActions } from '../../../../store/task-slice'
 
 export const File = () => {
    const dispatch = useDispatch()
-   const { fileName } = useSelector((state) => state.tasks.file)
+   const { files } = useSelector((state) => state.tasks)
 
    const deleteFileHandler = (index) => {
       dispatch(taskActions.deleteFile(index))
    }
    return (
       <>
-         {fileName.map((el, i) => (
+         {files.map((el, i) => (
             <Container key={el.id}>
                <StyledIcon id="container">
                   <RemoveIcon

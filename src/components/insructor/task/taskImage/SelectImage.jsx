@@ -10,15 +10,15 @@ export const SelectImage = ({ setShowImage }) => {
    const dispatch = useDispatch()
 
    function onDrop(e) {
-      const image = URL.createObjectURL(e.target.files[0])
-      const files = e.target.files[0]
+      const selectedImage = URL.createObjectURL(e.target.files[0])
+      const selectedImagefile = e.target.files[0]
       dispatch(
          taskActions.selectImage({
             images: {
-               image,
+               selectedImage,
                id: uuid(),
             },
-            files,
+            selectedImagefile,
          })
       )
       setShowImage(true)

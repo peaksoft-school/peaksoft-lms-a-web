@@ -6,25 +6,21 @@ import { fileFetch } from '../api/fileFetch'
 const initState = {
    taskName: '',
    text: null,
-   file: {
-      fileName: [],
-      files: [],
-   },
+   files: [],
    image: {
       images: [],
       files: [],
    },
-   link: {
-      linkText: [],
-      links: [],
-   },
+   links: [],
    code: null,
 }
 
 export const uploadImages = createAsyncThunk(
    'task/uploadImage',
-   async ({ images, taskName }, { rejectWithValue, dispatch }) => {
-      console.log(images)
+   async (
+      { images, files, taskName, lessonId },
+      { rejectWithValue, dispatch }
+   ) => {
       const formData = new FormData()
       try {
          const promise = await Promise.all(
@@ -40,14 +36,34 @@ export const uploadImages = createAsyncThunk(
          )
          const imageUrl = promise.map((image) => {
             return {
-               value: image,
+               value: image.url,
                taskType: 'IMAGE',
+            }
+         })
+         const promiseFile = await Promise.all(
+            files.map((file) => {
+               formData.set('file', file.selectedFile)
+               const result = fileFetch({
+                  path: 'api/file',
+                  body: formData,
+                  method: 'POST',
+               })
+               return result
+            })
+         )
+         const fileUrl = promiseFile.map((el) => {
+            return {
+               value: el.url,
+               taskType: 'FILE',
             }
          })
          dispatch(
             addTask({
-               taskName,
-               taskTypeEntity: [...imageUrl],
+               tasks: {
+                  taskName,
+                  taskTypeEntity: [...imageUrl, ...fileUrl],
+               },
+               lessonId,
             })
          )
       } catch (error) {
@@ -58,10 +74,10 @@ export const uploadImages = createAsyncThunk(
 
 export const addTask = createAsyncThunk(
    'task/addTask',
-   async (tasks, { rejectWithValue }) => {
+   async ({ tasks, lessonId }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
-            path: 'api/task/2',
+            path: `api/tasks/${lessonId}`,
             method: 'POST',
             body: { ...tasks },
          })
@@ -81,19 +97,17 @@ export const taskSlice = createSlice({
          state.text = action.payload
       },
       selectFile(state, action) {
-         const { nameOfFile, files } = action.payload
-         state.file.fileName = state.file.fileName.concat(nameOfFile)
-         state.file.files = state.file.files.concat(files)
+         const file = action.payload
+         state.files = state.files.concat(file)
       },
       selectImage(state, action) {
-         const { images, files } = action.payload
+         const { images, selectedImagefile } = action.payload
          state.image.images = state.image.images.concat(images)
-         state.image.files = state.image.files.concat(files)
+         state.image.files = state.image.files.concat(selectedImagefile)
       },
       addlink(state, action) {
-         const { link, textLink } = action.payload
-         state.link.linkText = state.link.linkText.concat(textLink)
-         state.link.links = state.link.links.concat(link)
+         const { link } = action.payload
+         state.links = state.links.concat(link)
       },
       addCode(state, action) {
          state.code = action.payload
@@ -105,17 +119,11 @@ export const taskSlice = createSlice({
       },
       deleteFile(state, action) {
          const index = action.payload
-         state.file.fileName = state.file.fileName.filter(
-            (el, i) => i !== index
-         )
-         state.file.files = state.file.files.filter((el, i) => i !== index)
+         state.files = state.files.filter((el, i) => i !== index)
       },
       deleteLink(state, action) {
          const index = action.payload
-         state.link.linkText = state.link.linkText.filter(
-            (el, i) => i !== index
-         )
-         state.link.links = state.link.links.filter((el, i) => i !== index)
+         state.links = state.links.filter((el, i) => i !== index)
       },
    },
 })

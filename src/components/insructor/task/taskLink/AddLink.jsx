@@ -26,9 +26,7 @@ export const AddLinkModal = ({ setShowLink }) => {
 
    const addLink = () => {
       const { linkText, link } = value
-      dispatch(
-         taskActions.addlink({ textLink: { linkText, id: uuid() }, link })
-      )
+      dispatch(taskActions.addlink({ link: { link, linkText, id: uuid() } }))
       setModalIsOpen(false)
       setShowLink(true)
       onClear()

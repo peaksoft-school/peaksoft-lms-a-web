@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
@@ -30,6 +30,7 @@ import { LessonCard } from '../../../UI/lessonCard/LessonCard'
 
 export const Materials = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { id } = useParams()
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
@@ -42,6 +43,12 @@ export const Materials = () => {
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+
+   const selectedOption = (option) => {
+      if (option.id === 'task') {
+         navigate(`create_task/${option.lessonId}`)
+      }
+   }
 
    const closeModals = () => {
       setSearchParams('')
@@ -68,7 +75,7 @@ export const Materials = () => {
             showSuccessMessage('Урок успешно создан')
             closeModals()
             onClear()
-            dispatch(getLessons())
+            dispatch(getLessons(id))
          })
          .catch(() => {
             showErrorMessage('Не удалось создать урок')
@@ -110,7 +117,7 @@ export const Materials = () => {
       if (showConfirmationModal) {
          closeModals()
       }
-      dispatch(getLessons())
+      dispatch(getLessons(id))
       dispatch(getCourse(id))
    }, [])
 
@@ -150,7 +157,7 @@ export const Materials = () => {
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
-                     video
+                     selectedOption={selectedOption}
                   />
                ))}
          </Container>

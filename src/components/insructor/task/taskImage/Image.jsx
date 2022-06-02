@@ -11,12 +11,11 @@ export const Image = () => {
    const deleteImageHandler = (index) => {
       dispatch(taskActions.deleteImage(index))
    }
-
    return (
       <>
          {images.map((el, i) => (
             <ImageContainer key={el.id}>
-               <img alt="" src={el.image} />
+               <img alt="" src={el.selectedImage} />
                <Overlay>
                   <Button
                      id="delete"

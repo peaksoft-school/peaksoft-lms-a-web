@@ -18,6 +18,7 @@ export const LessonCard = ({
    test,
    onEditTitle,
    onDeleteLesson,
+   selectedOption,
    lessonId,
 }) => {
    const ADD_OPTIONS = [
@@ -35,6 +36,7 @@ export const LessonCard = ({
          id: 'task',
          title: 'Задание',
          disabled: Boolean(task),
+         lessonId,
       },
       {
          id: 'link',
@@ -47,9 +49,7 @@ export const LessonCard = ({
          disabled: Boolean(test),
       },
    ]
-   const selectedOption = (option) => {
-      console.log(option)
-   }
+
    return (
       <StyledContainer>
          <StyledTitleContainer>
