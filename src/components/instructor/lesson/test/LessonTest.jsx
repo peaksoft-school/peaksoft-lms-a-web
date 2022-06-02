@@ -1,42 +1,77 @@
-/* eslint-disable no-param-reassign */
 import { useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../../../UI/button/Button'
 import { TestQuestion } from './TestQuestion'
 import { TestTitle } from './TestTitle'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/VectorAdd.svg'
-import { testActions } from '../../../../store/create-test-slice'
+import { addTest, testActions } from '../../../../store/create-test-slice'
 import { TEST_KEY } from '../../../../utils/constants/general'
 import { localStorageHelper } from '../../../../utils/helpers/general'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../../UI/notification/Notification'
+import { Spinner } from '../../../UI/Spinner/Spinner'
 
 export const LessonTest = () => {
    const dispatch = useDispatch()
-   const testState = useSelector((state) => state.createTest)
+   const navigate = useNavigate()
+   const { id, lessonId } = useParams()
+   const { test, isLoading } = useSelector((state) => state.createTest)
 
    const addQuestionHandler = () => {
       dispatch(testActions.addQuestion())
    }
+
+   const onCancelToCreateTest = () => {
+      navigate(`/instructor/instructor_course/${id}/materials`, {
+         replace: true,
+      })
+   }
+
    const sendTestDataHandler = () => {
-      // dispatch(testActions.test())
-      console.log(testState)
+      const testData = { ...test }
+      const questions = testData.questions.map((question) => {
+         return {
+            question: question.question,
+            questionType: question.questionType,
+            options: question.options.map((option) => {
+               return { option: option.option, isTrue: option.isTrue }
+            }),
+         }
+      })
+      const newTestData = { ...testData, questions }
+      dispatch(addTest({ value: newTestData, id: lessonId }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Тест успешно создан')
+            onCancelToCreateTest()
+            dispatch(testActions.clearTest())
+            localStorageHelper.clear(TEST_KEY)
+         })
+         .catch((error) => {
+            showErrorMessage(error)
+         })
    }
 
    useEffect(() => {
       window.onbeforeunload = () => {
-         return localStorageHelper.store(TEST_KEY, testState)
+         return localStorageHelper.store(TEST_KEY, test)
       }
-   }, [testState])
+   }, [test])
 
    return (
       <StyledContainer>
-         <TestTitle testName={testState.testName} />
-         <TestQuestion />
+         {(isLoading && <Spinner />) || <TestTitle testName={test.testName} />}
+         {(isLoading && <Spinner />) || <TestQuestion />}
          <StyledButtonContainer>
             <Button
                background="none"
                border="1px solid #3772FF"
                color="#3772FF"
+               onClick={onCancelToCreateTest}
             >
                Отмена
             </Button>

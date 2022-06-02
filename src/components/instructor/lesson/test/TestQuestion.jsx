@@ -10,7 +10,7 @@ import { testActions } from '../../../../store/create-test-slice'
 
 export const TestQuestion = () => {
    const dispatch = useDispatch()
-   const { questions } = useSelector((state) => state.createTest)
+   const { questions } = useSelector((state) => state.createTest.test)
 
    const onGetOptionValue = (event, questionId, optionId) => {
       dispatch(
@@ -91,7 +91,7 @@ export const TestQuestion = () => {
                            id="more"
                            name={`option of variants ${question.id}`}
                            onChange={() => onChooseVariantOne(question.id)}
-                           checked={question.questionType === 'MORE'}
+                           checked={question.questionType === 'MANY'}
                         />
                         <label htmlFor="more">Несколько из списка</label>
                      </MoreOfList>

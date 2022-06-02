@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
-   ADD_TEST,
    DELETE_LESSON,
    EDIT_LESSON,
 } from '../../../../utils/constants/general'
@@ -28,10 +27,10 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
-import { LessonTest } from '../../lesson/test/LessonTest'
 
 export const Materials = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { id } = useParams()
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
@@ -42,13 +41,12 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
-   const showAddTestPage = searchParams.get(ADD_TEST)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
 
    const selectedOption = (option) => {
       if (option.id === 'test') {
-         setSearchParams({ [ADD_TEST]: true, lessonId: option.lessonId })
+         navigate(`create_test/${option.lessonId}`)
       }
    }
 
@@ -92,7 +90,6 @@ export const Materials = () => {
             closeModals()
             onClear()
             dispatch(getLessons())
-            dispatch(getLesson(lesson.id))
          })
          .catch(() => {
             showErrorMessage('Не удалось изменить данные')
