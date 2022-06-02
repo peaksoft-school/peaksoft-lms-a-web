@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Tooltip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import uuid from 'react-uuid'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { ReactComponent as TextIcon } from '../../../assets/icons/text.svg'
@@ -23,7 +24,12 @@ export const Task = () => {
    const { lessonId } = useParams()
    const { image, files } = useSelector((state) => state.tasks)
    const [taskName, setTaskName] = useState('')
-   const [showTextEditor, setShowTextEditor] = useState(false)
+   const [showTextEditor, setShowTextEditor] = useState([
+      {
+         taskType: '',
+         id: uuid(),
+      },
+   ])
    const [showFile, setShowFile] = useState(false)
    const [showLink, setShowLink] = useState(false)
    const [showImage, setShowImage] = useState(false)
@@ -42,6 +48,31 @@ export const Task = () => {
          })
       )
    }
+
+   const addTextEditor = (type) => {
+      console.log(type)
+      setShowTextEditor([
+         ...showTextEditor,
+         { taskType: type, id: Math.random().toString() },
+      ])
+   }
+   console.log(showTextEditor)
+   let content
+
+   setShowTextEditor.map((el) => {
+      switch (el.taskType) {
+         case 'text':
+            content = <TextEditor key={el.id} />
+            break
+         case 'file':
+            content = <File />
+            break
+         default:
+            break
+      }
+      return el
+   })
+
    return (
       <>
          <StyledBreadCrumbs>
@@ -57,10 +88,10 @@ export const Task = () => {
                <StyledIcons>
                   <StyledTooltip title="Текстовое поле" placement="top">
                      <StyledIcon>
-                        <TextIcon onClick={() => setShowTextEditor(true)} />
+                        <TextIcon onClick={() => addTextEditor('text')} />
                      </StyledIcon>
                   </StyledTooltip>
-                  <SelectFile setShowFile={setShowFile} />
+                  <SelectFile setShowFile={() => addTextEditor('file')} />
                   <SelectImage setShowImage={setShowImage} />
                   <AddLinkModal setShowLink={setShowLink} />
                   <StyledTooltip title="Код" placement="top">
@@ -71,8 +102,7 @@ export const Task = () => {
                </StyledIcons>
             </Title>
             <StyledContainer>
-               {showTextEditor && <TextEditor />}
-               {showFile && <File />}
+               {/* {content} */}
                {showLink && <TaskLink />}
                {showImage && <Image setShowImage={setShowImage} />}
                {showCode && <Code />}

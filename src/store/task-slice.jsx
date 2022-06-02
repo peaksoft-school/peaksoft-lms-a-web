@@ -81,7 +81,6 @@ export const addTask = createAsyncThunk(
             method: 'POST',
             body: { ...tasks },
          })
-         console.log(response)
          return response
       } catch (error) {
          rejectWithValue(error)
