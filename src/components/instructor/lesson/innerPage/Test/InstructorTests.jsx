@@ -1,10 +1,20 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getInstructorTests } from '../../../../../store/instructor-tests-slice'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
 
 export const InstructorTests = () => {
+   const { tests } = useSelector((state) => state.instructorTests)
+   const dispatch = useDispatch()
+
+   useEffect(() => {
+      dispatch(getInstructorTests(2))
+   }, [])
+
    return (
       <>
+         <Title>{tests.testName}</Title>
          <AnswersContainer>
             <InnerContainer>
                <p>0 ответов</p>
@@ -14,7 +24,9 @@ export const InstructorTests = () => {
                </div>
             </InnerContainer>
          </AnswersContainer>
-         <TableContainer>Ответы принимаются</TableContainer>
+         <TableContainer>
+            <p>Ответы принимаются</p>
+         </TableContainer>
       </>
    )
 }
@@ -54,4 +66,17 @@ const TableContainer = styled.div`
    height: 68px;
    background: #ffffff;
    border-radius: 10px;
+   border: 1px solid #d4d4d4;
+   margin-top: 25px;
+   p {
+      color: #70757a;
+   }
+`
+const Title = styled.h1`
+   font-family: 'Open Sans', sans-serif;
+   font-style: normal;
+   font-weight: 600;
+   font-size: 24px;
+   line-height: 33px;
+   color: #292929;
 `
