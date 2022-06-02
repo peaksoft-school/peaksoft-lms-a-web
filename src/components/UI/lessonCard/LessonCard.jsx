@@ -18,7 +18,6 @@ export const LessonCard = ({
    test,
    onEditTitle,
    onDeleteLesson,
-   lessonId,
 }) => {
    const ADD_OPTIONS = [
       {
