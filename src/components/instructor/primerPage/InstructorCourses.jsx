@@ -102,12 +102,17 @@ export const InstrutorCourses = () => {
    const filteredStudents = students.filter(
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
+
    const groupOptions = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
       }
    })
+
+   const groups = groupOptions.filter(
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
+   )
 
    useEffect(() => {
       dispatch(getCoursesOfInstructor())
@@ -140,7 +145,7 @@ export const InstrutorCourses = () => {
          <AddStudentsOfGroup
             isModalOpen={Boolean(showAddGroupModal)}
             onClose={handleClose}
-            groups={groupOptions}
+            groups={groups}
             onAdd={addGroupHandler}
          />
       </Wrapper>
