@@ -67,20 +67,20 @@ export const Students = () => {
          })
    }
 
-   const addStudent = () => {
+   const openAddStudentModal = () => {
       setSearchParams({
          [ADD_STUDENT]: true,
       })
       dispatch(getStudents())
    }
-   const addGroup = () => {
+   const openAddGroupModal = () => {
       setSearchParams({
          [ADD_GROUP]: true,
       })
       dispatch(getGroupOfStudents())
    }
 
-   const pathArray = useMemo(
+   const breadcrumbs = useMemo(
       () => [
          { path: 'instructor/instructor_course', name: 'Курсы' },
          { path: 'instructor/students', name: singleCourse?.courseName },
@@ -93,10 +93,13 @@ export const Students = () => {
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const groupOptions = groupOfStudents.map((group) => {
+   const filteredGroups = groupOfStudents.filter(
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
+   )
+   const groups = filteredGroups.map((el) => {
       return {
-         id: group.id,
-         title: group.groupName,
+         id: el.id,
+         title: el.groupName,
       }
    })
 
@@ -109,7 +112,7 @@ export const Students = () => {
       <>
          <Container>
             <StyledBreadCrumbs>
-               <BreadCrumbs pathsArray={pathArray} />
+               <BreadCrumbs pathsArray={breadcrumbs} />
             </StyledBreadCrumbs>
             <StyledButton>
                <Button
@@ -118,7 +121,7 @@ export const Students = () => {
                   bgActive="#6190FF4D"
                   border="1px solid #1D60FF"
                   color="#3772FF"
-                  onClick={addStudent}
+                  onClick={openAddStudentModal}
                >
                   <StyledAddStudent />
                   Добавить студента в курс
@@ -127,7 +130,7 @@ export const Students = () => {
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
-                  onClick={addGroup}
+                  onClick={openAddGroupModal}
                >
                   <StyledAddGroup /> Добавить группу в курс
                </Button>
@@ -141,7 +144,7 @@ export const Students = () => {
             <AddStudentsOfGroup
                isModalOpen={Boolean(showAddGroupModal)}
                onClose={handleClose}
-               groups={groupOptions}
+               groups={groups}
                onAdd={addGroupHandler}
             />
          </Container>

@@ -58,14 +58,14 @@ export const InstrutorCourses = () => {
          })
    }
 
-   const addStudent = (id) => {
+   const openAddStudentModal = (id) => {
       setSearchParams({
          [ADD_STUDENT]: true,
       })
       dispatch(getStudents())
       setCourseId(id)
    }
-   const addGroup = (id) => {
+   const openAddGroupModal = (id) => {
       setSearchParams({
          [ADD_GROUP]: true,
       })
@@ -77,7 +77,7 @@ export const InstrutorCourses = () => {
       () => [
          {
             id: 'one',
-            action: (id) => addStudent(id),
+            action: (id) => openAddStudentModal(id),
             content: (
                <StyledIcon>
                   <CourseStudent />
@@ -87,7 +87,7 @@ export const InstrutorCourses = () => {
          },
          {
             id: 'two',
-            action: (id) => addGroup(id),
+            action: (id) => openAddGroupModal(id),
             content: (
                <StyledIcon>
                   <CourseGroup />
@@ -103,16 +103,15 @@ export const InstrutorCourses = () => {
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const groupOptions = groupOfStudents.map((el) => {
+   const filteredGroups = groupOfStudents.filter(
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
+   )
+   const groups = filteredGroups.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
       }
    })
-
-   const groups = groupOptions.filter(
-      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
-   )
 
    useEffect(() => {
       dispatch(getCoursesOfInstructor())
