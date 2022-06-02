@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
-import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
