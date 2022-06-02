@@ -70,7 +70,6 @@ export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
          />
          <StyledInput
             placeholder="Пароль"
-            type="password"
             name="password"
             value={value.password}
             onChange={onChange}
