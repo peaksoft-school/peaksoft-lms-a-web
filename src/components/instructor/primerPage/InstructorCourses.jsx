@@ -22,9 +22,8 @@ import {
 
 export const InstrutorCourses = () => {
    const dispatch = useDispatch()
-   const { courses, groupOfStudents, students } = useSelector(
-      (state) => state.instructorCourses
-   )
+   const { courses, students, groupOfStudents, newStudentsOfCourse } =
+      useSelector((state) => state.instructorCourses)
 
    const [courseId, setCourseId] = useState()
    const [searchParams, setSearchParams] = useSearchParams()
@@ -37,7 +36,7 @@ export const InstrutorCourses = () => {
    }
 
    const addGroupHandler = (groupId) => {
-      dispatch(addGroupToCourse({ groupId, courseId }))
+      dispatch(addGroupToCourse({ groupId, id: courseId }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Группа успешно добавлена')
@@ -48,7 +47,7 @@ export const InstrutorCourses = () => {
          })
    }
    const addStudentHandler = (studentId) => {
-      dispatch(addStudentToCourse({ studentId, courseId }))
+      dispatch(addStudentToCourse({ studentId, id: courseId }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
@@ -59,14 +58,14 @@ export const InstrutorCourses = () => {
          })
    }
 
-   const addStudent = (id) => {
+   const openAddStudentModal = (id) => {
       setSearchParams({
          [ADD_STUDENT]: true,
       })
       dispatch(getStudents())
       setCourseId(id)
    }
-   const addGroup = (id) => {
+   const openAddGroupModal = (id) => {
       setSearchParams({
          [ADD_GROUP]: true,
       })
@@ -78,7 +77,7 @@ export const InstrutorCourses = () => {
       () => [
          {
             id: 'one',
-            action: (id) => addStudent(id),
+            action: (id) => openAddStudentModal(id),
             content: (
                <StyledIcon>
                   <CourseStudent />
@@ -88,7 +87,7 @@ export const InstrutorCourses = () => {
          },
          {
             id: 'two',
-            action: (id) => addGroup(id),
+            action: (id) => openAddGroupModal(id),
             content: (
                <StyledIcon>
                   <CourseGroup />
@@ -100,18 +99,25 @@ export const InstrutorCourses = () => {
       []
    )
 
-   useEffect(() => {
-      dispatch(getCoursesOfInstructor())
-      dispatch(getGroupOfStudents())
-      dispatch(getStudents())
-   }, [])
+   const filteredStudents = students.filter(
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
+   )
 
-   const groupOptions = groupOfStudents.map((el) => {
+   const filteredGroups = groupOfStudents.filter(
+      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
+   )
+   const groups = filteredGroups.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
       }
    })
+
+   useEffect(() => {
+      dispatch(getCoursesOfInstructor())
+      dispatch(getGroupOfStudents())
+      dispatch(getStudents())
+   }, [])
 
    return (
       <Wrapper>
@@ -132,13 +138,13 @@ export const InstrutorCourses = () => {
          <AddStudent
             isModalOpen={Boolean(showAddStudentModal)}
             onClose={handleClose}
-            students={students}
+            students={filteredStudents}
             onAdd={addStudentHandler}
          />
          <AddStudentsOfGroup
             isModalOpen={Boolean(showAddGroupModal)}
             onClose={handleClose}
-            groups={groupOptions}
+            groups={groups}
             onAdd={addGroupHandler}
          />
       </Wrapper>
