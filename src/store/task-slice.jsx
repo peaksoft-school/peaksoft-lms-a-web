@@ -96,11 +96,9 @@ export const taskSlice = createSlice({
    initialState: initState,
    reducers: {
       addTask(state, action) {
-         console.log(action.payload)
          state.lessonTasks.push(action.payload)
       },
       deleteTask(state, action) {
-         console.log(action.payload)
          const id = action.payload
          state.lessonTasks = state.lessonTasks.filter((el) => el.id !== id)
       },

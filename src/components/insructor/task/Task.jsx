@@ -21,9 +21,8 @@ import { AddCode } from './taskCode/AddCode'
 
 export const Task = () => {
    const dispatch = useDispatch()
-   const { lessonId } = useParams()
+   // const { lessonId } = useParams()
    const { lessonTasks } = useSelector((state) => state.tasks)
-   console.log(lessonTasks)
 
    const [taskName, setTaskName] = useState('')
 
