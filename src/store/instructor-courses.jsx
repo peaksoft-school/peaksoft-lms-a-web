@@ -3,7 +3,7 @@ import { baseFetch } from '../api/baseFetch'
 
 const initialState = {
    courses: [],
-   newGroupStudents: [],
+   newStudentsOfCourse: [],
    newStudents: [],
    groupOfStudents: [],
    singleCourse: [],
@@ -28,14 +28,14 @@ export const getCoursesOfInstructor = createAsyncThunk(
 )
 export const addGroupToCourse = createAsyncThunk(
    'instructorCourses/addGroupToCourse',
-   async ({ groupId, courseId }, { rejectWithValue }) => {
+   async ({ groupId, id }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/groups/accept-to-course`,
             method: 'PUT',
             params: {
                groupId,
-               courseId,
+               courseId: id,
             },
          })
          return response
@@ -46,13 +46,13 @@ export const addGroupToCourse = createAsyncThunk(
 )
 export const addStudentToCourse = createAsyncThunk(
    'instructorCourses/addStudentToCourse',
-   async ({ studentId, courseId }, { rejectWithValue }) => {
+   async ({ studentId, id }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/students/accept-to-course`,
             method: 'PUT',
             params: {
-               courseId,
+               courseId: id,
                studentId,
             },
          })
@@ -93,15 +93,15 @@ export const getGroupOfStudents = createAsyncThunk(
       }
    }
 )
-export const getStudentsByGroup = createAsyncThunk(
-   'instructorCourses/getStudentsByGroup',
+export const getStudentsByCourse = createAsyncThunk(
+   'instructorCourses/getStudentsByCourse',
    async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: `api/courses/students/${id}`,
             method: 'GET',
          })
-         dispatch(setCourseByStudents(response))
+         dispatch(setStudentsOfCourse(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -128,7 +128,7 @@ export const searchStudentsByName = createAsyncThunk(
    async (name, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/students/firstname/${name}`,
+            path: `api/students/fullName/${name}`,
             method: 'GET',
          })
          dispatch(getSearchResults(response))
@@ -153,8 +153,8 @@ export const instructorCoursesSlice = createSlice({
       setCoursesOfInstructor(state, action) {
          state.courses = action.payload
       },
-      setCourseByStudents(state, action) {
-         state.newGroupStudents = action.payload
+      setStudentsOfCourse(state, action) {
+         state.newStudentsOfCourse = action.payload
       },
       setGroupOfStudents(state, action) {
          state.groupOfStudents = action.payload
@@ -190,7 +190,7 @@ export const instructorCoursesSlice = createSlice({
 
 export const {
    setCoursesOfInstructor,
-   setCourseByStudents,
+   setStudentsOfCourse,
    setGroupOfStudents,
    getSearchResults,
    setSingleCourse,

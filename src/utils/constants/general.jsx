@@ -181,3 +181,9 @@ export const STUDENTS_INFO = [
    { title: 'Номер телефона', accessKey: 'phoneNumber', id: 'five' },
    { title: 'E-mail', accessKey: 'email', id: 'six' },
 ]
+
+export const TEXT = 'TEXT'
+export const FILE = 'FILE'
+export const IMAGE = 'IMAGE'
+export const LINK = 'LINK'
+export const CODE = 'CODE'

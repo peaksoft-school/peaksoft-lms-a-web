@@ -5,21 +5,23 @@ import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
 import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
 import { taskActions } from '../../../../store/task-slice'
+import { FILE } from '../../../../utils/constants/general'
 
-export const SelectFile = ({ setShowFile }) => {
+export const SelectFile = ({ addTextEditor }) => {
    const dispatch = useDispatch()
 
    const onDrop = (e) => {
       const selectedFile = e.target.files[0]
       const fileName = selectedFile.name
       dispatch(
-         taskActions.selectFile({
+         taskActions.addTask({
+            taskType: FILE,
             selectedFile,
             fileName,
             id: uuid(),
          })
       )
-      setShowFile(true)
+      addTextEditor(FILE)
    }
 
    return (

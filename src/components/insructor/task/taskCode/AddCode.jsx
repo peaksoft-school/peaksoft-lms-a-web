@@ -3,34 +3,24 @@ import { Tooltip } from '@mui/material'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
-import { ReactComponent as PictureIcon } from '../../../../assets/icons/picture.svg'
+import { ReactComponent as CodeIcon } from '../../../../assets/icons/code.svg'
 import { taskActions } from '../../../../store/task-slice'
-import { IMAGE } from '../../../../utils/constants/general'
+import { CODE } from '../../../../utils/constants/general'
 
-export const SelectImage = ({ addTextEditor }) => {
+export const AddCode = () => {
    const dispatch = useDispatch()
-
-   function onDrop(e) {
-      const selectedImageUrl = URL.createObjectURL(e.target.files[0])
-      const selectedImagefile = e.target.files[0]
+   const addCodeTask = () => {
       dispatch(
          taskActions.addTask({
-            taskType: IMAGE,
-            selectedImageUrl,
+            taskType: CODE,
             id: uuid(),
-            selectedImagefile,
          })
       )
-      addTextEditor(IMAGE)
    }
-
    return (
-      <StyledTooltip title="Добавить картинку" placement="top">
+      <StyledTooltip title="Код" placement="top">
          <StyledIcon>
-            <label htmlFor="uploadImage">
-               <PictureIcon />
-            </label>
-            <input type="file" id="uploadImage" onChange={onDrop} />
+            <CodeIcon onClick={addCodeTask} />
          </StyledIcon>
       </StyledTooltip>
    )
@@ -63,8 +53,5 @@ const StyledIcon = styled.div`
    &:hover {
       background: #d4d4d4;
       border-radius: 6px;
-   }
-   svg {
-      margin-top: 4px;
    }
 `

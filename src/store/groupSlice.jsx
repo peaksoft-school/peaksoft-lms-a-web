@@ -107,7 +107,7 @@ export const groupsPagination = createAsyncThunk(
             method: 'GET',
             params: {
                page,
-               size: 3,
+               size: 8,
             },
          })
          dispatch(groupActions.pagination(response))

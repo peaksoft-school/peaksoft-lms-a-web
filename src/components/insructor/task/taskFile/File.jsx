@@ -1,32 +1,28 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
 import { taskActions } from '../../../../store/task-slice'
 
-export const File = () => {
+export const File = ({ file }) => {
    const dispatch = useDispatch()
-   const { files } = useSelector((state) => state.tasks)
 
-   const deleteFileHandler = (index) => {
-      dispatch(taskActions.deleteFile(index))
+   const deleteFileHandler = (id) => {
+      dispatch(taskActions.deleteTask(id))
    }
+
    return (
-      <>
-         {files.map((el, i) => (
-            <Container key={el.id}>
-               <StyledIcon id="container">
-                  <RemoveIcon
-                     id="remove"
-                     onClick={() => deleteFileHandler(i)}
-                  />
-                  <FileIcon id="file" />
-               </StyledIcon>
-               <p>{el.fileName}</p>
-            </Container>
-         ))}
-      </>
+      <Container>
+         <StyledIcon id="container">
+            <RemoveIcon
+               id="remove"
+               onClick={() => deleteFileHandler(file.id)}
+            />
+            <FileIcon id="file" />
+         </StyledIcon>
+         <p>{file.fileName}</p>
+      </Container>
    )
 }
 
@@ -35,7 +31,7 @@ const Container = styled.div`
    align-items: center;
    margin-left: 5px;
    margin-top: 10px;
-   height: 30pxs;
+   height: 30px;
    #remove {
       display: none;
    }

@@ -139,6 +139,9 @@ const WrapperForButton = styled.div`
    width: 100%;
    display: flex;
    justify-content: end;
+   button {
+      margin-top: 18px;
+   }
 `
 const ModalContentControl = styled.div`
    width: 338px;

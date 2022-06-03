@@ -2,18 +2,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
+import { FILE, IMAGE } from '../utils/constants/general'
 
-const initState = {
-   taskName: '',
-   text: null,
-   files: [],
-   image: {
-      images: [],
-      files: [],
-   },
-   links: [],
-   code: null,
-}
+// const initState = {
+//    taskName: '',
+//    text: null,
+//    files: [],
+//    image: {
+//       images: [],
+//       files: [],
+//    },
+//    links: [],
+//    code: null,
+// }
 
 export const uploadImages = createAsyncThunk(
    'task/uploadImage',
@@ -37,7 +38,7 @@ export const uploadImages = createAsyncThunk(
          const imageUrl = promise.map((image) => {
             return {
                value: image.url,
-               taskType: 'IMAGE',
+               taskType: IMAGE,
             }
          })
          const promiseFile = await Promise.all(
@@ -54,7 +55,7 @@ export const uploadImages = createAsyncThunk(
          const fileUrl = promiseFile.map((el) => {
             return {
                value: el.url,
-               taskType: 'FILE',
+               taskType: FILE,
             }
          })
          dispatch(
@@ -87,42 +88,21 @@ export const addTask = createAsyncThunk(
       }
    }
 )
-
+const initState = {
+   lessonTasks: [],
+}
 export const taskSlice = createSlice({
    name: 'task',
    initialState: initState,
    reducers: {
-      addtext(state, action) {
-         state.text = action.payload
+      addTask(state, action) {
+         console.log(action.payload)
+         state.lessonTasks.push(action.payload)
       },
-      selectFile(state, action) {
-         const file = action.payload
-         state.files = state.files.concat(file)
-      },
-      selectImage(state, action) {
-         const { images, selectedImagefile } = action.payload
-         state.image.images = state.image.images.concat(images)
-         state.image.files = state.image.files.concat(selectedImagefile)
-      },
-      addlink(state, action) {
-         const { link } = action.payload
-         state.links = state.links.concat(link)
-      },
-      addCode(state, action) {
-         state.code = action.payload
-      },
-      deleteImage(state, action) {
-         const index = action.payload
-         state.image.images = state.image.images.filter((el, i) => i !== index)
-         state.image.files = state.image.files.filter((el, i) => i !== index)
-      },
-      deleteFile(state, action) {
-         const index = action.payload
-         state.files = state.files.filter((el, i) => i !== index)
-      },
-      deleteLink(state, action) {
-         const index = action.payload
-         state.links = state.links.filter((el, i) => i !== index)
+      deleteTask(state, action) {
+         console.log(action.payload)
+         const id = action.payload
+         state.lessonTasks = state.lessonTasks.filter((el) => el.id !== id)
       },
    },
 })

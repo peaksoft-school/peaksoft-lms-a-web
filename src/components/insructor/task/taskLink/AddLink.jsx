@@ -9,8 +9,9 @@ import { Button } from '../../../UI/button/Button'
 import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.svg'
 import { useInput } from '../../../../hooks/useInput/useInput'
 import { taskActions } from '../../../../store/task-slice'
+import { LINK } from '../../../../utils/constants/general'
 
-export const AddLinkModal = ({ setShowLink }) => {
+export const AddLinkModal = ({ addTextEditor }) => {
    const dispatch = useDispatch()
    const [modalIsOpen, setModalIsOpen] = useState(false)
    const [formIsValid, setFormIsValid] = useState(false)
@@ -26,9 +27,16 @@ export const AddLinkModal = ({ setShowLink }) => {
 
    const addLink = () => {
       const { linkText, link } = value
-      dispatch(taskActions.addlink({ link: { link, linkText, id: uuid() } }))
+      dispatch(
+         taskActions.addTask({
+            taskType: LINK,
+            linkText,
+            link,
+            id: uuid(),
+         })
+      )
       setModalIsOpen(false)
-      setShowLink(true)
+      addTextEditor(LINK)
       onClear()
    }
 
