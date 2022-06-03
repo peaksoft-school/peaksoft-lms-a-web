@@ -10,6 +10,8 @@ import {
    ADD_LESSON,
    DELETE_LESSON,
    EDIT_LESSON,
+   ADD_LINK_MODAL,
+   GET_LINK,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -27,21 +29,36 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { AddLinkModal } from '../../../insructor/AddLinkModal'
+import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
 
-export const Materials = () => {
+export const Materials = (props) => {
    const dispatch = useDispatch()
    const { id } = useParams()
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
-
    const [searchParams, setSearchParams] = useSearchParams()
 
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+   const { newLinkData, oneSingleLink } = useSelector((state) => state.link)
+   console.log(newLinkData)
+
+   useEffect((id) => {
+      dispatch(getSingleLink(id))
+      setSearchParams({ [GET_LINK]: true, linkId: id })
+   }, [])
+
+   const selectedOptionHandler = (option) => {
+      if (option.id === 'link') {
+         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
+      }
+   }
 
    const closeModals = () => {
       setSearchParams('')
@@ -132,6 +149,7 @@ export const Materials = () => {
       <>
          <StyledButtonContainer>
             <BreadCrumbs pathsArray={pathsArray} />
+
             <Button
                background="#3772FF"
                bgHover="#1D60FF"
@@ -150,6 +168,8 @@ export const Materials = () => {
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
+                     selectedOption={selectedOptionHandler}
+                     // link={oneSingleLink}
                   />
                ))}
          </Container>
@@ -170,6 +190,10 @@ export const Materials = () => {
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <AddLinkModal
+            isModalOpen={showAddLinkModal}
+            closeModals={closeModals}
          />
       </>
    )

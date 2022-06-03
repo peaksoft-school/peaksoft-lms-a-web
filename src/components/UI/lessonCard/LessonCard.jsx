@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { useSelector } from 'react-redux'
 import { ReactComponent as EditTitle } from '../../../assets/icons/editTitle.svg'
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/Delete.svg'
 import { ReactComponent as LinkIcon } from '../../../assets/icons/Link.svg'
@@ -8,7 +9,6 @@ import { ReactComponent as TestIcon } from '../../../assets/icons/Test.svg'
 import { ReactComponent as VideoIcon } from '../../../assets/icons/Video.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/editIcon.svg'
 import { Select } from '../select/Select'
-// import { AddLinkModal } from '../../insructor/AddLinkModal'
 
 export const LessonCard = ({
    title,
@@ -19,6 +19,7 @@ export const LessonCard = ({
    test,
    onEditTitle,
    onDeleteLesson,
+   selectedOption,
    lessonId,
 }) => {
    const ADD_OPTIONS = [
@@ -41,6 +42,7 @@ export const LessonCard = ({
          id: 'link',
          title: 'Ссылка',
          disabled: Boolean(link),
+         lessonId,
       },
       {
          id: 'test',
@@ -60,7 +62,11 @@ export const LessonCard = ({
             </StyledTitle>
             <StyledManageContainer>
                <StyledSelectContainer>
-                  <Select placeholder="Добавить" options={ADD_OPTIONS} />
+                  <Select
+                     placeholder="Добавить"
+                     options={ADD_OPTIONS}
+                     selectedOption={selectedOption}
+                  />
                </StyledSelectContainer>
                <StyledDeleteIcon onClick={onDeleteLesson}>
                   <DeleteIcon />
@@ -140,6 +146,13 @@ export const LessonCard = ({
                </StyledContentIcon>
                <StyledDiv>
                   <h2>Ссылка</h2>
+                  {/* <a href={newLinkData?.link}>Ссылка</a> */}
+                  {/* <div>
+                     <a href={link} target="_blank" rel="noreferrer">
+                        Ссылка
+                     </a>
+                     location.href
+                  </div> */}
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>

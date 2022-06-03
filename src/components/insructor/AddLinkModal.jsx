@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { Input } from '../UI/input/Input'
+
 import { BasicModal } from '../UI/modal/BasicModal'
 import { Button } from '../UI/button/Button'
 import { addLinkToLesson } from '../../store/INSTRUCTOR/linkSlice'
@@ -10,26 +12,30 @@ import {
    showSuccessMessage,
 } from '../UI/notification/Notification'
 import { useInput } from '../../hooks/usuInput/useInput'
+import { ADD_LINK_MODAL } from '../../utils/constants/general'
 
-export const AddLinkModal = () => {
+export const AddLinkModal = ({ closeModals, isModalOpen }) => {
    const dispatch = useDispatch()
-   const [openAddingLinkModal, setOpenAddingLinkModal] = useState(true)
+   const [searchParams, setSearchParams] = useSearchParams()
 
    const { value, onChange, onClear } = useInput({
       text: '',
       link: '',
    })
+
    const addLinkToLessonHandler = () => {
+      const lessonId = searchParams.get('lessonId')
       const newLinkData = {
-         lessonId: 1,
          text: value.text,
          link: value.link,
       }
-      dispatch(addLinkToLesson(newLinkData))
+
+      dispatch(addLinkToLesson({ newLinkData, lessonId }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Ссылка успешно добавленна')
-            setOpenAddingLinkModal(false)
+            setSearchParams({ [ADD_LINK_MODAL]: false })
+            closeModals()
             onClear()
          })
          .catch(() => {
@@ -39,7 +45,11 @@ export const AddLinkModal = () => {
 
    return (
       <div>
-         <BasicModal isModalOpen={openAddingLinkModal} title="Добавить ссылку">
+         <BasicModal
+            isModalOpen={Boolean(isModalOpen)}
+            onClose={closeModals}
+            title="Добавить ссылку"
+         >
             <InputStyleControl>
                <div>
                   <Input
@@ -69,7 +79,7 @@ export const AddLinkModal = () => {
                      color="#3772FF"
                      bgHover="rgba(29, 96, 255, 0.1)"
                      bgActive="rgba(97, 144, 255, 0.3)"
-                     onClick={() => setOpenAddingLinkModal(false)}
+                     onClick={closeModals}
                   >
                      Отмена
                   </Button>

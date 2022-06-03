@@ -3,6 +3,7 @@ import { baseFetch } from '../../api/baseFetch'
 
 const initialState = {
    newLinkData: [],
+   oneSingleLink: null,
    isLoading: null,
    successMessage: null,
    error: null,
@@ -10,14 +11,13 @@ const initialState = {
 
 export const addLinkToLesson = createAsyncThunk(
    'lessons/addLinkToLesson',
-   async ({ lessonId, text, link }, { rejectWithValue, dispatch }) => {
+   async ({ lessonId, newLinkData }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/links/${lessonId}`,
             method: 'POST',
-            body: { text, link },
+            body: newLinkData,
          })
-         dispatch(linkActions.getLinkData(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -25,12 +25,31 @@ export const addLinkToLesson = createAsyncThunk(
    }
 )
 
+export const getSingleLink = createAsyncThunk(
+   'lessons/getSingleLink',
+   async (linkId, { rejectWithValue, dispatch }) => {
+      console.log(linkId)
+      try {
+         const response = await baseFetch({
+            path: `api/links/${linkId}`,
+            method: 'GET',
+         })
+         dispatch(linkActions.getOneSingleLink(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
 export const linkSlice = createSlice({
    name: 'lessons',
    initialState,
    reducers: {
       getLinkData: (state, action) => {
          state.newLinkData = action.payload
+      },
+      getOneSingleLink: (state, action) => {
+         state.oneSingleLink = action.payload
       },
    },
    extraReducers: {
