@@ -76,7 +76,7 @@ export const ADD_COURSES = 'add_courses'
 export const ADD_LESSON = 'create_lesson'
 export const EDIT_LESSON = 'edit_lesson'
 export const DELETE_LESSON = 'delete-lesson-confirmation'
-export const ADD_TEST = 'add-test'
+export const DELETE_TEST = 'dlete-test-confirmation'
 
 export const STUDY_FORMAT_OPTION = [
    {

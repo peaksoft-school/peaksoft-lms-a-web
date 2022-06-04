@@ -9,6 +9,7 @@ import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
    DELETE_LESSON,
+   DELETE_TEST,
    EDIT_LESSON,
 } from '../../../../utils/constants/general'
 import {
@@ -27,6 +28,8 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { getTest, removeTest } from '../../../../store/create-test-slice'
+import { ConfirmModalOnDeleteTest } from './ConfirmModalOnDeleteTest'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -40,9 +43,11 @@ export const Materials = () => {
 
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
-   const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showDeleteLessonConfirmModal = searchParams.get(DELETE_LESSON)
+   const showDeleteTestConfirmModal = searchParams.get(DELETE_TEST)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+   const [deletedTestId, setDeletedTestId] = useState(null)
 
    const selectedOption = (option) => {
       if (option.id === 'test') {
@@ -63,6 +68,11 @@ export const Materials = () => {
       setSearchParams({ [DELETE_LESSON]: true })
    }
 
+   const deleteTest = (id) => {
+      setDeletedTestId(id)
+      setSearchParams({ [DELETE_TEST]: true })
+   }
+
    const openEditModal = (id) => {
       dispatch(getLesson(id))
       setSearchParams({ [EDIT_LESSON]: true, lessonId: id })
@@ -75,7 +85,7 @@ export const Materials = () => {
             showSuccessMessage('Урок успешно создан')
             closeModals()
             onClear()
-            dispatch(getLessons())
+            dispatch(getLessons(id))
          })
          .catch(() => {
             showErrorMessage('Не удалось создать урок')
@@ -109,15 +119,36 @@ export const Materials = () => {
          })
    }
 
+   const deleteTestHandler = () => {
+      dispatch(removeTest(deletedTestId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Тест успешно удален')
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить тест')
+         })
+   }
+
+   const editTestHandler = (id) => {
+      navigate(`edit_test/${id}`)
+      dispatch(getTest(id))
+   }
+
    useEffect(() => {
       const lessonId = searchParams.get('lessonId')
       if (lessonId) {
          dispatch(getLesson(lessonId))
       }
-      if (showConfirmationModal) {
+      if (showDeleteLessonConfirmModal) {
          closeModals()
       }
-      dispatch(getLessons())
+      if (showDeleteTestConfirmModal) {
+         closeModals()
+      }
+      dispatch(getLessons(id))
       dispatch(getCourse(id))
    }, [])
 
@@ -158,6 +189,9 @@ export const Materials = () => {
                      selectedOption={selectedOption}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
+                     onEditTest={editTestHandler}
+                     onDeleteTest={deleteTest}
+                     test={lesson.testResponse}
                   />
                ))}
          </Container>
@@ -175,9 +209,14 @@ export const Materials = () => {
             />
          )}
          <ConfirmModalOnDelete
-            showModal={showConfirmationModal}
+            showModal={showDeleteLessonConfirmModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <ConfirmModalOnDeleteTest
+            showModal={showDeleteTestConfirmModal}
+            onClose={closeModals}
+            onDelete={deleteTestHandler}
          />
       </>
    )

@@ -6,7 +6,11 @@ import { Button } from '../../../UI/button/Button'
 import { TestQuestion } from './TestQuestion'
 import { TestTitle } from './TestTitle'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/VectorAdd.svg'
-import { addTest, testActions } from '../../../../store/create-test-slice'
+import {
+   addTest,
+   editTest,
+   testActions,
+} from '../../../../store/create-test-slice'
 import { TEST_KEY } from '../../../../utils/constants/general'
 import { localStorageHelper } from '../../../../utils/helpers/general'
 import {
@@ -18,7 +22,7 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 export const LessonTest = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { id, lessonId } = useParams()
+   const { id, lessonId, testId } = useParams()
    const { test, isLoading } = useSelector((state) => state.createTest)
 
    const addQuestionHandler = () => {
@@ -29,6 +33,8 @@ export const LessonTest = () => {
       navigate(`/instructor/instructor_course/${id}/materials`, {
          replace: true,
       })
+      dispatch(testActions.clearTest())
+      localStorageHelper.clear(TEST_KEY)
    }
 
    const sendTestDataHandler = () => {
@@ -56,6 +62,20 @@ export const LessonTest = () => {
          })
    }
 
+   const sendEditedTestData = () => {
+      dispatch(editTest({ value: test, id: testId }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            onCancelToCreateTest()
+            dispatch(testActions.clearTest())
+            localStorageHelper.clear(TEST_KEY)
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
+   }
+
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store(TEST_KEY, test)
@@ -63,31 +83,35 @@ export const LessonTest = () => {
    }, [test])
 
    return (
-      <StyledContainer>
-         {(isLoading && <Spinner />) || <TestTitle testName={test.testName} />}
-         {(isLoading && <Spinner />) || <TestQuestion />}
-         <StyledButtonContainer>
-            <Button
-               background="none"
-               border="1px solid #3772FF"
-               color="#3772FF"
-               onClick={onCancelToCreateTest}
-            >
-               Отмена
-            </Button>
-            <Button
-               background="#3772FF"
-               bgHover="#1D60FF"
-               bgActive="#6190FF"
-               onClick={sendTestDataHandler}
-            >
-               Сохранить
-            </Button>
-         </StyledButtonContainer>
-         <StyledAddOptionIcon onClick={addQuestionHandler}>
-            <AddIcon />
-         </StyledAddOptionIcon>
-      </StyledContainer>
+      <div>
+         {(isLoading && <Spinner />) || (
+            <StyledContainer>
+               <TestTitle testName={test.testName} />
+               <TestQuestion />
+               <StyledButtonContainer>
+                  <Button
+                     background="none"
+                     border="1px solid #3772FF"
+                     color="#3772FF"
+                     onClick={onCancelToCreateTest}
+                  >
+                     Отмена
+                  </Button>
+                  <Button
+                     background="#3772FF"
+                     bgHover="#1D60FF"
+                     bgActive="#6190FF"
+                     onClick={testId ? sendEditedTestData : sendTestDataHandler}
+                  >
+                     Сохранить
+                  </Button>
+               </StyledButtonContainer>
+               <StyledAddOptionIcon onClick={addQuestionHandler}>
+                  <AddIcon />
+               </StyledAddOptionIcon>
+            </StyledContainer>
+         )}
+      </div>
    )
 }
 

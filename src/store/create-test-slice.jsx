@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { TEST_KEY } from '../utils/constants/general'
@@ -17,7 +16,6 @@ const initState = {
                   id: 1,
                   option: '',
                   isTrue: false,
-                  another: false,
                },
             ],
          },
@@ -33,6 +31,52 @@ export const addTest = createAsyncThunk(
          const response = await baseFetch({
             path: `api/tests/save/${id}`,
             method: 'POST',
+            body: value,
+         })
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
+export const getTest = createAsyncThunk(
+   'lesson/getTest',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/tests/get/${id}`,
+            method: 'GET',
+         })
+         dispatch(testActions.getTest(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const removeTest = createAsyncThunk(
+   'lesson/deleteTest',
+   async (id, { rejectWithValue }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/tests/delete/${id}`,
+            method: 'DELETE',
+         })
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
+export const editTest = createAsyncThunk(
+   'lesson/editTest',
+   async ({ value, id }, { rejectWithValue }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/tests/update/${id}`,
+            method: 'PUT',
             body: value,
          })
          return response
@@ -59,7 +103,6 @@ export const createTestSlice = createSlice({
             id: option.id + 1,
             option: '',
             isTrue: false,
-            another: false,
          })
       },
       addOptionAnother(state, action) {
@@ -71,7 +114,6 @@ export const createTestSlice = createSlice({
             id: option.id + 1,
             option: 'Другое...',
             isTrue: false,
-            another: true,
          })
       },
       deleteOption(state, action) {
@@ -174,6 +216,9 @@ export const createTestSlice = createSlice({
             },
          ]
          state.test.testName = ''
+      },
+      getTest(state, action) {
+         state.test = action.payload
       },
    },
    extraReducers: {

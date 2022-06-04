@@ -7,6 +7,6 @@ export const localStorageHelper = {
       localStorage.setItem(key, JSON.stringify(value))
    },
    clear(key) {
-      localStorage.clear(key)
+      localStorage.removeItem(key)
    },
 }

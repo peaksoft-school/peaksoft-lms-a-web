@@ -27,6 +27,10 @@ export const InstructorRoutes = () => {
                element={<LessonTest />}
             />
             <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/edit_test/:testId`}
+               element={<LessonTest />}
+            />
+            <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/students`}
                element={<Students />}
             />

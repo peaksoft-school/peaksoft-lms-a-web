@@ -106,7 +106,7 @@ export const TestQuestion = () => {
                            checked={option.isTrue}
                            onClick={() => deleteOption(option.id, question.id)}
                            inputValue={option.option}
-                           inputDisabled={option.another}
+                           inputDisabled={option.option === 'Другое...'}
                            onChangeOption={() =>
                               chooseCorrectOptionHandler(question.id, option.id)
                            }
@@ -120,7 +120,7 @@ export const TestQuestion = () => {
                            onClick={() => deleteOption(option.id, question.id)}
                            inputValue={option.option}
                            checked={option.isTrue}
-                           inputDisabled={option.another}
+                           inputDisabled={option.option === 'Другое...'}
                            onChangeOption={() =>
                               chooseCorrectOptionHandler(question.id, option.id)
                            }
