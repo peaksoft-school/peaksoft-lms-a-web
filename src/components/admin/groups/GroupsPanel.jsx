@@ -91,20 +91,21 @@ export const GroupsPanel = () => {
          <GroupCreate page={page} />
          <StyledContainer>
             <CardContentStyleControl>
-               {groups.map((group) => {
-                  return (
-                     <Card
-                        image={group.image}
-                        options={options}
-                        title={group.groupName}
-                        description={group.description}
-                        date={group.dateOfStart}
-                        key={group.id}
-                        id={group.id}
-                        path={`${group.id}/group_students`}
-                     />
-                  )
-               })}
+               {(isLoading && <Spinner />) ||
+                  groups.map((group) => {
+                     return (
+                        <Card
+                           image={group.image}
+                           options={options}
+                           title={group.groupName}
+                           description={group.description}
+                           date={group.dateOfStart}
+                           key={group.id}
+                           id={group.id}
+                           path={`${group.id}/group_students`}
+                        />
+                     )
+                  })}
                <GroupDeleteConfirm
                   isModalOpen={isModalOpen}
                   deletingModalHandler={deletingModalHandler}

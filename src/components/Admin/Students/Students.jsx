@@ -266,7 +266,6 @@ export const Students = () => {
          title: el.groupName,
       }
    })
-
    return (
       <div>
          <StyledButtonsContainer>

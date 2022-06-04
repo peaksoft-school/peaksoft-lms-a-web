@@ -4,15 +4,11 @@ import { useLocation } from 'react-router-dom'
 
 export const BreadCrumbs = (props) => {
    const { pathname } = useLocation()
-
    const paths = pathname.split('/').filter((x) => x)
-
    const pathsHistory = props.pathsArray.slice(0, paths.length)
-
    const crumbs = pathsHistory.map((crumb, index) => {
       const crumbHref = `/${paths.slice(0, index + 1).join('/')}`
       const isLast = index === paths.length - 2
-
       return isLast ? (
          <LastPathStyle color="black" key={crumb.path}>
             {crumb.name}
@@ -38,7 +34,6 @@ const StyledCrumbs = styled(Breadcrumbs)`
    font-family: sans-serif;
    margin-left: 20px;
 `
-
 const LinkStyleControl = styled(Link)`
    color: ${({ color }) => color || 'gray'};
 `
