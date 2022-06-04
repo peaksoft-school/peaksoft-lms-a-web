@@ -2,6 +2,12 @@ import { ReactComponent as GroupsIcon } from '../../assets/icons/group.svg'
 import { ReactComponent as CoursesIcon } from '../../assets/icons/courses.svg'
 import { ReactComponent as TeachersIcon } from '../../assets/icons/teacher.svg'
 import { ReactComponent as StudentsIcon } from '../../assets/icons/students.svg'
+import { ReactComponent as TextIcon } from '../../assets/icons/simpleText.svg'
+import { ReactComponent as ItalicIcon } from '../../assets/icons/italic.svg'
+import { ReactComponent as UnderlineIcon } from '../../assets/icons/underline.svg'
+import { ReactComponent as BoldIcon } from '../../assets/icons/bold.svg'
+import { ReactComponent as UlIcon } from '../../assets/icons/ulList.svg'
+import { ReactComponent as OlIcon } from '../../assets/icons/olList.svg'
 
 export const BASE_URL =
    'http://peaksoftlmsab4-env.eba-azvcpcga.eu-west-2.elasticbeanstalk.com'
@@ -187,3 +193,49 @@ export const FILE = 'FILE'
 export const IMAGE = 'IMAGE'
 export const LINK = 'LINK'
 export const CODE = 'CODE'
+
+export const TOOLBAR = [
+   {
+      id: 2,
+      format: 'heading',
+      type: 'mark',
+      icon: <TextIcon />,
+      title: 'Заголовок',
+   },
+   {
+      id: 3,
+      format: 'bold',
+      type: 'mark',
+      icon: <BoldIcon />,
+      title: 'Жирный текст',
+   },
+   {
+      id: 4,
+      format: 'italic',
+      type: 'mark',
+      icon: <ItalicIcon />,
+      title: 'Курсив',
+   },
+   {
+      id: 5,
+      format: 'underline',
+      type: 'mark',
+      icon: <UnderlineIcon />,
+      title: 'Подчеркнутый текст',
+   },
+
+   {
+      id: 15,
+      format: 'orderedList',
+      type: 'block',
+      icon: <OlIcon />,
+      title: 'Нумерованный список',
+   },
+   {
+      id: 16,
+      format: 'unorderedList',
+      type: 'block',
+      icon: <UlIcon />,
+      title: 'Маркированный список',
+   },
+]

@@ -1,20 +1,8 @@
 /* eslint-disable consistent-return */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
 import { FILE, IMAGE } from '../utils/constants/general'
-
-// const initState = {
-//    taskName: '',
-//    text: null,
-//    files: [],
-//    image: {
-//       images: [],
-//       files: [],
-//    },
-//    links: [],
-//    code: null,
-// }
 
 export const uploadImages = createAsyncThunk(
    'task/uploadImage',
@@ -101,6 +89,30 @@ export const taskSlice = createSlice({
       deleteTask(state, action) {
          const id = action.payload
          state.lessonTasks = state.lessonTasks.filter((el) => el.id !== id)
+      },
+      addText(state, action) {
+         const { id, textValue } = action.payload
+         state.lessonTasks = state.lessonTasks.map((el) => {
+            if (el.id === id) {
+               return {
+                  ...el,
+                  value: textValue,
+               }
+            }
+            return el
+         })
+      },
+      addCode(state, action) {
+         const { id, code } = action.payload
+         state.lessonTasks = state.lessonTasks.map((el) => {
+            if (el.id === id) {
+               return {
+                  ...el,
+                  value: code,
+               }
+            }
+            return el
+         })
       },
    },
 })

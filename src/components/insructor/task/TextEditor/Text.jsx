@@ -3,38 +3,28 @@ import { Tooltip } from '@mui/material'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
-import { ReactComponent as PictureIcon } from '../../../../assets/icons/picture.svg'
 import { taskActions } from '../../../../store/task-slice'
-import { IMAGE } from '../../../../utils/constants/general'
+import { TEXT } from '../../../../utils/constants/general'
+import { ReactComponent as TextIcon } from '../../../../assets/icons/text.svg'
 
-export const SelectImage = () => {
+export const Text = () => {
    const dispatch = useDispatch()
-
-   function onDrop(e) {
-      const selectedImageUrl = URL.createObjectURL(e.target.files[0])
-      const selectedImagefile = e.target.files[0]
+   const addTextEditor = () => {
       dispatch(
          taskActions.addTask({
-            taskType: IMAGE,
-            selectedImageUrl,
+            taskType: TEXT,
             id: uuid(),
-            selectedImagefile,
          })
       )
    }
-
    return (
-      <StyledTooltip title="Добавить картинку" placement="top">
+      <StyledTooltip title="Текстовое поле" placement="top">
          <StyledIcon>
-            <label htmlFor="uploadImage">
-               <PictureIcon />
-            </label>
-            <input type="file" id="uploadImage" onChange={onDrop} />
+            <TextIcon onClick={addTextEditor} />
          </StyledIcon>
       </StyledTooltip>
    )
 }
-
 const StyledTooltip = styled(({ className, ...props }) => (
    <Tooltip {...props} classes={{ popper: className }} />
 ))`

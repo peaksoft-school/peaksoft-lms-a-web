@@ -3,11 +3,14 @@ import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 import { ReactComponent as IconText } from '../../../../assets/icons/text.svg'
 import { Toolbar } from './Toolbar'
 import { taskActions } from '../../../../store/task-slice'
+import { TEXT } from '../../../../utils/constants/general'
+import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
 
-export const TextEditor = () => {
+export const TextEditor = ({ text }) => {
    const dispatch = useDispatch()
    const [value, setValue] = useState([
       {
@@ -17,7 +20,12 @@ export const TextEditor = () => {
    ])
 
    useEffect(() => {
-      dispatch(taskActions.addtext(value))
+      dispatch(
+         taskActions.addText({
+            textValue: value,
+            id: text.id,
+         })
+      )
    }, [value])
 
    const editorRef = useRef()
@@ -30,6 +38,9 @@ export const TextEditor = () => {
       return <Leaf {...props} />
    }, [])
 
+   const deleteTextHandler = (id) => {
+      dispatch(taskActions.deleteTask(id))
+   }
    return (
       <Slate
          editor={editor}
@@ -41,7 +52,14 @@ export const TextEditor = () => {
          <TextEditorContainer>
             <Toolbar />
             <StyledTextEditor>
-               <IconText />
+               <StyledIcon id="container">
+                  <RemoveIcon
+                     id="remove"
+                     onClick={() => deleteTextHandler(text.id)}
+                  />
+                  <IconText id="text" />
+               </StyledIcon>
+
                <StyledEditable
                   placeholder="имя"
                   renderElement={renderElement}
@@ -100,9 +118,20 @@ const StyledTextEditor = styled.div`
    width: 100%;
    min-height: 40px;
    margin-top: 20px;
-   svg {
-      margin-top: 9px;
-      margin-right: 8px;
+   #remove {
+      display: none;
+   }
+   &:hover {
+      #remove {
+         display: block;
+      }
+      #text {
+         display: none;
+      }
+      #container {
+         background: #c4c4c4;
+         border-radius: 3px;
+      }
    }
 `
 const StyledEditable = styled(Editable)`
@@ -113,4 +142,18 @@ const StyledEditable = styled(Editable)`
    border-radius: 10px;
    width: 100%;
    height: 100%;
+`
+const StyledIcon = styled.div`
+   width: 27px;
+   height: 28px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-right: 10px;
+   margin-top: 8px;
+   cursor: pointer;
+   &:hover {
+      background: #c4c4c4;
+      border-radius: 3px;
+   }
 `

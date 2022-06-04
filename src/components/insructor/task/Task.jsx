@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import uuid from 'react-uuid'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
-import { ReactComponent as TextIcon } from '../../../assets/icons/text.svg'
+
 import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
 import { TextEditor } from './TextEditor/TextEditor'
 import { SelectFile } from './taskFile/SelectFile'
@@ -18,6 +18,7 @@ import { File } from './taskFile/File'
 import { AddLinkModal } from './taskLink/AddLink'
 import { CODE, FILE, IMAGE, LINK, TEXT } from '../../../utils/constants/general'
 import { AddCode } from './taskCode/AddCode'
+import { Text } from './TextEditor/Text'
 
 export const Task = () => {
    const dispatch = useDispatch()
@@ -39,7 +40,7 @@ export const Task = () => {
    //       })
    //    )
    // }
-   const addTextEditor = () => {}
+   console.log(lessonTasks)
    return (
       <>
          <StyledBreadCrumbs>
@@ -53,11 +54,7 @@ export const Task = () => {
                   onChange={onChangeHandler}
                />
                <StyledIcons>
-                  <StyledTooltip title="Текстовое поле" placement="top">
-                     <StyledIcon>
-                        <TextIcon onClick={() => addTextEditor(TEXT)} />
-                     </StyledIcon>
-                  </StyledTooltip>
+                  <Text />
                   <SelectFile />
                   <SelectImage />
                   <AddLinkModal />
@@ -65,7 +62,7 @@ export const Task = () => {
                </StyledIcons>
             </Title>
             <StyledContainer>
-               {lessonTasks.map((el, i) => {
+               {lessonTasks.map((el) => {
                   if (el.taskType === FILE) {
                      return <File file={el} />
                   }
@@ -77,6 +74,9 @@ export const Task = () => {
                   }
                   if (el.taskType === LINK) {
                      return <TaskLink link={el} />
+                  }
+                  if (el.taskType === TEXT) {
+                     return <TextEditor text={el} />
                   }
                   return el
                })}
@@ -160,6 +160,8 @@ const StyledContainer = styled.div`
    border: 1px solid #d4d4d4;
    border-radius: 10px;
    padding: 18px;
+   display: grid;
+   grid-row-gap: 20px;
 `
 const ButtonContainer = styled.div`
    height: 80px;

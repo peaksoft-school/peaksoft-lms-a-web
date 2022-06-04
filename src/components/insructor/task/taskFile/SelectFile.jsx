@@ -7,7 +7,7 @@ import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
 import { taskActions } from '../../../../store/task-slice'
 import { FILE } from '../../../../utils/constants/general'
 
-export const SelectFile = ({ addTextEditor }) => {
+export const SelectFile = () => {
    const dispatch = useDispatch()
 
    const onDrop = (e) => {
@@ -21,7 +21,6 @@ export const SelectFile = ({ addTextEditor }) => {
             id: uuid(),
          })
       )
-      addTextEditor(FILE)
    }
 
    return (

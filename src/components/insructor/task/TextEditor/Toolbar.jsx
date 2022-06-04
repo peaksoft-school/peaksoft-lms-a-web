@@ -4,12 +4,7 @@ import { Tooltip } from '@mui/material'
 import React from 'react'
 import { ReactEditor, useSlate } from 'slate-react'
 import { Editor, Transforms, Element as SlateElement } from 'slate'
-import { ReactComponent as TextIcon } from '../../../../assets/icons/simpleText.svg'
-import { ReactComponent as ItalicIcon } from '../../../../assets/icons/italic.svg'
-import { ReactComponent as UnderlineIcon } from '../../../../assets/icons/underline.svg'
-import { ReactComponent as BoldIcon } from '../../../../assets/icons/bold.svg'
-import { ReactComponent as UlIcon } from '../../../../assets/icons/ulList.svg'
-import { ReactComponent as OlIcon } from '../../../../assets/icons/olList.svg'
+import { TOOLBAR } from '../../../../utils/constants/general'
 
 export const Toolbar = () => {
    const editor = useSlate()
@@ -48,7 +43,7 @@ export const Toolbar = () => {
    }
    return (
       <Container>
-         {toolbar.map((el) => {
+         {TOOLBAR.map((el) => {
             switch (el.type) {
                case 'mark':
                   return <MarkButton key={el.id} {...el} />
@@ -121,6 +116,7 @@ const Container = styled.div`
    align-items: flex-end;
    margin-left: 40px;
    cursor: pointer;
+   margin-top: 20px;
 `
 const StyledIcon = styled.div`
    width: 34px;
@@ -148,49 +144,3 @@ const StyledTooltip = styled(({ className, ...props }) => (
       gap: 10px;
    }
 `
-
-const toolbar = [
-   {
-      id: 2,
-      format: 'heading',
-      type: 'mark',
-      icon: <TextIcon />,
-      title: 'Заголовок',
-   },
-   {
-      id: 3,
-      format: 'bold',
-      type: 'mark',
-      icon: <BoldIcon />,
-      title: 'Жирный текст',
-   },
-   {
-      id: 4,
-      format: 'italic',
-      type: 'mark',
-      icon: <ItalicIcon />,
-      title: 'Курсив',
-   },
-   {
-      id: 5,
-      format: 'underline',
-      type: 'mark',
-      icon: <UnderlineIcon />,
-      title: 'Подчеркнутый текст',
-   },
-
-   {
-      id: 15,
-      format: 'orderedList',
-      type: 'block',
-      icon: <OlIcon />,
-      title: 'Нумерованный список',
-   },
-   {
-      id: 16,
-      format: 'unorderedList',
-      type: 'block',
-      icon: <UlIcon />,
-      title: 'Маркированный список',
-   },
-]

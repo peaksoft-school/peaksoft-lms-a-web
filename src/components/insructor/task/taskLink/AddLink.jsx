@@ -11,7 +11,7 @@ import { useInput } from '../../../../hooks/useInput/useInput'
 import { taskActions } from '../../../../store/task-slice'
 import { LINK } from '../../../../utils/constants/general'
 
-export const AddLinkModal = ({ addTextEditor }) => {
+export const AddLinkModal = () => {
    const dispatch = useDispatch()
    const [modalIsOpen, setModalIsOpen] = useState(false)
    const [formIsValid, setFormIsValid] = useState(false)
@@ -36,7 +36,6 @@ export const AddLinkModal = ({ addTextEditor }) => {
          })
       )
       setModalIsOpen(false)
-      addTextEditor(LINK)
       onClear()
    }
 

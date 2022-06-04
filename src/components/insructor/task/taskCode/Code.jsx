@@ -8,13 +8,17 @@ import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIco
 export const Code = ({ code }) => {
    const dispatch = useDispatch()
    const onChangeHandler = (e) => {
-      dispatch(taskActions.addCode(e.target.value))
+      dispatch(
+         taskActions.addCode({
+            code: e.target.value,
+            id: code.id,
+         })
+      )
    }
    const handleKeyDown = (e) => {
       e.target.style.height = 'inherit'
       e.target.style.height = `${e.target.scrollHeight}px`
    }
-   console.log(code)
    const deleteHandler = (id) => {
       dispatch(taskActions.deleteTask(id))
    }
@@ -37,12 +41,8 @@ const Container = styled.div`
    display: flex;
    margin-left: 5px;
    margin-top: 10px;
-   height: 30px;
+   max-height: 300px;
    width: 100%;
-   svg {
-      margin-top: 10px;
-      margin-left: 5px;
-   }
    #remove {
       display: none;
    }
@@ -79,6 +79,7 @@ const StyledIcon = styled.div`
    align-items: center;
    justify-content: center;
    margin-right: 10px;
+   margin-top: 8px;
    cursor: pointer;
    &:hover {
       background: #c4c4c4;
