@@ -48,7 +48,11 @@ export const Header = () => {
             <Container tabs>
                <Routes>
                   <Route
-                     path={`${ROUTES.INSTRUCTOR_COURSES}/:id/*`}
+                     path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
+                     element={<NavTabs tabs={MATERIALS_INNER_TABS} />}
+                  />
+                  <Route
+                     path={`${ROUTES.INSTRUCTOR_COURSES}/:id/students`}
                      element={<NavTabs tabs={MATERIALS_INNER_TABS} />}
                   />
                </Routes>

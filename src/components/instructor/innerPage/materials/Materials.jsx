@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
+   ADD_VIDEO,
    DELETE_LESSON,
    EDIT_LESSON,
 } from '../../../../utils/constants/general'
@@ -27,9 +28,11 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { LessonVideo } from './video/LessonVideo'
 
 export const Materials = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { id } = useParams()
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
@@ -40,8 +43,16 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showVideoModal = searchParams.get(ADD_VIDEO)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+
+   let content
+   const selectedOption = (option) => {
+      if (option.id === 'video') {
+         setSearchParams({ [ADD_VIDEO]: true })
+      }
+   }
 
    const closeModals = () => {
       setSearchParams('')
@@ -150,6 +161,7 @@ export const Materials = () => {
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
+                     selectedOption={selectedOption}
                   />
                ))}
          </Container>
@@ -170,6 +182,11 @@ export const Materials = () => {
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <LessonVideo
+            isModalOpen={Boolean(showVideoModal)}
+            closeModals={closeModals}
+            lessonId={id}
          />
       </>
    )

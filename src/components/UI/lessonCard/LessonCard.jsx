@@ -18,12 +18,15 @@ export const LessonCard = ({
    test,
    onEditTitle,
    onDeleteLesson,
+   selectedOption,
+   lessonId,
 }) => {
    const ADD_OPTIONS = [
       {
          id: 'video',
          title: 'Видеоурок',
          disabled: Boolean(video),
+         lessonId,
       },
       {
          id: 'presentation',
@@ -34,6 +37,7 @@ export const LessonCard = ({
          id: 'task',
          title: 'Задание',
          disabled: Boolean(task),
+         lessonId,
       },
       {
          id: 'link',
@@ -58,7 +62,11 @@ export const LessonCard = ({
             </StyledTitle>
             <StyledManageContainer>
                <StyledSelectContainer>
-                  <Select placeholder="Добавить" options={ADD_OPTIONS} />
+                  <Select
+                     placeholder="Добавить"
+                     options={ADD_OPTIONS}
+                     selectedOption={selectedOption}
+                  />
                </StyledSelectContainer>
                <StyledDeleteIcon onClick={onDeleteLesson}>
                   <DeleteIcon />
