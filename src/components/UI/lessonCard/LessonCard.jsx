@@ -21,6 +21,9 @@ export const LessonCard = ({
    onDeleteLesson,
    selectedOption,
    lessonId,
+   followLinkHandler,
+   onEditLink,
+   onDeleteLink,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -41,7 +44,7 @@ export const LessonCard = ({
       {
          id: 'link',
          title: 'Ссылка',
-         disabled: Boolean(link),
+         disabled: link?.lessonId === lessonId,
          lessonId,
       },
       {
@@ -140,27 +143,20 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!link}>
+            <StyledContentItem disabled={link?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <LinkIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => followLinkHandler(link?.link)}>
                   <h2>Ссылка</h2>
-                  {/* <a href={newLinkData?.link}>Ссылка</a> */}
-                  {/* <div>
-                     <a href={link} target="_blank" rel="noreferrer">
-                        Ссылка
-                     </a>
-                     location.href
-                  </div> */}
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer onClick={onEditLink}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer onClick={onDeleteLink}>
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
