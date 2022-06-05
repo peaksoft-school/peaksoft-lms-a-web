@@ -21,7 +21,7 @@ export const File = ({ file }) => {
             />
             <FileIcon id="file" />
          </StyledIcon>
-         <p>{file.fileName}</p>
+         <a href={file.selectedFile}>{file.fileName}</a>
       </Container>
    )
 }

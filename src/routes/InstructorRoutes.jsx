@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Task } from '../components/insructor/task/Task'
+import { Task } from '../components/instructor/task/Task'
 import { InstrutorCourses } from '../components/instructor/primerPage/InstructorCourses'
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'

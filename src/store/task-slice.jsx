@@ -29,8 +29,10 @@ export const uploadFile = createAsyncThunk(
                taskType: IMAGE,
             }
          })
+         console.log(imageUrl)
          const promiseFile = await Promise.all(
             lessonTasks.map((task) => {
+               console.log(task)
                formData.set('file', task.selectedFile)
                const result = fileFetch({
                   path: 'api/file',
@@ -46,11 +48,12 @@ export const uploadFile = createAsyncThunk(
                taskType: FILE,
             }
          })
+         console.log(fileUrl)
          dispatch(
             sendLessonTask({
                tasks: {
                   taskName,
-                  taskTypeRequests: [...fileUrl],
+                  taskTypeRequests: [...imageUrl, ...fileUrl],
                },
                lessonId,
             })
@@ -64,6 +67,7 @@ export const uploadFile = createAsyncThunk(
 export const sendLessonTask = createAsyncThunk(
    'task/sendLessonTask',
    async ({ tasks, lessonId }, { rejectWithValue }) => {
+      console.log(tasks)
       try {
          const response = await baseFetch({
             path: `api/tasks/${lessonId}`,

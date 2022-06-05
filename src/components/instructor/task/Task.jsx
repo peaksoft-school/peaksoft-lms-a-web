@@ -24,7 +24,6 @@ export const Task = () => {
    const { lessonTasks } = useSelector((state) => state.tasks)
 
    const [taskName, setTaskName] = useState('')
-
    const onChangeHandler = (e) => {
       setTaskName(e.target.value)
    }
