@@ -4,17 +4,17 @@ import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
 import { FILE, IMAGE } from '../utils/constants/general'
 
-export const uploadImages = createAsyncThunk(
-   'task/uploadImage',
+export const uploadFile = createAsyncThunk(
+   'task/uploadFile',
    async (
-      { images, files, taskName, lessonId },
+      { lessonTasks, taskName, lessonId },
       { rejectWithValue, dispatch }
    ) => {
       const formData = new FormData()
       try {
          const promise = await Promise.all(
-            images.map((image) => {
-               formData.set('file', image)
+            lessonTasks.map((task) => {
+               formData.append('file', task.selectedImagefile)
                const result = fileFetch({
                   path: 'api/file',
                   body: formData,
@@ -30,8 +30,8 @@ export const uploadImages = createAsyncThunk(
             }
          })
          const promiseFile = await Promise.all(
-            files.map((file) => {
-               formData.set('file', file.selectedFile)
+            lessonTasks.map((task) => {
+               formData.set('file', task.selectedFile)
                const result = fileFetch({
                   path: 'api/file',
                   body: formData,
@@ -47,10 +47,10 @@ export const uploadImages = createAsyncThunk(
             }
          })
          dispatch(
-            addTask({
+            sendLessonTask({
                tasks: {
                   taskName,
-                  taskTypeEntity: [...imageUrl, ...fileUrl],
+                  taskTypeRequests: [...fileUrl],
                },
                lessonId,
             })
@@ -61,14 +61,14 @@ export const uploadImages = createAsyncThunk(
    }
 )
 
-export const addTask = createAsyncThunk(
-   'task/addTask',
+export const sendLessonTask = createAsyncThunk(
+   'task/sendLessonTask',
    async ({ tasks, lessonId }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/tasks/${lessonId}`,
             method: 'POST',
-            body: { ...tasks },
+            body: tasks,
          })
          return response
       } catch (error) {

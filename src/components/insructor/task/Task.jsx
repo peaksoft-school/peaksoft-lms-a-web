@@ -1,12 +1,9 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
-import { Tooltip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
-import uuid from 'react-uuid'
+import { useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
-
 import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
 import { TextEditor } from './TextEditor/TextEditor'
 import { SelectFile } from './taskFile/SelectFile'
@@ -19,10 +16,11 @@ import { AddLinkModal } from './taskLink/AddLink'
 import { CODE, FILE, IMAGE, LINK, TEXT } from '../../../utils/constants/general'
 import { AddCode } from './taskCode/AddCode'
 import { Text } from './TextEditor/Text'
+import { uploadFile } from '../../../store/task-slice'
 
 export const Task = () => {
    const dispatch = useDispatch()
-   // const { lessonId } = useParams()
+   const { lessonId } = useParams()
    const { lessonTasks } = useSelector((state) => state.tasks)
 
    const [taskName, setTaskName] = useState('')
@@ -30,17 +28,18 @@ export const Task = () => {
    const onChangeHandler = (e) => {
       setTaskName(e.target.value)
    }
-   // const submitHandler = () => {
-   //    dispatch(
-   //       uploadImages({
-   //          images: image.files,
-   //          files,
-   //          taskName,
-   //          lessonId,
-   //       })
-   //    )
-   // }
-   console.log(lessonTasks)
+   const submitHandler = () => {
+      lessonTasks.map((el) => {
+         dispatch(
+            uploadFile({
+               lessonTasks,
+               taskName,
+               lessonId,
+            })
+         )
+         return el
+      })
+   }
    return (
       <>
          <StyledBreadCrumbs>
@@ -64,19 +63,19 @@ export const Task = () => {
             <StyledContainer>
                {lessonTasks.map((el) => {
                   if (el.taskType === FILE) {
-                     return <File file={el} />
+                     return <File file={el} key={el.id} />
                   }
                   if (el.taskType === IMAGE) {
-                     return <Image image={el} />
+                     return <Image image={el} key={el.id} />
                   }
                   if (el.taskType === CODE) {
-                     return <Code code={el} />
+                     return <Code code={el} key={el.id} />
                   }
                   if (el.taskType === LINK) {
-                     return <TaskLink link={el} />
+                     return <TaskLink link={el} key={el.id} />
                   }
                   if (el.taskType === TEXT) {
-                     return <TextEditor text={el} />
+                     return <TextEditor text={el} key={el.id} />
                   }
                   return el
                })}
@@ -94,7 +93,7 @@ export const Task = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     // onClick={submitHandler}
+                     onClick={submitHandler}
                   >
                      Сохранить
                   </Button>
@@ -180,34 +179,4 @@ const StyledBreadCrumbs = styled.div`
    padding-bottom: 16px;
    display: flex;
    align-items: flex-end;
-`
-
-const StyledTooltip = styled(({ className, ...props }) => (
-   <Tooltip {...props} classes={{ popper: className }} />
-))`
-   & .MuiTooltip-tooltip {
-      background: #8d949e;
-      border-radius: 8px;
-      height: 28px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      padding: 6px 8px;
-      gap: 10px;
-   }
-`
-const StyledIcon = styled.div`
-   width: 34px;
-   height: 28px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   & input {
-      display: none;
-   }
-   &:hover {
-      background: #d4d4d4;
-      border-radius: 6px;
-   }
 `
