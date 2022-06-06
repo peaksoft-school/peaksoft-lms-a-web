@@ -55,8 +55,19 @@ export const TestQuestion = () => {
       dispatch(testActions.changeOptionToOne(id))
    }
 
-   const chooseCorrectOptionHandler = (questionId, optionId) => {
-      dispatch(testActions.chooseOption({ questionId, optionId }))
+   const chooseCorrectOptionFromMany = (
+      questionId,
+      optionId,
+      checked,
+      type
+   ) => {
+      dispatch(
+         testActions.chooseOptionMany({ questionId, optionId, checked, type })
+      )
+   }
+
+   const chooseCorrectOptionFromOne = (questionId, optionId) => {
+      dispatch(testActions.chooseOptionOne({ questionId, optionId }))
    }
 
    const onCloneQuestion = (id) => {
@@ -108,7 +119,7 @@ export const TestQuestion = () => {
                            inputValue={option.option}
                            inputDisabled={option.option === 'Другое...'}
                            onChangeOption={() =>
-                              chooseCorrectOptionHandler(question.id, option.id)
+                              chooseCorrectOptionFromOne(question.id, option.id)
                            }
                            onGetInputValue={(e) =>
                               onGetOptionValue(e, question.id, option.id)
@@ -121,8 +132,13 @@ export const TestQuestion = () => {
                            inputValue={option.option}
                            checked={option.isTrue}
                            inputDisabled={option.option === 'Другое...'}
-                           onChangeOption={() =>
-                              chooseCorrectOptionHandler(question.id, option.id)
+                           onChangeOption={(e) =>
+                              chooseCorrectOptionFromMany(
+                                 question.id,
+                                 option.id,
+                                 e.target.checked,
+                                 e.type
+                              )
                            }
                            onGetInputValue={(e) =>
                               onGetOptionValue(e, question.id, option.id)

@@ -11,6 +11,7 @@ import {
    DELETE_LESSON,
    DELETE_TEST,
    EDIT_LESSON,
+   TEST_KEY,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -30,6 +31,7 @@ import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
 import { getTest, removeTest } from '../../../../store/create-test-slice'
 import { ConfirmModalOnDeleteTest } from './ConfirmModalOnDeleteTest'
+import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -126,6 +128,7 @@ export const Materials = () => {
             showSuccessMessage('Тест успешно удален')
             closeModals()
             dispatch(getLessons())
+            localStorageHelper.clear(TEST_KEY)
          })
          .catch(() => {
             showErrorMessage('Не удалось удалить тест')

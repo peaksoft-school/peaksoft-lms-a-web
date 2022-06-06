@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { TEST_KEY } from '../utils/constants/general'
@@ -163,15 +164,45 @@ export const createTestSlice = createSlice({
          )
          question.questionType = 'ONE'
       },
-      chooseOption(state, action) {
+      chooseOptionMany(state, action) {
+         const { questionId, optionId, checked } = action.payload
+         const question = state.test.questions.find(
+            (question) => question.id === questionId
+         )
+         // if (type === 'radio') {
+         //    question.options = question.options.map((option) => {
+         //       if (option.id === optionId) {
+         //          // eslint-disable-next-line no-param-reassign
+         //          option.isTrue = true
+         //       } else {
+         //          // eslint-disable-next-line no-param-reassign
+         //          option.isTrue = false
+         //       }
+         //       return option
+         //    })
+         // }
+         question.options = question.options.map((option) => {
+            if (option.id === optionId && checked) {
+               option.isTrue = true
+            } else if (option.id === optionId && !checked) {
+               option.isTrue = false
+            }
+            return option
+         })
+      },
+      chooseOptionOne(state, action) {
          const { questionId, optionId } = action.payload
          const question = state.test.questions.find(
             (question) => question.id === questionId
          )
-         const option = question.options.find(
-            (option) => option.id === optionId
-         )
-         option.isTrue = !option.isTrue
+         question.options = question.options.map((option) => {
+            if (option.id === optionId) {
+               option.isTrue = true
+            } else {
+               option.isTrue = false
+            }
+            return option
+         })
       },
       saveOptionData(state, action) {
          const { optionValue, questionId, optionId } = action.payload
