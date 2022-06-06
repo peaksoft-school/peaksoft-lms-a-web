@@ -22,7 +22,6 @@ export const SelectImage = () => {
          })
       )
    }
-
    return (
       <StyledTooltip title="Добавить картинку" placement="top">
          <StyledIcon>

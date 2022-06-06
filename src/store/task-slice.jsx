@@ -16,50 +16,65 @@ export const uploadFile = createAsyncThunk(
    ) => {
       const formData = new FormData()
       try {
-         const promise = await Promise.all(
-            lessonTasks.map((task) => {
+         const images = lessonTasks.filter((task) => task.taskType === IMAGE)
+         const files = lessonTasks.filter((task) => task.taskType === FILE)
+         console.log('files before upload', files)
+         const uploadedImages = await Promise.all(
+            images.map(async (task) => {
                formData.append('file', task.selectedImagefile)
-               const result = fileFetch({
+               const result = await fileFetch({
                   path: 'api/file',
                   body: formData,
                   method: 'POST',
                })
-               return result
+               return { ...result, id: task.id }
             })
          )
-         const imageUrl = promise.map((image) => {
-            return {
-               value: image.url,
-               taskType: IMAGE,
-            }
+         console.log('images after upload', uploadedImages)
+         const lessonTaskWithUploadedImages = lessonTasks.map((task) => {
+            const updatedTask = { taskType: task.taskType, name: '', value: '' }
+            uploadedImages.forEach((image) => {
+               if (task.id === image.id) {
+                  updatedTask.value = image.url
+               }
+            })
+            return updatedTask
          })
-         const promiseFile = await Promise.all(
-            lessonTasks.map((task) => {
-               formData.append('file', task.selectedFile)
-               const result = fileFetch({
-                  path: 'api/file',
-                  body: formData,
-                  method: 'POST',
-               })
-               return result
-            })
-         )
-         const fileUrl = promiseFile.map((el) => {
-            return {
-               value: el.url,
-               taskType: FILE,
-            }
-         })
-
-         dispatch(
-            sendLessonTask({
-               tasks: {
-                  taskName,
-                  taskTypeRequests: [...fileUrl, imageUrl],
-               },
-               lessonId,
-            })
-         )
+         console.log('updated tasks', lessonTaskWithUploadedImages)
+         // const imageUrl = promise.map((image) => {
+         //    return {
+         //       value: image.url,
+         //       name: 'image',
+         //       taskType: IMAGE,
+         //    }
+         // })
+         // const promiseFile = await Promise.all(
+         //    lessonTasks.map((task) => {
+         //       formData.append('file', task.selectedFile)
+         //       const result = fileFetch({
+         //          path: 'api/file',
+         //          body: formData,
+         //          method: 'POST',
+         //       })
+         //       return result
+         //    })
+         // )
+         // const fileUrl = promiseFile.map((el) => {
+         //    return {
+         //       value: el.url,
+         //       name: 'file',
+         //       taskType: FILE,
+         //    }
+         // })
+         // dispatch(
+         //    sendLessonTask({
+         //       tasks: {
+         //          taskName,
+         //          taskTypeRequests: [...imageUrl, ...fileUrl],
+         //       },
+         //       lessonId,
+         //    })
+         // )
       } catch (error) {
          rejectWithValue(error.message)
       }
