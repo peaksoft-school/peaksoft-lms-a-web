@@ -10,7 +10,9 @@ import {
    ADD_LESSON,
    ADD_PRESENTATION,
    DELETE_LESSON,
+   DELETE_PRESENTATION,
    EDIT_LESSON,
+   EDIT_PRESENTATION,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -29,7 +31,14 @@ import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
 import { PresentationCreateModal } from '../../lesson/presentation/PresentationModal'
-import { addPresentation } from '../../../../store/presentation-slice'
+import {
+   addPresentation,
+   deletePresentation,
+   editPresentation,
+   getPresentation,
+} from '../../../../store/presentation-slice'
+import { PresentationEditModal } from '../../lesson/presentation/EditPresentation'
+import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -37,6 +46,7 @@ export const Materials = () => {
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
+   const { presentation } = useSelector((state) => state.presentation)
 
    const [searchParams, setSearchParams] = useSearchParams()
 
@@ -44,8 +54,11 @@ export const Materials = () => {
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
    const showPresentationModal = searchParams.get(ADD_PRESENTATION)
+   const showEditPresentationModal = searchParams.get(EDIT_PRESENTATION)
+   const showConfirmPresentationModal = searchParams.get(DELETE_PRESENTATION)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+   const [deletedPresentationId, setDeletedPresentationId] = useState(null)
 
    const addLessonMaterials = (option) => {
       if (option.id === 'presentation') {
@@ -72,6 +85,16 @@ export const Materials = () => {
    const openEditModal = (id) => {
       dispatch(getLesson(id))
       setSearchParams({ [EDIT_LESSON]: true, lessonId: id })
+   }
+
+   const openPresentationEditModal = (id) => {
+      dispatch(getPresentation(id))
+      setSearchParams({ [EDIT_PRESENTATION]: true, presentationId: id })
+   }
+
+   const deletePresentationModal = (id) => {
+      setDeletedPresentationId(id)
+      setSearchParams({ [DELETE_PRESENTATION]: true })
    }
 
    const addLessonHandler = (value, onClear) => {
@@ -129,14 +152,53 @@ export const Materials = () => {
          })
    }
 
+   const senEditedPresentationHandler = (value, file, id, onClear) => {
+      dispatch(editPresentation({ value, file, id }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            onClear()
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
+   }
+
+   const deletePresentationHandler = () => {
+      dispatch(deletePresentation(deletedPresentationId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Презентация успешно удален')
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить презентацию')
+         })
+   }
+
    useEffect(() => {
       const lessonId = searchParams.get('lessonId')
+      const presentationId = searchParams.get('presentationId')
+
       if (lessonId) {
          dispatch(getLesson(lessonId))
       }
+
+      if (presentationId) {
+         dispatch(getPresentation(presentationId))
+      }
+
       if (showConfirmationModal) {
          closeModals()
       }
+
+      if (showConfirmPresentationModal) {
+         closeModals()
+      }
+
       dispatch(getLessons())
       dispatch(getCourse(id))
    }, [])
@@ -179,6 +241,8 @@ export const Materials = () => {
                      onDeleteLesson={() => deleteHandler(lesson.id)}
                      presentation={lesson.presentationResponse}
                      selectedOption={addLessonMaterials}
+                     onEditPresentation={openPresentationEditModal}
+                     onDeletePresentation={deletePresentationModal}
                   />
                ))}
          </Container>
@@ -204,6 +268,19 @@ export const Materials = () => {
             showModal={showPresentationModal}
             onClose={closeModals}
             onAdd={addPresentationHandler}
+         />
+         {presentation && (
+            <PresentationEditModal
+               showModal={showEditPresentationModal}
+               onClose={closeModals}
+               onEdit={senEditedPresentationHandler}
+               presentation={presentation}
+            />
+         )}
+         <ConfirmModalOnDeletePresentation
+            showModal={showConfirmPresentationModal}
+            onClose={closeModals}
+            onDelete={deletePresentationHandler}
          />
       </>
    )

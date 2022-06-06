@@ -76,6 +76,8 @@ export const ADD_LESSON = 'create_lesson'
 export const EDIT_LESSON = 'edit_lesson'
 export const DELETE_LESSON = 'delete-lesson-confirmation'
 export const ADD_PRESENTATION = 'add-presentation'
+export const EDIT_PRESENTATION = 'edit-presentation'
+export const DELETE_PRESENTATION = 'delete-presentation-confirmation'
 
 export const STUDY_FORMAT_OPTION = [
    {

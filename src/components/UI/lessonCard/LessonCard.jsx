@@ -20,6 +20,8 @@ export const LessonCard = ({
    onDeleteLesson,
    lessonId,
    selectedOption,
+   onEditPresentation,
+   onDeletePresentation,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -104,11 +106,15 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer
+                        onClick={() => onEditPresentation(presentation?.id)}
+                     >
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeletePresentation(presentation?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
