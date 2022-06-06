@@ -1,12 +1,28 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import ConfirmModal from '../../../UI/modal/ConfirmModal'
 import { Button } from '../../../UI/button/Button'
+import { deleteLink } from '../../../../store/INSTRUCTOR/linkSlice'
 
-export const LinkDeleteConfirm = ({
-   isModalOpen,
-   onClose,
-   deleteLinkHandler,
-}) => {
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../../UI/notification/Notification'
+
+export const LinkDeleteConfirm = ({ isModalOpen, onClose, deletedLinkId }) => {
+   const dispatch = useDispatch()
+
+   const deleteLinkHandler = () => {
+      dispatch(deleteLink({ id: deletedLinkId }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Вы удалили ссылку')
+            onClose()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить ссылку')
+         })
+   }
    return (
       <ConfirmModal
          title="Вы уверены, что хотите удалить ссылку ... ?"

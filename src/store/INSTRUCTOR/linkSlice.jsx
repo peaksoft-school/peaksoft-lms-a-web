@@ -1,22 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../../api/baseFetch'
+import { getLessons } from '../materials-slice'
 
 const initialState = {
    newLinkData: [],
-   oneSingleLink: [],
+   oneSingleLink: null,
    isLoading: null,
    successMessage: null,
    error: null,
 }
-
-export const addLinkToLesson = createAsyncThunk(
-   'lessons/addLinkToLesson',
-   async ({ lessonId, newLinkData }, { rejectWithValue }) => {
+export const getAllLinks = createAsyncThunk(
+   'lessons/getAllLinks',
+   async (_, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
-            path: `api/links/${lessonId}`,
-            method: 'POST',
-            body: newLinkData,
+            path: `api/links`,
+            method: 'GET',
          })
          return response
       } catch (error) {
@@ -24,7 +23,6 @@ export const addLinkToLesson = createAsyncThunk(
       }
    }
 )
-
 export const getSingleLink = createAsyncThunk(
    'lessons/getSingleLink',
    async (id, { rejectWithValue, dispatch }) => {
@@ -35,6 +33,23 @@ export const getSingleLink = createAsyncThunk(
             method: 'GET',
          })
          dispatch(linkActions.getOneSingleLink(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+
+export const addLinkToLesson = createAsyncThunk(
+   'lessons/addLinkToLesson',
+   async ({ lessonId, newLinkData }, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/links/${lessonId}`,
+            method: 'POST',
+            body: newLinkData,
+         })
+         dispatch(getLessons())
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -60,13 +75,14 @@ export const updateSingleLink = createAsyncThunk(
 
 export const deleteLink = createAsyncThunk(
    'lessons/ deleteLink',
-   async (id, { rejectWithValue }) => {
-      console.log(id)
+   async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/links/${id}`,
+            path: `api/links/${id.id}`,
             method: 'DELETE',
          })
+         dispatch(getLessons())
+
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -95,6 +111,16 @@ export const linkSlice = createSlice({
          state.isLoading = false
       },
       [addLinkToLesson.rejected]: (state) => {
+         state.isLoading = false
+      },
+      [getAllLinks.pending]: (state) => {
+         state.isLoading = true
+      },
+      [getAllLinks.fulfilled]: (state, { payload }) => {
+         state.isLoading = false
+         state.newLinkData = payload
+      },
+      [getAllLinks.rejected]: (state) => {
          state.isLoading = false
       },
    },

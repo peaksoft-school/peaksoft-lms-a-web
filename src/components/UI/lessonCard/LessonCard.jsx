@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import { useSelector } from 'react-redux'
 import { ReactComponent as EditTitle } from '../../../assets/icons/editTitle.svg'
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/Delete.svg'
 import { ReactComponent as LinkIcon } from '../../../assets/icons/Link.svg'
@@ -152,11 +151,13 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer onClick={onEditLink}>
+                     <StyledEditContainer onClick={() => onEditLink(link?.id)}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer onClick={onDeleteLink}>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteLink(link?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>

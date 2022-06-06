@@ -1,43 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
-import { useDispatch } from 'react-redux'
-// import { useSearchParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { BasicModal } from '../../../UI/modal/BasicModal'
 import { Input } from '../../../UI/input/Input'
 import { Button } from '../../../UI/button/Button'
 import { useInput } from '../../../../hooks/usuInput/useInput'
-import { updateSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
+import {
+   updateSingleLink,
+   getSingleLink,
+} from '../../../../store/INSTRUCTOR/linkSlice'
 import {
    showErrorMessage,
    showSuccessMessage,
 } from '../../../UI/notification/Notification'
 
-export const LinkEdit = ({
-   oneSingleLink,
-   // linkId,
-   onClose,
-   showEditLinkModal,
-}) => {
-   //    console.log(linkId)
+export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    const dispatch = useDispatch()
-   const [linkID, setLinkID] = useState()
 
-   const { value, onChange, onClear } = useInput({
-      text: oneSingleLink.text || '',
-      link: oneSingleLink.link || '',
+   const { oneSingleLink } = useSelector((state) => state.link)
+
+   const { value, onChange, setValue } = useInput({
+      text: (oneSingleLink && oneSingleLink?.text) || '',
+      link: (oneSingleLink && oneSingleLink?.link) || '',
    })
 
-   const getLinkId = (id) => {
-      setLinkID(id)
-   }
+   useEffect(() => {
+      dispatch(getSingleLink(id))
+   }, [])
 
-   const editLinkHandler = () => {
-      saveUpdatedLink(value, onClear)
-      getLinkId()
-   }
+   const saveUpdatedLink = () => {
+      const linkUpdateInfo = {
+         text: value.text,
+         link: value.link,
+      }
 
-   const saveUpdatedLink = (value) => {
-      dispatch(updateSingleLink({ linkUpdateInfo: value, id: linkID }))
+      dispatch(updateSingleLink({ linkUpdateInfo, id: oneSingleLink.id }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Вы редактировали ссылку')
@@ -47,6 +44,11 @@ export const LinkEdit = ({
             showErrorMessage('Не удалось редактировать ссылку')
          })
    }
+
+   useEffect(() => {
+      setValue({ link: oneSingleLink?.link, text: oneSingleLink?.text })
+   }, [oneSingleLink])
+
    return (
       <BasicModal
          isModalOpen={Boolean(showEditLinkModal)}
@@ -69,7 +71,6 @@ export const LinkEdit = ({
                   value={value.link}
                   onChange={onChange}
                   type="url"
-                  id="link"
                />
             </div>
          </InputStyleControl>
@@ -92,7 +93,7 @@ export const LinkEdit = ({
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
-                  onClick={editLinkHandler}
+                  onClick={saveUpdatedLink}
                >
                   Добавить
                </Button>
