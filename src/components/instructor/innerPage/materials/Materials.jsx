@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
-import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
+   ADD_PRESENTATION,
    DELETE_LESSON,
    EDIT_LESSON,
 } from '../../../../utils/constants/general'
@@ -27,6 +28,8 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { PresentationCreateModal } from '../../lesson/presentation/PresentationModal'
+import { addPresentation } from '../../../../store/presentation-slice'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -40,8 +43,18 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showPresentationModal = searchParams.get(ADD_PRESENTATION)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+
+   const addLessonMaterials = (option) => {
+      if (option.id === 'presentation') {
+         setSearchParams({
+            [ADD_PRESENTATION]: true,
+            lessonId: option.lessonId,
+         })
+      }
+   }
 
    const closeModals = () => {
       setSearchParams('')
@@ -102,6 +115,20 @@ export const Materials = () => {
          })
    }
 
+   const addPresentationHandler = (value, file, id, onClear) => {
+      dispatch(addPresentation({ value, file, id }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Презентация успешно создана')
+            onClear()
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось создать презентацию')
+         })
+   }
+
    useEffect(() => {
       const lessonId = searchParams.get('lessonId')
       if (lessonId) {
@@ -150,6 +177,8 @@ export const Materials = () => {
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
+                     presentation={lesson.presentationResponse}
+                     selectedOption={addLessonMaterials}
                   />
                ))}
          </Container>
@@ -170,6 +199,11 @@ export const Materials = () => {
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <PresentationCreateModal
+            showModal={showPresentationModal}
+            onClose={closeModals}
+            onAdd={addPresentationHandler}
          />
       </>
    )
