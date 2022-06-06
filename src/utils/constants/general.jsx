@@ -176,7 +176,7 @@ export const COURSE_STUDENTS = [
 export const TEST_INFO = [
    {
       title: 'Имя Фамилия',
-      accessKey: 'fullName',
+      accessKey: 'studentName',
       id: 1,
    },
    {
@@ -185,8 +185,8 @@ export const TEST_INFO = [
       id: 2,
    },
    {
-      title: 'Результат',
-      accessKey: 'result',
+      title: 'Статус',
+      accessKey: 'status',
       id: 3,
    },
    {

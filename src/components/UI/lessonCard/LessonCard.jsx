@@ -16,8 +16,10 @@ export const LessonCard = ({
    link,
    task,
    test,
+   lessonId,
    onEditTitle,
    onDeleteLesson,
+   openTestInnerPage,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -43,7 +45,7 @@ export const LessonCard = ({
       {
          id: 'test',
          title: 'Тест',
-         disabled: Boolean(test),
+         disabled: test?.lessonId === lessonId,
       },
    ]
 
@@ -154,11 +156,11 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!test}>
+            <StyledContentItem disabled={test?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <TestIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => openTestInnerPage(test?.id, lessonId)}>
                   <h2>Тест</h2>
                </StyledDiv>
                <ActionsContainer id="actions">

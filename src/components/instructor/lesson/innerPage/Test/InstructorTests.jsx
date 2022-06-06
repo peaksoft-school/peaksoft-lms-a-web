@@ -1,10 +1,13 @@
-/* eslint-disable no-unused-expressions */
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getSingleCourse } from '../../../../../store/courses-slice'
-import { getInstructorTests } from '../../../../../store/instructor-tests-slice'
+import {
+   getAllResults,
+   getInstructorTests,
+   getLesson,
+   getSingleCourse,
+} from '../../../../../store/instructor-tests-slice'
 import { TEST_INFO } from '../../../../../utils/constants/general'
 import { BreadCrumbs } from '../../../../UI/BreadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
@@ -12,58 +15,50 @@ import { AppTable } from '../../../../UI/table/AppTable'
 
 export const InstructorTests = () => {
    const dispatch = useDispatch()
-   const { tests, singleCourse } = useSelector((state) => state.instructorTests)
-
-   const { id } = useParams()
+   const { tests, course, results, lesson } = useSelector(
+      (state) => state.instructorTests
+   )
+   const { id, lessonId, testId } = useParams()
    const [toggle, setToggle] = useState(false)
 
    const toggler = () => {
-      toggle ? setToggle(false) : setToggle(true)
+      return toggle ? setToggle(false) : setToggle(true)
+   }
+
+   const amount = results.length
+
+   const Content = () => {
+      if (amount === 0) {
+         return (
+            <Container>
+               <p>Ответы принимаются </p>
+            </Container>
+         )
+      }
+      if (amount > 0) {
+         return <AppTable data={results} columns={TEST_INFO} />
+      }
+      return amount
+   }
+
+   const currentClassName = (isActive) => {
+      return isActive ? 'green' : 'red'
    }
 
    const breadcrumbs = [
-      { path: 'instructor/instructor_course', name: 'Мои Курсы' },
+      { path: 'instructor/instructor_course', name: course?.courseName },
       {
-         path: 'instructor/tests',
-         name: singleCourse?.courseName,
-      },
-      {
-         path: 'instructor/instructors',
-         name: <StyledTestName> {tests?.testName}</StyledTestName>,
+         path: 'instructor/materials',
+         name: lesson?.lessonName,
       },
    ]
-
-   const answers = toggle ? (
-      <p className="green">0 ответов</p>
-   ) : (
-      <p className="red">4 ответов</p>
-   )
-
-   const acceptAnswers = toggle ? (
-      <p className="green">Ответы принимаются</p>
-   ) : (
-      <p className="red">Ответы не принимаются</p>
-   )
 
    useEffect(() => {
-      dispatch(getInstructorTests(4))
+      dispatch(getInstructorTests(lessonId))
       dispatch(getSingleCourse(id))
+      dispatch(getLesson(testId))
+      dispatch(getAllResults())
    }, [])
-
-   const TEST_RESULTS = [
-      {
-         fullName: 'Baya Asanova',
-         date: '2022-06-02',
-         result: 'FAILED',
-         grade: '50%',
-      },
-      {
-         fullName: 'Baya Asanova',
-         date: '2022-06-02',
-         result: 'FAILED',
-         grade: '50%',
-      },
-   ]
 
    return (
       <Wrapper>
@@ -76,15 +71,23 @@ export const InstructorTests = () => {
                className={toggle ? 'answers-accepted' : 'no-answers-accepted'}
             >
                <InnerContainer>
-                  {answers}
+                  <p className={currentClassName(toggle)}>{amount} ответов</p>
                   <div>
-                     {acceptAnswers}
-                     <ToggleSwitch id="1" name={toggle} onClick={toggler} />
+                     <p className={currentClassName(toggle)}>
+                        {toggle
+                           ? 'Ответы принимаются'
+                           : 'Ответы не принимаются'}
+                     </p>
+                     <ToggleSwitch
+                        id="1"
+                        name={toggle.toString()}
+                        onClick={toggler}
+                     />
                   </div>
                </InnerContainer>
             </div>
          </AnswersContainer>
-         <AppTable data={TEST_RESULTS} columns={TEST_INFO} />
+         {Content()}
       </Wrapper>
    )
 }
@@ -146,10 +149,16 @@ const TitleContainer = styled.div`
       margin-top: 11px;
    }
 `
-const StyledTestName = styled.p`
-   color: #1f6ed4;
-   font-family: sans-serif;
-   font-weight: 600;
-   font-size: 14px;
-   letter-spacing: 0.04em;
+const Container = styled.div`
+   width: 100%;
+   height: 69px;
+   background: #ffffff;
+   border: 1px solid #d4d4d4;
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: #70757a;
+   margin-top: 20px;
+   font-size: 18px;
 `

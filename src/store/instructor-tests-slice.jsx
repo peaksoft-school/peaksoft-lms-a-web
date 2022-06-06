@@ -3,7 +3,9 @@ import { baseFetch } from '../api/baseFetch'
 
 const initialState = {
    tests: {},
-   singleCourse: [],
+   course: [],
+   results: [],
+   lesson: [],
 }
 
 export const getInstructorTests = createAsyncThunk(
@@ -22,7 +24,7 @@ export const getInstructorTests = createAsyncThunk(
    }
 )
 export const getSingleCourse = createAsyncThunk(
-   'instructorCourses/getSingleCourses',
+   'instructorTests/getSingleCourses',
    async (id, { dispatch }) => {
       dispatch(clearCourse)
       try {
@@ -34,6 +36,36 @@ export const getSingleCourse = createAsyncThunk(
          return response
       } catch (error) {
          return error.message
+      }
+   }
+)
+export const getAllResults = createAsyncThunk(
+   'instructorTests/getAllResults',
+   async (_, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: 'api/resulting/all',
+            method: 'GET',
+         })
+         dispatch(setAllResults(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+   }
+)
+export const getLesson = createAsyncThunk(
+   'instructorTests/getLesson',
+   async (id, { rejectWithValue, dispatch }) => {
+      try {
+         const response = await baseFetch({
+            path: `api/lessons/${id}`,
+            method: 'GET',
+         })
+         dispatch(setLesson(response))
+         return response
+      } catch (error) {
+         return rejectWithValue(error.message)
       }
    }
 )
@@ -53,10 +85,16 @@ export const instructorTestsSlice = createSlice({
          state.tests = action.payload
       },
       clearCourse(state) {
-         state.singleCourse = null
+         state.course = null
       },
       setSingleCourse(state, action) {
-         state.singleCourse = action.payload
+         state.course = action.payload
+      },
+      setAllResults(state, action) {
+         state.results = action.payload
+      },
+      setLesson(state, action) {
+         state.lesson = action.payload
       },
    },
    extraReducers: {
@@ -66,8 +104,16 @@ export const instructorTestsSlice = createSlice({
       [getSingleCourse.pending]: setPending,
       [getSingleCourse.rejected]: setIsLoading,
       [getSingleCourse.fulfilled]: setPending,
+      [getAllResults.pending]: setPending,
+      [getAllResults.rejected]: setIsLoading,
+      [getAllResults.fulfilled]: setPending,
    },
 })
 
-export const { setInstructorTests, clearCourse, setSingleCourse } =
-   instructorTestsSlice.actions
+export const {
+   setInstructorTests,
+   clearCourse,
+   setSingleCourse,
+   setAllResults,
+   setLesson,
+} = instructorTestsSlice.actions
