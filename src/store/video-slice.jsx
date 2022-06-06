@@ -6,7 +6,7 @@ export const addVideo = createAsyncThunk(
    async ({ video, lessonId }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
-            path: `/api/videos/${lessonId}`,
+            path: `api/videos/${lessonId}`,
             method: 'POST',
             body: video,
          })

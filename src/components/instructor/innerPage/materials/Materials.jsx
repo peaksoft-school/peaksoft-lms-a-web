@@ -47,8 +47,7 @@ export const Materials = () => {
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
 
-   let content
-   const selectedOption = (option) => {
+   const addLessonMaterials = (option) => {
       if (option.id === 'video') {
          setSearchParams({ [ADD_VIDEO]: true })
       }
@@ -121,7 +120,7 @@ export const Materials = () => {
       if (showConfirmationModal) {
          closeModals()
       }
-      dispatch(getLessons())
+      dispatch(getLessons(id))
       dispatch(getCourse(id))
    }, [])
 
@@ -161,7 +160,8 @@ export const Materials = () => {
                      key={lesson.id}
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
-                     selectedOption={selectedOption}
+                     selectedOption={addLessonMaterials}
+                     video={lesson.videoResponse}
                   />
                ))}
          </Container>

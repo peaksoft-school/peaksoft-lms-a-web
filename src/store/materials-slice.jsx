@@ -29,7 +29,7 @@ export const getLessons = createAsyncThunk(
    async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: 'api/lessons',
+            path: `api/lessons`,
             method: 'GET',
          })
          dispatch(materialsActions.getLessons(response))

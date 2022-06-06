@@ -25,7 +25,7 @@ export const LessonCard = ({
       {
          id: 'video',
          title: 'Видеоурок',
-         disabled: Boolean(video),
+         disabled: video?.lessonId === lessonId,
          lessonId,
       },
       {
@@ -74,7 +74,7 @@ export const LessonCard = ({
             </StyledManageContainer>
          </StyledTitleContainer>
          <StyledContentContainer>
-            <StyledContentItem disabled={!video}>
+            <StyledContentItem disabled={video?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <VideoIcon />
                </StyledContentIcon>
