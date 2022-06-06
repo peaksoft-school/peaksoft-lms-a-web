@@ -1,7 +1,11 @@
 /* eslint-disable consistent-return */
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../components/UI/notification/Notification'
 import { FILE, IMAGE } from '../utils/constants/general'
 
 export const uploadFile = createAsyncThunk(
@@ -29,11 +33,9 @@ export const uploadFile = createAsyncThunk(
                taskType: IMAGE,
             }
          })
-         console.log(imageUrl)
          const promiseFile = await Promise.all(
             lessonTasks.map((task) => {
-               console.log(task)
-               formData.set('file', task.selectedFile)
+               formData.append('file', task.selectedFile)
                const result = fileFetch({
                   path: 'api/file',
                   body: formData,
@@ -48,12 +50,12 @@ export const uploadFile = createAsyncThunk(
                taskType: FILE,
             }
          })
-         console.log(fileUrl)
+
          dispatch(
             sendLessonTask({
                tasks: {
                   taskName,
-                  taskTypeRequests: [...imageUrl, ...fileUrl],
+                  taskTypeRequests: [...fileUrl, imageUrl],
                },
                lessonId,
             })
@@ -67,19 +69,21 @@ export const uploadFile = createAsyncThunk(
 export const sendLessonTask = createAsyncThunk(
    'task/sendLessonTask',
    async ({ tasks, lessonId }, { rejectWithValue }) => {
-      console.log(tasks)
       try {
          const response = await baseFetch({
             path: `api/tasks/${lessonId}`,
             method: 'POST',
             body: tasks,
          })
+         showSuccessMessage('task successfully created')
          return response
       } catch (error) {
+         showErrorMessage("can't create lesson")
          rejectWithValue(error)
       }
    }
 )
+
 const initState = {
    lessonTasks: [],
 }

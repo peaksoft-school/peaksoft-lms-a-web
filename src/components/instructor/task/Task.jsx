@@ -28,16 +28,13 @@ export const Task = () => {
       setTaskName(e.target.value)
    }
    const submitHandler = () => {
-      lessonTasks.map((el) => {
-         dispatch(
-            uploadFile({
-               lessonTasks,
-               taskName,
-               lessonId,
-            })
-         )
-         return el
-      })
+      dispatch(
+         uploadFile({
+            lessonTasks,
+            taskName,
+            lessonId,
+         })
+      )
    }
    return (
       <>

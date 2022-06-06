@@ -19,6 +19,15 @@ export const TextEditor = ({ text }) => {
       },
    ])
 
+   // useEffect(() => {
+   //    value.map((text) => {
+   //       text.children.map((el) => {
+   //          return el
+   //       })
+   //       return text
+   //    })
+   // }, [value])
+
    useEffect(() => {
       dispatch(
          taskActions.addText({
