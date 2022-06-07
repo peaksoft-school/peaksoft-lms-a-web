@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { Button } from '../../UI/button/Button'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
-import DatepickerUi from '../../UI/DatePickerUi'
+import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { Input } from '../../UI/input/Input'
 import { useInput } from '../../../hooks/usuInput/useInput'
 import { updateSingleGroup } from '../../../store/groupSlice'
@@ -73,7 +73,7 @@ const GroupEdit = (props) => {
                />
             </div>
             <div>
-               <DatepickerUi
+               <Datepicker
                   name="dateOfStart"
                   dateValue={dateValue}
                   onChange={dateChangehandler}

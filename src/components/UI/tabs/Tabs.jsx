@@ -38,11 +38,13 @@ const StyledTabs = styled(Tabs)`
       height: 3px;
       background: #3772ff;
       border-radius: 5px 5px 0px 0px;
+      top: 55px;
    }
+   margin: 0 auto;
 `
 const StyledTab = styled(Tab)`
    padding: 0px 27px 0px 27px;
-   margin-bottom: 11px;
+   margin-bottom: 17px;
    text-transform: none;
    font-family: 'Open Sans' sans-serif;
    font-style: normal;

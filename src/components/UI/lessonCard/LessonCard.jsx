@@ -17,8 +17,14 @@ export const LessonCard = ({
    task,
    test,
    onEditTitle,
+   onDeleteLesson,
+   selectedOption,
+   lessonId,
+   followLinkHandler,
+   onEditLink,
+   onDeleteLink,
 }) => {
-   const STUDY_FORMAT_OPTION = [
+   const ADD_OPTIONS = [
       {
          id: 'video',
          title: 'Видеоурок',
@@ -37,7 +43,8 @@ export const LessonCard = ({
       {
          id: 'link',
          title: 'Ссылка',
-         disabled: Boolean(link),
+         disabled: link?.lessonId === lessonId,
+         lessonId,
       },
       {
          id: 'test',
@@ -45,6 +52,7 @@ export const LessonCard = ({
          disabled: Boolean(test),
       },
    ]
+
    return (
       <StyledContainer>
          <StyledTitleContainer>
@@ -58,10 +66,11 @@ export const LessonCard = ({
                <StyledSelectContainer>
                   <Select
                      placeholder="Добавить"
-                     options={STUDY_FORMAT_OPTION}
+                     options={ADD_OPTIONS}
+                     selectedOption={selectedOption}
                   />
                </StyledSelectContainer>
-               <StyledDeleteIcon>
+               <StyledDeleteIcon onClick={onDeleteLesson}>
                   <DeleteIcon />
                </StyledDeleteIcon>
             </StyledManageContainer>
@@ -133,20 +142,22 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!link}>
+            <StyledContentItem disabled={link?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <LinkIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => followLinkHandler(link?.link)}>
                   <h2>Ссылка</h2>
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer onClick={() => onEditLink(link?.id)}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteLink(link?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
@@ -204,7 +215,6 @@ const StyledContentContainer = styled.div`
    height: 226px;
    display: flex;
    justify-content: space-between;
-   align-items: center;
    flex-direction: column;
    padding: 18px 20px;
 `
@@ -246,7 +256,7 @@ const StyledContentItem = styled.div`
    height: 30px;
    display: flex;
    align-items: center;
-   justify-content: start;
+   justify-content: flex-start;
    border-radius: 6px;
    h2 {
       width: 107px;
@@ -287,6 +297,7 @@ const StyledDeleteIcon = styled.div`
    width: 26px;
    height: 26px;
    margin-right: 5px;
+   cursor: pointer;
 `
 const ActionsContainer = styled.div`
    width: 270px;
