@@ -33,19 +33,18 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
-import { PresentationCreateModal } from '../../lesson/presentation/PresentationModal'
 import {
    addPresentation,
    deletePresentation,
    editPresentation,
    getPresentation,
 } from '../../../../store/presentation-slice'
-import { PresentationEditModal } from '../../lesson/presentation/EditPresentation'
 import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
 import { AddLinkModal } from '../../../insructor/AddLinkModal'
 import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
 import { LinkEdit } from './LinkEdit'
 import { LinkDeleteConfirm } from './LinkDeleteConfirm'
+import { PresentationForm } from '../../lesson/presentation/PresentationForm'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -71,6 +70,7 @@ export const Materials = () => {
    const [deletedLinkId, setDeletedLinkId] = useState(null)
    const [deletedLessonId, setDeletedLessonId] = useState(null)
    const [deletedPresentationId, setDeletedPresentationId] = useState(null)
+   const [linkId, setLinkId] = useState('')
 
    // ----------------LINK RELATED --------------------
 
@@ -82,7 +82,6 @@ export const Materials = () => {
       setDeletedLinkId(id)
       setSearchParams({ [DELETE_LINK]: true })
    }
-   const [linkId, setLinkId] = useState('')
    const editLink = (id) => {
       setLinkId(id)
       dispatch(getSingleLink(id))
@@ -302,13 +301,13 @@ export const Materials = () => {
             onClose={closeModals}
             onDelete={deleteLessonHandler}
          />
-         <PresentationCreateModal
+         <PresentationForm
             showModal={showPresentationModal}
             onClose={closeModals}
             onAdd={addPresentationHandler}
          />
          {presentation && (
-            <PresentationEditModal
+            <PresentationForm
                showModal={showEditPresentationModal}
                onClose={closeModals}
                onEdit={senEditedPresentationHandler}

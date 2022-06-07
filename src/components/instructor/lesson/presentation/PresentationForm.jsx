@@ -2,24 +2,38 @@ import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../../hooks/usuInput/useInput'
+import { EDIT_PRESENTATION } from '../../../../utils/constants/general'
 import { Button } from '../../../UI/button/Button'
 import { Input } from '../../../UI/input/Input'
 import { BasicModal } from '../../../UI/modal/BasicModal'
 
-export const PresentationCreateModal = ({ showModal, onAdd, onClose }) => {
+export const PresentationForm = ({
+   showModal,
+   onEdit,
+   onAdd,
+   onClose,
+   presentation,
+}) => {
    const { value, onChange, onClear } = useInput({
-      presentationName: '',
-      description: '',
+      presentationName: (presentation && presentation?.presentationName) || '',
+      description: (presentation && presentation?.description) || '',
    })
 
    const [searchParams, setSearchParams] = useSearchParams()
 
+   const editModal = searchParams.get(EDIT_PRESENTATION)
+
    const [disableButton, setDisableButton] = useState(false)
    const [selectedFile, setSelectedFile] = useState('')
 
-   const addPresentation = () => {
+   const editPresentation = () => {
+      const presentationId = searchParams.get('presentationId')
       const lessonId = searchParams.get('lessonId')
-      onAdd(value, selectedFile, lessonId, onClear)
+      if (editModal) {
+         onEdit(value, selectedFile, presentationId, onClear)
+      } else {
+         onAdd(value, selectedFile, lessonId, onClear)
+      }
    }
 
    const uploadFileHandler = (e) => {
@@ -38,7 +52,9 @@ export const PresentationCreateModal = ({ showModal, onAdd, onClose }) => {
    return (
       <BasicModal
          isModalOpen={Boolean(showModal)}
-         title="Добавить презентацию"
+         title={
+            editModal ? 'Редактировать презентацию' : 'Добавить презентацию'
+         }
          onClose={onClose}
       >
          <StyledChildrenOfModal>
@@ -83,10 +99,10 @@ export const PresentationCreateModal = ({ showModal, onAdd, onClose }) => {
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
-                  onClick={addPresentation}
+                  onClick={editPresentation}
                   disabled={!disableButton}
                >
-                  Добавить
+                  {editModal ? 'Сохранить' : 'Добавить'}
                </Button>
             </StyledModalButtonContainer>
          </StyledChildrenOfModal>
