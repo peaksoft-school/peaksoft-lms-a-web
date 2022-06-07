@@ -13,6 +13,7 @@ export const AddCode = () => {
       dispatch(
          taskActions.addTask({
             taskType: CODE,
+            name: 'code',
             id: uuid(),
          })
       )

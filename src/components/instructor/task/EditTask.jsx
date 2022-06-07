@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
@@ -13,25 +13,16 @@ import { Code } from './taskCode/Code'
 import { Image } from './taskImage/Image'
 import { File } from './taskFile/File'
 import { AddLinkModal } from './taskLink/AddLink'
-import {
-   CODE,
-   FILE,
-   IMAGE,
-   LESSON_TASK,
-   LINK,
-   TEXT,
-} from '../../../utils/constants/general'
+import { CODE, FILE, IMAGE, LINK, TEXT } from '../../../utils/constants/general'
 import { AddCode } from './taskCode/AddCode'
 import { Text } from './TextEditor/Text'
-import { taskActions, uploadFile } from '../../../store/task-slice'
-import { localStorageHelper } from '../../../utils/helpers/general'
+import { taskActions, updateFile } from '../../../store/task-slice'
 
-export const Task = () => {
+export const EditTask = () => {
    const dispatch = useDispatch()
-   const { lessonId, id } = useParams()
+   const { taskId, id } = useParams()
    const navigate = useNavigate()
    const { lessonTasks, taskName } = useSelector((state) => state.tasks.task)
-   const { task } = useSelector((state) => state.tasks)
 
    const onChangeHandler = (e) => {
       dispatch(taskActions.addTaskName(e.target.value))
@@ -41,21 +32,16 @@ export const Task = () => {
          replace: true,
       })
    }
-   const submitHandler = () => {
+   const editHandler = () => {
       dispatch(
-         uploadFile({
+         updateFile({
             lessonTasks,
             taskName,
-            lessonId,
+            taskId,
             navigateAfterSuccessResponse,
          })
       )
    }
-   useEffect(() => {
-      window.onbeforeunload = () => {
-         return localStorageHelper.store(LESSON_TASK, task)
-      }
-   }, [task])
    return (
       <>
          <StyledBreadCrumbs>
@@ -109,7 +95,7 @@ export const Task = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={submitHandler}
+                     onClick={editHandler}
                   >
                      Сохранить
                   </Button>

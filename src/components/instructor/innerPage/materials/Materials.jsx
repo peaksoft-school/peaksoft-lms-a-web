@@ -9,7 +9,9 @@ import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
    DELETE_LESSON,
+   DELETE_TASK,
    EDIT_LESSON,
+   LESSON_TASK,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -27,6 +29,8 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { deleteLessonTask, getLessonTask } from '../../../../store/task-slice'
+import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -41,14 +45,43 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showTaskConfirmationModal = searchParams.get(DELETE_TASK)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+   const [deletedTaskId, setDeletedTaskId] = useState(null)
+
+   // --------------------------task
 
    const selectedOption = (option) => {
       if (option.id === 'task') {
          navigate(`create_task/${option.lessonId}`)
       }
    }
+   const editTask = (id) => {
+      navigate(`edit_task/${id}`)
+      dispatch(getLessonTask(id))
+   }
+
+   const deleteTask = (id) => {
+      setDeletedTaskId(id)
+      setSearchParams({ [DELETE_TASK]: true })
+   }
+
+   const deleteTaskHandler = () => {
+      dispatch(deleteLessonTask(deletedTaskId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Task deleted')
+            closeModals()
+            dispatch(getLessons(id))
+            // localStorageHelper.clear(LESSON_TASK)
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить тест')
+         })
+   }
+
+   // ----------------task
 
    const closeModals = () => {
       setSearchParams('')
@@ -158,6 +191,9 @@ export const Materials = () => {
                      onEditTitle={() => openEditModal(lesson.id)}
                      onDeleteLesson={() => deleteHandler(lesson.id)}
                      selectedOption={selectedOption}
+                     onEditTask={editTask}
+                     onDeleteTask={deleteTask}
+                     task={lesson.taskResponse}
                   />
                ))}
          </Container>
@@ -178,6 +214,11 @@ export const Materials = () => {
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <ConfirmModalOnDelete
+            showModal={showTaskConfirmationModal}
+            onClose={closeModals}
+            onDelete={deleteTaskHandler}
          />
       </>
    )

@@ -3,11 +3,9 @@ import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
 import { useDispatch } from 'react-redux'
-import uuid from 'react-uuid'
 import { ReactComponent as IconText } from '../../../../assets/icons/text.svg'
 import { Toolbar } from './Toolbar'
 import { taskActions } from '../../../../store/task-slice'
-import { TEXT } from '../../../../utils/constants/general'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
 
 export const TextEditor = ({ text }) => {
@@ -19,21 +17,11 @@ export const TextEditor = ({ text }) => {
       },
    ])
 
-   // useEffect(() => {
-   //    value.map((text) => {
-   //       text.children.map((el) => {
-
-   //          return el
-   //       })
-   //       return text
-   //    })
-   // }, [value])
-
-   console.log(value)
    useEffect(() => {
       dispatch(
          taskActions.addText({
-            textValue: value,
+            textValue: JSON.stringify(value),
+            name: 'text',
             id: text.id,
          })
       )

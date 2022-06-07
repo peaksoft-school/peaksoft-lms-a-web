@@ -65,6 +65,7 @@ export const STUDENTTABS = [
 ]
 
 export const AUTH_KEY = '@peaksoft-lms-a-auth-info'
+export const LESSON_TASK = 'lesson_task'
 
 export const DELETE_COURSE = 'delete_course'
 export const APPOINT_TEACHER = 'apppoint_teacher'
@@ -81,6 +82,7 @@ export const ADD_COURSES = 'add_courses'
 export const ADD_LESSON = 'create_lesson'
 export const EDIT_LESSON = 'edit_lesson'
 export const DELETE_LESSON = 'delete-lesson-confirmation'
+export const DELETE_TASK = 'delete_task'
 
 export const STUDY_FORMAT_OPTION = [
    {

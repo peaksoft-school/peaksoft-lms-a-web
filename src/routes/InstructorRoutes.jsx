@@ -5,6 +5,7 @@ import { InstrutorCourses } from '../components/instructor/primerPage/Instructor
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
+import { EditTask } from '../components/instructor/task/EditTask'
 
 export const InstructorRoutes = () => {
    return (
@@ -29,6 +30,10 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_task/:lessonId`}
                element={<Task />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/edit_task/:taskId`}
+               element={<EditTask />}
             />
          </Routes>
       </div>

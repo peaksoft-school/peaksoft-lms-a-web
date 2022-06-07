@@ -12,7 +12,7 @@ export const Image = ({ image }) => {
    }
    return (
       <ImageContainer>
-         <img alt="" src={image.selectedImageUrl} />
+         <img alt={image.name} src={image.value} />
          <Overlay>
             <Button
                id="delete"

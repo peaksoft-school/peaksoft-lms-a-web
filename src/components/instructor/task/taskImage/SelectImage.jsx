@@ -16,7 +16,8 @@ export const SelectImage = () => {
       dispatch(
          taskActions.addTask({
             taskType: IMAGE,
-            selectedImageUrl,
+            name: selectedImagefile.name,
+            value: selectedImageUrl,
             id: uuid(),
             selectedImagefile,
          })
