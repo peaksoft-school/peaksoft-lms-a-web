@@ -51,6 +51,9 @@ export const Task = () => {
          })
       )
    }
+   const cancelHandler = () => {
+      navigateAfterSuccessResponse()
+   }
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store(LESSON_TASK, task)
@@ -102,6 +105,7 @@ export const Task = () => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
+                     onClick={cancelHandler}
                   >
                      Отмена
                   </Button>

@@ -47,6 +47,7 @@ export const Materials = () => {
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
    const showTaskConfirmationModal = searchParams.get(DELETE_TASK)
 
+   const [confirmationTitle, setconfirmationTitle] = useState('')
    const [deletedLessonId, setDeletedLessonId] = useState(null)
    const [deletedTaskId, setDeletedTaskId] = useState(null)
 
@@ -63,6 +64,7 @@ export const Materials = () => {
    }
 
    const deleteTask = (id) => {
+      setconfirmationTitle('Вы уверены, что хотите удалить задание ... ?')
       setDeletedTaskId(id)
       setSearchParams({ [DELETE_TASK]: true })
    }
@@ -92,6 +94,7 @@ export const Materials = () => {
    }
 
    const deleteHandler = (id) => {
+      setconfirmationTitle('Вы уверены, что хотите удалить урок ... ?')
       setDeletedLessonId(id)
       setSearchParams({ [DELETE_LESSON]: true })
    }
@@ -211,11 +214,13 @@ export const Materials = () => {
             />
          )}
          <ConfirmModalOnDelete
+            title={confirmationTitle}
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
          />
          <ConfirmModalOnDelete
+            title={confirmationTitle}
             showModal={showTaskConfirmationModal}
             onClose={closeModals}
             onDelete={deleteTaskHandler}

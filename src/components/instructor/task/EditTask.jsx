@@ -42,6 +42,9 @@ export const EditTask = () => {
          })
       )
    }
+   const cancelHandler = () => {
+      navigateAfterSuccessResponse()
+   }
    return (
       <>
          <StyledBreadCrumbs>
@@ -88,6 +91,7 @@ export const EditTask = () => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
+                     onClick={cancelHandler}
                   >
                      Отмена
                   </Button>
