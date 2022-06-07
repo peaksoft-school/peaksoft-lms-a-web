@@ -11,6 +11,7 @@ const initialState = {
    successMessage: null,
    error: null,
 }
+
 export const addNewGroup = createAsyncThunk(
    'groups/addNewGroup',
    async ({ groupData, file }, { rejectWithValue, dispatch }) => {

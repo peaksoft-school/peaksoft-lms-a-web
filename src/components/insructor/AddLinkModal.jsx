@@ -1,74 +1,67 @@
-import styled from '@emotion/styled'
 import React from 'react'
+import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { useInput } from '../../../../../hooks/usuInput/useInput'
-import { addVideo } from '../../../../../store/video-slice'
-import { ADD_VIDEO } from '../../../../../utils/constants/general'
-import { Button } from '../../../../UI/button/Button'
-import { Input } from '../../../../UI/input/Input'
-import { BasicModal } from '../../../../UI/modal/BasicModal'
+import { Input } from '../UI/input/Input'
+
+import { BasicModal } from '../UI/modal/BasicModal'
+import { Button } from '../UI/button/Button'
+import { addLinkToLesson } from '../../store/INSTRUCTOR/linkSlice'
 import {
    showErrorMessage,
    showSuccessMessage,
-} from '../../../../UI/notification/Notification'
+} from '../UI/notification/Notification'
+import { useInput } from '../../hooks/usuInput/useInput'
+import { ADD_LINK_MODAL } from '../../utils/constants/general'
 
-export const LessonVideo = ({ isModalOpen, closeModals }) => {
+export const AddLinkModal = ({ closeModals, isModalOpen }) => {
    const dispatch = useDispatch()
    const [searchParams, setSearchParams] = useSearchParams()
+
    const { value, onChange, onClear } = useInput({
-      title: '',
-      description: '',
+      text: '',
       link: '',
    })
 
-   const AddVideoLesson = () => {
+   const addLinkToLessonHandler = () => {
       const lessonId = searchParams.get('lessonId')
-      console.log(lessonId)
-      const video = {
-         videoName: value.title,
-         description: value.description,
-         videoLink: value.link,
+      const newLinkData = {
+         text: value.text,
+         link: value.link,
       }
-      dispatch(addVideo({ video, lessonId }))
+
+      dispatch(addLinkToLesson({ newLinkData, lessonId }))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Video успешно добавленна')
-            setSearchParams({ [ADD_VIDEO]: false })
+            showSuccessMessage('Ссылка успешно добавленна')
+            setSearchParams({ [ADD_LINK_MODAL]: false })
             closeModals()
             onClear()
          })
          .catch(() => {
-            showErrorMessage('Не удалось добавить video')
+            showErrorMessage('Не удалось добавить ссылку')
          })
    }
+
    return (
       <div>
          <BasicModal
             isModalOpen={Boolean(isModalOpen)}
             onClose={closeModals}
-            title="Добавить видеоурок"
+            title="Добавить ссылку"
          >
             <InputStyleControl>
                <div>
                   <Input
-                     placeholder="Введите название видеоурока"
-                     name="title"
-                     value={value.title}
+                     placeholder="Отображаемый текст"
+                     name="text"
+                     value={value.text}
                      onChange={onChange}
                   />
                </div>
                <div>
                   <Input
-                     placeholder="Введите описание видеурока"
-                     name="description"
-                     value={value.description}
-                     onChange={onChange}
-                  />
-               </div>
-               <div>
-                  <Input
-                     placeholder="Вставьте ссылку на видеоурок"
+                     placeholder="Вставьте ссылку"
                      name="link"
                      value={value.link}
                      onChange={onChange}
@@ -77,6 +70,7 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
                   />
                </div>
             </InputStyleControl>
+
             <BtnStyleControl>
                <div>
                   <Button
@@ -95,7 +89,7 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={AddVideoLesson}
+                     onClick={addLinkToLessonHandler}
                   >
                      Добавить
                   </Button>
@@ -112,6 +106,7 @@ const BtnStyleControl = styled.div`
    margin-top: 10px;
    margin-bottom: 1px;
    padding: 1px;
+
    button {
       margin-left: 10px;
    }
