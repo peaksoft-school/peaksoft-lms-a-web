@@ -20,6 +20,10 @@ export const LessonCard = ({
    onEditTitle,
    onDeleteLesson,
    openTestInnerPage,
+   selectedOption,
+   followLinkHandler,
+   onEditLink,
+   onDeleteLink,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -40,7 +44,8 @@ export const LessonCard = ({
       {
          id: 'link',
          title: 'Ссылка',
-         disabled: Boolean(link),
+         disabled: link?.lessonId === lessonId,
+         lessonId,
       },
       {
          id: 'test',
@@ -60,7 +65,11 @@ export const LessonCard = ({
             </StyledTitle>
             <StyledManageContainer>
                <StyledSelectContainer>
-                  <Select placeholder="Добавить" options={ADD_OPTIONS} />
+                  <Select
+                     placeholder="Добавить"
+                     options={ADD_OPTIONS}
+                     selectedOption={selectedOption}
+                  />
                </StyledSelectContainer>
                <StyledDeleteIcon onClick={onDeleteLesson}>
                   <DeleteIcon />
@@ -134,20 +143,22 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!link}>
+            <StyledContentItem disabled={link?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <LinkIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => followLinkHandler(link?.link)}>
                   <h2>Ссылка</h2>
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer onClick={() => onEditLink(link?.id)}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteLink(link?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
