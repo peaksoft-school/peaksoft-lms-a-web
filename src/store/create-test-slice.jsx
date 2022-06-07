@@ -157,30 +157,26 @@ export const createTestSlice = createSlice({
             (question) => question.id === action.payload
          )
          question.questionType = 'MANY'
+         question.options = question.options.map((option) => {
+            option.isTrue = false
+            return option
+         })
       },
       changeOptionToOne(state, action) {
          const question = state.test.questions.find(
             (question) => question.id === action.payload
          )
          question.questionType = 'ONE'
+         question.options = question.options.map((option) => {
+            option.isTrue = false
+            return option
+         })
       },
       chooseOptionMany(state, action) {
          const { questionId, optionId, checked } = action.payload
          const question = state.test.questions.find(
             (question) => question.id === questionId
          )
-         // if (type === 'radio') {
-         //    question.options = question.options.map((option) => {
-         //       if (option.id === optionId) {
-         //          // eslint-disable-next-line no-param-reassign
-         //          option.isTrue = true
-         //       } else {
-         //          // eslint-disable-next-line no-param-reassign
-         //          option.isTrue = false
-         //       }
-         //       return option
-         //    })
-         // }
          question.options = question.options.map((option) => {
             if (option.id === optionId && checked) {
                option.isTrue = true
