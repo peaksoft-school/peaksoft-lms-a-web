@@ -33,6 +33,7 @@ export const getLessons = createAsyncThunk(
             method: 'GET',
          })
          dispatch(materialsActions.getLessons(response))
+
          return response
       } catch (error) {
          return rejectWithValue(error.message)

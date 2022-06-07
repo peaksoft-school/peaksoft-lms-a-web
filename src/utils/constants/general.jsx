@@ -77,6 +77,10 @@ export const ADD_LESSON = 'create_lesson'
 export const EDIT_LESSON = 'edit_lesson'
 export const DELETE_LESSON = 'delete-lesson-confirmation'
 export const DELETE_TEST = 'dlete-test-confirmation'
+export const ADD_LINK_MODAL = 'add_link_modal'
+export const GET_LINK = 'get_link'
+export const EDIT_LINK = 'edit_links'
+export const DELETE_LINK = 'delete_link'
 
 export const STUDY_FORMAT_OPTION = [
    {
