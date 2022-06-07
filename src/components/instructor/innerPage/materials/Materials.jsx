@@ -13,6 +13,9 @@ import {
    DELETE_PRESENTATION,
    EDIT_LESSON,
    EDIT_PRESENTATION,
+   ADD_LINK_MODAL,
+   EDIT_LINK,
+   DELETE_LINK,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -39,10 +42,15 @@ import {
 } from '../../../../store/presentation-slice'
 import { PresentationEditModal } from '../../lesson/presentation/EditPresentation'
 import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
+import { AddLinkModal } from '../../../insructor/AddLinkModal'
+import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
+import { LinkEdit } from './LinkEdit'
+import { LinkDeleteConfirm } from './LinkDeleteConfirm'
 
 export const Materials = () => {
    const dispatch = useDispatch()
    const { id } = useParams()
+
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
@@ -56,9 +64,30 @@ export const Materials = () => {
    const showPresentationModal = searchParams.get(ADD_PRESENTATION)
    const showEditPresentationModal = searchParams.get(EDIT_PRESENTATION)
    const showConfirmPresentationModal = searchParams.get(DELETE_PRESENTATION)
+   const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
+   const showEditLinkModal = searchParams.get(EDIT_LINK)
+   const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
 
+   const [deletedLinkId, setDeletedLinkId] = useState(null)
    const [deletedLessonId, setDeletedLessonId] = useState(null)
    const [deletedPresentationId, setDeletedPresentationId] = useState(null)
+
+   // ----------------LINK RELATED --------------------
+
+   const followLinkHandler = (link) => {
+      window.open(link, '_blank')
+   }
+
+   const openDeleteLinkConfirmModal = (id) => {
+      setDeletedLinkId(id)
+      setSearchParams({ [DELETE_LINK]: true })
+   }
+   const [linkId, setLinkId] = useState('')
+   const editLink = (id) => {
+      setLinkId(id)
+      dispatch(getSingleLink(id))
+      setSearchParams({ [EDIT_LINK]: true, linkId: id })
+   }
 
    const addLessonMaterials = (option) => {
       if (option.id === 'presentation') {
@@ -67,24 +96,28 @@ export const Materials = () => {
             lessonId: option.lessonId,
          })
       }
+      if (option.id === 'link') {
+         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
+      }
    }
 
+   // ------------------------------LESSON RELATED-----------------
    const closeModals = () => {
       setSearchParams('')
    }
 
-   const openCreateModal = () => {
+   const openCreateLessonModal = () => {
       setSearchParams({ [ADD_LESSON]: true })
    }
 
-   const deleteHandler = (id) => {
+   const deleteLessonModal = (id) => {
       setDeletedLessonId(id)
       setSearchParams({ [DELETE_LESSON]: true })
    }
 
-   const openEditModal = (id) => {
+   const openEditLessonModal = (id) => {
       dispatch(getLesson(id))
-      setSearchParams({ [EDIT_LESSON]: true, lessonId: id })
+      setSearchParams({ [EDIT_LESSON]: true })
    }
 
    const openPresentationEditModal = (id) => {
@@ -221,11 +254,12 @@ export const Materials = () => {
       <>
          <StyledButtonContainer>
             <BreadCrumbs pathsArray={pathsArray} />
+
             <Button
                background="#3772FF"
                bgHover="#1D60FF"
                bgActive="#6190FF"
-               onClick={openCreateModal}
+               onClick={openCreateLessonModal}
             >
                <StyledAddIcon /> Добавить урок
             </Button>
@@ -237,12 +271,16 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
-                     onEditTitle={() => openEditModal(lesson.id)}
-                     onDeleteLesson={() => deleteHandler(lesson.id)}
                      presentation={lesson.presentationResponse}
                      selectedOption={addLessonMaterials}
                      onEditPresentation={openPresentationEditModal}
                      onDeletePresentation={deletePresentationModal}
+                     onEditTitle={() => openEditLessonModal(lesson.id)}
+                     onEditLink={editLink}
+                     onDeleteLesson={() => deleteLessonModal(lesson.id)}
+                     onDeleteLink={openDeleteLinkConfirmModal}
+                     link={lesson.linkResponse}
+                     followLinkHandler={followLinkHandler}
                   />
                ))}
          </Container>
@@ -281,6 +319,20 @@ export const Materials = () => {
             showModal={showConfirmPresentationModal}
             onClose={closeModals}
             onDelete={deletePresentationHandler}
+         />
+         <AddLinkModal
+            isModalOpen={showAddLinkModal}
+            closeModals={closeModals}
+         />
+         <LinkEdit
+            showEditLinkModal={showEditLinkModal}
+            onClose={closeModals}
+            id={linkId}
+         />
+         <LinkDeleteConfirm
+            isModalOpen={showDeleteLinkConfirmationModal}
+            onClose={closeModals}
+            deletedLinkId={deletedLinkId}
          />
       </>
    )
