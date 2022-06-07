@@ -17,28 +17,27 @@ export const AddLinkModal = () => {
    const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
-      linkText: '',
-      link: '',
+      name: '',
+      value: '',
    })
 
    useEffect(() => {
-      setFormIsValid(value.linkText.length > 0 && value.link.length > 0)
+      setFormIsValid(value.name.length > 0 && value.value.length > 0)
    }, [value])
 
    const addLink = () => {
-      const { linkText, link } = value
       dispatch(
          taskActions.addTask({
             taskType: LINK,
-            linkText,
-            link,
+            name: value.name,
+            value: value.value,
             id: uuid(),
          })
       )
       setModalIsOpen(false)
       onClear()
    }
-
+   console.log(value)
    return (
       <div>
          <StyledTooltip title="Вставить ссылку" placement="top">
@@ -51,17 +50,17 @@ export const AddLinkModal = () => {
                <div>
                   <Input
                      placeholder="Отображаемый текст"
-                     name="linkText"
+                     name="name"
                      onChange={onChange}
-                     value={value.linkText}
+                     value={value.name}
                   />
                </div>
                <div>
                   <Input
                      placeholder="Вставьте ссылку"
-                     name="link"
+                     name="value"
                      onChange={onChange}
-                     value={value.link}
+                     value={value.value}
                   />
                </div>
             </InputStyleControl>

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
@@ -13,14 +13,23 @@ import { Code } from './taskCode/Code'
 import { Image } from './taskImage/Image'
 import { File } from './taskFile/File'
 import { AddLinkModal } from './taskLink/AddLink'
-import { CODE, FILE, IMAGE, LINK, TEXT } from '../../../utils/constants/general'
+import {
+   CODE,
+   FILE,
+   IMAGE,
+   LINK,
+   ROUTES,
+   TEXT,
+} from '../../../utils/constants/general'
 import { AddCode } from './taskCode/AddCode'
 import { Text } from './TextEditor/Text'
-import { uploadFile } from '../../../store/task-slice'
+import { taskActions, uploadFile } from '../../../store/task-slice'
+import { showErrorMessage } from '../../UI/notification/Notification'
 
 export const Task = () => {
    const dispatch = useDispatch()
    const { lessonId } = useParams()
+   const navigate = useNavigate()
    const { lessonTasks } = useSelector((state) => state.tasks)
 
    const [taskName, setTaskName] = useState('')
@@ -35,8 +44,14 @@ export const Task = () => {
             lessonId,
          })
       )
+         .unwrap()
+         .then(() => {
+            navigate(`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`)
+         })
+         .catch((error) => {
+            showErrorMessage(error.message)
+         })
    }
-   console.log(lessonTasks)
    return (
       <>
          <StyledBreadCrumbs>

@@ -12,12 +12,12 @@ export const SelectFile = () => {
 
    const onDrop = (e) => {
       const selectedFile = e.target.files[0]
-      const fileName = selectedFile.name
+      const { name } = selectedFile
       dispatch(
          taskActions.addTask({
             taskType: FILE,
             selectedFile,
-            fileName,
+            name,
             id: uuid(),
          })
       )

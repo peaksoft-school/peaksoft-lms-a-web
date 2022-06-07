@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
@@ -18,7 +17,7 @@ export const uploadFile = createAsyncThunk(
       try {
          const images = lessonTasks.filter((task) => task.taskType === IMAGE)
          const files = lessonTasks.filter((task) => task.taskType === FILE)
-         console.log('files before upload', files)
+
          const uploadedImages = await Promise.all(
             images.map(async (task) => {
                formData.append('file', task.selectedImagefile)
@@ -30,9 +29,29 @@ export const uploadFile = createAsyncThunk(
                return { ...result, id: task.id }
             })
          )
-         console.log('images after upload', uploadedImages)
-         const lessonTaskWithUploadedImages = lessonTasks.map((task) => {
-            const updatedTask = { taskType: task.taskType, name: '', value: '' }
+
+         const uploadedFiles = await Promise.all(
+            files.map(async (file) => {
+               formData.append('file', file.selectedFile)
+               const fileResult = await fileFetch({
+                  path: 'api/file',
+                  method: 'POST',
+                  body: formData,
+               })
+               return { ...fileResult, id: file.id }
+            })
+         )
+         const lessonTaskWithUploadedTasks = lessonTasks.map((task) => {
+            const updatedTask = {
+               taskType: task.taskType,
+               name: task.name,
+               value: JSON.stringify(task.value),
+            }
+            uploadedFiles.forEach((file) => {
+               if (task.id === file.id) {
+                  updatedTask.value = file.url
+               }
+            })
             uploadedImages.forEach((image) => {
                if (task.id === image.id) {
                   updatedTask.value = image.url
@@ -40,41 +59,15 @@ export const uploadFile = createAsyncThunk(
             })
             return updatedTask
          })
-         console.log('updated tasks', lessonTaskWithUploadedImages)
-         // const imageUrl = promise.map((image) => {
-         //    return {
-         //       value: image.url,
-         //       name: 'image',
-         //       taskType: IMAGE,
-         //    }
-         // })
-         // const promiseFile = await Promise.all(
-         //    lessonTasks.map((task) => {
-         //       formData.append('file', task.selectedFile)
-         //       const result = fileFetch({
-         //          path: 'api/file',
-         //          body: formData,
-         //          method: 'POST',
-         //       })
-         //       return result
-         //    })
-         // )
-         // const fileUrl = promiseFile.map((el) => {
-         //    return {
-         //       value: el.url,
-         //       name: 'file',
-         //       taskType: FILE,
-         //    }
-         // })
-         // dispatch(
-         //    sendLessonTask({
-         //       tasks: {
-         //          taskName,
-         //          taskTypeRequests: [...imageUrl, ...fileUrl],
-         //       },
-         //       lessonId,
-         //    })
-         // )
+         dispatch(
+            sendLessonTask({
+               tasks: {
+                  taskName,
+                  taskTypeRequests: lessonTaskWithUploadedTasks,
+               },
+               lessonId,
+            })
+         )
       } catch (error) {
          rejectWithValue(error.message)
       }
@@ -93,8 +86,8 @@ export const sendLessonTask = createAsyncThunk(
          showSuccessMessage('task successfully created')
          return response
       } catch (error) {
-         showErrorMessage("can't create lesson")
-         rejectWithValue(error)
+         showErrorMessage("can't create task")
+         return rejectWithValue(error)
       }
    }
 )

@@ -20,7 +20,7 @@ export const Link = ({ link }) => {
             />
             <LinkIcon id="link" />
          </StyledIcon>
-         <a href={link.link}>{link.linkText}</a>
+         <a href={link.value}>{link.name}</a>
       </Container>
    )
 }
