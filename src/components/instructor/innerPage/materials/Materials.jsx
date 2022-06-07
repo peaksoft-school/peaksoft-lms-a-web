@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
@@ -37,6 +37,7 @@ import { LinkDeleteConfirm } from './LinkDeleteConfirm'
 
 export const Materials = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { id } = useParams()
 
    const { lessons, isLoading, lesson, course } = useSelector(
@@ -65,6 +66,10 @@ export const Materials = () => {
       if (option.id === 'link') {
          setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
       }
+   }
+
+   const openTaskInnerPage = (taskId) => {
+      navigate(`task/${taskId}`)
    }
 
    const openDeleteLinkConfirmModal = (id) => {
@@ -191,6 +196,8 @@ export const Materials = () => {
                      onDeleteLink={openDeleteLinkConfirmModal}
                      selectedOption={selectedOptionHandler}
                      link={lesson.linkResponse}
+                     task={lesson.taskResponse}
+                     openTaskInnerPage={openTaskInnerPage}
                      followLinkHandler={followLinkHandler}
                   />
                ))}
