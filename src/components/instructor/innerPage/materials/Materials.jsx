@@ -29,8 +29,9 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
-import { deleteLessonTask, getLessonTask } from '../../../../store/task-slice'
+import { getLessonTask } from '../../../../store/task-slice'
 import { localStorageHelper } from '../../../../utils/helpers/general'
+import { ConfirmationModal } from '../../task/ConfirmationModal'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -47,11 +48,8 @@ export const Materials = () => {
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
    const showTaskConfirmationModal = searchParams.get(DELETE_TASK)
 
-   const [confirmationTitle, setconfirmationTitle] = useState('')
    const [deletedLessonId, setDeletedLessonId] = useState(null)
    const [deletedTaskId, setDeletedTaskId] = useState(null)
-
-   // --------------------------task
 
    const selectedOption = (option) => {
       if (option.id === 'task') {
@@ -64,26 +62,9 @@ export const Materials = () => {
    }
 
    const deleteTask = (id) => {
-      setconfirmationTitle('Вы уверены, что хотите удалить задание ... ?')
       setDeletedTaskId(id)
       setSearchParams({ [DELETE_TASK]: true })
    }
-
-   const deleteTaskHandler = () => {
-      dispatch(deleteLessonTask(deletedTaskId))
-         .unwrap()
-         .then(() => {
-            showSuccessMessage('Task deleted')
-            closeModals()
-            dispatch(getLessons(id))
-            // localStorageHelper.clear(LESSON_TASK)
-         })
-         .catch(() => {
-            showErrorMessage('Не удалось удалить тест')
-         })
-   }
-
-   // ----------------task
 
    const closeModals = () => {
       setSearchParams('')
@@ -94,7 +75,6 @@ export const Materials = () => {
    }
 
    const deleteHandler = (id) => {
-      setconfirmationTitle('Вы уверены, что хотите удалить урок ... ?')
       setDeletedLessonId(id)
       setSearchParams({ [DELETE_LESSON]: true })
    }
@@ -214,16 +194,13 @@ export const Materials = () => {
             />
          )}
          <ConfirmModalOnDelete
-            title={confirmationTitle}
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
          />
-         <ConfirmModalOnDelete
-            title={confirmationTitle}
+         <ConfirmationModal
             showModal={showTaskConfirmationModal}
             onClose={closeModals}
-            onDelete={deleteTaskHandler}
          />
       </>
    )
