@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
@@ -37,6 +37,7 @@ import { LinkDeleteConfirm } from './LinkDeleteConfirm'
 
 export const Materials = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { id } = useParams()
 
    const { lessons, isLoading, lesson, course } = useSelector(
@@ -95,6 +96,10 @@ export const Materials = () => {
    const openEditLessonModal = (id) => {
       dispatch(getLesson(id))
       setSearchParams({ [EDIT_LESSON]: true })
+   }
+
+   const openTestInnerPage = (lessonId, testId) => {
+      navigate(`test/${lessonId}/${testId}`)
    }
 
    const addLessonHandler = (value, onClear) => {
@@ -185,6 +190,8 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
+                     openTestInnerPage={openTestInnerPage}
+                     test={lesson.testResponse}
                      onEditTitle={() => openEditLessonModal(lesson.id)}
                      onEditLink={editLink}
                      onDeleteLesson={() => deleteLessonModal(lesson.id)}
