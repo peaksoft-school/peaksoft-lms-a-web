@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../../../hooks/usuInput/useInput'
-import { addVideo } from '../../../../../store/video-slice'
+import { addVideo, getSingleVideo } from '../../../../../store/video-slice'
 import { ADD_VIDEO } from '../../../../../utils/constants/general'
 import { Button } from '../../../../UI/button/Button'
 import { Input } from '../../../../UI/input/Input'
@@ -13,27 +13,30 @@ import {
    showSuccessMessage,
 } from '../../../../UI/notification/Notification'
 
-export const LessonVideo = ({ isModalOpen, closeModals }) => {
+export const EditVideo = ({ isModalOpen, closeModals, id }) => {
    const dispatch = useDispatch()
-   const [searchParams, setSearchParams] = useSearchParams()
-   const { value, onChange, onClear } = useInput({
-      title: '',
-      description: '',
-      link: '',
+   const { singleVideo } = useSelector((state) => state.video)
+
+   const { value, onChange, onClear, setValue } = useInput({
+      title: (singleVideo && singleVideo?.title) || '',
+      description: (singleVideo && singleVideo?.description) || '',
+      link: (singleVideo && singleVideo?.link) || '',
    })
 
-   const AddVideoLesson = () => {
-      const lessonId = searchParams.get('lessonId')
+   useEffect(() => {
+      dispatch(getSingleVideo(id))
+   }, [])
+
+   const AddUpdatedVideoLesson = () => {
       const video = {
          videoName: value.title,
          description: value.description,
          videoLink: value.link,
       }
-      dispatch(addVideo({ video, lessonId }))
+      dispatch(addVideo({ video, id: singleVideo.id }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Видеоурок успешно добавлен')
-            setSearchParams({ [ADD_VIDEO]: false })
             closeModals()
             onClear()
          })
@@ -41,6 +44,13 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
             showErrorMessage('Не удалось добавить видеоурок')
          })
    }
+   useEffect(() => {
+      setValue({
+         title: singleVideo?.title,
+         description: singleVideo?.description,
+         videoLink: singleVideo?.videoLink,
+      })
+   }, [singleVideo])
    return (
       <div>
          <BasicModal
@@ -94,7 +104,7 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={AddVideoLesson}
+                     onClick={AddUpdatedVideoLesson}
                   >
                      Добавить
                   </Button>

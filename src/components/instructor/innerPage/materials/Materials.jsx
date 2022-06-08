@@ -14,6 +14,8 @@ import {
    ADD_LINK_MODAL,
    EDIT_LINK,
    DELETE_LINK,
+   DELETE_VIDEO,
+   EDIT_VIDEO,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -36,6 +38,9 @@ import { AddLinkModal } from '../../../insructor/AddLinkModal'
 import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
 import { LinkEdit } from './LinkEdit'
 import { LinkDeleteConfirm } from './LinkDeleteConfirm'
+import { deleteVideo } from '../../../../store/video-slice'
+import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
+import { EditVideo } from './video/EditVideo'
 
 export const Materials = () => {
    const dispatch = useDispatch()
@@ -51,13 +56,15 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
-   const showVideoModal = searchParams.get(ADD_VIDEO)
    const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
    const showEditLinkModal = searchParams.get(EDIT_LINK)
    const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
+   const showVideoModal = searchParams.get(ADD_VIDEO)
+   const showVideoConfirmModal = searchParams.get(DELETE_VIDEO)
+   const showVideoEditModal = searchParams.get(EDIT_VIDEO)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
-   const [deletedLinkId, setDeletedLinkId] = useState(null)
+   const [materialId, setMaterialId] = useState(null)
 
    const addLessonMaterials = (option) => {
       if (option.id === 'video') {
@@ -68,6 +75,15 @@ export const Materials = () => {
       }
    }
 
+   const editVideo = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [EDIT_VIDEO]: true, videoId: id })
+   }
+
+   const deleteVideo = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
+   }
    // ----------------LINK RELATED --------------------
 
    const followLinkHandler = (link) => {
@@ -75,7 +91,7 @@ export const Materials = () => {
    }
 
    const openDeleteLinkConfirmModal = (id) => {
-      setDeletedLinkId(id)
+      setMaterialId(id)
       setSearchParams({ [DELETE_LINK]: true })
    }
    const [linkId, setLinkId] = useState('')
@@ -193,13 +209,15 @@ export const Materials = () => {
                      title={lesson.lessonName}
                      key={lesson.id}
                      selectedOption={addLessonMaterials}
-                     video={lesson.videoResponse}
                      onEditTitle={() => openEditLessonModal(lesson.id)}
                      onEditLink={editLink}
                      onDeleteLesson={() => deleteLessonModal(lesson.id)}
                      onDeleteLink={openDeleteLinkConfirmModal}
                      link={lesson.linkResponse}
                      followLinkHandler={followLinkHandler}
+                     video={lesson.videoResponse}
+                     onEditVideo={editVideo}
+                     onDeleteVideo={deleteVideo}
                   />
                ))}
          </Container>
@@ -221,10 +239,19 @@ export const Materials = () => {
             onClose={closeModals}
             onDelete={deleteLessonHandler}
          />
+         <ConfirmVideoModalOnDelete
+            isModalOpen={showVideoConfirmModal}
+            onClose={closeModals}
+            id={materialId}
+         />
          <LessonVideo
             isModalOpen={Boolean(showVideoModal)}
             closeModals={closeModals}
-            lessonId={id}
+         />
+         <EditVideo
+            isModalOpen={showVideoEditModal}
+            closeModals={closeModals}
+            id={materialId}
          />
          <AddLinkModal
             isModalOpen={showAddLinkModal}
@@ -238,7 +265,7 @@ export const Materials = () => {
          <LinkDeleteConfirm
             isModalOpen={showDeleteLinkConfirmationModal}
             onClose={closeModals}
-            deletedLinkId={deletedLinkId}
+            deletedLinkId={materialId}
          />
       </>
    )

@@ -80,6 +80,8 @@ export const ADD_LINK_MODAL = 'add_link_modal'
 export const GET_LINK = 'get_link'
 export const EDIT_LINK = 'edit_links'
 export const DELETE_LINK = 'delete_link'
+export const DELETE_VIDEO = 'delete_video'
+export const EDIT_VIDEO = 'edit_video'
 
 export const STUDY_FORMAT_OPTION = [
    {

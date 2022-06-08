@@ -23,6 +23,8 @@ export const LessonCard = ({
    followLinkHandler,
    onEditLink,
    onDeleteLink,
+   onEditVideo,
+   onDeleteVideo,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -87,11 +89,15 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer
+                        onClick={() => onEditVideo(video?.id)}
+                     >
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteVideo(video?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
