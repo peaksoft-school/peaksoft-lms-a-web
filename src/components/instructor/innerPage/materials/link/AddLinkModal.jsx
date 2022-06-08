@@ -2,17 +2,17 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { Input } from '../UI/input/Input'
+import { Input } from '../../../../UI/input/Input'
 
-import { BasicModal } from '../UI/modal/BasicModal'
-import { Button } from '../UI/button/Button'
-import { addLinkToLesson } from '../../store/INSTRUCTOR/linkSlice'
+import { BasicModal } from '../../../../UI/modal/BasicModal'
+import { Button } from '../../../../UI/button/Button'
+import { addLinkToLesson } from '../../../../../store/INSTRUCTOR/linkSlice'
 import {
    showErrorMessage,
    showSuccessMessage,
-} from '../UI/notification/Notification'
-import { useInput } from '../../hooks/usuInput/useInput'
-import { ADD_LINK_MODAL } from '../../utils/constants/general'
+} from '../../../../UI/notification/Notification'
+import { useInput } from '../../../../../hooks/usuInput/useInput'
+import { ADD_LINK_MODAL } from '../../../../../utils/constants/general'
 
 export const AddLinkModal = ({ closeModals, isModalOpen }) => {
    const dispatch = useDispatch()

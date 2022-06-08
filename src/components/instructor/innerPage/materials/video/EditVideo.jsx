@@ -1,10 +1,8 @@
 import styled from '@emotion/styled'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../../../hooks/usuInput/useInput'
-import { addVideo, getSingleVideo } from '../../../../../store/video-slice'
-import { ADD_VIDEO } from '../../../../../utils/constants/general'
+import { editVideo, getSingleVideo } from '../../../../../store/video-slice'
 import { Button } from '../../../../UI/button/Button'
 import { Input } from '../../../../UI/input/Input'
 import { BasicModal } from '../../../../UI/modal/BasicModal'
@@ -18,9 +16,9 @@ export const EditVideo = ({ isModalOpen, closeModals, id }) => {
    const { singleVideo } = useSelector((state) => state.video)
 
    const { value, onChange, onClear, setValue } = useInput({
-      title: (singleVideo && singleVideo?.title) || '',
+      title: (singleVideo && singleVideo?.videoName) || '',
       description: (singleVideo && singleVideo?.description) || '',
-      link: (singleVideo && singleVideo?.link) || '',
+      link: (singleVideo && singleVideo?.videoLink) || '',
    })
 
    useEffect(() => {
@@ -33,22 +31,22 @@ export const EditVideo = ({ isModalOpen, closeModals, id }) => {
          description: value.description,
          videoLink: value.link,
       }
-      dispatch(addVideo({ video, id: singleVideo.id }))
+      dispatch(editVideo({ video, id: singleVideo.id }))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Видеоурок успешно добавлен')
+            showSuccessMessage('Изменения успешно сохранены')
             closeModals()
             onClear()
          })
          .catch(() => {
-            showErrorMessage('Не удалось добавить видеоурок')
+            showErrorMessage('Не удалось изменить данные')
          })
    }
    useEffect(() => {
       setValue({
-         title: singleVideo?.title,
+         title: singleVideo?.videoName,
          description: singleVideo?.description,
-         videoLink: singleVideo?.videoLink,
+         link: singleVideo?.videoLink,
       })
    }, [singleVideo])
    return (

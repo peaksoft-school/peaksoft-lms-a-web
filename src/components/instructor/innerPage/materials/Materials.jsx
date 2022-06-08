@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
@@ -34,17 +34,16 @@ import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
 import { LessonVideo } from './video/LessonVideo'
-import { AddLinkModal } from '../../../insructor/AddLinkModal'
+import { AddLinkModal } from './link/AddLinkModal'
 import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
-import { LinkEdit } from './LinkEdit'
-import { LinkDeleteConfirm } from './LinkDeleteConfirm'
-import { deleteVideo } from '../../../../store/video-slice'
+import { LinkEdit } from './link/LinkEdit'
+import { LinkDeleteConfirm } from './link/LinkDeleteConfirm'
+import { getSingleVideo } from '../../../../store/video-slice'
 import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
 import { EditVideo } from './video/EditVideo'
 
 export const Materials = () => {
    const dispatch = useDispatch()
-   const navigate = useNavigate()
    const { id } = useParams()
 
    const { lessons, isLoading, lesson, course } = useSelector(
@@ -77,9 +76,9 @@ export const Materials = () => {
 
    const editVideo = (id) => {
       setMaterialId(id)
+      dispatch(getSingleVideo(id))
       setSearchParams({ [EDIT_VIDEO]: true, videoId: id })
    }
-
    const deleteVideo = (id) => {
       setMaterialId(id)
       setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
@@ -89,14 +88,12 @@ export const Materials = () => {
    const followLinkHandler = (link) => {
       window.open(link, '_blank')
    }
-
    const openDeleteLinkConfirmModal = (id) => {
       setMaterialId(id)
       setSearchParams({ [DELETE_LINK]: true })
    }
-   const [linkId, setLinkId] = useState('')
    const editLink = (id) => {
-      setLinkId(id)
+      setMaterialId(id)
       dispatch(getSingleLink(id))
       setSearchParams({ [EDIT_LINK]: true, linkId: id })
    }
@@ -210,9 +207,9 @@ export const Materials = () => {
                      key={lesson.id}
                      selectedOption={addLessonMaterials}
                      onEditTitle={() => openEditLessonModal(lesson.id)}
-                     onEditLink={editLink}
                      onDeleteLesson={() => deleteLessonModal(lesson.id)}
                      onDeleteLink={openDeleteLinkConfirmModal}
+                     onEditLink={editLink}
                      link={lesson.linkResponse}
                      followLinkHandler={followLinkHandler}
                      video={lesson.videoResponse}
@@ -239,10 +236,19 @@ export const Materials = () => {
             onClose={closeModals}
             onDelete={deleteLessonHandler}
          />
-         <ConfirmVideoModalOnDelete
-            isModalOpen={showVideoConfirmModal}
+         <AddLinkModal
+            isModalOpen={showAddLinkModal}
+            closeModals={closeModals}
+         />
+         <LinkEdit
+            showEditLinkModal={showEditLinkModal}
             onClose={closeModals}
             id={materialId}
+         />
+         <LinkDeleteConfirm
+            isModalOpen={showDeleteLinkConfirmationModal}
+            onClose={closeModals}
+            deletedLinkId={materialId}
          />
          <LessonVideo
             isModalOpen={Boolean(showVideoModal)}
@@ -253,19 +259,10 @@ export const Materials = () => {
             closeModals={closeModals}
             id={materialId}
          />
-         <AddLinkModal
-            isModalOpen={showAddLinkModal}
-            closeModals={closeModals}
-         />
-         <LinkEdit
-            showEditLinkModal={showEditLinkModal}
+         <ConfirmVideoModalOnDelete
+            isModalOpen={showVideoConfirmModal}
             onClose={closeModals}
-            id={linkId}
-         />
-         <LinkDeleteConfirm
-            isModalOpen={showDeleteLinkConfirmationModal}
-            onClose={closeModals}
-            deletedLinkId={materialId}
+            id={materialId}
          />
       </>
    )
