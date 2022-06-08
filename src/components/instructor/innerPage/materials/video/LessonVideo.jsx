@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { useInput } from '../../../../../hooks/usuInput/useInput'
@@ -16,6 +16,7 @@ import {
 export const LessonVideo = ({ isModalOpen, closeModals }) => {
    const dispatch = useDispatch()
    const [searchParams, setSearchParams] = useSearchParams()
+   const [formIsValid, setFormIsValid] = useState(false)
    const { value, onChange, onClear } = useInput({
       title: '',
       description: '',
@@ -41,6 +42,13 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
             showErrorMessage('Не удалось добавить видеоурок')
          })
    }
+   useEffect(() => {
+      setFormIsValid(
+         value.title.length > 0 &&
+            value.description.length > 0 &&
+            value.link.length > 0
+      )
+   }, [value])
    return (
       <div>
          <BasicModal
@@ -91,6 +99,7 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
                </div>
                <div>
                   <Button
+                     disabled={!formIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
