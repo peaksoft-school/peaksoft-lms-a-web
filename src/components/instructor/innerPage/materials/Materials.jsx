@@ -11,6 +11,8 @@ import {
    ADD_PRESENTATION,
    ADD_VIDEO,
    DELETE_LESSON,
+   DELETE_TEST,
+   TEST_KEY,
    DELETE_PRESENTATION,
    EDIT_LESSON,
    EDIT_PRESENTATION,
@@ -36,6 +38,9 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import { getTest, removeTest } from '../../../../store/create-test-slice'
+import { ConfirmModalOnDeleteTest } from './ConfirmModalOnDeleteTest'
+import { localStorageHelper } from '../../../../utils/helpers/general'
 import {
    addPresentation,
    deletePresentation,
@@ -67,6 +72,8 @@ export const Materials = () => {
 
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
+   const showDeleteLessonConfirmModal = searchParams.get(DELETE_LESSON)
+   const showDeleteTestConfirmModal = searchParams.get(DELETE_TEST)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
    const showPresentationModal = searchParams.get(ADD_PRESENTATION)
    const showEditPresentationModal = searchParams.get(EDIT_PRESENTATION)
@@ -79,8 +86,27 @@ export const Materials = () => {
    const showVideoEditModal = searchParams.get(EDIT_VIDEO)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
-   const [deletedPresentationId, setDeletedPresentationId] = useState(null)
+   const [deletedTestId, setDeletedTestId] = useState(null)
    const [materialId, setMaterialId] = useState(null)
+   const [deletedPresentationId, setDeletedPresentationId] = useState(null)
+
+   const addLessonMaterials = (option) => {
+      if (option.id === 'video') {
+         setSearchParams({ [ADD_VIDEO]: true, lessonId: option.lessonId })
+      }
+      if (option.id === 'link') {
+         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
+      }
+      if (option.id === 'test') {
+         navigate(`create_test/${option.lessonId}`)
+      }
+      if (option.id === 'presentation') {
+         setSearchParams({
+            [ADD_PRESENTATION]: true,
+            lessonId: option.lessonId,
+         })
+      }
+   }
 
    const editVideo = (id) => {
       setMaterialId(id)
@@ -91,7 +117,6 @@ export const Materials = () => {
       setMaterialId(id)
       setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
    }
-   // ----------------LINK RELATED --------------------
 
    const followLinkHandler = (link) => {
       window.open(link, '_blank')
@@ -107,21 +132,6 @@ export const Materials = () => {
       setSearchParams({ [EDIT_LINK]: true, linkId: id })
    }
 
-   const addLessonMaterials = (option) => {
-      if (option.id === 'presentation') {
-         setSearchParams({
-            [ADD_PRESENTATION]: true,
-            lessonId: option.lessonId,
-         })
-      }
-      if (option.id === 'link') {
-         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
-      }
-      if (option.id === 'video') {
-         setSearchParams({ [ADD_VIDEO]: true, lessonId: option.lessonId })
-      }
-   }
-
    // ------------------------------LESSON RELATED-----------------
    const closeModals = () => {
       setSearchParams('')
@@ -134,6 +144,11 @@ export const Materials = () => {
    const deleteLessonModal = (id) => {
       setDeletedLessonId(id)
       setSearchParams({ [DELETE_LESSON]: true })
+   }
+
+   const deleteTest = (id) => {
+      setDeletedTestId(id)
+      setSearchParams({ [DELETE_TEST]: true })
    }
 
    const openEditLessonModal = (id) => {
@@ -161,7 +176,7 @@ export const Materials = () => {
             showSuccessMessage('Урок успешно создан')
             closeModals()
             onClear()
-            dispatch(getLessons())
+            dispatch(getLessons(id))
          })
          .catch(() => {
             showErrorMessage('Не удалось создать урок')
@@ -195,6 +210,24 @@ export const Materials = () => {
          })
    }
 
+   const deleteTestHandler = () => {
+      dispatch(removeTest(deletedTestId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Тест успешно удален')
+            closeModals()
+            dispatch(getLessons())
+            localStorageHelper.clear(TEST_KEY)
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить тест')
+         })
+   }
+
+   const editTestHandler = (id) => {
+      navigate(`edit_test/${id}`)
+      dispatch(getTest(id))
+   }
    const addPresentationHandler = (value, file, id, onClear) => {
       dispatch(addPresentation({ value, file, id }))
          .unwrap()
@@ -242,6 +275,12 @@ export const Materials = () => {
 
       if (lessonId) {
          dispatch(getLesson(lessonId))
+      }
+      if (showDeleteLessonConfirmModal) {
+         closeModals()
+      }
+      if (showDeleteTestConfirmModal) {
+         closeModals()
       }
 
       if (presentationId) {
@@ -295,6 +334,8 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
+                     onEditTest={editTestHandler}
+                     onDeleteTest={deleteTest}
                      presentation={lesson.presentationResponse}
                      selectedOption={addLessonMaterials}
                      onEditPresentation={openPresentationEditModal}
@@ -327,9 +368,14 @@ export const Materials = () => {
             />
          )}
          <ConfirmModalOnDelete
-            showModal={showConfirmationModal}
+            showModal={showDeleteLessonConfirmModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <ConfirmModalOnDeleteTest
+            showModal={showDeleteTestConfirmModal}
+            onClose={closeModals}
+            onDelete={deleteTestHandler}
          />
          <PresentationForm
             showModal={showPresentationModal}

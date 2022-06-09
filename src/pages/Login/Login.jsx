@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as PeaksoftBoy } from '../../assets/icons/PeaksoftBoy.svg'
 import { LoginForm } from '../../components/Login/LoginForm'
 import { signIn } from '../../store/authSlice'
-import { AUTH_KEY, ROUTES } from '../../utils/constants/general'
-import { localStorageHelper } from '../../utils/helpers/general'
+import { ROUTES } from '../../utils/constants/general'
 
 export const Login = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { user } = useSelector((state) => state.auth)
+
    const onSubmitUserInfo = (userInfo) => {
       dispatch(signIn(userInfo))
    }
@@ -25,12 +25,6 @@ export const Login = () => {
       }
       if (user.role === 'INSTRUCTOR') {
          navigate(ROUTES.INSTRUCTOR)
-      }
-   }, [user])
-
-   useEffect(() => {
-      window.onbeforeunload = () => {
-         return localStorageHelper.store(AUTH_KEY, user)
       }
    }, [user])
 
