@@ -68,10 +68,6 @@ export const Materials = () => {
       }
    }
 
-   const openTaskInnerPage = (taskId) => {
-      navigate(`task/${taskId}`)
-   }
-
    const openDeleteLinkConfirmModal = (id) => {
       setDeletedLinkId(id)
       setSearchParams({ [DELETE_LINK]: true })
@@ -81,6 +77,11 @@ export const Materials = () => {
       setLinkId(id)
       dispatch(getSingleLink(id))
       setSearchParams({ [EDIT_LINK]: true, linkId: id })
+   }
+
+   // ------------------------------TASK INNER PAGE----------------
+   const openTaskInnerPage = (taskId) => {
+      navigate(`task/${taskId}`)
    }
 
    // ------------------------------LESSON RELATED-----------------

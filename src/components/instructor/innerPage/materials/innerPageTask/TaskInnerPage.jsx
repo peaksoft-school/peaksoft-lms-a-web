@@ -19,10 +19,16 @@ export const TaskInnerPage = () => {
                <Title>{task.taskName}</Title>
                {task.taskTypeResponses.map((el) => (
                   <div key={el.id}>
-                     <a href={el.name}>Название файла, формат</a>
+                     <a href={el.value}>{el.name}</a>
                      <Cart>
-                        <img src={el.value} alt="taskType" />
+                        {el.taskType === 'IMAGE' && (
+                           <img src={el.value} alt={el.name} />
+                        )}
                      </Cart>
+                     {/* <Cart>{el.taskType === 'CODE' && <p>{el.value}</p>}</Cart> */}
+                     {el.taskType === 'FILE' && (
+                        <a href={el.value}>{el.name}</a>
+                     )}
                   </div>
                ))}
             </div>
@@ -56,5 +62,6 @@ const Cart = styled.div`
    img {
       width: 338px;
       height: 308px;
+      margin-top: 20px;
    }
 `
