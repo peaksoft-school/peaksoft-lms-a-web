@@ -22,14 +22,10 @@ import {
    getStudents,
    getStudentsByCourse,
 } from '../../../../store/instructor-courses'
-<<<<<<< HEAD
 import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
-=======
-import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
 import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'
->>>>>>> b919a6b987fea594f920256c20edd869c407090e
 
 export const Students = () => {
    const dispatch = useDispatch()

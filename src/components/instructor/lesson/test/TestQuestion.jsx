@@ -76,10 +76,10 @@ export const TestQuestion = () => {
 
    return (
       <>
-         {questions.map((question) => (
+         {questions.map((question, i) => (
             <StyledQuestionContainer key={question.id}>
                <QuestionContainer>
-                  <StyledNumberInList>{question.id}</StyledNumberInList>
+                  <StyledNumberInList>{i + 1}</StyledNumberInList>
                   <StyledQuestion>
                      <Input
                         placeholder="Вопрос"
