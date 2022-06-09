@@ -55,7 +55,7 @@
          }
       ],
       "no-param-reassign": [
-         "off",
+         "error",
          { "props": false, "ignorePropertyModificationsFor": ["state"] }
       ],
       "react/destructuring-assignment": "off",

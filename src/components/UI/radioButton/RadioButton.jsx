@@ -7,7 +7,7 @@ export const RadioButton = (props) => {
             id={props.id}
             value={props.value}
             type="radio"
-            name="radio"
+            name={props.name}
             onChange={props.onChange}
             checked={props.checked}
          />
@@ -17,8 +17,8 @@ export const RadioButton = (props) => {
 }
 
 const StyledInput = styled.input`
-   width: 24px;
-   height: 24px;
+   width: 22px;
+   height: 22px;
 `
 const StyledLabel = styled.label`
    cursor: pointer;

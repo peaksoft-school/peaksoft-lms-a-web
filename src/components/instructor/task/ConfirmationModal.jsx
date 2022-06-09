@@ -7,8 +7,9 @@ import {
    showSuccessMessage,
 } from '../../UI/notification/Notification'
 import { deleteLessonTask } from '../../../store/task-slice'
+import { getLessons } from '../../../store/materials-slice'
 
-export const ConfirmationModal = ({ isModalOpen, onClose, id }) => {
+export const ConfirmationModal = ({ showModal, onClose, id }) => {
    const dispatch = useDispatch()
 
    const deleteHandler = () => {
@@ -16,6 +17,7 @@ export const ConfirmationModal = ({ isModalOpen, onClose, id }) => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Вы удалили task')
+            dispatch(getLessons())
             onClose()
          })
          .catch(() => {
@@ -25,7 +27,7 @@ export const ConfirmationModal = ({ isModalOpen, onClose, id }) => {
    return (
       <ConfirmModal
          title="Вы уверены, что хотите удалить task ... ?"
-         isConfirmModalOpen={Boolean(isModalOpen)}
+         isConfirmModalOpen={Boolean(showModal)}
          closeConfirmModal={onClose}
       >
          <Button

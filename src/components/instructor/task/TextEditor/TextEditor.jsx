@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
 import { useDispatch } from 'react-redux'
-import uuid from 'react-uuid'
 import { ReactComponent as IconText } from '../../../../assets/icons/text.svg'
 import { Toolbar } from './Toolbar'
 import { taskActions } from '../../../../store/task-slice'
@@ -11,14 +10,20 @@ import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIco
 
 export const TextEditor = ({ text }) => {
    const dispatch = useDispatch()
-   const [value, setValue] = useState([
-      {
-         type: 'paragraph',
-         children: [{ text: 'A line of text in a paragraph.' }],
-      },
-   ])
+   const initialValue = useMemo(
+      () =>
+         (Object.values(text).includes(text.value) &&
+            JSON.parse(text.value)) || [
+            {
+               type: 'paragraph',
+               children: [{ text: '' }],
+            },
+         ],
+      []
+   )
 
-   useEffect(() => {
+   const onChangeHandler = (value) => {
+      console.log(value)
       dispatch(
          taskActions.addText({
             textValue: JSON.stringify(value),
@@ -26,7 +31,7 @@ export const TextEditor = ({ text }) => {
             id: text.id,
          })
       )
-   }, [value])
+   }
 
    const editorRef = useRef()
    if (!editorRef.current) editorRef.current = withReact(createEditor())
@@ -44,10 +49,8 @@ export const TextEditor = ({ text }) => {
    return (
       <Slate
          editor={editor}
-         value={value}
-         onChange={(value) => {
-            setValue(value)
-         }}
+         value={initialValue}
+         onChange={(initialValue) => onChangeHandler(initialValue)}
       >
          <TextEditorContainer>
             <Toolbar />

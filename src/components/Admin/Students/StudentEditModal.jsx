@@ -122,7 +122,7 @@ export const StudentsEditModal = ({
                   onClick={editStudents}
                   disabled={!disableButton}
                >
-                  Сохранять
+                  Сохранить
                </Button>
             </StyledModalButtonContainer>
          </StyledChildrenOfModal>

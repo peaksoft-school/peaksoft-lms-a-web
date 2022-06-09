@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
@@ -13,16 +13,26 @@ import { Code } from './taskCode/Code'
 import { Image } from './taskImage/Image'
 import { File } from './taskFile/File'
 import { AddLinkModal } from './taskLink/AddLink'
-import { CODE, FILE, IMAGE, LINK, TEXT } from '../../../utils/constants/general'
+import {
+   CODE,
+   FILE,
+   IMAGE,
+   LESSON_TASK,
+   LINK,
+   TEXT,
+} from '../../../utils/constants/general'
 import { AddCode } from './taskCode/AddCode'
 import { Text } from './TextEditor/Text'
-import { taskActions, updateFile } from '../../../store/task-slice'
+import { taskActions, uploadFile } from '../../../store/task-slice'
+import { localStorageHelper } from '../../../utils/helpers/general'
+import { getCourse } from '../../../store/materials-slice'
 
 export const EditTask = () => {
    const dispatch = useDispatch()
    const { taskId, id } = useParams()
    const navigate = useNavigate()
    const { lessonTasks, taskName } = useSelector((state) => state.tasks.task)
+   const { course } = useSelector((state) => state.materials)
 
    const onChangeHandler = (e) => {
       dispatch(taskActions.addTaskName(e.target.value))
@@ -34,17 +44,38 @@ export const EditTask = () => {
    }
    const editHandler = () => {
       dispatch(
-         updateFile({
+         uploadFile({
             lessonTasks,
             taskName,
             taskId,
             navigateAfterSuccessResponse,
+            isUpdate: true,
          })
       )
    }
    const cancelHandler = () => {
+      localStorageHelper.clear(LESSON_TASK)
       navigateAfterSuccessResponse()
+      dispatch(taskActions.clearTask())
    }
+   useEffect(() => {
+      dispatch(getCourse(id))
+   }, [])
+
+   const pathsArray = [
+      {
+         path: '/instructor_course',
+         name: 'курсы',
+      },
+      {
+         path: '/materials',
+         name: course?.courseName,
+      },
+      {
+         path: '/instructors',
+         name: 'Материалы',
+      },
+   ]
    return (
       <>
          <StyledBreadCrumbs>
@@ -55,6 +86,7 @@ export const EditTask = () => {
             <Title>
                <StyledText
                   placeholder="Название задания"
+                  value={taskName}
                   onChange={onChangeHandler}
                />
                <StyledIcons>
@@ -110,20 +142,6 @@ export const EditTask = () => {
    )
 }
 
-const pathsArray = [
-   {
-      path: 'admin',
-      name: 'курсы',
-   },
-   {
-      path: 'courses',
-      name: 'courseName',
-   },
-   {
-      path: '/instructors',
-      name: 'Студенты',
-   },
-]
 const Container = styled.div`
    width: 100%;
    border-radius: 8px;

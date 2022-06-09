@@ -7,6 +7,7 @@ import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIco
 
 export const Code = ({ code }) => {
    const dispatch = useDispatch()
+
    const onChangeHandler = (e) => {
       dispatch(
          taskActions.addCode({
@@ -19,6 +20,7 @@ export const Code = ({ code }) => {
       e.target.style.height = 'inherit'
       e.target.style.height = `${e.target.scrollHeight}px`
    }
+
    const deleteHandler = (id) => {
       dispatch(taskActions.deleteTask(id))
    }
@@ -30,6 +32,7 @@ export const Code = ({ code }) => {
          </StyledIcon>
 
          <StyledTextArea
+            value={code.value}
             placeholder="Вставьте код"
             onChange={onChangeHandler}
             onKeyDown={handleKeyDown}

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
@@ -25,13 +25,16 @@ import { AddCode } from './taskCode/AddCode'
 import { Text } from './TextEditor/Text'
 import { taskActions, uploadFile } from '../../../store/task-slice'
 import { localStorageHelper } from '../../../utils/helpers/general'
+import { getCourse } from '../../../store/materials-slice'
 
 export const Task = () => {
    const dispatch = useDispatch()
    const { lessonId, id } = useParams()
    const navigate = useNavigate()
+   const [formIsValid, setFormIsValid] = useState(false)
    const { lessonTasks, taskName } = useSelector((state) => state.tasks.task)
    const { task } = useSelector((state) => state.tasks)
+   const { course } = useSelector((state) => state.materials)
 
    const onChangeHandler = (e) => {
       dispatch(taskActions.addTaskName(e.target.value))
@@ -52,6 +55,8 @@ export const Task = () => {
       )
    }
    const cancelHandler = () => {
+      localStorageHelper.clear(LESSON_TASK)
+      dispatch(taskActions.clearTask())
       navigateAfterSuccessResponse()
    }
    useEffect(() => {
@@ -59,6 +64,29 @@ export const Task = () => {
          return localStorageHelper.store(LESSON_TASK, task)
       }
    }, [task])
+
+   useEffect(() => {
+      setFormIsValid(lessonTasks.length > 0)
+   }, [lessonTasks])
+
+   useEffect(() => {
+      dispatch(getCourse(id))
+   }, [])
+
+   const pathsArray = [
+      {
+         path: '/instructor_course',
+         name: 'курсы',
+      },
+      {
+         path: '/materials',
+         name: course?.courseName,
+      },
+      {
+         path: '/instructors',
+         name: 'Материалы',
+      },
+   ]
    return (
       <>
          <StyledBreadCrumbs>
@@ -110,6 +138,7 @@ export const Task = () => {
                      Отмена
                   </Button>
                   <Button
+                     disabled={!formIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
@@ -124,20 +153,6 @@ export const Task = () => {
    )
 }
 
-const pathsArray = [
-   {
-      path: 'admin',
-      name: 'курсы',
-   },
-   {
-      path: 'courses',
-      name: 'courseName',
-   },
-   {
-      path: '/instructors',
-      name: 'Студенты',
-   },
-]
 const Container = styled.div`
    width: 100%;
    border-radius: 8px;

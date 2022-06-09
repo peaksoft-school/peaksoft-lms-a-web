@@ -2,10 +2,10 @@ import styled from '@emotion/styled'
 import { Button } from '../../../UI/button/Button'
 import ConfirmModal from '../../../UI/modal/ConfirmModal'
 
-export const ConfirmModalOnDelete = ({ showModal, onClose, onDelete }) => {
+export const ConfirmModalOnDeleteTest = ({ showModal, onClose, onDelete }) => {
    return (
       <ConfirmModal
-         title="Вы уверены, что хотите удалить урок ... ?"
+         title="Вы уверены, что хотите удалить тест ... ?"
          isConfirmModalOpen={Boolean(showModal)}
          closeConfirmModal={onClose}
       >

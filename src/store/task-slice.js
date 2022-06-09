@@ -5,12 +5,20 @@ import {
    showErrorMessage,
    showSuccessMessage,
 } from '../components/UI/notification/Notification'
-import { FILE, IMAGE } from '../utils/constants/general'
+import { FILE, IMAGE, LESSON_TASK } from '../utils/constants/general'
+import { localStorageHelper } from '../utils/helpers/general'
 
 export const uploadFile = createAsyncThunk(
    'task/uploadFile',
    async (
-      { lessonTasks, taskName, lessonId, navigateAfterSuccessResponse },
+      {
+         lessonTasks,
+         taskName,
+         lessonId,
+         navigateAfterSuccessResponse,
+         isUpdate,
+         taskId,
+      },
       { rejectWithValue, dispatch }
    ) => {
       const formData = new FormData()
@@ -58,16 +66,30 @@ export const uploadFile = createAsyncThunk(
             })
             return updatedTask
          })
-         dispatch(
-            sendLessonTask({
-               tasks: {
-                  taskName,
-                  taskTypeRequests: lessonTaskWithUploadedTasks,
-               },
-               lessonId,
-               navigateAfterSuccessResponse,
-            })
-         )
+         if (isUpdate) {
+            dispatch(
+               editTask({
+                  tasks: {
+                     taskName,
+                     taskTypeRequests: lessonTaskWithUploadedTasks,
+                  },
+                  taskId,
+                  navigateAfterSuccessResponse,
+               })
+            )
+         }
+         if (!isUpdate) {
+            dispatch(
+               sendLessonTask({
+                  tasks: {
+                     taskName,
+                     taskTypeRequests: lessonTaskWithUploadedTasks,
+                  },
+                  lessonId,
+                  navigateAfterSuccessResponse,
+               })
+            )
+         }
       } catch (error) {
          rejectWithValue(error.message)
       }
@@ -87,7 +109,7 @@ export const sendLessonTask = createAsyncThunk(
             body: tasks,
          })
          showSuccessMessage('task successfully created')
-         dispatch(taskActions.clear())
+         dispatch(taskActions.clearTask())
          navigateAfterSuccessResponse()
          return response
       } catch (error) {
@@ -113,73 +135,6 @@ export const getLessonTask = createAsyncThunk(
    }
 )
 
-export const updateFile = createAsyncThunk(
-   'task/uploadFile',
-   async (
-      { lessonTasks, taskName, taskId, navigateAfterSuccessResponse },
-      { rejectWithValue, dispatch }
-   ) => {
-      const formData = new FormData()
-      try {
-         const images = lessonTasks.filter((task) => task.taskType === IMAGE)
-         const files = lessonTasks.filter((task) => task.taskType === FILE)
-
-         const uploadedImages = await Promise.all(
-            images.map(async (task) => {
-               formData.set('file', task.selectedImagefile)
-               const result = await fileFetch({
-                  path: 'api/file',
-                  body: formData,
-                  method: 'POST',
-               })
-               return { ...result, id: task.id }
-            })
-         )
-         const uploadedFiles = await Promise.all(
-            files.map(async (file) => {
-               formData.set('file', file.selectedFile)
-               const fileResult = await fileFetch({
-                  path: 'api/file',
-                  method: 'POST',
-                  body: formData,
-               })
-               return { ...fileResult, id: file.id }
-            })
-         )
-         const lessonTaskWithUploadedTasks = lessonTasks.map((task) => {
-            const updatedTask = {
-               taskType: task.taskType,
-               name: task.name,
-               value: task.value,
-            }
-            uploadedFiles.forEach((file) => {
-               if (task.id === file.id) {
-                  updatedTask.value = file.url
-               }
-            })
-            uploadedImages.forEach((image) => {
-               if (task.id === image.id) {
-                  updatedTask.value = image.url
-               }
-            })
-            return updatedTask
-         })
-         dispatch(
-            editTask({
-               tasks: {
-                  taskName,
-                  taskTypeRequests: lessonTaskWithUploadedTasks,
-               },
-               taskId,
-               navigateAfterSuccessResponse,
-            })
-         )
-      } catch (error) {
-         rejectWithValue(error.message)
-      }
-   }
-)
-
 export const editTask = createAsyncThunk(
    'task/editTask',
    async (
@@ -192,12 +147,12 @@ export const editTask = createAsyncThunk(
             method: 'PUT',
             body: tasks,
          })
-         showSuccessMessage('task successfully edited')
-         dispatch(taskActions.clear())
+         showSuccessMessage('Изменения успешно сохранены')
+         dispatch(taskActions.clearTask())
          navigateAfterSuccessResponse()
          return response
       } catch (error) {
-         showErrorMessage(error.message)
+         showErrorMessage('Не удалось изменить данные')
          return rejectWithValue(error)
       }
    }
@@ -224,9 +179,14 @@ const initState = {
       lessonTasks: [],
    },
 }
+
+const taskData = localStorageHelper.laod(LESSON_TASK)
+   ? { ...initState, task: localStorageHelper.laod(LESSON_TASK) }
+   : initState
+
 export const taskSlice = createSlice({
    name: 'task',
-   initialState: initState,
+   initialState: taskData,
    reducers: {
       addTaskName(state, action) {
          state.task.taskName = action.payload
@@ -269,7 +229,7 @@ export const taskSlice = createSlice({
          state.task.taskName = taskName
          state.task.lessonTasks = taskTypeResponses
       },
-      clear(state) {
+      clearTask(state) {
          state.task.taskName = ''
          state.task.lessonTasks = []
       },

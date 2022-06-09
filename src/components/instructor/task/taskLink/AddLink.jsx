@@ -37,7 +37,6 @@ export const AddLinkModal = () => {
       setModalIsOpen(false)
       onClear()
    }
-   console.log(value)
    return (
       <div>
          <StyledTooltip title="Вставить ссылку" placement="top">
