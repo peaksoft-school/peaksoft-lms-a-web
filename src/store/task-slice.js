@@ -105,7 +105,7 @@ export const getLessonTask = createAsyncThunk(
             path: `api/tasks/${id}`,
             method: 'GET',
          })
-         dispatch(taskActions.getLessonTask(response))
+         dispatch(taskActions.setLessonTask(response))
          return response
       } catch (error) {
          return rejectWithValue(error)
@@ -264,7 +264,7 @@ export const taskSlice = createSlice({
             return el
          })
       },
-      getLessonTask(state, action) {
+      setLessonTask(state, action) {
          const { taskTypeResponses, taskName } = action.payload
          state.task.taskName = taskName
          state.task.lessonTasks = taskTypeResponses

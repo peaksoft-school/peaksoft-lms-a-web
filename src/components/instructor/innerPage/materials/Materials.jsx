@@ -54,30 +54,32 @@ export const Materials = () => {
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
+   const showEditLinkModal = searchParams.get(EDIT_LINK)
+   const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
    const showTaskConfirmationModal = searchParams.get(DELETE_TASK)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
-   const [deletedTaskId, setDeletedTaskId] = useState(null)
+   const [materialId, setMaterialId] = useState(null)
 
-   const selectedOption = (option) => {
+   const addLessonMaterials = (option) => {
       if (option.id === 'task') {
          navigate(`create_task/${option.lessonId}`)
       }
+      if (option.id === 'link') {
+         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
+      }
    }
+
    const editTask = (id) => {
       navigate(`edit_task/${id}`)
       dispatch(getLessonTask(id))
    }
 
    const deleteTask = (id) => {
-      setDeletedTaskId(id)
+      setMaterialId(id)
       setSearchParams({ [DELETE_TASK]: true })
    }
-   const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
-   const showEditLinkModal = searchParams.get(EDIT_LINK)
-   const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
-
-   const [deletedLinkId, setDeletedLinkId] = useState(null)
 
    // ----------------LINK RELATED --------------------
 
@@ -85,19 +87,12 @@ export const Materials = () => {
       window.open(link, '_blank')
    }
 
-   const selectedOptionHandler = (option) => {
-      if (option.id === 'link') {
-         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
-      }
-   }
-
    const openDeleteLinkConfirmModal = (id) => {
-      setDeletedLinkId(id)
+      setMaterialId(id)
       setSearchParams({ [DELETE_LINK]: true })
    }
-   const [linkId, setLinkId] = useState('')
    const editLink = (id) => {
-      setLinkId(id)
+      setMaterialId(id)
       dispatch(getSingleLink(id))
       setSearchParams({ [EDIT_LINK]: true, linkId: id })
    }
@@ -216,7 +211,7 @@ export const Materials = () => {
                      onEditLink={editLink}
                      onDeleteLesson={() => deleteLessonModal(lesson.id)}
                      onDeleteLink={openDeleteLinkConfirmModal}
-                     selectedOption={selectedOptionHandler}
+                     selectedOption={addLessonMaterials}
                      link={lesson.linkResponse}
                      followLinkHandler={followLinkHandler}
                   />
@@ -251,12 +246,12 @@ export const Materials = () => {
          <LinkEdit
             showEditLinkModal={showEditLinkModal}
             onClose={closeModals}
-            id={linkId}
+            id={materialId}
          />
          <LinkDeleteConfirm
             isModalOpen={showDeleteLinkConfirmationModal}
             onClose={closeModals}
-            deletedLinkId={deletedLinkId}
+            deletedLinkId={materialId}
          />
       </>
    )
