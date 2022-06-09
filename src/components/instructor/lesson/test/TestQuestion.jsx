@@ -4,8 +4,8 @@ import { Input } from '../../../UI/input/Input'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 import { ReactComponent as Clone } from '../../../../assets/icons/clone.svg'
 import { ReactComponent as Delete } from '../../../../assets/icons/Delete.svg'
-import { OneOfTheList } from './OneOfTheList'
-import { FewFromTheList } from './FewFromTheList'
+import { SingleChoice } from './SingleChoice'
+import { MultipleChoice } from './MultipleChoice'
 import { testActions } from '../../../../store/create-test-slice'
 
 export const TestQuestion = () => {
@@ -111,7 +111,7 @@ export const TestQuestion = () => {
                {question.options.map((option) => (
                   <OptionsContainer key={option.id}>
                      {(question.questionType === 'ONE' && (
-                        <OneOfTheList
+                        <SingleChoice
                            optionName={`option ${question.id}`}
                            placeholder={`Вариант ${option.id}`}
                            checked={option.isTrue}
@@ -126,7 +126,7 @@ export const TestQuestion = () => {
                            }
                         />
                      )) || (
-                        <FewFromTheList
+                        <MultipleChoice
                            placeholder={`Вариант ${option.id}`}
                            onClick={() => deleteOption(option.id, question.id)}
                            inputValue={option.option}

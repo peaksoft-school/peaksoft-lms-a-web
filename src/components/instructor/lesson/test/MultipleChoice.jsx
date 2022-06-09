@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { ReactComponent as Cancel } from '../../../../assets/icons/Cancel.svg'
 import { Checkbox } from '../../../UI/checkbox/Checkbox'
 
-export const FewFromTheList = ({
+export const MultipleChoice = ({
    placeholder,
    onClick,
    onChangeOption,

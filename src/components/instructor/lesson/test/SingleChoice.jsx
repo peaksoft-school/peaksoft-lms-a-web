@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { ReactComponent as Cancel } from '../../../../assets/icons/Cancel.svg'
 import { RadioButton } from '../../../UI/radioButton/RadioButton'
 
-export const OneOfTheList = ({
+export const SingleChoice = ({
    optionName,
    onClick,
    placeholder,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { LessonTest } from '../components/instructor/lesson/test/LessonTest'
+import { Test } from '../components/instructor/lesson/test/Test'
 import { InstrutorCourses } from '../components/instructor/primerPage/InstructorCourses'
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
@@ -26,11 +26,11 @@ export const InstructorRoutes = () => {
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_test/:lessonId`}
-               element={<LessonTest />}
+               element={<Test />}
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/edit_test/:testId`}
-               element={<LessonTest />}
+               element={<Test />}
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/students`}

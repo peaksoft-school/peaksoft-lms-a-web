@@ -19,7 +19,7 @@ import {
 } from '../../../UI/notification/Notification'
 import { Spinner } from '../../../UI/Spinner/Spinner'
 
-export const LessonTest = () => {
+export const Test = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { id, lessonId, testId } = useParams()
@@ -29,7 +29,7 @@ export const LessonTest = () => {
       dispatch(testActions.addQuestion())
    }
 
-   const onCancelToCreateTest = () => {
+   const onCancelTest = () => {
       navigate(`/instructor/instructor_course/${id}/materials`, {
          replace: true,
       })
@@ -37,9 +37,9 @@ export const LessonTest = () => {
       localStorageHelper.clear(TEST_KEY)
    }
 
-   const sendTestDataHandler = () => {
-      const testData = { ...test }
-      const questions = testData.questions.map((question) => {
+   const sendTestHandler = () => {
+      const currentTest = { ...test }
+      const questions = currentTest.questions.map((question) => {
          return {
             question: question.question,
             questionType: question.questionType,
@@ -48,14 +48,13 @@ export const LessonTest = () => {
             }),
          }
       })
-      const newTestData = { ...testData, questions }
-      dispatch(addTest({ value: newTestData, id: lessonId }))
+      const newTest = { ...currentTest, questions }
+      dispatch(addTest({ value: newTest, id: lessonId }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Тест успешно создан')
-            onCancelToCreateTest()
+            onCancelTest()
             dispatch(testActions.clearTest())
-            localStorageHelper.clear(TEST_KEY)
          })
          .catch((error) => {
             showErrorMessage(error)
@@ -67,9 +66,8 @@ export const LessonTest = () => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Изменения успешно сохранены')
-            onCancelToCreateTest()
+            onCancelTest()
             dispatch(testActions.clearTest())
-            localStorageHelper.clear(TEST_KEY)
          })
          .catch(() => {
             showErrorMessage('Не удалось изменить данные')
@@ -93,7 +91,7 @@ export const LessonTest = () => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={onCancelToCreateTest}
+                     onClick={onCancelTest}
                   >
                      Отмена
                   </Button>
@@ -101,7 +99,7 @@ export const LessonTest = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={testId ? sendEditedTestData : sendTestDataHandler}
+                     onClick={testId ? sendEditedTestData : sendTestHandler}
                   >
                      Сохранить
                   </Button>
