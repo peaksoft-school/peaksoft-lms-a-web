@@ -22,7 +22,6 @@ export const LessonCard = ({
    onDeleteTest,
    selectedOption,
    onEditTest,
-   selectedOption,
    onEditPresentation,
    onDeletePresentation,
    openTestInnerPage,

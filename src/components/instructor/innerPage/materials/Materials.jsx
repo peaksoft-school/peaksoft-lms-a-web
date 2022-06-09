@@ -12,7 +12,6 @@ import {
    ADD_VIDEO,
    DELETE_LESSON,
    DELETE_TEST,
-   EDIT_LESSON,
    TEST_KEY,
    DELETE_PRESENTATION,
    EDIT_LESSON,
@@ -90,7 +89,6 @@ export const Materials = () => {
    const [deletedTestId, setDeletedTestId] = useState(null)
    const [materialId, setMaterialId] = useState(null)
    const [deletedPresentationId, setDeletedPresentationId] = useState(null)
-   const [materialId, setMaterialId] = useState(null)
 
    const addLessonMaterials = (option) => {
       if (option.id === 'video') {
