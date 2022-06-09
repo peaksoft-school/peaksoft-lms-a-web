@@ -6,6 +6,8 @@ import { Materials } from '../components/instructor/innerPage/materials/Material
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
 import { EditTask } from '../components/instructor/task/EditTask'
+import { LessonVideo } from '../components/instructor/innerPage/materials/video/LessonVideo'
+import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
 
 export const InstructorRoutes = () => {
    return (
@@ -34,6 +36,14 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/edit_task/:taskId`}
                element={<EditTask />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/lesson_video/:lessonId`}
+               element={<LessonVideo />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
+               element={<InstructorTests />}
             />
          </Routes>
       </div>

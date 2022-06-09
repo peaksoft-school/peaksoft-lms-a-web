@@ -45,7 +45,7 @@ export const Header = () => {
          break
       case 'INSTRUCTOR':
          content = (
-            <Container tabs>
+            <Container>
                <Routes>
                   <Route
                      path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}

@@ -16,21 +16,25 @@ export const LessonCard = ({
    link,
    task,
    test,
+   lessonId,
    onEditTitle,
    onDeleteLesson,
+   openTestInnerPage,
    selectedOption,
-   lessonId,
    onEditTask,
    onDeleteTask,
    followLinkHandler,
    onEditLink,
    onDeleteLink,
+   onEditVideo,
+   onDeleteVideo,
 }) => {
    const ADD_OPTIONS = [
       {
          id: 'video',
          title: 'Видеоурок',
-         disabled: Boolean(video),
+         disabled: video?.lessonId === lessonId,
+         lessonId,
       },
       {
          id: 'presentation',
@@ -52,7 +56,7 @@ export const LessonCard = ({
       {
          id: 'test',
          title: 'Тест',
-         disabled: Boolean(test),
+         disabled: test?.lessonId === lessonId,
       },
    ]
 
@@ -79,7 +83,7 @@ export const LessonCard = ({
             </StyledManageContainer>
          </StyledTitleContainer>
          <StyledContentContainer>
-            <StyledContentItem disabled={!video}>
+            <StyledContentItem disabled={video?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <VideoIcon />
                </StyledContentIcon>
@@ -88,11 +92,15 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer
+                        onClick={() => onEditVideo(video?.id)}
+                     >
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteVideo(video?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
@@ -171,11 +179,11 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!test}>
+            <StyledContentItem disabled={test?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <TestIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => openTestInnerPage(test?.id, lessonId)}>
                   <h2>Тест</h2>
                </StyledDiv>
                <ActionsContainer id="actions">
