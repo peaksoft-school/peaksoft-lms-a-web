@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { BreadCrumbs } from '../../../../components/UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 import { Button } from '../../../../components/UI/button/Button'
 import { ReactComponent as PinIcon } from '../../../../assets/icons/pinnedIcon.svg'
@@ -14,7 +14,7 @@ import {
    getCourseTeachers,
    getInstructor,
 } from '../../../../store/courses-slice'
-import { AssignTeacher } from '../../../../components/Admin/courses/AssignTeacher'
+import { AssignTeacher } from '../../../../components/admin/courses/AssignTeacher'
 import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseInstructors = () => {

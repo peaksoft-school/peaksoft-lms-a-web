@@ -9,7 +9,7 @@ import {
    getSingleCourse,
 } from '../../../../../store/instructor-tests-slice'
 import { TEST_INFO } from '../../../../../utils/constants/general'
-import { BreadCrumbs } from '../../../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../../UI/breadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
 import { AppTable } from '../../../../UI/table/AppTable'
 

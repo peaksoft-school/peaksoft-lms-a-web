@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { baseFetch } from '../../../../api/baseFetch'
-import { BreadCrumbs } from '../../../../components/UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { showErrorMessage } from '../../../../components/UI/notification/Notification'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 import { COURSE_STUDENTS } from '../../../../utils/constants/general'

@@ -22,7 +22,7 @@ import {
    getStudents,
    getStudentsByCourse,
 } from '../../../../store/instructor-courses'
-import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
 import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'

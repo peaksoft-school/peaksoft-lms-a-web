@@ -4,13 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
-import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
+   ADD_PRESENTATION,
    ADD_VIDEO,
    DELETE_LESSON,
+   DELETE_PRESENTATION,
    EDIT_LESSON,
+   EDIT_PRESENTATION,
    ADD_LINK_MODAL,
    EDIT_LINK,
    DELETE_LINK,
@@ -33,11 +36,19 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
+import {
+   addPresentation,
+   deletePresentation,
+   editPresentation,
+   getPresentation,
+} from '../../../../store/presentation-slice'
+import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
+import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
+import { LinkDeleteConfirm } from './link/LinkDeleteConfirm'
+import { PresentationForm } from '../../lesson/presentation/PresentationForm'
 import { LessonVideo } from './video/LessonVideo'
 import { AddLinkModal } from './link/AddLinkModal'
-import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
 import { LinkEdit } from './link/LinkEdit'
-import { LinkDeleteConfirm } from './link/LinkDeleteConfirm'
 import { getSingleVideo } from '../../../../store/video-slice'
 import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
 import { EditVideo } from './video/EditVideo'
@@ -50,12 +61,16 @@ export const Materials = () => {
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
+   const { presentation } = useSelector((state) => state.presentation)
 
    const [searchParams, setSearchParams] = useSearchParams()
 
    const showCreateModal = searchParams.get(ADD_LESSON)
    const showEditModal = searchParams.get(EDIT_LESSON)
    const showConfirmationModal = searchParams.get(DELETE_LESSON)
+   const showPresentationModal = searchParams.get(ADD_PRESENTATION)
+   const showEditPresentationModal = searchParams.get(EDIT_PRESENTATION)
+   const showConfirmPresentationModal = searchParams.get(DELETE_PRESENTATION)
    const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
    const showEditLinkModal = searchParams.get(EDIT_LINK)
    const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
@@ -64,16 +79,8 @@ export const Materials = () => {
    const showVideoEditModal = searchParams.get(EDIT_VIDEO)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
+   const [deletedPresentationId, setDeletedPresentationId] = useState(null)
    const [materialId, setMaterialId] = useState(null)
-
-   const addLessonMaterials = (option) => {
-      if (option.id === 'video') {
-         setSearchParams({ [ADD_VIDEO]: true, lessonId: option.lessonId })
-      }
-      if (option.id === 'link') {
-         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
-      }
-   }
 
    const editVideo = (id) => {
       setMaterialId(id)
@@ -89,6 +96,7 @@ export const Materials = () => {
    const followLinkHandler = (link) => {
       window.open(link, '_blank')
    }
+
    const openDeleteLinkConfirmModal = (id) => {
       setMaterialId(id)
       setSearchParams({ [DELETE_LINK]: true })
@@ -97,6 +105,21 @@ export const Materials = () => {
       setMaterialId(id)
       dispatch(getSingleLink(id))
       setSearchParams({ [EDIT_LINK]: true, linkId: id })
+   }
+
+   const addLessonMaterials = (option) => {
+      if (option.id === 'presentation') {
+         setSearchParams({
+            [ADD_PRESENTATION]: true,
+            lessonId: option.lessonId,
+         })
+      }
+      if (option.id === 'link') {
+         setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
+      }
+      if (option.id === 'video') {
+         setSearchParams({ [ADD_VIDEO]: true, lessonId: option.lessonId })
+      }
    }
 
    // ------------------------------LESSON RELATED-----------------
@@ -118,6 +141,15 @@ export const Materials = () => {
       setSearchParams({ [EDIT_LESSON]: true })
    }
 
+   const openPresentationEditModal = (id) => {
+      dispatch(getPresentation(id))
+      setSearchParams({ [EDIT_PRESENTATION]: true, presentationId: id })
+   }
+
+   const deletePresentationModal = (id) => {
+      setDeletedPresentationId(id)
+      setSearchParams({ [DELETE_PRESENTATION]: true })
+   }
    const openTestInnerPage = (lessonId, testId) => {
       navigate(`test/${lessonId}/${testId}`)
    }
@@ -163,15 +195,68 @@ export const Materials = () => {
          })
    }
 
+   const addPresentationHandler = (value, file, id, onClear) => {
+      dispatch(addPresentation({ value, file, id }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Презентация успешно создана')
+            onClear()
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось создать презентацию')
+         })
+   }
+
+   const senEditedPresentationHandler = (value, file, id, onClear) => {
+      dispatch(editPresentation({ value, file, id }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            onClear()
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
+   }
+
+   const deletePresentationHandler = () => {
+      dispatch(deletePresentation(deletedPresentationId))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Презентация успешно удален')
+            closeModals()
+            dispatch(getLessons())
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить презентацию')
+         })
+   }
+
    useEffect(() => {
       const lessonId = searchParams.get('lessonId')
+      const presentationId = searchParams.get('presentationId')
+
       if (lessonId) {
          dispatch(getLesson(lessonId))
       }
+
+      if (presentationId) {
+         dispatch(getPresentation(presentationId))
+      }
+
       if (showConfirmationModal) {
          closeModals()
       }
-      dispatch(getLessons(id))
+
+      if (showConfirmPresentationModal) {
+         closeModals()
+      }
+
+      dispatch(getLessons())
       dispatch(getCourse(id))
    }, [])
 
@@ -210,7 +295,10 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
+                     presentation={lesson.presentationResponse}
                      selectedOption={addLessonMaterials}
+                     onEditPresentation={openPresentationEditModal}
+                     onDeletePresentation={deletePresentationModal}
                      openTestInnerPage={openTestInnerPage}
                      test={lesson.testResponse}
                      onEditTitle={() => openEditLessonModal(lesson.id)}
@@ -242,6 +330,24 @@ export const Materials = () => {
             showModal={showConfirmationModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <PresentationForm
+            showModal={showPresentationModal}
+            onClose={closeModals}
+            onAdd={addPresentationHandler}
+         />
+         {presentation && (
+            <PresentationForm
+               showModal={showEditPresentationModal}
+               onClose={closeModals}
+               onEdit={senEditedPresentationHandler}
+               presentation={presentation}
+            />
+         )}
+         <ConfirmModalOnDeletePresentation
+            showModal={showConfirmPresentationModal}
+            onClose={closeModals}
+            onDelete={deletePresentationHandler}
          />
          <AddLinkModal
             isModalOpen={showAddLinkModal}
