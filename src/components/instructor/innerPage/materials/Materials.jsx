@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
 import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
@@ -9,6 +9,7 @@ import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
    ADD_PRESENTATION,
+   ADD_VIDEO,
    DELETE_LESSON,
    DELETE_PRESENTATION,
    EDIT_LESSON,
@@ -16,6 +17,8 @@ import {
    ADD_LINK_MODAL,
    EDIT_LINK,
    DELETE_LINK,
+   DELETE_VIDEO,
+   EDIT_VIDEO,
 } from '../../../../utils/constants/general'
 import {
    addLesson,
@@ -40,14 +43,19 @@ import {
    getPresentation,
 } from '../../../../store/presentation-slice'
 import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
-import { AddLinkModal } from '../../../insructor/AddLinkModal'
 import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
-import { LinkEdit } from './LinkEdit'
-import { LinkDeleteConfirm } from './LinkDeleteConfirm'
+import { LinkDeleteConfirm } from './link/LinkDeleteConfirm'
 import { PresentationForm } from '../../lesson/presentation/PresentationForm'
+import { LessonVideo } from './video/LessonVideo'
+import { AddLinkModal } from './link/AddLinkModal'
+import { LinkEdit } from './link/LinkEdit'
+import { getSingleVideo } from '../../../../store/video-slice'
+import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
+import { EditVideo } from './video/EditVideo'
 
 export const Materials = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { id } = useParams()
 
    const { lessons, isLoading, lesson, course } = useSelector(
@@ -66,12 +74,23 @@ export const Materials = () => {
    const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
    const showEditLinkModal = searchParams.get(EDIT_LINK)
    const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
+   const showVideoModal = searchParams.get(ADD_VIDEO)
+   const showVideoConfirmModal = searchParams.get(DELETE_VIDEO)
+   const showVideoEditModal = searchParams.get(EDIT_VIDEO)
 
-   const [deletedLinkId, setDeletedLinkId] = useState(null)
    const [deletedLessonId, setDeletedLessonId] = useState(null)
    const [deletedPresentationId, setDeletedPresentationId] = useState(null)
-   const [linkId, setLinkId] = useState('')
+   const [materialId, setMaterialId] = useState(null)
 
+   const editVideo = (id) => {
+      setMaterialId(id)
+      dispatch(getSingleVideo(id))
+      setSearchParams({ [EDIT_VIDEO]: true, videoId: id })
+   }
+   const deleteVideo = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
+   }
    // ----------------LINK RELATED --------------------
 
    const followLinkHandler = (link) => {
@@ -79,11 +98,11 @@ export const Materials = () => {
    }
 
    const openDeleteLinkConfirmModal = (id) => {
-      setDeletedLinkId(id)
+      setMaterialId(id)
       setSearchParams({ [DELETE_LINK]: true })
    }
    const editLink = (id) => {
-      setLinkId(id)
+      setMaterialId(id)
       dispatch(getSingleLink(id))
       setSearchParams({ [EDIT_LINK]: true, linkId: id })
    }
@@ -97,6 +116,9 @@ export const Materials = () => {
       }
       if (option.id === 'link') {
          setSearchParams({ [ADD_LINK_MODAL]: true, lessonId: option.lessonId })
+      }
+      if (option.id === 'video') {
+         setSearchParams({ [ADD_VIDEO]: true, lessonId: option.lessonId })
       }
    }
 
@@ -127,6 +149,9 @@ export const Materials = () => {
    const deletePresentationModal = (id) => {
       setDeletedPresentationId(id)
       setSearchParams({ [DELETE_PRESENTATION]: true })
+   }
+   const openTestInnerPage = (lessonId, testId) => {
+      navigate(`test/${lessonId}/${testId}`)
    }
 
    const addLessonHandler = (value, onClear) => {
@@ -274,12 +299,17 @@ export const Materials = () => {
                      selectedOption={addLessonMaterials}
                      onEditPresentation={openPresentationEditModal}
                      onDeletePresentation={deletePresentationModal}
+                     openTestInnerPage={openTestInnerPage}
+                     test={lesson.testResponse}
                      onEditTitle={() => openEditLessonModal(lesson.id)}
-                     onEditLink={editLink}
                      onDeleteLesson={() => deleteLessonModal(lesson.id)}
                      onDeleteLink={openDeleteLinkConfirmModal}
+                     onEditLink={editLink}
                      link={lesson.linkResponse}
                      followLinkHandler={followLinkHandler}
+                     video={lesson.videoResponse}
+                     onEditVideo={editVideo}
+                     onDeleteVideo={deleteVideo}
                   />
                ))}
          </Container>
@@ -326,12 +356,26 @@ export const Materials = () => {
          <LinkEdit
             showEditLinkModal={showEditLinkModal}
             onClose={closeModals}
-            id={linkId}
+            id={materialId}
          />
          <LinkDeleteConfirm
             isModalOpen={showDeleteLinkConfirmationModal}
             onClose={closeModals}
-            deletedLinkId={deletedLinkId}
+            deletedLinkId={materialId}
+         />
+         <LessonVideo
+            isModalOpen={Boolean(showVideoModal)}
+            closeModals={closeModals}
+         />
+         <EditVideo
+            isModalOpen={showVideoEditModal}
+            closeModals={closeModals}
+            id={materialId}
+         />
+         <ConfirmVideoModalOnDelete
+            isModalOpen={showVideoConfirmModal}
+            onClose={closeModals}
+            id={materialId}
          />
       </>
    )
