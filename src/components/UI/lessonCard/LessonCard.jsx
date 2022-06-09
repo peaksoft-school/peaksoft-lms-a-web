@@ -16,10 +16,11 @@ export const LessonCard = ({
    link,
    task,
    test,
+   lessonId,
    onEditTitle,
    onDeleteLesson,
+   openTestInnerPage,
    selectedOption,
-   lessonId,
    followLinkHandler,
    onEditLink,
    onDeleteLink,
@@ -53,7 +54,7 @@ export const LessonCard = ({
       {
          id: 'test',
          title: 'Тест',
-         disabled: Boolean(test),
+         disabled: test?.lessonId === lessonId,
       },
    ]
 
@@ -174,11 +175,11 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!test}>
+            <StyledContentItem disabled={test?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <TestIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => openTestInnerPage(test?.id, lessonId)}>
                   <h2>Тест</h2>
                </StyledDiv>
                <ActionsContainer id="actions">

@@ -180,6 +180,28 @@ export const COURSE_STUDENTS = [
    },
 ]
 
+export const TEST_INFO = [
+   {
+      title: 'Имя Фамилия',
+      accessKey: 'studentName',
+      id: 1,
+   },
+   {
+      title: 'Дата',
+      accessKey: 'date',
+      id: 2,
+   },
+   {
+      title: 'Статус',
+      accessKey: 'status',
+      id: 3,
+   },
+   {
+      title: 'Оценка',
+      accessKey: 'grade',
+      id: 4,
+   },
+]
 export const STUDENTS_INFO = [
    { title: 'N', accessKey: 'id', id: 'one' },
    { title: 'Имя Фамилия', accessKey: 'fullName', id: 'two' },

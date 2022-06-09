@@ -41,7 +41,7 @@ export const getSingleVideo = createAsyncThunk(
             path: `api/videos/${id}`,
             method: 'GET',
          })
-         dispatch(videoActions.getSingleVideo(response))
+         dispatch(videoActions.setVideo(response))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -72,7 +72,7 @@ export const videoSlice = createSlice({
    name: 'videos',
    initialState: initState,
    reducers: {
-      getSingleVideo: (state, action) => {
+      setVideo: (state, action) => {
          state.singleVideo = action.payload
       },
    },

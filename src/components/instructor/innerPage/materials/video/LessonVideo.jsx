@@ -23,7 +23,7 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
       link: '',
    })
 
-   const AddVideoLesson = () => {
+   const addVideoLesson = () => {
       const lessonId = searchParams.get('lessonId')
       const video = {
          videoName: value.title,
@@ -103,7 +103,7 @@ export const LessonVideo = ({ isModalOpen, closeModals }) => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={AddVideoLesson}
+                     onClick={addVideoLesson}
                   >
                      Добавить
                   </Button>
