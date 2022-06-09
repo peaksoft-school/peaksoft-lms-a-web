@@ -5,6 +5,7 @@ import { groupsSlice } from './groupSlice'
 import { studentsSlice } from './studentsSlice'
 import { teachersSlice } from './teachers-slice'
 import { taskSlice } from './task-slice'
+import { linkSlice } from './INSTRUCTOR/linkSlice'
 import { instructorCoursesSlice } from './instructor-courses'
 import { materialsSlice } from './materials-slice'
 
@@ -16,6 +17,7 @@ export const store = configureStore({
       students: studentsSlice.reducer,
       teachers: teachersSlice.reducer,
       tasks: taskSlice.reducer,
+      link: linkSlice.reducer,
       instructorCourses: instructorCoursesSlice.reducer,
       materials: materialsSlice.reducer,
    },
