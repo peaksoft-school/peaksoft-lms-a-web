@@ -8,6 +8,8 @@ import { createTestSlice } from './create-test-slice'
 import { linkSlice } from './INSTRUCTOR/linkSlice'
 import { instructorCoursesSlice } from './instructor-courses'
 import { materialsSlice } from './materials-slice'
+import { videoSlice } from './video-slice'
+import { instructorTestsSlice } from './instructor-tests-slice'
 
 export const store = configureStore({
    reducer: {
@@ -20,5 +22,7 @@ export const store = configureStore({
       link: linkSlice.reducer,
       instructorCourses: instructorCoursesSlice.reducer,
       materials: materialsSlice.reducer,
+      video: videoSlice.reducer,
+      instructorTests: instructorTestsSlice.reducer,
    },
 })

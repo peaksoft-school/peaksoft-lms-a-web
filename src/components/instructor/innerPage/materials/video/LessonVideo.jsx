@@ -1,67 +1,81 @@
-import React from 'react'
 import styled from '@emotion/styled'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { Input } from '../UI/input/Input'
-
-import { BasicModal } from '../UI/modal/BasicModal'
-import { Button } from '../UI/button/Button'
-import { addLinkToLesson } from '../../store/INSTRUCTOR/linkSlice'
+import { useInput } from '../../../../../hooks/usuInput/useInput'
+import { addVideo } from '../../../../../store/video-slice'
+import { ADD_VIDEO } from '../../../../../utils/constants/general'
+import { Button } from '../../../../UI/button/Button'
+import { Input } from '../../../../UI/input/Input'
+import { BasicModal } from '../../../../UI/modal/BasicModal'
 import {
    showErrorMessage,
    showSuccessMessage,
-} from '../UI/notification/Notification'
-import { useInput } from '../../hooks/usuInput/useInput'
-import { ADD_LINK_MODAL } from '../../utils/constants/general'
+} from '../../../../UI/notification/Notification'
 
-export const AddLinkModal = ({ closeModals, isModalOpen }) => {
+export const LessonVideo = ({ isModalOpen, closeModals }) => {
    const dispatch = useDispatch()
    const [searchParams, setSearchParams] = useSearchParams()
-
+   const [formIsValid, setFormIsValid] = useState(false)
    const { value, onChange, onClear } = useInput({
-      text: '',
+      title: '',
+      description: '',
       link: '',
    })
 
-   const addLinkToLessonHandler = () => {
+   const addVideoLesson = () => {
       const lessonId = searchParams.get('lessonId')
-      const newLinkData = {
-         text: value.text,
-         link: value.link,
+      const video = {
+         videoName: value.title,
+         description: value.description,
+         videoLink: value.link,
       }
-
-      dispatch(addLinkToLesson({ newLinkData, lessonId }))
+      dispatch(addVideo({ video, lessonId }))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Ссылка успешно добавленна')
-            setSearchParams({ [ADD_LINK_MODAL]: false })
+            showSuccessMessage('Видеоурок успешно добавлен')
+            setSearchParams({ [ADD_VIDEO]: false })
             closeModals()
             onClear()
          })
          .catch(() => {
-            showErrorMessage('Не удалось добавить ссылку')
+            showErrorMessage('Не удалось добавить видеоурок')
          })
    }
-
+   useEffect(() => {
+      setFormIsValid(
+         value.title.length > 0 &&
+            value.description.length > 0 &&
+            value.link.length > 0
+      )
+   }, [value])
    return (
       <div>
          <BasicModal
             isModalOpen={Boolean(isModalOpen)}
             onClose={closeModals}
-            title="Добавить ссылку"
+            title="Добавить видеоурок"
          >
             <InputStyleControl>
                <div>
                   <Input
-                     placeholder="Отображаемый текст"
-                     name="text"
-                     value={value.text}
+                     placeholder="Введите название видеоурока"
+                     name="title"
+                     value={value.title}
                      onChange={onChange}
                   />
                </div>
                <div>
                   <Input
-                     placeholder="Вставьте ссылку"
+                     placeholder="Введите описание видеурока"
+                     name="description"
+                     value={value.description}
+                     onChange={onChange}
+                  />
+               </div>
+               <div>
+                  <Input
+                     placeholder="Вставьте ссылку на видеоурок"
                      name="link"
                      value={value.link}
                      onChange={onChange}
@@ -70,7 +84,6 @@ export const AddLinkModal = ({ closeModals, isModalOpen }) => {
                   />
                </div>
             </InputStyleControl>
-
             <BtnStyleControl>
                <div>
                   <Button
@@ -86,10 +99,11 @@ export const AddLinkModal = ({ closeModals, isModalOpen }) => {
                </div>
                <div>
                   <Button
+                     disabled={!formIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={addLinkToLessonHandler}
+                     onClick={addVideoLesson}
                   >
                      Добавить
                   </Button>
@@ -106,7 +120,6 @@ const BtnStyleControl = styled.div`
    margin-top: 10px;
    margin-bottom: 1px;
    padding: 1px;
-
    button {
       margin-left: 10px;
    }
