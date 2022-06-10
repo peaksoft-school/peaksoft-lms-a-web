@@ -103,6 +103,10 @@ export const Materials = () => {
       setSearchParams({ [EDIT_LESSON]: true })
    }
 
+   const openTestInnerPage = (lessonId, testId) => {
+      navigate(`test/${lessonId}/${testId}`)
+   }
+
    const addLessonHandler = (value, onClear) => {
       dispatch(addLesson({ lessonData: value, id }))
          .unwrap()
@@ -191,6 +195,8 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
+                     openTestInnerPage={openTestInnerPage}
+                     test={lesson.testResponse}
                      onEditTitle={() => openEditLessonModal(lesson.id)}
                      onEditLink={editLink}
                      onDeleteLesson={() => deleteLessonModal(lesson.id)}

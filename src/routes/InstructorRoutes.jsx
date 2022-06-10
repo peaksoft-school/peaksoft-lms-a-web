@@ -4,7 +4,8 @@ import { InstrutorCourses } from '../components/instructor/primerPage/Instructor
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
-import { TaskInnerPage } from '../components/instructor/innerPage/materials/innerPageTask/TaskInnerPage'
+import { TaskInnerPage } from '../components/instructor/lesson/innerPage/Task/TaskInnerPage'
+import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
 
 export const InstructorRoutes = () => {
    return (
@@ -29,6 +30,10 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/task/:taskId`}
                element={<TaskInnerPage />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
+               element={<InstructorTests />}
             />
          </Routes>
       </div>

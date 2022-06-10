@@ -8,6 +8,7 @@ import { linkSlice } from './INSTRUCTOR/linkSlice'
 import { instructorCoursesSlice } from './instructor-courses'
 import { materialsSlice } from './materials-slice'
 import { taskInnerPageSlice } from './taskInnerPage-slice'
+import { instructorTestsSlice } from './instructor-tests-slice'
 
 export const store = configureStore({
    reducer: {
@@ -20,5 +21,6 @@ export const store = configureStore({
       instructorCourses: instructorCoursesSlice.reducer,
       materials: materialsSlice.reducer,
       taskInnerPage: taskInnerPageSlice.reducer,
+      instructorTests: instructorTestsSlice.reducer,
    },
 })
