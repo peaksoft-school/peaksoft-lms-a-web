@@ -4,6 +4,7 @@ import { InstrutorCourses } from '../components/instructor/primerPage/Instructor
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
+// import { VideoPresentationPage } from '../components/insructor/VideoPresentationPage'
 
 export const InstructorRoutes = () => {
    return (
@@ -21,6 +22,10 @@ export const InstructorRoutes = () => {
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
                element={<Materials />}
             />
+            {/* <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials_video`}
+               element={<VideoPresentationPage />}
+            /> */}
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/students`}
                element={<Students />}
