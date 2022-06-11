@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import ConfirmModal from '../../../UI/modal/ConfirmModal'
-import { Button } from '../../../UI/button/Button'
-import { deleteLink } from '../../../../store/INSTRUCTOR/linkSlice'
+import ConfirmModal from '../../../../UI/modal/ConfirmModal'
+import { Button } from '../../../../UI/button/Button'
+import { deleteLink } from '../../../../../store/INSTRUCTOR/linkSlice'
 
 import {
    showErrorMessage,
    showSuccessMessage,
-} from '../../../UI/notification/Notification'
+} from '../../../../UI/notification/Notification'
 
 export const LinkDeleteConfirm = ({ isModalOpen, onClose, deletedLinkId }) => {
    const dispatch = useDispatch()

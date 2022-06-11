@@ -1,17 +1,24 @@
 import React, { useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { NavLink } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 function LinkTab(props) {
-   return <StyledTab component={NavLink} {...props} />
+   return <StyledTab component={Link} {...props} />
 }
 
 export default function NavTabs({ tabs }) {
+   const { pathname } = useLocation()
+
    const [tabsValue, setTabsValue] = useState(0)
+
    const onChangeTabsHandler = (event, newValue) => {
       setTabsValue(newValue)
+   }
+
+   const replcaeTheLastPath = (newPath) => {
+      return pathname.replace(/[^/]*$/, newPath)
    }
 
    return (
@@ -21,7 +28,11 @@ export default function NavTabs({ tabs }) {
          aria-label="nav tabs example"
       >
          {tabs.map((tab) => (
-            <LinkTab label={tab.title} to={tab.to} key={tab.title} />
+            <LinkTab
+               label={tab.title}
+               to={replcaeTheLastPath(tab.to)}
+               key={tab.title}
+            />
          ))}
       </StyledTabs>
    )

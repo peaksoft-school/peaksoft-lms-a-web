@@ -1,10 +1,13 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { Test } from '../components/instructor/lesson/test/Test'
 import { InstrutorCourses } from '../components/instructor/primerPage/InstructorCourses'
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
-// import { VideoPresentationPage } from '../components/insructor/VideoPresentationPage'
+import { LessonVideo } from '../components/instructor/innerPage/materials/video/LessonVideo'
+import { VideoInnerPage } from '../components/instructor/innerPage/materials/video/VideoInnerPage'
+import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
 
 export const InstructorRoutes = () => {
    return (
@@ -22,13 +25,29 @@ export const InstructorRoutes = () => {
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
                element={<Materials />}
             />
-            {/* <Route
-               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials_video`}
-               element={<VideoPresentationPage />}
-            /> */}
+            <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/video/:videoId`}
+               element={<VideoInnerPage />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_test/:lessonId`}
+               element={<Test />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/edit_test/:testId`}
+               element={<Test />}
+            />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/students`}
                element={<Students />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/lesson_video/:lessonId`}
+               element={<LessonVideo />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
+               element={<InstructorTests />}
             />
          </Routes>
       </div>

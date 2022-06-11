@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { BasicModal } from '../../../UI/modal/BasicModal'
-import { Input } from '../../../UI/input/Input'
-import { Button } from '../../../UI/button/Button'
-import { useInput } from '../../../../hooks/usuInput/useInput'
+import { BasicModal } from '../../../../UI/modal/BasicModal'
+import { Input } from '../../../../UI/input/Input'
+import { Button } from '../../../../UI/button/Button'
+import { useInput } from '../../../../../hooks/usuInput/useInput'
 import {
    updateSingleLink,
    getSingleLink,
-} from '../../../../store/INSTRUCTOR/linkSlice'
+} from '../../../../../store/INSTRUCTOR/linkSlice'
 import {
    showErrorMessage,
    showSuccessMessage,
-} from '../../../UI/notification/Notification'
+} from '../../../../UI/notification/Notification'
 
 export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    const dispatch = useDispatch()
@@ -25,7 +25,9 @@ export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    })
 
    useEffect(() => {
-      dispatch(getSingleLink(id))
+      if (id) {
+         dispatch(getSingleLink(id))
+      }
    }, [])
 
    const saveUpdatedLink = () => {

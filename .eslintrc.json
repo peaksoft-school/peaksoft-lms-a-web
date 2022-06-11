@@ -57,7 +57,7 @@
 
       "no-param-reassign": [
          "error",
-         { "props": true, "ignorePropertyModificationsFor": ["state"] }
+         { "props": false, "ignorePropertyModificationsFor": ["state"] }
       ],
       "react/destructuring-assignment": "off",
       "no-unused-vars": "warn",

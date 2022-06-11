@@ -20,7 +20,7 @@ export const BreadCrumbs = (props) => {
       )
    })
    return (
-      <StyledCrumbs aria-label="breadcrumbs" separator="\">
+      <StyledCrumbs aria-label="breadcrumbs" separator="/">
          {crumbs}
       </StyledCrumbs>
    )
