@@ -17,6 +17,7 @@ export const signIn = createAsyncThunk(
             method: 'POST',
             body: userInfo,
          })
+         localStorageHelper.store(AUTH_KEY, response)
          return response
       } catch (error) {
          return rejectWithValue(error.message)

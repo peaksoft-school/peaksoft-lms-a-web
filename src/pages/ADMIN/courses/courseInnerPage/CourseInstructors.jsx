@@ -96,7 +96,6 @@ export const CourseInstructors = () => {
                id={params.id}
             />
          )}
-
          <AppTable columns={COURSE_INSTRUCTORS} data={courseTeachers} />
       </div>
    )

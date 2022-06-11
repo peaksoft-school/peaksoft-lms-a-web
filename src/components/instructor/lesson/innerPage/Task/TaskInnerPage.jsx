@@ -60,25 +60,11 @@ const Wrapper = styled.div`
    background: #ffffff;
    border-radius: 10px;
    padding: 25px;
-`
-const Title = styled.h1`
-   color: #212121;
-   font-style: normal;
-   font-weight: 400;
-   font-size: 20px;
-   line-height: 27px;
-   margin-bottom: 20px;
-`
-const Cart = styled.div`
-   display: flex;
-   flex-direction: column;
-   width: 338px;
-   height: 308px;
-   background: #eff0f4;
-   border-radius: 2px;
-   img {
-      width: 338px;
-      height: 308px;
-      margin-top: 20px;
+   h2 {
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 27px;
    }
 `

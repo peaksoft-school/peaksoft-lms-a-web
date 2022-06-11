@@ -10,6 +10,6 @@ export const Image = ({ image }) => {
 }
 
 const Img = styled.img`
-   width: 338px;
-   height: 308px;
+   width: 792px;
+   height: 464px;
 `

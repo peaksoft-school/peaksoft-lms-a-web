@@ -26,10 +26,10 @@ export const addLesson = createAsyncThunk(
 
 export const getLessons = createAsyncThunk(
    'materials/getLessons',
-   async (_, { rejectWithValue, dispatch }) => {
+   async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: 'api/lessons',
+            path: `api/lessons`,
             method: 'GET',
          })
          dispatch(materialsActions.getLessons(response))
@@ -45,7 +45,7 @@ export const getLesson = createAsyncThunk(
    'materials/getLesson',
    async (id, { rejectWithValue, dispatch }) => {
       try {
-         dispatch(materialsActions.getLesson())
+         dispatch(materialsActions.getLesson(null))
          const response = await baseFetch({
             path: `api/lessons/${id}`,
             method: 'GET',

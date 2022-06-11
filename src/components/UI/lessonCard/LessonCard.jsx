@@ -19,23 +19,31 @@ export const LessonCard = ({
    lessonId,
    onEditTitle,
    onDeleteLesson,
-   openTestInnerPage,
+   onDeleteTest,
    selectedOption,
+   onEditTest,
+   onEditPresentation,
+   onDeletePresentation,
+   openTestInnerPage,
    followLinkHandler,
    openTaskInnerPage,
    onEditLink,
    onDeleteLink,
+   onEditVideo,
+   onDeleteVideo,
 }) => {
    const ADD_OPTIONS = [
       {
          id: 'video',
          title: 'Видеоурок',
-         disabled: Boolean(video),
+         disabled: video?.lessonId === lessonId,
+         lessonId,
       },
       {
          id: 'presentation',
          title: 'Презентация',
-         disabled: Boolean(presentation),
+         lessonId,
+         disabled: presentation?.lessonId === lessonId,
       },
       {
          id: 'task',
@@ -52,6 +60,7 @@ export const LessonCard = ({
       {
          id: 'test',
          title: 'Тест',
+         lessonId,
          disabled: test?.lessonId === lessonId,
       },
    ]
@@ -79,7 +88,7 @@ export const LessonCard = ({
             </StyledManageContainer>
          </StyledTitleContainer>
          <StyledContentContainer>
-            <StyledContentItem disabled={!video}>
+            <StyledContentItem disabled={video?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <VideoIcon />
                </StyledContentIcon>
@@ -88,11 +97,15 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer
+                        onClick={() => onEditVideo(video?.id)}
+                     >
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteVideo(video?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
@@ -101,7 +114,7 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!presentation}>
+            <StyledContentItem disabled={presentation?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <PresentationIcon />
                </StyledContentIcon>
@@ -110,11 +123,15 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer
+                        onClick={() => onEditPresentation(presentation?.id)}
+                     >
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeletePresentation(presentation?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
@@ -178,11 +195,13 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer onClick={() => onEditTest(test?.id)}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteTest(test?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>
