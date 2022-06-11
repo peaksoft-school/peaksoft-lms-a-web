@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { Tooltip } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
 import { Input } from '../../../UI/input/Input'
@@ -10,6 +9,7 @@ import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.sv
 import { useInput } from '../../../../hooks/useInput/useInput'
 import { taskActions } from '../../../../store/task-slice'
 import { LINK } from '../../../../utils/constants/general'
+import { StyledTooltip } from '../../../UI/tooltip/StyledTooltip'
 
 export const AddLinkModal = () => {
    const dispatch = useDispatch()
@@ -25,7 +25,7 @@ export const AddLinkModal = () => {
       setFormIsValid(value.name.length > 0 && value.value.length > 0)
    }, [value])
 
-   const addLink = () => {
+   const addLinkHandler = () => {
       dispatch(
          taskActions.addTask({
             taskType: LINK,
@@ -39,7 +39,7 @@ export const AddLinkModal = () => {
    }
    return (
       <div>
-         <StyledTooltip title="Вставить ссылку" placement="top">
+         <StyledTooltip title="Вставить ссылку">
             <StyledIcon onClick={() => setModalIsOpen(true)}>
                <LinkIcon />
             </StyledIcon>
@@ -81,7 +81,7 @@ export const AddLinkModal = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={addLink}
+                     onClick={addLinkHandler}
                      disabled={!formIsValid}
                   >
                      Добавить
@@ -110,21 +110,6 @@ const InputStyleControl = styled.div`
    }
 `
 
-const StyledTooltip = styled(({ className, ...props }) => (
-   <Tooltip {...props} classes={{ popper: className }} />
-))`
-   & .MuiTooltip-tooltip {
-      background: #8d949e;
-      border-radius: 8px;
-      height: 28px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      padding: 6px 8px;
-      gap: 10px;
-   }
-`
 const StyledIcon = styled.div`
    width: 34px;
    height: 28px;

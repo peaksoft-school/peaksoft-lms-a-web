@@ -6,13 +6,10 @@ import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
 import { TextEditor } from './TextEditor/TextEditor'
-import { SelectFile } from './taskFile/SelectFile'
-import { SelectImage } from './taskImage/SelectImage'
 import { Link as TaskLink } from './taskLink/Link'
 import { Code } from './taskCode/Code'
 import { Image } from './taskImage/Image'
 import { File } from './taskFile/File'
-import { AddLinkModal } from './taskLink/AddLink'
 import {
    CODE,
    FILE,
@@ -21,44 +18,20 @@ import {
    LINK,
    TEXT,
 } from '../../../utils/constants/general'
-import { AddCode } from './taskCode/AddCode'
-import { Text } from './TextEditor/Text'
 import { taskActions, uploadFile } from '../../../store/task-slice'
 import { localStorageHelper } from '../../../utils/helpers/general'
 import { getCourse } from '../../../store/materials-slice'
+import { AddTaskIcons } from './AddTaskIcons'
 
 export const Task = () => {
    const dispatch = useDispatch()
-   const { lessonId, id } = useParams()
    const navigate = useNavigate()
+   const { lessonId, id } = useParams()
    const [formIsValid, setFormIsValid] = useState(false)
    const { lessonTasks, taskName } = useSelector((state) => state.tasks.task)
    const { task } = useSelector((state) => state.tasks)
    const { course } = useSelector((state) => state.materials)
 
-   const onChangeHandler = (e) => {
-      dispatch(taskActions.addTaskName(e.target.value))
-   }
-   const navigateAfterSuccessResponse = () => {
-      navigate(`/instructor/instructor_course/${id}/materials`, {
-         replace: true,
-      })
-   }
-   const submitHandler = () => {
-      dispatch(
-         uploadFile({
-            lessonTasks,
-            taskName,
-            lessonId,
-            navigateAfterSuccessResponse,
-         })
-      )
-   }
-   const cancelHandler = () => {
-      localStorageHelper.clear(LESSON_TASK)
-      dispatch(taskActions.clearTask())
-      navigateAfterSuccessResponse()
-   }
    useEffect(() => {
       window.onbeforeunload = () => {
          return localStorageHelper.store(LESSON_TASK, task)
@@ -72,6 +45,30 @@ export const Task = () => {
    useEffect(() => {
       dispatch(getCourse(id))
    }, [])
+
+   const changeTaskNameHandler = (e) => {
+      dispatch(taskActions.setTaskName(e.target.value))
+   }
+   const navigateToMaterials = () => {
+      navigate(`/instructor/instructor_course/${id}/materials`, {
+         replace: true,
+      })
+   }
+   const sendTaskHandler = () => {
+      dispatch(
+         uploadFile({
+            lessonTasks,
+            taskName,
+            lessonId,
+            navigateToMaterials,
+         })
+      )
+   }
+   const cancelTaskHandler = () => {
+      localStorageHelper.clear(LESSON_TASK)
+      dispatch(taskActions.clearTask())
+      navigateToMaterials()
+   }
 
    const pathsArray = [
       {
@@ -97,15 +94,9 @@ export const Task = () => {
             <Title>
                <StyledText
                   placeholder="Название задания"
-                  onChange={onChangeHandler}
+                  onChange={changeTaskNameHandler}
                />
-               <StyledIcons>
-                  <Text />
-                  <SelectFile />
-                  <SelectImage />
-                  <AddLinkModal />
-                  <AddCode />
-               </StyledIcons>
+               <AddTaskIcons />
             </Title>
             <StyledContainer>
                {lessonTasks.map((el) => {
@@ -133,7 +124,7 @@ export const Task = () => {
                      background="none"
                      border="1px solid #3772FF"
                      color="#3772FF"
-                     onClick={cancelHandler}
+                     onClick={cancelTaskHandler}
                   >
                      Отмена
                   </Button>
@@ -142,7 +133,7 @@ export const Task = () => {
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"
-                     onClick={submitHandler}
+                     onClick={sendTaskHandler}
                   >
                      Сохранить
                   </Button>
@@ -166,7 +157,6 @@ const StyledTitle = styled.div`
    font-size: 19px;
    line-height: 22px;
    color: #1f6ed4;
-   width: 154px;
    height: 22px;
 `
 const Title = styled.div`
@@ -178,15 +168,7 @@ const StyledText = styled(Input)`
    width: 842px;
    height: 42px;
 `
-const StyledIcons = styled.div`
-   margin-left: 30px;
-   margin-bottom: 7px;
-   width: 280px;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   cursor: pointer;
-`
+
 const StyledContainer = styled.div`
    margin-top: 20px;
    width: 100%;

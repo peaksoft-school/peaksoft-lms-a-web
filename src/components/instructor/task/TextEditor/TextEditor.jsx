@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+/* eslint-disable no-param-reassign */
+import React, { useCallback, useMemo, useRef } from 'react'
 import styled from '@emotion/styled'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
@@ -7,25 +8,32 @@ import { ReactComponent as IconText } from '../../../../assets/icons/text.svg'
 import { Toolbar } from './Toolbar'
 import { taskActions } from '../../../../store/task-slice'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
+import {
+   LIST_ITEM,
+   ORDERED_LIST,
+   PARAGRAPH,
+   UNORDERED_LIST,
+} from '../../../../utils/constants/general'
 
 export const TextEditor = ({ text }) => {
    const dispatch = useDispatch()
+   const hasTextValue = () => {
+      return Object.values(text).includes(text.value)
+   }
    const initialValue = useMemo(
       () =>
-         (Object.values(text).includes(text.value) &&
-            JSON.parse(text.value)) || [
+         (hasTextValue() && JSON.parse(text.value)) || [
             {
-               type: 'paragraph',
+               type: PARAGRAPH,
                children: [{ text: '' }],
             },
          ],
       []
    )
 
-   const onChangeHandler = (value) => {
-      console.log(value)
+   const changeTextHandler = (value) => {
       dispatch(
-         taskActions.addText({
+         taskActions.setText({
             textValue: JSON.stringify(value),
             name: 'text',
             id: text.id,
@@ -50,7 +58,7 @@ export const TextEditor = ({ text }) => {
       <Slate
          editor={editor}
          value={initialValue}
-         onChange={(initialValue) => onChangeHandler(initialValue)}
+         onChange={(initialValue) => changeTextHandler(initialValue)}
       >
          <TextEditorContainer>
             <Toolbar />
@@ -78,16 +86,16 @@ const Element = (props) => {
    const { attributes, children, element } = props
 
    switch (element.type) {
-      case 'list-item':
+      case LIST_ITEM:
          return <li {...attributes}>{children}</li>
-      case 'orderedList':
+      case ORDERED_LIST:
          return (
-            <ol type="1" {...attributes}>
+            <StyledOl type="1" {...attributes}>
                {children}
-            </ol>
+            </StyledOl>
          )
-      case 'unorderedList':
-         return <ul {...attributes}>{children}</ul>
+      case UNORDERED_LIST:
+         return <StyledUl {...attributes}>{children}</StyledUl>
 
       default:
          return <p {...attributes}>{children}</p>
@@ -115,7 +123,12 @@ const Leaf = ({ attributes, children, leaf }) => {
 const TextEditorContainer = styled.div`
    min-height: 136px;
 `
-
+const StyledOl = styled.ol`
+   padding-left: 10px;
+`
+const StyledUl = styled.ul`
+   padding-left: 10px;
+`
 const StyledTextEditor = styled.div`
    display: flex;
    width: 100%;
@@ -139,7 +152,7 @@ const StyledTextEditor = styled.div`
 `
 const StyledEditable = styled(Editable)`
    margin-left: 5px;
-   padding: 10px 8px 10px 18px;
+   padding: 10px 8px 10px 20px;
    background: #ffffff;
    border: 1px solid #d4d4d4;
    border-radius: 10px;

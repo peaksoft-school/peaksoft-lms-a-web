@@ -11,7 +11,6 @@ export const File = ({ file }) => {
    const deleteFileHandler = (id) => {
       dispatch(taskActions.deleteTask(id))
    }
-
    return (
       <Container>
          <StyledIcon id="container">
@@ -21,7 +20,7 @@ export const File = ({ file }) => {
             />
             <FileIcon id="file" />
          </StyledIcon>
-         <a href={file.selectedFile}>{file.name}</a>
+         <a href={file.selectedFileUrl}>{file.name}</a>
       </Container>
    )
 }

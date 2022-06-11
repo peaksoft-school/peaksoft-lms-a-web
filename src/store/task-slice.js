@@ -15,7 +15,7 @@ export const uploadFile = createAsyncThunk(
          lessonTasks,
          taskName,
          lessonId,
-         navigateAfterSuccessResponse,
+         navigateToMaterials,
          isUpdate,
          taskId,
       },
@@ -28,7 +28,7 @@ export const uploadFile = createAsyncThunk(
 
          const uploadedImages = await Promise.all(
             images.map(async (task) => {
-               formData.set('file', task.selectedImagefile)
+               formData.set('file', task.selectedImageFile)
                const result = await fileFetch({
                   path: 'api/file',
                   body: formData,
@@ -74,7 +74,7 @@ export const uploadFile = createAsyncThunk(
                      taskTypeRequests: lessonTaskWithUploadedTasks,
                   },
                   taskId,
-                  navigateAfterSuccessResponse,
+                  navigateToMaterials,
                })
             )
          }
@@ -86,7 +86,7 @@ export const uploadFile = createAsyncThunk(
                      taskTypeRequests: lessonTaskWithUploadedTasks,
                   },
                   lessonId,
-                  navigateAfterSuccessResponse,
+                  navigateToMaterials,
                })
             )
          }
@@ -99,7 +99,7 @@ export const uploadFile = createAsyncThunk(
 export const sendLessonTask = createAsyncThunk(
    'task/sendLessonTask',
    async (
-      { tasks, lessonId, navigateAfterSuccessResponse },
+      { tasks, lessonId, navigateToMaterials },
       { rejectWithValue, dispatch }
    ) => {
       try {
@@ -108,12 +108,12 @@ export const sendLessonTask = createAsyncThunk(
             method: 'POST',
             body: tasks,
          })
-         showSuccessMessage('task successfully created')
+         showSuccessMessage('Задание успешно создано')
+         navigateToMaterials()
          dispatch(taskActions.clearTask())
-         navigateAfterSuccessResponse()
          return response
       } catch (error) {
-         showErrorMessage("can't create task")
+         showErrorMessage('Не удалось создать задание')
          return rejectWithValue(error)
       }
    }
@@ -138,7 +138,7 @@ export const getLessonTask = createAsyncThunk(
 export const editTask = createAsyncThunk(
    'task/editTask',
    async (
-      { tasks, taskId, navigateAfterSuccessResponse },
+      { tasks, taskId, navigateToMaterials },
       { rejectWithValue, dispatch }
    ) => {
       try {
@@ -149,7 +149,7 @@ export const editTask = createAsyncThunk(
          })
          showSuccessMessage('Изменения успешно сохранены')
          dispatch(taskActions.clearTask())
-         navigateAfterSuccessResponse()
+         navigateToMaterials()
          return response
       } catch (error) {
          showErrorMessage('Не удалось изменить данные')
@@ -188,7 +188,7 @@ export const taskSlice = createSlice({
    name: 'task',
    initialState: taskData,
    reducers: {
-      addTaskName(state, action) {
+      setTaskName(state, action) {
          state.task.taskName = action.payload
       },
       addTask(state, action) {
@@ -200,7 +200,7 @@ export const taskSlice = createSlice({
             (el) => el.id !== id
          )
       },
-      addText(state, action) {
+      setText(state, action) {
          const { id, textValue } = action.payload
          state.task.lessonTasks = state.task.lessonTasks.map((el) => {
             if (el.id === id) {
@@ -212,7 +212,7 @@ export const taskSlice = createSlice({
             return el
          })
       },
-      addCode(state, action) {
+      setCode(state, action) {
          const { id, code } = action.payload
          state.task.lessonTasks = state.task.lessonTasks.map((el) => {
             if (el.id === id) {

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import styled from '@emotion/styled'
 import React from 'react'
 import { useDispatch } from 'react-redux'
@@ -8,9 +9,9 @@ import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIco
 export const Code = ({ code }) => {
    const dispatch = useDispatch()
 
-   const onChangeHandler = (e) => {
+   const setCodeHandler = (e) => {
       dispatch(
-         taskActions.addCode({
+         taskActions.setCode({
             code: e.target.value,
             id: code.id,
          })
@@ -21,20 +22,23 @@ export const Code = ({ code }) => {
       e.target.style.height = `${e.target.scrollHeight}px`
    }
 
-   const deleteHandler = (id) => {
+   const deleteCodeHandler = (id) => {
       dispatch(taskActions.deleteTask(id))
    }
    return (
       <Container>
          <StyledIcon id="container">
-            <RemoveIcon id="remove" onClick={() => deleteHandler(code.id)} />
+            <RemoveIcon
+               id="remove"
+               onClick={() => deleteCodeHandler(code.id)}
+            />
             <CodeIcon id="code" />
          </StyledIcon>
 
          <StyledTextArea
             value={code.value}
             placeholder="Вставьте код"
-            onChange={onChangeHandler}
+            onChange={setCodeHandler}
             onKeyDown={handleKeyDown}
          />
       </Container>

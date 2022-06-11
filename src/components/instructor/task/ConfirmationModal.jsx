@@ -12,21 +12,21 @@ import { getLessons } from '../../../store/materials-slice'
 export const ConfirmationModal = ({ showModal, onClose, id }) => {
    const dispatch = useDispatch()
 
-   const deleteHandler = () => {
+   const deleteTaskHandler = () => {
       dispatch(deleteLessonTask(id))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Вы удалили task')
+            showSuccessMessage('Вы удалили задание')
             dispatch(getLessons())
             onClose()
          })
          .catch(() => {
-            showErrorMessage('Не удалось удалить task')
+            showErrorMessage('Не удалось удалить задание')
          })
    }
    return (
       <ConfirmModal
-         title="Вы уверены, что хотите удалить task ... ?"
+         title="Вы уверены, что хотите удалить задание ... ?"
          isConfirmModalOpen={Boolean(showModal)}
          closeConfirmModal={onClose}
       >
@@ -41,7 +41,7 @@ export const ConfirmationModal = ({ showModal, onClose, id }) => {
             Отмена
          </Button>
          <Button
-            onClick={deleteHandler}
+            onClick={deleteTaskHandler}
             background="#C91E1E"
             bgHover="#B62727"
             bgActive="#E13A3A"

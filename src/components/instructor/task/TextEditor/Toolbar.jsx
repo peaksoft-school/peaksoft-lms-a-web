@@ -1,17 +1,24 @@
-/* eslint-disable no-nested-ternary */
 import styled from '@emotion/styled'
-import { Tooltip } from '@mui/material'
 import React from 'react'
 import { ReactEditor, useSlate } from 'slate-react'
 import { Editor, Transforms, Element as SlateElement } from 'slate'
-import { TOOLBAR } from '../../../../utils/constants/general'
+import {
+   BLOCK,
+   LIST_ITEM,
+   MARK,
+   ORDERED_LIST,
+   PARAGRAPH,
+   TOOLBAR,
+   UNORDERED_LIST,
+} from '../../../../utils/constants/general'
+import { StyledTooltip } from '../../../UI/tooltip/StyledTooltip'
 
 export const Toolbar = () => {
    const editor = useSlate()
 
    const MarkButton = ({ format, title, icon }) => {
       return (
-         <StyledTooltip title={title} placement="top">
+         <StyledTooltip title={title}>
             <StyledIcon
                active={isMarkActive(editor, format)}
                format={format}
@@ -27,7 +34,7 @@ export const Toolbar = () => {
    }
    const BlockButton = ({ format, title, icon }) => {
       return (
-         <StyledTooltip title={title} placement="top">
+         <StyledTooltip title={title}>
             <StyledIcon
                active={isMarkActive(editor, format)}
                format={format}
@@ -45,12 +52,12 @@ export const Toolbar = () => {
       <Container>
          {TOOLBAR.map((el) => {
             switch (el.type) {
-               case 'mark':
+               case MARK:
                   return <MarkButton key={el.id} {...el} />
-               case 'block':
+               case BLOCK:
                   return <BlockButton key={el.id} {...el} />
                default:
-                  return <DefaultElement {...el} />
+                  return <DefaultElement {...el} key={el.id} />
             }
          })}
       </Container>
@@ -63,7 +70,7 @@ const DefaultElement = (props) => {
 export const isMarkActive = (editor, format) => {
    const marks = Editor.marks(editor)
 
-   return marks ? marks[format] === true : false
+   return marks && marks[format]
 }
 export const toggleMark = (editor, format) => {
    const isActive = isMarkActive(editor, format)
@@ -75,7 +82,7 @@ export const toggleMark = (editor, format) => {
    }
    ReactEditor.focus(editor)
 }
-const listTypes = ['orderedList', 'unorderedList']
+const listTypes = [ORDERED_LIST, UNORDERED_LIST]
 
 export const toggleBlock = (editor, format) => {
    const isActive = isBlockActive(editor, format)
@@ -90,7 +97,7 @@ export const toggleBlock = (editor, format) => {
    })
 
    Transforms.setNodes(editor, {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+      type: isActive ? PARAGRAPH : isList ? LIST_ITEM : format,
    })
    if (isList && !isActive) {
       Transforms.wrapNodes(editor, {
@@ -127,20 +134,5 @@ const StyledIcon = styled.div`
    &:hover {
       background: #d4d4d4;
       border-radius: 6px;
-   }
-`
-const StyledTooltip = styled(({ className, ...props }) => (
-   <Tooltip {...props} classes={{ popper: className }} />
-))`
-   & .MuiTooltip-tooltip {
-      background: #8d949e;
-      border-radius: 8px;
-      height: 28px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      padding: 6px 8px;
-      gap: 10px;
    }
 `
