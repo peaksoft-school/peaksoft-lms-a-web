@@ -21,7 +21,8 @@ import {
 import { taskActions, uploadFile } from '../../../store/task-slice'
 import { localStorageHelper } from '../../../utils/helpers/general'
 import { getCourse } from '../../../store/materials-slice'
-import { AddTaskIcons } from './AddTaskIcons'
+import { TaskCreatorOptions } from './TaskCreatorOptions'
+import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const Task = () => {
    const dispatch = useDispatch()
@@ -29,7 +30,7 @@ export const Task = () => {
    const { lessonId, id } = useParams()
    const [formIsValid, setFormIsValid] = useState(false)
    const { lessonTasks, taskName } = useSelector((state) => state.tasks.task)
-   const { task } = useSelector((state) => state.tasks)
+   const { task, isLoading } = useSelector((state) => state.tasks)
    const { course } = useSelector((state) => state.materials)
 
    useEffect(() => {
@@ -96,7 +97,7 @@ export const Task = () => {
                   placeholder="Название задания"
                   onChange={changeTaskNameHandler}
                />
-               <AddTaskIcons />
+               <TaskCreatorOptions />
             </Title>
             <StyledContainer>
                {lessonTasks.map((el) => {
@@ -140,6 +141,7 @@ export const Task = () => {
                </StyledButton>
             </ButtonContainer>
          </Container>
+         {isLoading && <Spinner />}
       </>
    )
 }

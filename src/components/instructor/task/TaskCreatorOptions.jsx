@@ -6,7 +6,7 @@ import { AddLinkModal } from './taskLink/AddLink'
 import { AddTaskCode } from './taskCode/AddTaskCode'
 import { Text } from './TextEditor/Text'
 
-export const AddTaskIcons = () => {
+export const TaskCreatorOptions = () => {
    return (
       <Container>
          <Text />

@@ -22,7 +22,9 @@ export const EditVideo = ({ isModalOpen, closeModals, id }) => {
    })
 
    useEffect(() => {
-      dispatch(getSingleVideo(id))
+      if (id) {
+         dispatch(getSingleVideo(id))
+      }
    }, [])
 
    const AddUpdatedVideoLesson = () => {

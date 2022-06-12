@@ -25,7 +25,9 @@ export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    })
 
    useEffect(() => {
-      dispatch(getSingleLink(id))
+      if (id) {
+         dispatch(getSingleLink(id))
+      }
    }, [])
 
    const saveUpdatedLink = () => {

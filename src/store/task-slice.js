@@ -28,24 +28,30 @@ export const uploadFile = createAsyncThunk(
 
          const uploadedImages = await Promise.all(
             images.map(async (task) => {
-               formData.set('file', task.selectedImageFile)
-               const result = await fileFetch({
-                  path: 'api/file',
-                  body: formData,
-                  method: 'POST',
-               })
-               return { ...result, id: task.id }
+               if (task.selectedImageFile) {
+                  formData.set('file', task.selectedImageFile)
+                  const result = await fileFetch({
+                     path: 'api/file',
+                     method: 'POST',
+                     body: formData,
+                  })
+                  return { value: result.url, id: task.id }
+               }
+               return task
             })
          )
          const uploadedFiles = await Promise.all(
             files.map(async (file) => {
-               formData.set('file', file.selectedFile)
-               const fileResult = await fileFetch({
-                  path: 'api/file',
-                  method: 'POST',
-                  body: formData,
-               })
-               return { ...fileResult, id: file.id }
+               if (file.selectedFile) {
+                  formData.set('file', file.selectedFile)
+                  const fileResult = await fileFetch({
+                     path: 'api/file',
+                     method: 'POST',
+                     body: formData,
+                  })
+                  return { value: fileResult.url, id: file.id }
+               }
+               return file
             })
          )
          const lessonTaskWithUploadedTasks = lessonTasks.map((task) => {
@@ -56,12 +62,12 @@ export const uploadFile = createAsyncThunk(
             }
             uploadedFiles.forEach((file) => {
                if (task.id === file.id) {
-                  updatedTask.value = file.url
+                  updatedTask.value = file.value
                }
             })
             uploadedImages.forEach((image) => {
                if (task.id === image.id) {
-                  updatedTask.value = image.url
+                  updatedTask.value = image.value
                }
             })
             return updatedTask
@@ -77,8 +83,7 @@ export const uploadFile = createAsyncThunk(
                   navigateToMaterials,
                })
             )
-         }
-         if (!isUpdate) {
+         } else {
             dispatch(
                sendLessonTask({
                   tasks: {
@@ -178,11 +183,20 @@ const initState = {
       taskName: '',
       lessonTasks: [],
    },
+   isLoading: false,
 }
 
 const taskData = localStorageHelper.laod(LESSON_TASK)
    ? { ...initState, task: localStorageHelper.laod(LESSON_TASK) }
    : initState
+
+const setFulfilled = (state) => {
+   state.isLoading = false
+}
+
+const setPending = (state) => {
+   state.isLoading = true
+}
 
 export const taskSlice = createSlice({
    name: 'task',
@@ -233,6 +247,20 @@ export const taskSlice = createSlice({
          state.task.taskName = ''
          state.task.lessonTasks = []
       },
+   },
+   extraReducers: {
+      [sendLessonTask.pending]: setPending,
+      [sendLessonTask.fulfilled]: setFulfilled,
+      [sendLessonTask.rejected]: setFulfilled,
+      [uploadFile.pending]: setPending,
+      [uploadFile.fulfilled]: setFulfilled,
+      [uploadFile.rejected]: setFulfilled,
+      [editTask.pending]: setPending,
+      [editTask.fulfilled]: setFulfilled,
+      [editTask.rejected]: setFulfilled,
+      [getLessonTask.pending]: setPending,
+      [getLessonTask.fulfilled]: setFulfilled,
+      [getLessonTask.rejected]: setFulfilled,
    },
 })
 

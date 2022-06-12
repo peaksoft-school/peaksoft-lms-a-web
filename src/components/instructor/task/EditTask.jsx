@@ -17,13 +17,15 @@ import {
    uploadFile,
 } from '../../../store/task-slice'
 import { getCourse } from '../../../store/materials-slice'
-import { AddTaskIcons } from './AddTaskIcons'
+import { TaskCreatorOptions } from './TaskCreatorOptions'
+import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const EditTask = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { taskId, id } = useParams()
    const { lessonTasks, taskName } = useSelector((state) => state.tasks.task)
+   const { isLoading } = useSelector((state) => state.tasks)
    const { course } = useSelector((state) => state.materials)
 
    const changeTaskNameHandler = (e) => {
@@ -82,7 +84,7 @@ export const EditTask = () => {
                   value={taskName}
                   onChange={changeTaskNameHandler}
                />
-               <AddTaskIcons />
+               <TaskCreatorOptions />
             </Title>
             <StyledContainer>
                {lessonTasks.map((el) => {
@@ -125,6 +127,7 @@ export const EditTask = () => {
                </StyledButton>
             </ButtonContainer>
          </Container>
+         {isLoading && <Spinner />}
       </>
    )
 }
