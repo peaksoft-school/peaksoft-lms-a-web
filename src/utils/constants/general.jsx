@@ -262,14 +262,14 @@ export const TOOLBAR = [
 
    {
       id: 15,
-      format: 'orderedList',
+      format: ORDERED_LIST,
       type: 'block',
       icon: <OlIcon />,
       title: 'Нумерованный список',
    },
    {
       id: 16,
-      format: 'unorderedList',
+      format: UNORDERED_LIST,
       type: 'block',
       icon: <UlIcon />,
       title: 'Маркированный список',
