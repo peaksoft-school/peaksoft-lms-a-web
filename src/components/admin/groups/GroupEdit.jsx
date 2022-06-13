@@ -7,7 +7,7 @@ import { Button } from '../../UI/button/Button'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { Input } from '../../UI/input/Input'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { updateSingleGroup } from '../../../store/groupSlice'
 import {
    showErrorMessage,

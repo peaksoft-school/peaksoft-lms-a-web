@@ -14,7 +14,7 @@ import {
    getCourseTeachers,
    getInstructor,
 } from '../../../../store/courses-slice'
-import { AssignTeacher } from '../../../../components/admin/courses/AssignTeacher'
+import { AssignTeacher } from '../../../../components/Admin/courses/AssignTeacher'
 import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseInstructors = () => {
@@ -25,6 +25,7 @@ export const CourseInstructors = () => {
       (state) => state.courses
    )
 
+   console.log(courses)
    const [searchParams, setSearchParams] = useSearchParams()
 
    const showAppointTeacherModal = searchParams.get(APPOINT_TEACHER)

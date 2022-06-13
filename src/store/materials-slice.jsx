@@ -26,7 +26,7 @@ export const addLesson = createAsyncThunk(
 
 export const getLessons = createAsyncThunk(
    'materials/getLessons',
-   async (id, { rejectWithValue, dispatch }) => {
+   async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
             path: `api/lessons`,

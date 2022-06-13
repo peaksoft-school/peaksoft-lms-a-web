@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useInput } from '../../../../../hooks/usuInput/useInput'
+import { useInput } from '../../../../../hooks/useInput/useInput'
 import { editVideo, getSingleVideo } from '../../../../../store/video-slice'
 import { Button } from '../../../../UI/button/Button'
 import { Input } from '../../../../UI/input/Input'
@@ -22,7 +22,9 @@ export const EditVideo = ({ isModalOpen, closeModals, id }) => {
    })
 
    useEffect(() => {
-      dispatch(getSingleVideo(id))
+      if (id) {
+         dispatch(getSingleVideo(id))
+      }
    }, [])
 
    const AddUpdatedVideoLesson = () => {

@@ -177,7 +177,7 @@ export const getCourseTeachers = createAsyncThunk(
    async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/courses/teachers/${id}`,
+            path: `api/courses/instructors/${id}`,
             method: 'GET',
          })
          dispatch(coursesActions.getCourseTeachers(response))

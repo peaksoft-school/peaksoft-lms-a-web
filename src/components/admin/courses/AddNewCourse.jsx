@@ -6,7 +6,7 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { addNewCourse } from '../../../store/courses-slice'
 import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
 

@@ -21,6 +21,8 @@ export const LessonCard = ({
    onDeleteLesson,
    onDeleteTest,
    selectedOption,
+   onEditTask,
+   onDeleteTask,
    onEditTest,
    onEditPresentation,
    onDeletePresentation,
@@ -47,7 +49,7 @@ export const LessonCard = ({
       {
          id: 'task',
          title: 'Задание',
-         disabled: Boolean(task),
+         disabled: task?.lessonId === lessonId,
          lessonId,
       },
       {
@@ -139,7 +141,7 @@ export const LessonCard = ({
                   </StyledOnHoverActions>
                </ActionsContainer>
             </StyledContentItem>
-            <StyledContentItem disabled={!task}>
+            <StyledContentItem disabled={task?.lessonId !== lessonId}>
                <StyledContentIcon>
                   <TaskIcon />
                </StyledContentIcon>
@@ -148,11 +150,13 @@ export const LessonCard = ({
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer onClick={() => onEditTask(task?.id)}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteTask(task?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>

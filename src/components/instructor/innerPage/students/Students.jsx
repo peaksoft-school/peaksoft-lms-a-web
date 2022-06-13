@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -41,7 +41,6 @@ export const Students = () => {
    const handleClose = () => {
       setSearchParams(false)
    }
-
    const addStudentHandler = (studentId) => {
       dispatch(addStudentToCourse({ studentId, id }))
          .unwrap()
@@ -80,14 +79,11 @@ export const Students = () => {
       dispatch(getGroupOfStudents())
    }
 
-   const breadcrumbs = useMemo(
-      () => [
-         { path: 'instructor/instructor_course', name: 'Курсы' },
-         { path: 'instructor/students', name: singleCourse?.courseName },
-         { path: 'instructor/instructor_course', name: 'Студенты' },
-      ],
-      []
-   )
+   const breadcrumbs = [
+      { path: 'instructor/instructor_course', name: 'Курсы' },
+      { path: 'instructor/students', name: singleCourse?.courseName },
+      { path: 'instructor/instructor_course', name: 'Студенты' },
+   ]
 
    const filteredStudents = students.filter(
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)

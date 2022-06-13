@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BasicModal } from '../../../../UI/modal/BasicModal'
 import { Input } from '../../../../UI/input/Input'
 import { Button } from '../../../../UI/button/Button'
-import { useInput } from '../../../../../hooks/usuInput/useInput'
+import { useInput } from '../../../../../hooks/useInput/useInput'
 import {
    updateSingleLink,
    getSingleLink,
@@ -25,7 +25,9 @@ export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    })
 
    useEffect(() => {
-      dispatch(getSingleLink(id))
+      if (id) {
+         dispatch(getSingleLink(id))
+      }
    }, [])
 
    const saveUpdatedLink = () => {

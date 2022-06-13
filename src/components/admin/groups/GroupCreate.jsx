@@ -6,7 +6,7 @@ import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { Input } from '../../UI/input/Input'
 import { addNewGroup } from '../../../store/groupSlice'
 import {
@@ -139,6 +139,9 @@ const WrapperForButton = styled.div`
    width: 100%;
    display: flex;
    justify-content: end;
+   button {
+      margin-top: 18px;
+   }
 `
 const ModalContentControl = styled.div`
    width: 338px;
