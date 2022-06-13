@@ -1,10 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
-import {
-   showErrorMessage,
-   showSuccessMessage,
-} from '../components/UI/notification/Notification'
+import { showErrorMessage } from '../components/UI/notification/Notification'
 
 const initState = {
    courses: [],
@@ -43,27 +40,33 @@ export const addNewCourse = createAsyncThunk(
 
 export const onEditCourse = createAsyncThunk(
    'courses/editCourse',
-   async ({ file, course, currentPage }, { rejectWithValue, dispatch }) => {
+   async ({ file, course, image }, { rejectWithValue }) => {
       try {
-         const formData = new FormData()
-         formData.append('file', file)
+         if (file) {
+            const formData = new FormData()
+            formData.append('file', file)
 
-         const res = await fileFetch({
-            path: 'api/file',
-            method: 'POST',
-            body: formData,
-         })
-         const data = await res.url.toString()
-         const response = await baseFetch({
-            path: `api/courses/${course.id}`,
-            method: 'PUT',
-            body: { ...course, image: data },
-         })
-         dispatch(getAllCourses(currentPage))
-         showSuccessMessage('Изменения успешно сохранены')
-         return response
+            const res = await fileFetch({
+               path: 'api/file',
+               method: 'POST',
+               body: formData,
+            })
+            const data = await res.url.toString()
+            const response = await baseFetch({
+               path: `api/courses/${course.id}`,
+               method: 'PUT',
+               body: { ...course, image: data },
+            })
+         } else {
+            const response = await baseFetch({
+               path: `api/courses/${course.id}`,
+               method: 'PUT',
+               body: { ...course, image },
+            })
+            return response
+         }
+         return file
       } catch (error) {
-         showErrorMessage('Не удалось изменить данные')
          return rejectWithValue(error.message)
       }
    }
@@ -71,7 +74,7 @@ export const onEditCourse = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
    'courses/deleteCourse',
-   async ({ id, currentPage }, { rejectWithValue, dispatch }) => {
+   async ({ id }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/courses/${id}`,
@@ -113,6 +116,7 @@ export const assignTeacherToCourse = createAsyncThunk(
                instructorsId: instructorId,
             },
          })
+         dispatch(getAllCourses(1))
          return response
       } catch (error) {
          return rejectWithValue(error.message)
@@ -162,7 +166,7 @@ export const getCourseTeachers = createAsyncThunk(
    async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/courses/teachers/${id}`,
+            path: `api/courses/instructors/${id}`,
             method: 'GET',
          })
          dispatch(coursesActions.getCourseTeachers(response))

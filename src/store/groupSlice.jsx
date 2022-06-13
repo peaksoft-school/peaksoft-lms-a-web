@@ -74,25 +74,33 @@ export const getSingleGroup = createAsyncThunk(
 
 export const updateSingleGroup = createAsyncThunk(
    'groups/updateSingleGroup',
-   async ({ groupUpdateInfo, file }, { rejectWithValue, dispatch }) => {
+   async ({ groupUpdateInfo, file, image }, { rejectWithValue, dispatch }) => {
       try {
-         const editedGroup = new FormData()
-         editedGroup.append('file', file)
-         const fileResponse = await fileFetch({
-            path: 'api/file',
-            method: 'POST',
-            body: editedGroup,
-         })
-         const data = await fileResponse.url.toString()
+         if (file) {
+            const editedGroup = new FormData()
+            editedGroup.append('file', file)
+            const fileResponse = await fileFetch({
+               path: 'api/file',
+               method: 'POST',
+               body: editedGroup,
+            })
+            const data = await fileResponse.url.toString()
 
-         const response = await baseFetch({
-            path: `api/groups/${groupUpdateInfo.id}`,
-            method: 'PUT',
-            body: { ...groupUpdateInfo, image: data },
-         })
-         dispatch(groupsPagination(groupUpdateInfo.page))
-
-         return response
+            const response = await baseFetch({
+               path: `api/groups/${groupUpdateInfo.id}`,
+               method: 'PUT',
+               body: { ...groupUpdateInfo, image: data },
+            })
+            dispatch(groupsPagination(groupUpdateInfo.page))
+         } else {
+            const response = await baseFetch({
+               path: `api/groups/${groupUpdateInfo.id}`,
+               method: 'PUT',
+               body: { ...groupUpdateInfo, image },
+            })
+            return response
+         }
+         return file
       } catch (error) {
          return rejectWithValue(error.message)
       }

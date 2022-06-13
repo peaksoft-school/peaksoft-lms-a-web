@@ -12,7 +12,6 @@ import { AssignTeacher } from './AssignTeacher'
 import { EditCourse } from './EditCourse'
 import { AddNewCourse } from './AddNewCourse'
 import {
-   coursesActions,
    deleteCourse,
    getAllCourses,
    getInstructor,
@@ -222,7 +221,7 @@ export const Courses = () => {
 
 const Wrapper = styled.div`
    position: relative;
-   height: 880px;
+   height: 820px;
 `
 const StyledPagination = styled.div`
    margin-top: 20px;
@@ -247,6 +246,6 @@ const StyledIcon = styled.div`
 const StyledButton = styled.div`
    width: 241px;
    display: flex;
-   margin: 10px 0;
+   margin: 5px 0 10px;
    justify-content: space-between;
 `

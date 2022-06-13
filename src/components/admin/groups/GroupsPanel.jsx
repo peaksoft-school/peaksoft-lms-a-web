@@ -161,6 +161,6 @@ const PaginationStyleControl = styled.div`
    margin-top: 20px;
 `
 const StyledContainer = styled.div`
-   height: 880px;
+   height: 820px;
    position: relative;
 `

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useInput } from '../../../../hooks/usuInput/useInput'
+import { useInput } from '../../../../hooks/useInput/useInput'
 import { EDIT_PRESENTATION } from '../../../../utils/constants/general'
 import { Button } from '../../../UI/button/Button'
 import { Input } from '../../../UI/input/Input'

@@ -41,6 +41,7 @@ export const AssignTeacher = ({
    const filteredTeachers = instructors.filter(
       (item) => !courseTeachers.some((el) => item.id === el.id)
    )
+
    const options = filteredTeachers.map((teacher) => {
       return {
          id: teacher.id,

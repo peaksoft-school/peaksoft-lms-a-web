@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
@@ -31,7 +31,6 @@ export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
             value.lastName.length > 0 &&
             value.phoneNumber.length > 0 &&
             value.email.length > 0 &&
-            value.password.length > 0 &&
             value.specialization.length > 0
       )
    }, [value])

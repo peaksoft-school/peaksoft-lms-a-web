@@ -1,13 +1,17 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useInput } from '../../../hooks/usuInput/useInput'
-import { onEditCourse } from '../../../store/courses-slice'
+import { useInput } from '../../../hooks/useInput/useInput'
+import { getAllCourses, onEditCourse } from '../../../store/courses-slice'
 import { Button } from '../../UI/button/Button'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { BasicModal } from '../../UI/modal/BasicModal'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 
 export const EditCourse = ({
    сourse,
@@ -26,7 +30,7 @@ export const EditCourse = ({
       setDateValue(newValue)
    }
 
-   const { value, onChange } = useInput({
+   const { value, onChange, onClear } = useInput({
       courseName: courseName || '',
       description: description || '',
    })
@@ -46,6 +50,18 @@ export const EditCourse = ({
       }
 
       dispatch(onEditCourse({ file: selectedFile, image, course, currentPage }))
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Изменения успешно сохранены')
+            dispatch(getAllCourses(currentPage))
+            onClear()
+            setDateValue(null)
+            setFile(null)
+            closeModal()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось изменить данные')
+         })
    }
 
    return (

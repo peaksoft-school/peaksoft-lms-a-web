@@ -7,8 +7,8 @@ import { Button } from '../../UI/button/Button'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { Input } from '../../UI/input/Input'
-import { useInput } from '../../../hooks/usuInput/useInput'
-import { updateSingleGroup } from '../../../store/groupSlice'
+import { useInput } from '../../../hooks/useInput/useInput'
+import { groupsPagination, updateSingleGroup } from '../../../store/groupSlice'
 import {
    showErrorMessage,
    showSuccessMessage,
@@ -43,15 +43,22 @@ const GroupEdit = (props) => {
          dateOfStart: result,
          description: value.description,
          id,
-         page: props.page,
       }
       dispatch(
-         updateSingleGroup({ file: selectedFile, groupUpdateInfo: updateInfo })
+         updateSingleGroup({
+            file: selectedFile,
+            image,
+            groupUpdateInfo: updateInfo,
+         })
       )
          .unwrap()
          .then(() => {
             showSuccessMessage('Изменения успешно сохранены')
+            dispatch(groupsPagination(props.page))
+
             onClear()
+            setDateValue(null)
+            setFile(null)
             props.setOpenEditGroupModal(false)
          })
          .catch(() => {

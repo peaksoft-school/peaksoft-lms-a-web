@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { format } from 'date-fns'
 import { useDispatch } from 'react-redux'
 import styled from '@emotion/styled'
@@ -6,7 +6,7 @@ import { Button } from '../../UI/button/Button'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 import { Input } from '../../UI/input/Input'
 import { addNewGroup } from '../../../store/groupSlice'
 import {
@@ -21,11 +21,21 @@ const GroupCreate = (props) => {
    const [file, setFile] = useState(null)
    const [dateValue, setDateValue] = useState(null)
    const [selectedFile, setSelectedFile] = useState(null)
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
       groupName: '',
       description: '',
    })
+
+   useEffect(() => {
+      setFormIsValid(
+         file !== null &&
+            value.groupName.length > 0 &&
+            dateValue !== null &&
+            value.description.length > 0
+      )
+   }, [value, file, dateValue])
 
    const createGroupModalHandler = () => {
       setOpenCreateGroupModal(true)
@@ -59,6 +69,8 @@ const GroupCreate = (props) => {
             showSuccessMessage('Группа успешно создана')
             setOpenCreateGroupModal(false)
             onClear()
+            setDateValue(null)
+            setFile(null)
          })
          .catch(() => {
             showErrorMessage('Не удалось добавить группу')
@@ -83,6 +95,7 @@ const GroupCreate = (props) => {
             <BasicModal
                isModalOpen={openCreateGroupModal}
                title="Создать группу"
+               onClose={() => setOpenCreateGroupModal(false)}
             >
                <ImagePicker onDrop={onDrop} file={file} />
                <ModalContentControl>
@@ -124,6 +137,7 @@ const GroupCreate = (props) => {
                   </div>
                   <div>
                      <Button
+                        disabled={!formIsValid}
                         onClick={createNewGroupHandler}
                         background="#3772FF"
                         bgHover="#1D60FF"
@@ -144,6 +158,9 @@ const WrapperForButton = styled.div`
    height: 78px;
    align-items: center;
    justify-content: end;
+   button {
+      margin-top: 18px;
+   }
 `
 const ModalContentControl = styled.div`
    width: 338px;

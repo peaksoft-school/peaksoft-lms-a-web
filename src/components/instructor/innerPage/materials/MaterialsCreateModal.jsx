@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
-import { useInput } from '../../../../hooks/usuInput/useInput'
+import { useInput } from '../../../../hooks/useInput/useInput'
 import { Button } from '../../../UI/button/Button'
 import { Input } from '../../../UI/input/Input'
 import { BasicModal } from '../../../UI/modal/BasicModal'
