@@ -67,15 +67,18 @@ const GroupCreate = (props) => {
 
    return (
       <WrapperForButton>
-         <Button
-            style={{ marginLeft: '1026px' }}
-            background="#3772FF"
-            bgHover="#1D60FF"
-            bgActive="#6190FF"
-            onClick={createGroupModalHandler}
-         >
-            + Создать группу
-         </Button>
+         <span>
+            <Button
+               style={{ marginLeft: '1026px' }}
+               background="#3772FF"
+               bgHover="#1D60FF"
+               bgActive="#6190FF"
+               onClick={createGroupModalHandler}
+            >
+               + Создать группу
+            </Button>
+         </span>
+
          {openCreateGroupModal && (
             <BasicModal
                isModalOpen={openCreateGroupModal}
@@ -136,8 +139,10 @@ const GroupCreate = (props) => {
    )
 }
 const WrapperForButton = styled.div`
-   width: 100%;
+   width: 99.2%;
    display: flex;
+   height: 78px;
+   align-items: center;
    justify-content: end;
 `
 const ModalContentControl = styled.div`
