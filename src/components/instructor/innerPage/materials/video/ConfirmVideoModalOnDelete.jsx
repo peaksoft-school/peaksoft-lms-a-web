@@ -6,7 +6,7 @@ import {
    showErrorMessage,
    showSuccessMessage,
 } from '../../../../UI/notification/Notification'
-import { deleteVideo } from '../../../../../store/video-slice'
+import { deleteVideo } from '../../../../../store/INSTRUCTOR/video-slice'
 
 export const ConfirmVideoModalOnDelete = ({ isModalOpen, onClose, id }) => {
    const dispatch = useDispatch()

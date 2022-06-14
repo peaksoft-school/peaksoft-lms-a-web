@@ -30,7 +30,7 @@ import {
    getCourse,
    getLesson,
    getLessons,
-} from '../../../../store/materials-slice'
+} from '../../../../store/INSTRUCTOR/materials-slice'
 import {
    showErrorMessage,
    showSuccessMessage,
@@ -39,17 +39,20 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
-import { getLessonTask } from '../../../../store/task-slice'
+import { getLessonTask } from '../../../../store/INSTRUCTOR/task-slice'
 import { localStorageHelper } from '../../../../utils/helpers/general'
 import { ConfirmationModal } from '../../task/ConfirmationModal'
-import { getTest, removeTest } from '../../../../store/create-test-slice'
+import {
+   getTest,
+   removeTest,
+} from '../../../../store/INSTRUCTOR/create-test-slice'
 import { ConfirmModalOnDeleteTest } from './ConfirmModalOnDeleteTest'
 import {
    addPresentation,
    deletePresentation,
    editPresentation,
    getPresentation,
-} from '../../../../store/presentation-slice'
+} from '../../../../store/INSTRUCTOR/presentation-slice'
 import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
 import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
 import { LinkDeleteConfirm } from './link/LinkDeleteConfirm'
@@ -57,7 +60,7 @@ import { PresentationForm } from '../../lesson/presentation/PresentationForm'
 import { LessonVideo } from './video/LessonVideo'
 import { AddLinkModal } from './link/AddLinkModal'
 import { LinkEdit } from './link/LinkEdit'
-import { getSingleVideo } from '../../../../store/video-slice'
+import { getSingleVideo } from '../../../../store/INSTRUCTOR/video-slice'
 import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
 import { EditVideo } from './video/EditVideo'
 

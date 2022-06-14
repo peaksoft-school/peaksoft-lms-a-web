@@ -7,8 +7,12 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Input } from '../../UI/input/Input'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { addNewCourse } from '../../../store/courses-slice'
+import { addNewCourse, getAllCourses } from '../../../store/courses-slice'
 import { ReactComponent as AddIcon } from '../../../assets/icons/plusIcon.svg'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../../UI/notification/Notification'
 
 export const AddNewCourse = ({
    closeModal,
@@ -56,12 +60,20 @@ export const AddNewCourse = ({
          addNewCourse({
             file: selectedFile,
             courseData: newCourse,
-            currentPage,
          })
       )
-      onClear()
-      setDateValue(null)
-      setFile(null)
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Курс успешно создан')
+            dispatch(getAllCourses(currentPage))
+            onClear()
+            setDateValue(null)
+            setFile(null)
+            closeModal()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось создать курс')
+         })
    }
 
    return (
@@ -139,8 +151,9 @@ export const AddNewCourse = ({
 const StyledButton = styled.div`
    display: flex;
    align-items: center;
-   justify-content: flex-end;
-   height: 80px;
+   justify-content: end;
+   height: 78px;
+   width: 99.2%;
    svg {
       margin-right: 9px;
    }

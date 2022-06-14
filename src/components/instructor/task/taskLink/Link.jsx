@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.svg'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
-import { taskActions } from '../../../../store/task-slice'
+import { taskActions } from '../../../../store/INSTRUCTOR/task-slice'
 
 export const Link = ({ link }) => {
    const dispatch = useDispatch()

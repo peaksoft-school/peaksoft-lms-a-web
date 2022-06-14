@@ -230,6 +230,13 @@ export const IMAGE = 'IMAGE'
 export const LINK = 'LINK'
 export const CODE = 'CODE'
 
+export const LIST_ITEM = 'list-item'
+export const ORDERED_LIST = 'orderedList'
+export const UNORDERED_LIST = 'unorderedList'
+export const MARK = 'mark'
+export const BLOCK = 'block'
+export const PARAGRAPH = ' paragraph'
+
 export const TOOLBAR = [
    {
       id: 2,
@@ -275,10 +282,3 @@ export const TOOLBAR = [
       title: 'Маркированный список',
    },
 ]
-
-export const LIST_ITEM = 'list-item'
-export const ORDERED_LIST = 'orderedList'
-export const UNORDERED_LIST = 'unorderedList'
-export const MARK = 'mark'
-export const BLOCK = 'block'
-export const PARAGRAPH = ' paragraph'

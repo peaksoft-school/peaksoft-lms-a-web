@@ -7,7 +7,7 @@ import { BasicModal } from '../../../UI/modal/BasicModal'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as LinkIcon } from '../../../../assets/icons/linkIcon.svg'
 import { useInput } from '../../../../hooks/useInput/useInput'
-import { taskActions } from '../../../../store/task-slice'
+import { taskActions } from '../../../../store/INSTRUCTOR/task-slice'
 import { LINK } from '../../../../utils/constants/general'
 import { StyledTooltip } from '../../../UI/tooltip/StyledTooltip'
 

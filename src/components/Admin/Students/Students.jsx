@@ -324,10 +324,11 @@ export const Students = () => {
 }
 const StyledButtonsContainer = styled.div`
    width: 100%;
-   height: 88px;
+   height: 65px;
    display: flex;
    justify-content: space-between;
    align-items: center;
+   margin-top: 6px;
 `
 const StyledFormatOfEdu = styled.div`
    width: 202px;

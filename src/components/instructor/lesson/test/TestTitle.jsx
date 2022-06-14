@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
-import { testActions } from '../../../../store/create-test-slice'
+import { testActions } from '../../../../store/INSTRUCTOR/create-test-slice'
 import { Input } from '../../../UI/input/Input'
 
 export const TestTitle = ({ testName }) => {

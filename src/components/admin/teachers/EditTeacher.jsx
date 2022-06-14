@@ -31,7 +31,6 @@ export const EditTeacher = ({ showModal, onClose, onEdit, singleTeacher }) => {
             value.lastName.length > 0 &&
             value.phoneNumber.length > 0 &&
             value.email.length > 0 &&
-            value.password.length > 0 &&
             value.specialization.length > 0
       )
    }, [value])

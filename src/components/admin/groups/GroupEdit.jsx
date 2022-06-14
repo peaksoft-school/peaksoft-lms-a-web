@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { format } from 'date-fns'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
@@ -8,7 +8,7 @@ import { ImagePicker } from '../../UI/imagePicker/ImagePicker'
 import { Datepicker } from '../../UI/datePicker/Datepicker'
 import { Input } from '../../UI/input/Input'
 import { useInput } from '../../../hooks/useInput/useInput'
-import { updateSingleGroup } from '../../../store/groupSlice'
+import { groupsPagination, updateSingleGroup } from '../../../store/groupSlice'
 import {
    showErrorMessage,
    showSuccessMessage,
@@ -21,11 +21,21 @@ const GroupEdit = (props) => {
    const [file, setFile] = useState(image)
    const [dateValue, setDateValue] = useState(dateOfStart)
    const [selectedFile, setSelectedFile] = useState(null)
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
       groupName: groupName || '',
       description: description || '',
    })
+
+   useEffect(() => {
+      setFormIsValid(
+         file !== null &&
+            value.groupName.length > 0 &&
+            dateValue !== null &&
+            value.description.length > 0
+      )
+   }, [value, file, dateValue])
 
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
@@ -43,15 +53,22 @@ const GroupEdit = (props) => {
          dateOfStart: result,
          description: value.description,
          id,
-         page: props.page,
       }
       dispatch(
-         updateSingleGroup({ file: selectedFile, groupUpdateInfo: updateInfo })
+         updateSingleGroup({
+            file: selectedFile,
+            image,
+            groupUpdateInfo: updateInfo,
+         })
       )
          .unwrap()
          .then(() => {
             showSuccessMessage('Изменения успешно сохранены')
+            dispatch(groupsPagination(props.page))
+
             onClear()
+            setDateValue(null)
+            setFile(null)
             props.setOpenEditGroupModal(false)
          })
          .catch(() => {
@@ -102,6 +119,7 @@ const GroupEdit = (props) => {
             </div>
             <div>
                <Button
+                  disabled={!formIsValid}
                   onClick={saveEditGroupHandler}
                   background="#3772FF"
                   bgHover="#1D60FF"

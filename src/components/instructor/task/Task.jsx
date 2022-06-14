@@ -18,9 +18,9 @@ import {
    LINK,
    TEXT,
 } from '../../../utils/constants/general'
-import { taskActions, uploadFile } from '../../../store/task-slice'
+import { taskActions, uploadFile } from '../../../store/INSTRUCTOR/task-slice'
 import { localStorageHelper } from '../../../utils/helpers/general'
-import { getCourse } from '../../../store/materials-slice'
+import { getCourse } from '../../../store/INSTRUCTOR/materials-slice'
 import { TaskCreatorOptions } from './TaskCreatorOptions'
 import { Spinner } from '../../UI/Spinner/Spinner'
 

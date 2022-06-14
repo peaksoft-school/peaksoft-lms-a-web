@@ -6,7 +6,7 @@ import { Editable, Slate, withReact } from 'slate-react'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as IconText } from '../../../../assets/icons/text.svg'
 import { Toolbar } from './Toolbar'
-import { taskActions } from '../../../../store/task-slice'
+import { taskActions } from '../../../../store/INSTRUCTOR/task-slice'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
 import {
    LIST_ITEM,

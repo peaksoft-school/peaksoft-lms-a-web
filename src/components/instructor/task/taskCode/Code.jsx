@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as CodeIcon } from '../../../../assets/icons/code.svg'
-import { taskActions } from '../../../../store/task-slice'
+import { taskActions } from '../../../../store/INSTRUCTOR/task-slice'
 import { ReactComponent as RemoveIcon } from '../../../../assets/icons/deleteIcon.svg'
 
 export const Code = ({ code }) => {

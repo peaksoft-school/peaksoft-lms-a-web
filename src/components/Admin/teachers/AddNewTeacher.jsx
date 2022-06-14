@@ -123,7 +123,7 @@ const StyledButton = styled.div`
    justify-content: end;
    width: 100%;
    padding: 0;
-   margin-top: 10px;
+   margin-top: 20px;
 `
 const StyledInput = styled(Input)`
    margin: 5px;
