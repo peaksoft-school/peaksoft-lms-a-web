@@ -15,8 +15,8 @@ import {
    getLessonTask,
    taskActions,
    uploadFile,
-} from '../../../store/task-slice'
-import { getCourse } from '../../../store/materials-slice'
+} from '../../../store/INSTRUCTOR/task-slice'
+import { getCourse } from '../../../store/INSTRUCTOR/materials-slice'
 import { TaskCreatorOptions } from './TaskCreatorOptions'
 import { Spinner } from '../../UI/Spinner/Spinner'
 

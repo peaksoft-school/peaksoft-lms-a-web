@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useInput } from '../../../hooks/useInput/useInput'
 import { getAllCourses, onEditCourse } from '../../../store/courses-slice'
@@ -25,15 +25,24 @@ export const EditCourse = ({
    const [dateValue, setDateValue] = useState(dateOfStart)
    const [file, setFile] = useState(image)
    const [selectedFile, setSelectedFile] = useState(null)
-
-   const dateChangehandler = (newValue) => {
-      setDateValue(newValue)
-   }
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
       courseName: courseName || '',
       description: description || '',
    })
+   useEffect(() => {
+      setFormIsValid(
+         file !== null &&
+            value.courseName.length > 0 &&
+            dateValue !== null &&
+            value.description.length > 0
+      )
+   }, [value, file, dateValue])
+
+   const dateChangehandler = (newValue) => {
+      setDateValue(newValue)
+   }
 
    const onDrop = useCallback((acceptedFiles) => {
       setSelectedFile(acceptedFiles[0])
@@ -109,6 +118,7 @@ export const EditCourse = ({
                </div>
                <div>
                   <Button
+                     disabled={!formIsValid}
                      onClick={onEdit}
                      background="#3772FF"
                      bgHover="#1D60FF"

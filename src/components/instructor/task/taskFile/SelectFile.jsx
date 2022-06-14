@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
 import { ReactComponent as FileIcon } from '../../../../assets/icons/Frame.svg'
-import { taskActions } from '../../../../store/task-slice'
+import { taskActions } from '../../../../store/INSTRUCTOR/task-slice'
 import { FILE } from '../../../../utils/constants/general'
 import { StyledTooltip } from '../../../UI/tooltip/StyledTooltip'
 

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { taskActions } from '../../../../store/task-slice'
+import { taskActions } from '../../../../store/INSTRUCTOR/task-slice'
 import { Button } from '../../../UI/button/Button'
 
 export const Image = ({ image }) => {

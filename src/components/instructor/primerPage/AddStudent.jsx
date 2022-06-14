@@ -5,7 +5,7 @@ import { BasicModal } from '../../UI/modal/BasicModal'
 import { ReactComponent as Search } from '../../../assets/icons/search.svg'
 import { Button } from '../../UI/button/Button'
 import { useDebounce } from '../../../hooks/useDebounce/useDebounce'
-import { searchStudentsByName } from '../../../store/instructor-courses'
+import { searchStudentsByName } from '../../../store/INSTRUCTOR/instructor-courses'
 
 export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const dispatch = useDispatch()

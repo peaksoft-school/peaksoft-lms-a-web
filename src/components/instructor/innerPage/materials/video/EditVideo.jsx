@@ -2,7 +2,10 @@ import styled from '@emotion/styled'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useInput } from '../../../../../hooks/useInput/useInput'
-import { editVideo, getSingleVideo } from '../../../../../store/video-slice'
+import {
+   editVideo,
+   getSingleVideo,
+} from '../../../../../store/INSTRUCTOR/video-slice'
 import { Button } from '../../../../UI/button/Button'
 import { Input } from '../../../../UI/input/Input'
 import { BasicModal } from '../../../../UI/modal/BasicModal'

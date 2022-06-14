@@ -7,7 +7,7 @@ import {
    getInstructorTests,
    getLesson,
    getSingleCourse,
-} from '../../../../../store/instructor-tests-slice'
+} from '../../../../../store/INSTRUCTOR/instructor-tests-slice'
 import { TEST_INFO } from '../../../../../utils/constants/general'
 import { BreadCrumbs } from '../../../../UI/breadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'

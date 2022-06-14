@@ -6,8 +6,8 @@ import {
    showErrorMessage,
    showSuccessMessage,
 } from '../../UI/notification/Notification'
-import { deleteLessonTask } from '../../../store/task-slice'
-import { getLessons } from '../../../store/materials-slice'
+import { deleteLessonTask } from '../../../store/INSTRUCTOR/task-slice'
+import { getLessons } from '../../../store/INSTRUCTOR/materials-slice'
 
 export const ConfirmationModal = ({ showModal, onClose, id }) => {
    const dispatch = useDispatch()

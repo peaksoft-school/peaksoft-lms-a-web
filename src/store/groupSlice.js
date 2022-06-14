@@ -86,7 +86,7 @@ export const updateSingleGroup = createAsyncThunk(
             })
             const data = await fileResponse.url.toString()
 
-            const response = await baseFetch({
+            await baseFetch({
                path: `api/groups/${groupUpdateInfo.id}`,
                method: 'PUT',
                body: { ...groupUpdateInfo, image: data },

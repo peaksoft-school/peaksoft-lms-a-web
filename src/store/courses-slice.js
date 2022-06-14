@@ -52,7 +52,7 @@ export const onEditCourse = createAsyncThunk(
                body: formData,
             })
             const data = await res.url.toString()
-            const response = await baseFetch({
+            await baseFetch({
                path: `api/courses/${course.id}`,
                method: 'PUT',
                body: { ...course, image: data },

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { baseFetch } from '../api/baseFetch'
-import { fileFetch } from '../api/fileFetch'
+import { baseFetch } from '../../api/baseFetch'
+import { fileFetch } from '../../api/fileFetch'
 
 const initState = {
    isLoading: null,

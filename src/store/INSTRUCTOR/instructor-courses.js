@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { baseFetch } from '../api/baseFetch'
+import { baseFetch } from '../../api/baseFetch'
 
 const initialState = {
    courses: [],

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { format } from 'date-fns'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
@@ -21,11 +21,21 @@ const GroupEdit = (props) => {
    const [file, setFile] = useState(image)
    const [dateValue, setDateValue] = useState(dateOfStart)
    const [selectedFile, setSelectedFile] = useState(null)
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
       groupName: groupName || '',
       description: description || '',
    })
+
+   useEffect(() => {
+      setFormIsValid(
+         file !== null &&
+            value.groupName.length > 0 &&
+            dateValue !== null &&
+            value.description.length > 0
+      )
+   }, [value, file, dateValue])
 
    const dateChangehandler = (newValue) => {
       setDateValue(newValue)
@@ -109,6 +119,7 @@ const GroupEdit = (props) => {
             </div>
             <div>
                <Button
+                  disabled={!formIsValid}
                   onClick={saveEditGroupHandler}
                   background="#3772FF"
                   bgHover="#1D60FF"

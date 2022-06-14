@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { baseFetch } from '../api/baseFetch'
-import { fileFetch } from '../api/fileFetch'
+import { baseFetch } from '../../api/baseFetch'
+import { fileFetch } from '../../api/fileFetch'
 import {
    showErrorMessage,
    showSuccessMessage,
-} from '../components/UI/notification/Notification'
-import { FILE, IMAGE, LESSON_TASK } from '../utils/constants/general'
-import { localStorageHelper } from '../utils/helpers/general'
+} from '../../components/UI/notification/Notification'
+import { FILE, IMAGE, LESSON_TASK } from '../../utils/constants/general'
+import { localStorageHelper } from '../../utils/helpers/general'
 
 export const uploadFile = createAsyncThunk(
    'task/uploadFile',
