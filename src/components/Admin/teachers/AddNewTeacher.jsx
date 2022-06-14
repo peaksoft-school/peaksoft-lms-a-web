@@ -5,7 +5,7 @@ import { Input } from '../../UI/input/Input'
 import { MaskedInput } from '../../UI/input/MaskedInput'
 import { BasicModal } from '../../UI/modal/BasicModal'
 import { ReactComponent as AddIcon } from '../../../assets/icons/AddIcon.svg'
-import { useInput } from '../../../hooks/usuInput/useInput'
+import { useInput } from '../../../hooks/useInput/useInput'
 
 export const AddNewTeacher = ({ onAdd, showModal, onClose, addHandler }) => {
    const { value, onChange, onClear } = useInput({
@@ -123,7 +123,7 @@ const StyledButton = styled.div`
    justify-content: end;
    width: 100%;
    padding: 0;
-   margin-top: 10px;
+   margin-top: 20px;
 `
 const StyledInput = styled(Input)`
    margin: 5px;

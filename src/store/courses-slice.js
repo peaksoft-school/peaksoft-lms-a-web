@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
+import { showErrorMessage } from '../components/UI/notification/Notification'
 
 const initState = {
    courses: [],
@@ -9,15 +10,12 @@ const initState = {
    pages: null,
    presentPage: null,
    isLoading: null,
-   isModalOpen: false,
-   errorMessage: null,
-   successMessage: null,
    courseTeachers: [],
 }
 
 export const addNewCourse = createAsyncThunk(
    'courses/addNewCourse',
-   async ({ file, courseData, currentPage }, { rejectWithValue, dispatch }) => {
+   async ({ file, courseData }, { rejectWithValue }) => {
       try {
          const formData = new FormData()
          formData.append('file', file)
@@ -33,13 +31,8 @@ export const addNewCourse = createAsyncThunk(
             method: 'POST',
             body: { ...courseData, image: data },
          })
-         dispatch(getAllCourses(currentPage))
-         dispatch(coursesActions.showSuccessMessage('Курс успешно создан'))
-         dispatch(coursesActions.openModal(true))
          return response
       } catch (error) {
-         dispatch(coursesActions.showErrorMessage('Не удалось создать курс'))
-         dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
       }
    }
@@ -47,31 +40,33 @@ export const addNewCourse = createAsyncThunk(
 
 export const onEditCourse = createAsyncThunk(
    'courses/editCourse',
-   async ({ file, course, currentPage }, { rejectWithValue, dispatch }) => {
+   async ({ file, course, image }, { rejectWithValue }) => {
       try {
-         const formData = new FormData()
-         formData.append('file', file)
+         if (file) {
+            const formData = new FormData()
+            formData.append('file', file)
 
-         const res = await fileFetch({
-            path: 'api/file',
-            method: 'POST',
-            body: formData,
-         })
-         const data = await res.url.toString()
-         const response = await baseFetch({
-            path: `api/courses/${course.id}`,
-            method: 'PUT',
-            body: { ...course, image: data },
-         })
-         dispatch(getAllCourses(currentPage))
-         dispatch(
-            coursesActions.showSuccessMessage('Изменения успешно сохранены')
-         )
-         dispatch(coursesActions.openModal(true))
-         return response
+            const res = await fileFetch({
+               path: 'api/file',
+               method: 'POST',
+               body: formData,
+            })
+            const data = await res.url.toString()
+            await baseFetch({
+               path: `api/courses/${course.id}`,
+               method: 'PUT',
+               body: { ...course, image: data },
+            })
+         } else {
+            const response = await baseFetch({
+               path: `api/courses/${course.id}`,
+               method: 'PUT',
+               body: { ...course, image },
+            })
+            return response
+         }
+         return file
       } catch (error) {
-         dispatch(coursesActions.showErrorMessage('Не удалось изменить данные'))
-         dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
       }
    }
@@ -79,17 +74,14 @@ export const onEditCourse = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
    'courses/deleteCourse',
-   async ({ id, currentPage }, { rejectWithValue, dispatch }) => {
+   async ({ id }, { rejectWithValue }) => {
       try {
          const response = await baseFetch({
             path: `api/courses/${id}`,
             method: 'DELETE',
          })
-         dispatch(getAllCourses(currentPage))
-         dispatch(coursesActions.showSuccessMessage('Вы удалили курс'))
          return response
       } catch (error) {
-         dispatch(coursesActions.showErrorMessage('Не удалось удалить курс'))
          return rejectWithValue(error.message)
       }
    }
@@ -124,10 +116,9 @@ export const assignTeacherToCourse = createAsyncThunk(
                instructorsId: instructorId,
             },
          })
-         dispatch(coursesActions.openModal(true))
+         dispatch(getAllCourses(1))
          return response
       } catch (error) {
-         dispatch(coursesActions.openModal(false))
          return rejectWithValue(error.message)
       }
    }
@@ -164,9 +155,7 @@ export const getAllCourses = createAsyncThunk(
          dispatch(coursesActions.getAllCourses(response))
          return response
       } catch (error) {
-         coursesActions.showErrorMessage(
-            'Что-то пошло не так, попробуйте еще раз'
-         )
+         showErrorMessage('Что-то пошло не так, попробуйте еще раз')
          return rejectWithValue(error.message)
       }
    }
@@ -177,7 +166,7 @@ export const getCourseTeachers = createAsyncThunk(
    async (id, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: `api/courses/teachers/${id}`,
+            path: `api/courses/instructors/${id}`,
             method: 'GET',
          })
          dispatch(coursesActions.getCourseTeachers(response))
@@ -214,44 +203,14 @@ export const coursesSlice = createSlice({
       clearCourses(state) {
          state.сourse = null
       },
-      showSuccessMessage(state, action) {
-         state.successMessage = action.payload
-      },
-      showErrorMessage(state, action) {
-         state.errorMessage = action.payload
-      },
-      openModal(state, action) {
-         state.isModalOpen = action.payload
-      },
       getCourseTeachers(state, action) {
          state.courseTeachers = action.payload
       },
    },
    extraReducers: {
-      [addNewCourse.pending]: setPending,
-      [addNewCourse.fulfilled]: setIsLoading,
-      [addNewCourse.rejected]: setIsLoading,
       [getAllCourses.pending]: setPending,
       [getAllCourses.fulfilled]: setIsLoading,
       [getAllCourses.rejected]: setIsLoading,
-      [getSingleCourse.pending]: setPending,
-      [getSingleCourse.fulfilled]: setIsLoading,
-      [getSingleCourse.rejected]: setIsLoading,
-      [deleteCourse.pending]: setPending,
-      [deleteCourse.fulfilled]: setIsLoading,
-      [deleteCourse.rejected]: setIsLoading,
-      [onEditCourse.pending]: setPending,
-      [onEditCourse.fulfilled]: setIsLoading,
-      [onEditCourse.rejected]: setIsLoading,
-      [getInstructor.pending]: setPending,
-      [getInstructor.fulfilled]: setIsLoading,
-      [getInstructor.rejected]: setIsLoading,
-      [assignTeacherToCourse.pending]: setPending,
-      [assignTeacherToCourse.fulfilled]: setIsLoading,
-      [assignTeacherToCourse.rejected]: setIsLoading,
-      [getCourseTeachers.pending]: setPending,
-      [getCourseTeachers.fulfilled]: setIsLoading,
-      [getCourseTeachers.rejected]: setIsLoading,
    },
 })
 

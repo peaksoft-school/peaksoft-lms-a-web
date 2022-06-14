@@ -43,6 +43,7 @@ export const GroupsPanel = () => {
          ),
       },
    ])
+
    const groups = useSelector((state) => state.groups.newGroupData)
 
    const { singleGroup, allPages, isLoading } = useSelector(
@@ -135,12 +136,14 @@ export const GroupsPanel = () => {
 }
 
 const CardContentStyleControl = styled.div`
-   margin-top: 30px;
+   cursor: pointer;
+   flex-wrap: wrap;
+   grid-row: 30px;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
-   grid-column-gap: 20px;
-   grid-row-gap: 20px;
-   margin-bottom: 10px;
+   grid-template-rows: repeat(2, 1fr);
+   grid-column-gap: 30px;
+   grid-row-gap: 30px;
 `
 const Container = styled.div`
    width: 180px;
@@ -158,7 +161,6 @@ const PaginationStyleControl = styled.div`
    margin-top: 20px;
 `
 const StyledContainer = styled.div`
-   margin-top: 20px;
-   height: 880px;
+   height: 820px;
    position: relative;
 `

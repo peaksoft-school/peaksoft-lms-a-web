@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -21,7 +21,7 @@ import {
    getSingleCourse,
    getStudents,
    getStudentsByCourse,
-} from '../../../../store/instructor-courses'
+} from '../../../../store/INSTRUCTOR/instructor-courses'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
@@ -32,7 +32,6 @@ export const Students = () => {
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
-   console.log(newStudentsOfCourse)
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
@@ -41,7 +40,6 @@ export const Students = () => {
    const handleClose = () => {
       setSearchParams(false)
    }
-
    const addStudentHandler = (studentId) => {
       dispatch(addStudentToCourse({ studentId, id }))
          .unwrap()

@@ -11,6 +11,7 @@ import {
    ADD_PRESENTATION,
    ADD_VIDEO,
    DELETE_LESSON,
+   DELETE_TASK,
    DELETE_TEST,
    TEST_KEY,
    DELETE_PRESENTATION,
@@ -29,7 +30,7 @@ import {
    getCourse,
    getLesson,
    getLessons,
-} from '../../../../store/materials-slice'
+} from '../../../../store/INSTRUCTOR/materials-slice'
 import {
    showErrorMessage,
    showSuccessMessage,
@@ -38,15 +39,20 @@ import { Spinner } from '../../../UI/Spinner/Spinner'
 import { LessonEditModal } from './MaterialsEditModal'
 import { ConfirmModalOnDelete } from './ConfirmModalOnDelete'
 import { LessonCard } from '../../../UI/lessonCard/LessonCard'
-import { getTest, removeTest } from '../../../../store/create-test-slice'
-import { ConfirmModalOnDeleteTest } from './ConfirmModalOnDeleteTest'
+import { getLessonTask } from '../../../../store/INSTRUCTOR/task-slice'
 import { localStorageHelper } from '../../../../utils/helpers/general'
+import { ConfirmationModal } from '../../task/ConfirmationModal'
+import {
+   getTest,
+   removeTest,
+} from '../../../../store/INSTRUCTOR/create-test-slice'
+import { ConfirmModalOnDeleteTest } from './ConfirmModalOnDeleteTest'
 import {
    addPresentation,
    deletePresentation,
    editPresentation,
    getPresentation,
-} from '../../../../store/presentation-slice'
+} from '../../../../store/INSTRUCTOR/presentation-slice'
 import { ConfirmModalOnDeletePresentation } from './ConfirmModalOnDeletePresentation'
 import { getSingleLink } from '../../../../store/INSTRUCTOR/linkSlice'
 import { LinkDeleteConfirm } from './link/LinkDeleteConfirm'
@@ -54,7 +60,7 @@ import { PresentationForm } from '../../lesson/presentation/PresentationForm'
 import { LessonVideo } from './video/LessonVideo'
 import { AddLinkModal } from './link/AddLinkModal'
 import { LinkEdit } from './link/LinkEdit'
-import { getSingleVideo } from '../../../../store/video-slice'
+import { getSingleVideo } from '../../../../store/INSTRUCTOR/video-slice'
 import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
 import { EditVideo } from './video/EditVideo'
 
@@ -81,14 +87,13 @@ export const Materials = () => {
    const showAddLinkModal = searchParams.get(ADD_LINK_MODAL)
    const showEditLinkModal = searchParams.get(EDIT_LINK)
    const showDeleteLinkConfirmationModal = searchParams.get(DELETE_LINK)
+   const showTaskConfirmationModal = searchParams.get(DELETE_TASK)
    const showVideoModal = searchParams.get(ADD_VIDEO)
    const showVideoConfirmModal = searchParams.get(DELETE_VIDEO)
    const showVideoEditModal = searchParams.get(EDIT_VIDEO)
 
    const [deletedLessonId, setDeletedLessonId] = useState(null)
-   const [deletedTestId, setDeletedTestId] = useState(null)
    const [materialId, setMaterialId] = useState(null)
-   const [deletedPresentationId, setDeletedPresentationId] = useState(null)
 
    const addLessonMaterials = (option) => {
       if (option.id === 'video') {
@@ -106,6 +111,19 @@ export const Materials = () => {
             lessonId: option.lessonId,
          })
       }
+      if (option.id === 'task') {
+         navigate(`create_task/${option.lessonId}`)
+      }
+   }
+
+   const editTask = (id) => {
+      navigate(`edit_task/${id}`)
+      dispatch(getLessonTask(id))
+   }
+
+   const deleteTask = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_TASK]: true })
    }
 
    const editVideo = (id) => {
@@ -147,7 +165,7 @@ export const Materials = () => {
    }
 
    const deleteTest = (id) => {
-      setDeletedTestId(id)
+      setMaterialId(id)
       setSearchParams({ [DELETE_TEST]: true })
    }
 
@@ -162,7 +180,7 @@ export const Materials = () => {
    }
 
    const deletePresentationModal = (id) => {
-      setDeletedPresentationId(id)
+      setMaterialId(id)
       setSearchParams({ [DELETE_PRESENTATION]: true })
    }
    const openTestInnerPage = (lessonId, testId) => {
@@ -211,7 +229,7 @@ export const Materials = () => {
    }
 
    const deleteTestHandler = () => {
-      dispatch(removeTest(deletedTestId))
+      dispatch(removeTest(materialId))
          .unwrap()
          .then(() => {
             showSuccessMessage('Тест успешно удален')
@@ -257,10 +275,10 @@ export const Materials = () => {
    }
 
    const deletePresentationHandler = () => {
-      dispatch(deletePresentation(deletedPresentationId))
+      dispatch(deletePresentation(materialId))
          .unwrap()
          .then(() => {
-            showSuccessMessage('Презентация успешно удален')
+            showSuccessMessage('Презентация  успешно удален')
             closeModals()
             dispatch(getLessons())
          })
@@ -334,6 +352,9 @@ export const Materials = () => {
                      lessonId={lesson.id}
                      title={lesson.lessonName}
                      key={lesson.id}
+                     onEditTask={editTask}
+                     onDeleteTask={deleteTask}
+                     task={lesson.taskResponse}
                      onEditTest={editTestHandler}
                      onDeleteTest={deleteTest}
                      presentation={lesson.presentationResponse}
@@ -371,6 +392,11 @@ export const Materials = () => {
             showModal={showDeleteLessonConfirmModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+         />
+         <ConfirmationModal
+            showModal={showTaskConfirmationModal}
+            onClose={closeModals}
+            id={materialId}
          />
          <ConfirmModalOnDeleteTest
             showModal={showDeleteTestConfirmModal}

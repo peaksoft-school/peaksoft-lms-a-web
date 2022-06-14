@@ -1,26 +1,30 @@
+import styled from '@emotion/styled/macro'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { baseFetch } from '../../../../api/baseFetch'
 import { BreadCrumbs } from '../../../../components/UI/BreadCrumb/BreadCrumbs'
 import { showErrorMessage } from '../../../../components/UI/notification/Notification'
 import { AppTable } from '../../../../components/UI/table/AppTable'
+import { getSingleCourse } from '../../../../store/courses-slice'
 import { COURSE_STUDENTS } from '../../../../utils/constants/general'
-import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseStudents = () => {
-   const params = useParams()
+   const { id } = useParams()
+   const dispatch = useDispatch()
+   const { сourse } = useSelector((state) => state.courses)
 
    const [students, setStudents] = useState([])
 
-   const course = localStorageHelper.laod('course')
    useEffect(() => {
       getCourseStudents()
+      dispatch(getSingleCourse(id))
    }, [])
 
    const getCourseStudents = async () => {
       try {
          const response = await baseFetch({
-            path: `api/courses/students/${params.id}`,
+            path: `api/courses/students/${id}`,
             method: 'GET',
          })
          setStudents(response)
@@ -36,7 +40,7 @@ export const CourseStudents = () => {
       },
       {
          path: 'courses',
-         name: course,
+         name: сourse?.courseName,
       },
       {
          path: '/instructors',
@@ -45,9 +49,12 @@ export const CourseStudents = () => {
    ]
 
    return (
-      <div>
+      <Container>
          <BreadCrumbs pathsArray={pathsArray} />
          <AppTable columns={COURSE_STUDENTS} data={students} />
-      </div>
+      </Container>
    )
 }
+const Container = styled.div`
+   margin-top: -18px;
+`

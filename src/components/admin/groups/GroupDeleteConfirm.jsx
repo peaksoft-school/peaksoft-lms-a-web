@@ -7,6 +7,7 @@ const GroupDeleteConfirm = (props) => {
       <ConfirmModal
          title="Вы уверены, что хотите удалить группу ... ?"
          isConfirmModalOpen={props.isModalOpen}
+         closeConfirmModal={() => props.setIsModalOpen(false)}
       >
          <Button
             onClick={() => props.setIsModalOpen(false)}

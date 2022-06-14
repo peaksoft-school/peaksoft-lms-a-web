@@ -14,7 +14,7 @@ import {
    getGroupOfStudents,
    getStudents,
    getStudentsByCourse,
-} from '../../../store/instructor-courses'
+} from '../../../store/INSTRUCTOR/instructor-courses'
 import { AddStudent } from './AddStudent'
 import { AddStudentsOfGroup } from './AddStudentsOfGroup'
 import {

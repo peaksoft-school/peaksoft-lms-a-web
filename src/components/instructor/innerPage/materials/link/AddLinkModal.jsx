@@ -11,7 +11,7 @@ import {
    showErrorMessage,
    showSuccessMessage,
 } from '../../../../UI/notification/Notification'
-import { useInput } from '../../../../../hooks/usuInput/useInput'
+import { useInput } from '../../../../../hooks/useInput/useInput'
 import { ADD_LINK_MODAL } from '../../../../../utils/constants/general'
 
 export const AddLinkModal = ({ closeModals, isModalOpen }) => {

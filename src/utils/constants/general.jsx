@@ -2,6 +2,12 @@ import { ReactComponent as GroupsIcon } from '../../assets/icons/group.svg'
 import { ReactComponent as CoursesIcon } from '../../assets/icons/courses.svg'
 import { ReactComponent as TeachersIcon } from '../../assets/icons/teacher.svg'
 import { ReactComponent as StudentsIcon } from '../../assets/icons/students.svg'
+import { ReactComponent as TextIcon } from '../../assets/icons/simpleText.svg'
+import { ReactComponent as ItalicIcon } from '../../assets/icons/italic.svg'
+import { ReactComponent as UnderlineIcon } from '../../assets/icons/underline.svg'
+import { ReactComponent as BoldIcon } from '../../assets/icons/bold.svg'
+import { ReactComponent as UlIcon } from '../../assets/icons/ulList.svg'
+import { ReactComponent as OlIcon } from '../../assets/icons/olList.svg'
 
 export const BASE_URL =
    'http://peaksoftlmsab4-env.eba-azvcpcga.eu-west-2.elasticbeanstalk.com'
@@ -59,6 +65,7 @@ export const STUDENTTABS = [
 ]
 
 export const AUTH_KEY = '@peaksoft-lms-a-auth-info'
+export const LESSON_TASK = '@peaksoft-lms-lesson_task'
 export const TEST_KEY = '@peaksoft-lms-a-test-info'
 
 export const DELETE_COURSE = 'delete_course'
@@ -76,6 +83,7 @@ export const ADD_COURSES = 'add_courses'
 export const ADD_LESSON = 'create_lesson'
 export const EDIT_LESSON = 'edit_lesson'
 export const DELETE_LESSON = 'delete-lesson-confirmation'
+export const DELETE_TASK = 'delete_task'
 export const DELETE_TEST = 'dlete-test-confirmation'
 export const ADD_PRESENTATION = 'add-presentation'
 export const EDIT_PRESENTATION = 'edit-presentation'
@@ -214,4 +222,63 @@ export const STUDENTS_INFO = [
    { title: 'Формат обучения', accessKey: 'studyFormat', id: 'four' },
    { title: 'Номер телефона', accessKey: 'phoneNumber', id: 'five' },
    { title: 'E-mail', accessKey: 'email', id: 'six' },
+]
+
+export const TEXT = 'TEXT'
+export const FILE = 'FILE'
+export const IMAGE = 'IMAGE'
+export const LINK = 'LINK'
+export const CODE = 'CODE'
+
+export const LIST_ITEM = 'list-item'
+export const ORDERED_LIST = 'orderedList'
+export const UNORDERED_LIST = 'unorderedList'
+export const MARK = 'mark'
+export const BLOCK = 'block'
+export const PARAGRAPH = ' paragraph'
+
+export const TOOLBAR = [
+   {
+      id: 2,
+      format: 'heading',
+      type: 'mark',
+      icon: <TextIcon />,
+      title: 'Заголовок',
+   },
+   {
+      id: 3,
+      format: 'bold',
+      type: 'mark',
+      icon: <BoldIcon />,
+      title: 'Жирный текст',
+   },
+   {
+      id: 4,
+      format: 'italic',
+      type: 'mark',
+      icon: <ItalicIcon />,
+      title: 'Курсив',
+   },
+   {
+      id: 5,
+      format: 'underline',
+      type: 'mark',
+      icon: <UnderlineIcon />,
+      title: 'Подчеркнутый текст',
+   },
+
+   {
+      id: 15,
+      format: ORDERED_LIST,
+      type: 'block',
+      icon: <OlIcon />,
+      title: 'Нумерованный список',
+   },
+   {
+      id: 16,
+      format: UNORDERED_LIST,
+      type: 'block',
+      icon: <UlIcon />,
+      title: 'Маркированный список',
+   },
 ]

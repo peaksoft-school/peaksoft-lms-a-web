@@ -54,15 +54,18 @@
             }
          }
       ],
-
       "no-param-reassign": [
          "error",
-         { "props": false, "ignorePropertyModificationsFor": ["state"] }
+         {
+            "props": true,
+            "ignorePropertyModificationsFor": ["state", "children"]
+         }
       ],
       "react/destructuring-assignment": "off",
       "no-unused-vars": "warn",
       "react/no-unstable-nested-components": "off",
       "import/no-cycle": "off",
-      "eqeqeq": "off"
+      "eqeqeq": "off",
+      "no-nested-ternary": "off"
    }
 }

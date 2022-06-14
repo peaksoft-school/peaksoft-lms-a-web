@@ -6,7 +6,7 @@ import { ReactComponent as Clone } from '../../../../assets/icons/clone.svg'
 import { ReactComponent as Delete } from '../../../../assets/icons/Delete.svg'
 import { SingleChoice } from './SingleChoice'
 import { MultipleChoice } from './MultipleChoice'
-import { testActions } from '../../../../store/create-test-slice'
+import { testActions } from '../../../../store/INSTRUCTOR/create-test-slice'
 
 export const TestQuestion = () => {
    const dispatch = useDispatch()
