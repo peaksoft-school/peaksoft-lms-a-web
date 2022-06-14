@@ -9,9 +9,11 @@ import { ADD_GROUP, ADD_STUDENT } from '../../../utils/constants/general'
 import {
    addGroupToCourse,
    addStudentToCourse,
+   filteredGroup,
    getCoursesOfInstructor,
    getGroupOfStudents,
    getStudents,
+   getStudentsByCourse,
 } from '../../../store/instructor-courses'
 import { AddStudent } from './AddStudent'
 import { AddStudentsOfGroup } from './AddStudentsOfGroup'
@@ -51,7 +53,6 @@ export const InstrutorCourses = () => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
          })
          .catch(() => {
             showErrorMessage('Не удалось добавить студента')
@@ -62,8 +63,9 @@ export const InstrutorCourses = () => {
       setSearchParams({
          [ADD_STUDENT]: true,
       })
-      dispatch(getStudents())
       setCourseId(id)
+      dispatch(getStudents())
+      dispatch(getStudentsByCourse(id))
    }
    const openAddGroupModal = (id) => {
       setSearchParams({
@@ -71,6 +73,7 @@ export const InstrutorCourses = () => {
       })
       dispatch(getGroupOfStudents())
       setCourseId(id)
+      dispatch(filteredGroup({ id }))
    }
 
    const options = useMemo(
@@ -116,7 +119,6 @@ export const InstrutorCourses = () => {
    useEffect(() => {
       dispatch(getCoursesOfInstructor())
       dispatch(getGroupOfStudents())
-      dispatch(getStudents())
    }, [])
 
    return (

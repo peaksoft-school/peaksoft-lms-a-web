@@ -22,7 +22,7 @@ import {
    getStudents,
    getStudentsByCourse,
 } from '../../../../store/instructor-courses'
-import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
 import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'
@@ -32,7 +32,7 @@ export const Students = () => {
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
-
+   console.log(newStudentsOfCourse)
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
@@ -47,7 +47,6 @@ export const Students = () => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
             dispatch(getStudentsByCourse(id))
          })
          .catch(() => {
@@ -80,14 +79,11 @@ export const Students = () => {
       dispatch(getGroupOfStudents())
    }
 
-   const breadcrumbs = useMemo(
-      () => [
-         { path: 'instructor/instructor_course', name: 'Курсы' },
-         { path: 'instructor/students', name: singleCourse?.courseName },
-         { path: 'instructor/instructor_course', name: 'Студенты' },
-      ],
-      []
-   )
+   const breadcrumbs = [
+      { path: 'instructor/instructor_course', name: 'Курсы' },
+      { path: 'instructor/students', name: singleCourse?.courseName },
+      { path: 'instructor/instructor_course', name: 'Студенты' },
+   ]
 
    const filteredStudents = students.filter(
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
