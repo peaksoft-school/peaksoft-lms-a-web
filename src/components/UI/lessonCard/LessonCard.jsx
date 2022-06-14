@@ -31,6 +31,8 @@ export const LessonCard = ({
    onEditVideo,
    onDeleteVideo,
    openVideoInnerPage,
+   openPresentationInnerPage,
+   path,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -118,7 +120,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <PresentationIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv
+                  onClick={() => openPresentationInnerPage(presentation?.id)}
+               >
                   <h2>Презентация</h2>
                </StyledDiv>
                <ActionsContainer id="actions">

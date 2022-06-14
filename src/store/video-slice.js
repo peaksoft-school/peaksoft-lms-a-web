@@ -64,27 +64,10 @@ export const editVideo = createAsyncThunk(
       }
    }
 )
-export const getVideoByLessonId = createAsyncThunk(
-   'videos/getVideoByLessonId',
-   async (id, { rejectWithValue, dispatch }) => {
-      try {
-         const response = await baseFetch({
-            path: `api/videos/videoLesson/${id}`,
-            method: 'GET',
-         })
-         dispatch(videoActions.getVideoOfLesson(response))
-         console.log(response)
-         return response
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-   }
-)
 
 const initState = {
    singleVideo: null,
    isLoading: false,
-   oneLessonsVideo: [],
 }
 export const videoSlice = createSlice({
    name: 'videos',
@@ -92,9 +75,6 @@ export const videoSlice = createSlice({
    reducers: {
       setVideo: (state, action) => {
          state.singleVideo = action.payload
-      },
-      getVideoOfLesson: (state, action) => {
-         state.oneLessonsVideo = action.payload
       },
    },
    extraReducers: {

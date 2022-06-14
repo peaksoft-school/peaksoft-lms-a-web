@@ -4,7 +4,7 @@ import { fileFetch } from '../api/fileFetch'
 
 const initState = {
    isLoading: null,
-   presentation: null,
+   singlePresentation: null,
 }
 
 export const addPresentation = createAsyncThunk(
@@ -106,7 +106,7 @@ export const presentationSlice = createSlice({
    initialState: initState,
    reducers: {
       getPresentation(state, action) {
-         state.presentation = action.payload
+         state.singlePresentation = action.payload
       },
    },
    extraReducers: {

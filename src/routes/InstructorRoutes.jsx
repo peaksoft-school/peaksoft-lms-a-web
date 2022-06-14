@@ -8,6 +8,7 @@ import { Students } from '../components/instructor/innerPage/students/Students'
 import { LessonVideo } from '../components/instructor/innerPage/materials/video/LessonVideo'
 import { VideoInnerPage } from '../components/instructor/innerPage/materials/video/VideoInnerPage'
 import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
+import PresentationInnerPage from '../components/instructor/lesson/presentation/PresentationInnerPage'
 
 export const InstructorRoutes = () => {
    return (
@@ -28,6 +29,10 @@ export const InstructorRoutes = () => {
             <Route
                path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/video/:videoId`}
                element={<VideoInnerPage />}
+            />
+            <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/presentation/:presentationId`}
+               element={<PresentationInnerPage />}
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_test/:lessonId`}

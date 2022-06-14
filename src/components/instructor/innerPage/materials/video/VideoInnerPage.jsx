@@ -1,27 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import ReactPlayer from 'react-player'
-
+import { getSingleVideo } from '../../../../../store/video-slice'
 import { Spinner } from '../../../../UI/Spinner/Spinner'
 
 export const VideoInnerPage = (props) => {
+   const dispatch = useDispatch()
    const { isLoading } = useSelector((state) => state.video)
 
-   const { videoName, description, videoLink } = useSelector(
-      (state) => state.video.singleVideo
-   )
-   console.log(videoName)
+   const { singleVideo } = useSelector((state) => state.video)
+   const { videoId } = useParams()
+
+   useEffect(() => {
+      if (videoId) {
+         dispatch(getSingleVideo(videoId))
+      }
+   }, [])
 
    return (
       <div>
          {(isLoading && <Spinner />) || (
             <VideoPresentationContainer>
                <div>
-                  <h2>{videoName}</h2>
+                  <h2>{singleVideo?.videoName}</h2>
                </div>
                <div>
-                  <p>{description}</p>
+                  <p>{singleVideo?.description}</p>
                </div>
 
                <div>
@@ -30,9 +36,8 @@ export const VideoInnerPage = (props) => {
                      height="464px"
                      border-radius="10px"
                      muted
-                     playing
                      controls
-                     url={videoLink}
+                     url={singleVideo?.videoLink}
                   />
                </div>
             </VideoPresentationContainer>
@@ -41,11 +46,11 @@ export const VideoInnerPage = (props) => {
    )
 }
 const VideoPresentationContainer = styled.div`
-   width: 1140px;
+   width: 100%;
    background-color: #ffffff;
    border-radius: 10px;
-   margin: 40px;
    padding: 30px;
+   margin-top: 24px;
    & p {
       padding: 20px;
       color: #000000;

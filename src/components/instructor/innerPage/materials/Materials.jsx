@@ -66,7 +66,8 @@ export const Materials = () => {
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
-   const { presentation } = useSelector((state) => state.presentation)
+   const { singlePresentation } = useSelector((state) => state.presentation)
+   const { singleVideo } = useSelector((state) => state.video)
 
    const [searchParams, setSearchParams] = useSearchParams()
 
@@ -176,8 +177,8 @@ export const Materials = () => {
       setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
    }
    const openVideoInnerPage = (videoId) => {
-      navigate(`video/${videoId}`)
       dispatch(getSingleVideo(videoId))
+      navigate(`video/${videoId}`)
    }
 
    // ------------LINK RELATED----------------------------
@@ -228,6 +229,9 @@ export const Materials = () => {
    }
 
    // --------------------PRESENTATION RELATED-----------------
+   const openPresentationInnerPage = (presentationId) => {
+      navigate(`presentation/${presentationId}`)
+   }
 
    const openPresentationEditModal = (id) => {
       dispatch(getPresentation(id))
@@ -363,6 +367,8 @@ export const Materials = () => {
                      onEditVideo={editVideo}
                      onDeleteVideo={deleteVideo}
                      openVideoInnerPage={openVideoInnerPage}
+                     openPresentationInnerPage={openPresentationInnerPage}
+                     // path={`video/${id}`}
                   />
                ))}
          </Container>
@@ -394,12 +400,12 @@ export const Materials = () => {
             onClose={closeModals}
             onAdd={addPresentationHandler}
          />
-         {presentation && (
+         {singlePresentation && (
             <PresentationForm
                showModal={showEditPresentationModal}
                onClose={closeModals}
                onEdit={senEditedPresentationHandler}
-               presentation={presentation}
+               presentation={singlePresentation}
             />
          )}
          <ConfirmModalOnDeletePresentation
