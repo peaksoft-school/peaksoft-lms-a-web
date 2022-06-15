@@ -12,6 +12,7 @@ import {
    getCoursesOfInstructor,
    getGroupOfStudents,
    getStudents,
+   getStudentsByCourse,
 } from '../../../store/INSTRUCTOR/instructor-courses'
 import { AddStudent } from './AddStudent'
 import { AddStudentsOfGroup } from './AddStudentsOfGroup'
@@ -50,8 +51,8 @@ export const InstrutorCourses = () => {
       dispatch(addStudentToCourse({ studentId, id: courseId }))
          .unwrap()
          .then(() => {
+            dispatch(getStudentsByCourse(courseId))
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
          })
          .catch(() => {
             showErrorMessage('Не удалось добавить студента')
@@ -63,6 +64,7 @@ export const InstrutorCourses = () => {
          [ADD_STUDENT]: true,
       })
       dispatch(getStudents())
+      dispatch(getStudentsByCourse(id))
       setCourseId(id)
    }
    const openAddGroupModal = (id) => {
@@ -103,10 +105,7 @@ export const InstrutorCourses = () => {
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const filteredGroups = groupOfStudents.filter(
-      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
-   )
-   const groups = filteredGroups.map((el) => {
+   const groups = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
@@ -116,7 +115,6 @@ export const InstrutorCourses = () => {
    useEffect(() => {
       dispatch(getCoursesOfInstructor())
       dispatch(getGroupOfStudents())
-      dispatch(getStudents())
    }, [])
 
    return (

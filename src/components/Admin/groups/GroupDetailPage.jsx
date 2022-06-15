@@ -8,7 +8,7 @@ import {
    getSingleGroup,
    groupsPagination,
 } from '../../../store/groupSlice'
-import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const GroupDetailPage = () => {

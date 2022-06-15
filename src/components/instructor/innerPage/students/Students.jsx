@@ -22,7 +22,7 @@ import {
    getStudents,
    getStudentsByCourse,
 } from '../../../../store/INSTRUCTOR/instructor-courses'
-import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
 import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'
@@ -89,10 +89,7 @@ export const Students = () => {
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const filteredGroups = groupOfStudents.filter(
-      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
-   )
-   const groups = filteredGroups.map((el) => {
+   const groups = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,

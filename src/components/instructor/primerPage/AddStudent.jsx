@@ -11,7 +11,7 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const dispatch = useDispatch()
    const [name, setName] = useState('')
 
-   const searchStudents = useDebounce(searchStudentsHandler, 600)
+   const debouncedName = useDebounce(name, 600)
 
    function searchStudentsHandler() {
       if (name !== '') {
@@ -19,9 +19,11 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
       }
    }
 
+   const scroll = students.length
+
    useEffect(() => {
-      searchStudents()
-   }, [searchStudents])
+      searchStudentsHandler()
+   }, [debouncedName])
 
    const addStudents = (id) => {
       onAdd(id)
@@ -42,18 +44,20 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
             />
          </StyledSearch>
          <StyledUl>
-            {students.map((el) => (
-               <li key={el.id}>
-                  <p>{el.fullName}</p>
-                  <Button
-                     color="#3772FF"
-                     background="none"
-                     onClick={() => addStudents(el.id)}
-                  >
-                     Добавить
-                  </Button>
-               </li>
-            ))}
+            <span className={scroll > 4 ? 'scroll' : ''}>
+               {students.map((el) => (
+                  <li key={el.id}>
+                     <p>{el.fullName}</p>
+                     <Button
+                        color="#3772FF"
+                        background="none"
+                        onClick={() => addStudents(el.id)}
+                     >
+                        Добавить
+                     </Button>
+                  </li>
+               ))}
+            </span>
          </StyledUl>
       </BasicModal>
    )
@@ -85,22 +89,25 @@ const StyledUl = styled.ul`
    flex-direction: column;
    width: 491px;
    max-height: 180px;
-   padding: 10px;
-   overflow-y: scroll;
-   ::-webkit-scrollbar {
-      width: 8px;
+   margin-top: 15px;
+   .scroll {
+      overflow-y: scroll;
+      ::-webkit-scrollbar {
+         width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+         box-shadow: inset 0 0 5px #3772ff;
+         border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+         background: #3772ff;
+         border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+         background: #3772ff;
+      }
    }
-   ::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 5px #3772ff;
-      border-radius: 10px;
-   }
-   ::-webkit-scrollbar-thumb {
-      background: #3772ff;
-      border-radius: 10px;
-   }
-   ::-webkit-scrollbar-thumb:hover {
-      background: #3772ff;
-   }
+
    p {
       font-size: 18px;
       margin-left: 20px;
@@ -111,5 +118,8 @@ const StyledUl = styled.ul`
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #c4c4c4;
+      :last-child {
+         border-bottom: none;
+      }
    }
 `
