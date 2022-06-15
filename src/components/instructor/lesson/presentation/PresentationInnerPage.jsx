@@ -4,13 +4,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import PowerPoint from '../../../../assets/images/PowerPoint.png'
 import PDF from '../../../../assets/images/PDF.png'
-import { getPresentation } from '../../../../store/presentation-slice'
+import { getPresentation } from '../../../../store/INSTRUCTOR/presentation-slice'
 
 const PresentationInnerPage = () => {
    const dispatch = useDispatch()
 
    const { singlePresentation } = useSelector((state) => state.presentation)
-   console.log(singlePresentation)
 
    const { presentationId } = useParams()
 
@@ -20,18 +19,17 @@ const PresentationInnerPage = () => {
       }
    }, [])
 
-   const presentationType = singlePresentation?.presentationLink.at(-1)
+   const presentationType = singlePresentation?.presentationLink.includes('pdf')
 
-   const presentationTypeImage =
-      presentationType === 'x' ? (
-         <div>
-            <img src={PowerPoint} alt="powerpoint" />
-         </div>
-      ) : (
-         <div>
-            <img src={PDF} alt="PDF" />
-         </div>
-      )
+   const presentationTypeImage = presentationType ? (
+      <div>
+         <img src={PDF} alt="PDF" />
+      </div>
+   ) : (
+      <div>
+         <img src={PowerPoint} alt="powerpoint" />
+      </div>
+   )
 
    return (
       <PresentationContainer>

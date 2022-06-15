@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import ReactPlayer from 'react-player'
-import { getSingleVideo } from '../../../../../store/video-slice'
+import { getSingleVideo } from '../../../../../store/INSTRUCTOR/video-slice'
 import { Spinner } from '../../../../UI/Spinner/Spinner'
 
 export const VideoInnerPage = (props) => {
