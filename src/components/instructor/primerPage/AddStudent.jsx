@@ -11,7 +11,7 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const dispatch = useDispatch()
    const [name, setName] = useState('')
 
-   const searchStudents = useDebounce(searchStudentsHandler, 600)
+   const debouncedName = useDebounce(name, 600)
 
    function searchStudentsHandler() {
       if (name !== '') {
@@ -22,8 +22,8 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
    const scroll = students.length
 
    useEffect(() => {
-      searchStudents()
-   }, [searchStudents])
+      searchStudentsHandler()
+   }, [debouncedName])
 
    const addStudents = (id) => {
       onAdd(id)
@@ -43,8 +43,8 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
                onChange={(e) => setName(e.target.value)}
             />
          </StyledSearch>
-         <StyledUl>
-            <ul className={scroll > 4 && 'scroll'}>
+         <StyledDropdown>
+            <ul className={scroll > 4 ? 'scroll' : ''}>
                {students.map((el) => (
                   <li key={el.id}>
                      <p>{el.fullName}</p>
@@ -58,7 +58,7 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
                   </li>
                ))}
             </ul>
-         </StyledUl>
+         </StyledDropdown>
       </BasicModal>
    )
 }
@@ -84,12 +84,12 @@ const StyledSearch = styled.div`
 const StyledSearchIcon = styled(Search)`
    margin: 20px;
 `
-const StyledUl = styled.div`
+const StyledDropdown = styled.div`
    display: flex;
    flex-direction: column;
    width: 491px;
    max-height: 180px;
-   margin-top: 10px;
+   margin-top: 15px;
    .scroll {
       overflow-y: scroll;
       ::-webkit-scrollbar {
@@ -107,6 +107,7 @@ const StyledUl = styled.div`
          background: #3772ff;
       }
    }
+
    p {
       font-size: 18px;
       margin-left: 20px;
