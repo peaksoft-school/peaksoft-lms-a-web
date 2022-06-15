@@ -43,8 +43,8 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
                onChange={(e) => setName(e.target.value)}
             />
          </StyledSearch>
-         <StyledUl>
-            <span className={scroll > 4 ? 'scroll' : ''}>
+         <StyledDropdown>
+            <ul className={scroll > 4 ? 'scroll' : ''}>
                {students.map((el) => (
                   <li key={el.id}>
                      <p>{el.fullName}</p>
@@ -57,8 +57,8 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
                      </Button>
                   </li>
                ))}
-            </span>
-         </StyledUl>
+            </ul>
+         </StyledDropdown>
       </BasicModal>
    )
 }
@@ -84,7 +84,7 @@ const StyledSearch = styled.div`
 const StyledSearchIcon = styled(Search)`
    margin: 20px;
 `
-const StyledUl = styled.ul`
+const StyledDropdown = styled.div`
    display: flex;
    flex-direction: column;
    width: 491px;

@@ -32,7 +32,6 @@ export const Students = () => {
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
-
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
@@ -46,7 +45,6 @@ export const Students = () => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
             dispatch(getStudentsByCourse(id))
          })
          .catch(() => {

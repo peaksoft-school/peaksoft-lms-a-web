@@ -9,6 +9,7 @@ import { ADD_GROUP, ADD_STUDENT } from '../../../utils/constants/general'
 import {
    addGroupToCourse,
    addStudentToCourse,
+   filteredGroup,
    getCoursesOfInstructor,
    getGroupOfStudents,
    getStudents,
@@ -63,9 +64,9 @@ export const InstrutorCourses = () => {
       setSearchParams({
          [ADD_STUDENT]: true,
       })
+      setCourseId(id)
       dispatch(getStudents())
       dispatch(getStudentsByCourse(id))
-      setCourseId(id)
    }
    const openAddGroupModal = (id) => {
       setSearchParams({
@@ -73,6 +74,7 @@ export const InstrutorCourses = () => {
       })
       dispatch(getGroupOfStudents())
       setCourseId(id)
+      dispatch(filteredGroup({ id }))
    }
 
    const options = useMemo(
