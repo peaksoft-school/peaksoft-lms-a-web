@@ -13,7 +13,7 @@ import { BreadCrumbs } from '../../../../UI/breadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
 import { AppTable } from '../../../../UI/table/AppTable'
 
-export const InstructorTests = () => {
+const InstructorTests = () => {
    const dispatch = useDispatch()
    const { tests, course, results, lesson } = useSelector(
       (state) => state.instructorTests
@@ -91,6 +91,9 @@ export const InstructorTests = () => {
       </Wrapper>
    )
 }
+
+export default InstructorTests
+
 const Wrapper = styled.div`
    width: 100%;
 `

@@ -30,7 +30,7 @@ import {
 } from '../../UI/notification/Notification'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
-export const Courses = () => {
+const Courses = () => {
    const dispatch = useDispatch()
    const { сourse, instructors, pages, courses, isLoading, courseTeachers } =
       useSelector((state) => state.courses)
@@ -146,10 +146,10 @@ export const Courses = () => {
             addCourseHandler={addCourseHandler}
             currentPage={currentPage}
          />
-         <Wrapper>
-            <Container>
-               {(isLoading && <Spinner />) ||
-                  courses.map((course) => (
+         {(isLoading && <Spinner />) || (
+            <Wrapper>
+               <Container>
+                  {courses.map((course) => (
                      <Card
                         key={course.id}
                         options={options}
@@ -161,63 +161,67 @@ export const Courses = () => {
                         path={`${course.id}/course_instructors`}
                      />
                   ))}
-            </Container>
-            {instructors && (
-               <AssignTeacher
-                  isModalOpen={showAppointTeacherModal}
-                  closeModal={closeModal}
-                  instructors={instructors}
-                  courseTeachers={courseTeachers}
-                  id={courseId}
-               />
-            )}
+               </Container>
 
-            {сourse && (
-               <EditCourse
-                  isModalOpen={Boolean(showEditCourseModal)}
-                  closeModal={closeModal}
-                  сourse={сourse}
-                  currentPage={currentPage}
-               />
-            )}
-
-            <ConfirmModal
-               isConfirmModalOpen={Boolean(showConfirmModal)}
-               closeConfirmModal={closeModal}
-               title="Вы уверены, что хотите удалить курс... ?"
-            >
-               <StyledButton>
-                  <Button
-                     background="none"
-                     border="1px solid #3772FF"
-                     color="#3772FF"
-                     onClick={closeModal}
-                  >
-                     Отмена
-                  </Button>
-                  <Button
-                     background="#C91E1E"
-                     bgHover="#B62727"
-                     bgActive="#E13A3A"
-                     onClick={deleteHandler}
-                  >
-                     Удалить
-                  </Button>
-               </StyledButton>
-            </ConfirmModal>
-            {pages && (
-               <StyledPagination>
-                  <Pagination
-                     count={pages}
-                     page={currentPage}
-                     onChange={(_, num) => onChangeHandler(num)}
+               {instructors && (
+                  <AssignTeacher
+                     isModalOpen={showAppointTeacherModal}
+                     closeModal={closeModal}
+                     instructors={instructors}
+                     courseTeachers={courseTeachers}
+                     id={courseId}
                   />
-               </StyledPagination>
-            )}
-         </Wrapper>
+               )}
+
+               {сourse && (
+                  <EditCourse
+                     isModalOpen={Boolean(showEditCourseModal)}
+                     closeModal={closeModal}
+                     сourse={сourse}
+                     currentPage={currentPage}
+                  />
+               )}
+
+               <ConfirmModal
+                  isConfirmModalOpen={Boolean(showConfirmModal)}
+                  closeConfirmModal={closeModal}
+                  title="Вы уверены, что хотите удалить курс... ?"
+               >
+                  <StyledButton>
+                     <Button
+                        background="none"
+                        border="1px solid #3772FF"
+                        color="#3772FF"
+                        onClick={closeModal}
+                     >
+                        Отмена
+                     </Button>
+                     <Button
+                        background="#C91E1E"
+                        bgHover="#B62727"
+                        bgActive="#E13A3A"
+                        onClick={deleteHandler}
+                     >
+                        Удалить
+                     </Button>
+                  </StyledButton>
+               </ConfirmModal>
+               {pages && (
+                  <StyledPagination>
+                     <Pagination
+                        count={pages}
+                        page={currentPage}
+                        onChange={(_, num) => onChangeHandler(num)}
+                     />
+                  </StyledPagination>
+               )}
+            </Wrapper>
+         )}
       </>
    )
 }
+
+export default Courses
 
 const Wrapper = styled.div`
    position: relative;

@@ -17,7 +17,7 @@ import {
 } from '../../../../store/courses-slice'
 import { AssignTeacher } from '../../../../components/Admin/courses/AssignTeacher'
 
-export const CourseInstructors = () => {
+const CourseInstructors = () => {
    const { id } = useParams()
    const dispatch = useDispatch()
 
@@ -91,6 +91,8 @@ export const CourseInstructors = () => {
       </div>
    )
 }
+
+export default CourseInstructors
 
 const StyledButton = styled.div`
    display: flex;

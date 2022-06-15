@@ -16,10 +16,9 @@ import {
 
 export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    const dispatch = useDispatch()
-
    const { oneSingleLink } = useSelector((state) => state.link)
 
-   const { value, onChange, setValue } = useInput({
+   const { value, onChange, onClear, setValue } = useInput({
       text: (oneSingleLink && oneSingleLink?.text) || '',
       link: (oneSingleLink && oneSingleLink?.link) || '',
    })
@@ -41,6 +40,7 @@ export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
          .then(() => {
             showSuccessMessage('Вы редактировали ссылку')
             onClose()
+            onClear()
          })
          .catch(() => {
             showErrorMessage('Не удалось редактировать ссылку')

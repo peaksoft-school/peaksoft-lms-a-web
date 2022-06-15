@@ -20,7 +20,7 @@ import { getCourse } from '../../../store/INSTRUCTOR/materials-slice'
 import { TaskCreatorOptions } from './TaskCreatorOptions'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
-export const EditTask = () => {
+const EditTask = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { taskId, id } = useParams()
@@ -131,6 +131,8 @@ export const EditTask = () => {
       </>
    )
 }
+
+export default EditTask
 
 const Container = styled.div`
    width: 100%;

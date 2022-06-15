@@ -27,7 +27,7 @@ import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
 import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'
 
-export const Students = () => {
+const Students = () => {
    const dispatch = useDispatch()
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
@@ -148,6 +148,7 @@ export const Students = () => {
       </>
    )
 }
+export default Students
 
 const Container = styled.div`
    display: flex;

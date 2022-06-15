@@ -2,9 +2,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { ReactComponent as ProfileIcon } from '../../assets/icons/Profile.svg'
 import { LogoutButton } from '../../components/UI/logoutButton/Logoutbutton'
-import { ReactComponent as BellIcon } from '../../assets/icons/Bell.svg'
 import { logOut } from '../../store/authSlice'
 import {
    COURSE_INNER_TABS,
@@ -33,11 +31,10 @@ export const Header = () => {
                   />
                </Routes>
                <Container>
-                  <StyledProfile>
-                     <ProfileIcon />
-                     <p>Администратор</p>
-                     <LogoutButton logoutHandler={logoutHandler} />
-                  </StyledProfile>
+                  <LogoutButton
+                     logoutHandler={logoutHandler}
+                     title="Администратор"
+                  />
                   <Rectangle />
                </Container>
             </>
@@ -56,11 +53,7 @@ export const Header = () => {
                      element={<NavTabs tabs={MATERIALS_INNER_TABS} />}
                   />
                </Routes>
-               <StyledProfile>
-                  <ProfileIcon />
-                  <p>Инструктор</p>
-                  <LogoutButton logoutHandler={logoutHandler} />
-               </StyledProfile>
+               <LogoutButton logoutHandler={logoutHandler} title="Инструктор" />
                <Rectangle />
             </Container>
          )
@@ -68,12 +61,7 @@ export const Header = () => {
       case 'STUDENT':
          content = (
             <Container>
-               <StyledProfile>
-                  <BellIcon />
-                  <ProfileIcon />
-                  <p>Student</p>
-                  <LogoutButton logoutHandler={logoutHandler} />
-               </StyledProfile>
+               <LogoutButton logoutHandler={logoutHandler} title="Студент" />
                <Rectangle />
             </Container>
          )
@@ -90,25 +78,6 @@ const Rectangle = styled.div`
    top: 78px;
    left: 260px;
    background: #c4c4c4;
-`
-const StyledProfile = styled.div`
-   display: flex;
-   justify-content: space-around;
-   align-items: center;
-   padding: 8px;
-   position: absolute;
-   width: 213px;
-   height: 46px;
-   top: 15px;
-   cursor: pointer;
-   & p {
-      font-family: 'Open Sans', sans-serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 22px;
-      color: #232323;
-   }
 `
 const Container = styled.div`
    width: 100%;

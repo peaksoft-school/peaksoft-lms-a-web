@@ -11,7 +11,7 @@ import {
 import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
-export const GroupDetailPage = () => {
+const GroupDetailPage = () => {
    const dispatch = useDispatch()
    const { studentsIState, singleGroup, isLoading } = useSelector(
       (state) => state.groups
@@ -77,6 +77,9 @@ export const GroupDetailPage = () => {
       </Container>
    )
 }
+
+export default GroupDetailPage
+
 const Container = styled.div`
    margin-top: 38px;
 `

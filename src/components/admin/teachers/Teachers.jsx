@@ -27,7 +27,7 @@ import {
    showSuccessMessage,
 } from '../../UI/notification/Notification'
 
-export const Teachers = () => {
+const Teachers = () => {
    const dispatch = useDispatch()
    const { teacherData, singleTeacher, generalPage, actualPage, isLoading } =
       useSelector((state) => state.teachers)
@@ -223,6 +223,8 @@ export const Teachers = () => {
       </>
    )
 }
+
+export default Teachers
 
 const StyledActions = styled.td`
    cursor: pointer;

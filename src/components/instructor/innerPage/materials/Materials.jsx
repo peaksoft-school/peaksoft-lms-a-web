@@ -64,7 +64,7 @@ import { getSingleVideo } from '../../../../store/INSTRUCTOR/video-slice'
 import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
 import { EditVideo } from './video/EditVideo'
 
-export const Materials = () => {
+const Materials = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { id } = useParams()
@@ -452,6 +452,7 @@ export const Materials = () => {
       </>
    )
 }
+export default Materials
 
 const Container = styled.div`
    display: grid;

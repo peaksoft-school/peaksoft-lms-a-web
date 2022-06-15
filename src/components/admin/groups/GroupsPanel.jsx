@@ -90,10 +90,10 @@ export const GroupsPanel = () => {
    return (
       <>
          <GroupCreate page={page} />
-         <StyledContainer>
-            <CardContentStyleControl>
-               {(isLoading && <Spinner />) ||
-                  groups.map((group) => {
+         {(isLoading && <Spinner />) || (
+            <StyledContainer>
+               <CardContentStyleControl>
+                  {groups.map((group) => {
                      return (
                         <Card
                            image={group.image}
@@ -107,30 +107,31 @@ export const GroupsPanel = () => {
                         />
                      )
                   })}
-               <GroupDeleteConfirm
-                  isModalOpen={isModalOpen}
-                  deletingModalHandler={deletingModalHandler}
-                  setIsModalOpen={setIsModalOpen}
-               />
-               {singleGroup && (
-                  <GroupEdit
-                     singleGroup={singleGroup}
-                     openEditGroupModal={openEditGroupModal}
-                     setOpenEditGroupModal={setOpenEditGroupModal}
-                     page={page}
+                  <GroupDeleteConfirm
+                     isModalOpen={isModalOpen}
+                     deletingModalHandler={deletingModalHandler}
+                     setIsModalOpen={setIsModalOpen}
                   />
+                  {singleGroup && (
+                     <GroupEdit
+                        singleGroup={singleGroup}
+                        openEditGroupModal={openEditGroupModal}
+                        setOpenEditGroupModal={setOpenEditGroupModal}
+                        page={page}
+                     />
+                  )}
+               </CardContentStyleControl>
+               {allPages && (
+                  <PaginationStyleControl>
+                     <Pagination
+                        count={allPages}
+                        page={page}
+                        onChange={(_, num) => groupsPaginationHandler(num)}
+                     />
+                  </PaginationStyleControl>
                )}
-            </CardContentStyleControl>
-            {allPages && (
-               <PaginationStyleControl>
-                  <Pagination
-                     count={allPages}
-                     page={page}
-                     onChange={(_, num) => groupsPaginationHandler(num)}
-                  />
-               </PaginationStyleControl>
-            )}
-         </StyledContainer>
+            </StyledContainer>
+         )}
       </>
    )
 }
