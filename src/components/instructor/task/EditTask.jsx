@@ -34,6 +34,9 @@ const EditTask = () => {
    useEffect(() => {
       dispatch(getLessonTask(taskId))
       dispatch(getCourse(id))
+      return () => {
+         dispatch(taskActions.clearTask())
+      }
    }, [])
 
    const sendTaskHandler = () => {

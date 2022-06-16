@@ -19,6 +19,12 @@ const EditTask = React.lazy(() =>
 const InstructorTests = React.lazy(() =>
    import('../components/instructor/lesson/innerPage/Test/InstructorTests')
 )
+const VideoInnerPage = React.lazy(() =>
+   import('../components/instructor/innerPage/materials/video/VideoInnerPage')
+)
+const PresentationInnerPage = React.lazy(() =>
+   import('../components/instructor/lesson/presentation/PresentationInnerPage')
+)
 
 export const InstructorRoutes = () => {
    return (
@@ -35,6 +41,14 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
                element={<Materials />}
+            />
+            <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/video/:videoId`}
+               element={<VideoInnerPage />}
+            />
+            <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/presentation/:presentationId`}
+               element={<PresentationInnerPage />}
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_test/:lessonId`}

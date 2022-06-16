@@ -187,7 +187,7 @@ const Teachers = () => {
             />
          )}
          <ConfirmModal
-            title="Вы уверены, что хотите удалить учителя...?"
+            title="Вы уверены, что хотите удалить учителя?"
             isConfirmModalOpen={Boolean(deleteTeacherModal)}
             onModalClose={() => setSearchParams()}
             closeConfirmModal={handleClose}

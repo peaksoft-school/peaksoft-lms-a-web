@@ -5,7 +5,7 @@ import { Button } from '../../UI/button/Button'
 const GroupDeleteConfirm = (props) => {
    return (
       <ConfirmModal
-         title="Вы уверены, что хотите удалить группу ... ?"
+         title={`Вы уверены, что хотите удалить группу ${props.name}?`}
          isConfirmModalOpen={props.isModalOpen}
          closeConfirmModal={() => props.setIsModalOpen(false)}
       >

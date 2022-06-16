@@ -85,7 +85,7 @@ export const InstrutorCourses = () => {
             content: (
                <StyledIcon>
                   <CourseStudent />
-                  <p>Добавить студента в курс</p>
+                  <p>Добавить студента на курс</p>
                </StyledIcon>
             ),
          },
@@ -95,7 +95,7 @@ export const InstrutorCourses = () => {
             content: (
                <StyledIcon>
                   <CourseGroup />
-                  <p>Добавить группу в курс</p>
+                  <p>Добавить группу на курс</p>
                </StyledIcon>
             ),
          },

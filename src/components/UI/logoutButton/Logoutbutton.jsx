@@ -86,11 +86,11 @@ const Container = styled(MenuItem)`
 `
 const StyledProfile = styled.div`
    display: flex;
-   justify-content: space-around;
+   justify-content: space-between;
    align-items: center;
-   padding: 8px;
+   padding: 8px 2px 8px 8px;
    position: absolute;
-   width: 213px;
+   width: 180px;
    height: 46px;
    top: 15px;
    cursor: pointer;
@@ -101,5 +101,9 @@ const StyledProfile = styled.div`
       font-size: 16px;
       line-height: 22px;
       color: #232323;
+   }
+   svg {
+      padding: 0;
+      margin: 0;
    }
 `

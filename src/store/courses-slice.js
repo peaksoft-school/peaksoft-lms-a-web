@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../api/baseFetch'
 import { fileFetch } from '../api/fileFetch'
-import { showErrorMessage } from '../components/UI/notification/Notification'
+import {
+   showErrorMessage,
+   showSuccessMessage,
+} from '../components/UI/notification/Notification'
 
 const initState = {
    courses: [],
@@ -119,6 +122,7 @@ export const assignTeacherToCourse = createAsyncThunk(
          dispatch(getAllCourses(1))
          return response
       } catch (error) {
+         showSuccessMessage('Учитель назначен')
          return rejectWithValue(error.message)
       }
    }

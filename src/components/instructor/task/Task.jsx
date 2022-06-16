@@ -93,7 +93,7 @@ const Task = () => {
          <Container>
             <StyledTitle>Создать задание</StyledTitle>
             <Title>
-               <StyledText
+               <Input
                   placeholder="Название задания"
                   onChange={changeTaskNameHandler}
                />
@@ -167,10 +167,6 @@ const Title = styled.div`
    height: 70px;
    display: flex;
    align-items: flex-end;
-`
-const StyledText = styled(Input)`
-   width: 842px;
-   height: 42px;
 `
 
 const StyledContainer = styled.div`

@@ -19,7 +19,7 @@ export const TaskCreatorOptions = () => {
 }
 
 const Container = styled.div`
-   margin-left: 30px;
+   margin: 0 10px 0 30px;
    margin-bottom: 7px;
    width: 280px;
    display: flex;

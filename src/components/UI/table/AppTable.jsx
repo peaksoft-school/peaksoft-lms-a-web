@@ -14,6 +14,7 @@ import {
 import { Pagination } from '../pagination/Pagination'
 
 export const AppTable = ({ columns, data, pagination }) => {
+   console.log(pagination)
    return (
       <ThemeProvider theme={customTheme}>
          <Container component={Paper}>
@@ -51,7 +52,7 @@ export const AppTable = ({ columns, data, pagination }) => {
                </TableBody>
             </Table>
             <StyledPaginationContainer>
-               {pagination && (
+               {pagination?.count > 1 && (
                   <Pagination
                      count={pagination.count || 1}
                      onChange={pagination.onChange}

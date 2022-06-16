@@ -53,6 +53,7 @@ const GroupDetailPage = () => {
          id: 6,
       },
    ])
+
    const pathsArray = [
       {
          path: 'admin/groups',

@@ -115,7 +115,7 @@ const Students = () => {
                   onClick={openAddStudentModal}
                >
                   <StyledAddStudent />
-                  Добавить студента в курс
+                  Добавить студента на курс
                </Button>
                <Button
                   background="#3772FF"
@@ -123,7 +123,7 @@ const Students = () => {
                   bgActive="#6190FF"
                   onClick={openAddGroupModal}
                >
-                  <StyledAddGroup /> Добавить группу в курс
+                  <StyledAddGroup /> Добавить группу на курс
                </Button>
             </StyledButton>
             <AddStudent
@@ -148,15 +148,15 @@ export default Students
 const Container = styled.div`
    display: flex;
    justify-content: space-between;
-   margin: 7px;
+   margin: 7px 0;
 `
 const StyledBreadCrumbs = styled.div`
    margin-top: 40px;
 `
 const StyledButton = styled.div`
    display: flex;
-   justify-content: space-around;
-   width: 535px;
+   justify-content: space-between;
+   width: 540px;
    height: 45px;
    margin-top: 5px;
 `

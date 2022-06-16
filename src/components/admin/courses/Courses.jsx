@@ -69,6 +69,9 @@ const Courses = () => {
    const getCourseId = (id) => {
       setSearchParams({ [DELETE_COURSE]: true })
       setCourseId(id)
+      if (id) {
+         dispatch(getSingleCourse(id))
+      }
    }
 
    const editCourse = (id) => {
@@ -137,7 +140,6 @@ const Courses = () => {
       ],
       []
    )
-
    return (
       <>
          <AddNewCourse
@@ -185,7 +187,7 @@ const Courses = () => {
                <ConfirmModal
                   isConfirmModalOpen={Boolean(showConfirmModal)}
                   closeConfirmModal={closeModal}
-                  title="Вы уверены, что хотите удалить курс... ?"
+                  title={`Вы уверены, что хотите удалить курс ${сourse?.courseName}?`}
                >
                   <StyledButton>
                      <Button
@@ -206,7 +208,7 @@ const Courses = () => {
                      </Button>
                   </StyledButton>
                </ConfirmModal>
-               {pages && (
+               {pages > 1 && (
                   <StyledPagination>
                      <Pagination
                         count={pages}
@@ -225,7 +227,6 @@ export default Courses
 
 const Wrapper = styled.div`
    position: relative;
-   height: 820px;
 `
 const StyledPagination = styled.div`
    margin-top: 20px;
@@ -237,7 +238,6 @@ const Container = styled.div`
    grid-row: 30px;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
-   grid-template-rows: repeat(2, 1fr);
    grid-column-gap: 30px;
    grid-row-gap: 30px;
 `
