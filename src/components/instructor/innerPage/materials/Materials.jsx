@@ -221,6 +221,11 @@ export const Materials = () => {
       setSearchParams('')
    }
 
+   // ------------------------------TASK INNER PAGE----------------
+
+   const openTaskInnerPage = (taskId) => {
+      navigate(`task/${taskId}`)
+   }
    // --------------TEST RELATED---------------------------------------
 
    const deleteTest = (id) => {
@@ -385,6 +390,7 @@ export const Materials = () => {
                      onDeleteLink={openDeleteLinkConfirmModal}
                      onEditLink={editLink}
                      link={lesson.linkResponse}
+                     openTaskInnerPage={openTaskInnerPage}
                      followLinkHandler={followLinkHandler}
                      video={lesson.videoResponse}
                      onEditVideo={editVideo}

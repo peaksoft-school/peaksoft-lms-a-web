@@ -28,6 +28,7 @@ export const LessonCard = ({
    onDeletePresentation,
    openTestInnerPage,
    followLinkHandler,
+   openTaskInnerPage,
    onEditLink,
    onDeleteLink,
    onEditVideo,
@@ -150,7 +151,7 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <TaskIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => openTaskInnerPage(task?.id)}>
                   <h2>Задание</h2>
                </StyledDiv>
                <ActionsContainer id="actions">

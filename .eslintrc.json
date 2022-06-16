@@ -15,7 +15,13 @@
       "ecmaVersion": "latest",
       "sourceType": "module"
    },
-
+   "no-param-reassign": [
+      "off",
+      {
+         "props": true,
+         "ignorePropertyModificationsFor": ["state", "children"]
+      }
+   ],
    "plugins": ["react", "react-hooks"],
    "rules": {
       "react/jsx-filename-extension": [
@@ -57,7 +63,7 @@
       "no-param-reassign": [
          "error",
          {
-            "props": true,
+            "props": false,
             "ignorePropertyModificationsFor": ["state", "children"]
          }
       ],

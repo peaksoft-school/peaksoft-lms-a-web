@@ -10,6 +10,7 @@ import { EditTask } from '../components/instructor/task/EditTask'
 import { LessonVideo } from '../components/instructor/innerPage/materials/video/LessonVideo'
 import { VideoInnerPage } from '../components/instructor/innerPage/materials/video/VideoInnerPage'
 import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
+import { TaskInnerPage } from '../components/instructor/lesson/innerPage/Task/TaskInnerPage'
 import PresentationInnerPage from '../components/instructor/lesson/presentation/PresentationInnerPage'
 
 export const InstructorRoutes = () => {
@@ -63,6 +64,10 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
                element={<InstructorTests />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/task/:taskId`}
+               element={<TaskInnerPage />}
             />
          </Routes>
       </div>

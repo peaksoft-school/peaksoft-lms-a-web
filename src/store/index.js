@@ -12,6 +12,7 @@ import { materialsSlice } from './INSTRUCTOR/materials-slice'
 import { presentationSlice } from './INSTRUCTOR/presentation-slice'
 import { videoSlice } from './INSTRUCTOR/video-slice'
 import { instructorTestsSlice } from './INSTRUCTOR/instructor-tests-slice'
+import { taskInnerPageSlice } from './INSTRUCTOR/taskInnerPage-slice'
 
 export const store = configureStore({
    reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
       link: linkSlice.reducer,
       instructorCourses: instructorCoursesSlice.reducer,
       materials: materialsSlice.reducer,
+      taskInnerPage: taskInnerPageSlice.reducer,
       presentation: presentationSlice.reducer,
       video: videoSlice.reducer,
       instructorTests: instructorTestsSlice.reducer,

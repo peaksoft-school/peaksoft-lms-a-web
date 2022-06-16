@@ -18,6 +18,7 @@ export const InstructorTests = () => {
    const { tests, course, results, lesson } = useSelector(
       (state) => state.instructorTests
    )
+   console.log(results)
    const { id, lessonId, testId } = useParams()
    const [toggle, setToggle] = useState(false)
 
