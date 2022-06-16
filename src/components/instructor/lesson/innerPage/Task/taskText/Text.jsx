@@ -51,7 +51,7 @@ const Element = (props) => {
          return <ul {...attributes}>{children}</ul>
 
       default:
-         return <p {...attributes}>{children}sdweqwerqwerqwerqwer</p>
+         return <p {...attributes}>{children}</p>
    }
 }
 const Leaf = ({ attributes, children, leaf }) => {
