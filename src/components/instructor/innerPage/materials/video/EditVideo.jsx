@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useInput } from '../../../../../hooks/useInput/useInput'
 import {
@@ -17,6 +17,7 @@ import {
 export const EditVideo = ({ isModalOpen, closeModals, id }) => {
    const dispatch = useDispatch()
    const { singleVideo } = useSelector((state) => state.video)
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear, setValue } = useInput({
       title: (singleVideo && singleVideo?.videoName) || '',
@@ -29,6 +30,14 @@ export const EditVideo = ({ isModalOpen, closeModals, id }) => {
          dispatch(getSingleVideo(id))
       }
    }, [])
+
+   useEffect(() => {
+      setFormIsValid(
+         value.title?.length > 0 &&
+            value.description?.length > 0 &&
+            value.link?.length > 0
+      )
+   }, [value])
 
    const AddUpdatedVideoLesson = () => {
       const video = {
@@ -104,6 +113,7 @@ export const EditVideo = ({ isModalOpen, closeModals, id }) => {
                </div>
                <div>
                   <Button
+                     disabled={!formIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"

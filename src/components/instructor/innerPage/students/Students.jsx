@@ -32,7 +32,6 @@ const Students = () => {
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
-
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
@@ -46,7 +45,6 @@ const Students = () => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
             dispatch(getStudentsByCourse(id))
          })
          .catch(() => {
@@ -89,10 +87,7 @@ const Students = () => {
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const filteredGroups = groupOfStudents.filter(
-      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
-   )
-   const groups = filteredGroups.map((el) => {
+   const groups = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,

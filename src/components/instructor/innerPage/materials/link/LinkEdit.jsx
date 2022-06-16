@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
 import { BasicModal } from '../../../../UI/modal/BasicModal'
@@ -17,11 +17,16 @@ import {
 export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
    const dispatch = useDispatch()
    const { oneSingleLink } = useSelector((state) => state.link)
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear, setValue } = useInput({
       text: (oneSingleLink && oneSingleLink?.text) || '',
       link: (oneSingleLink && oneSingleLink?.link) || '',
    })
+
+   useEffect(() => {
+      setFormIsValid(value.text?.length > 0 && value.link?.length > 0)
+   }, [value])
 
    useEffect(() => {
       if (id) {
@@ -92,6 +97,7 @@ export const LinkEdit = ({ onClose, showEditLinkModal, id }) => {
             </div>
             <div>
                <Button
+                  disabled={!formIsValid}
                   background="#3772FF"
                   bgHover="#1D60FF"
                   bgActive="#6190FF"
