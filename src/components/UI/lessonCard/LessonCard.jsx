@@ -21,6 +21,8 @@ export const LessonCard = ({
    onDeleteLesson,
    onDeleteTest,
    selectedOption,
+   onEditTask,
+   onDeleteTask,
    onEditTest,
    onEditPresentation,
    onDeletePresentation,
@@ -144,16 +146,18 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <TaskIcon />
                </StyledContentIcon>
-               <StyledDiv onClick={() => openTaskInnerPage(task?.task)}>
+               <StyledDiv onClick={() => openTaskInnerPage(task?.id)}>
                   <h2>Задание</h2>
                </StyledDiv>
                <ActionsContainer id="actions">
                   <StyledOnHoverActions>
-                     <StyledEditContainer>
+                     <StyledEditContainer onClick={() => onEditTask(task?.id)}>
                         <EditIcon />
                         <h3>Редактировать</h3>
                      </StyledEditContainer>
-                     <StyledDeleteContainer>
+                     <StyledDeleteContainer
+                        onClick={() => onDeleteTask(task?.id)}
+                     >
                         <StyledDeleteIcon>
                            <DeleteIcon />
                         </StyledDeleteIcon>

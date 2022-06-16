@@ -13,41 +13,31 @@ import {
 import {
    getCourseTeachers,
    getInstructor,
+   getSingleCourse,
 } from '../../../../store/courses-slice'
 import { AssignTeacher } from '../../../../components/admin/courses/AssignTeacher'
-import { localStorageHelper } from '../../../../utils/helpers/general'
 
 export const CourseInstructors = () => {
-   const params = useParams()
+   const { id } = useParams()
    const dispatch = useDispatch()
 
-   const { instructors, courses, courseTeachers } = useSelector(
+   const { instructors, сourse, courseTeachers } = useSelector(
       (state) => state.courses
    )
-
    const [searchParams, setSearchParams] = useSearchParams()
 
    const showAppointTeacherModal = searchParams.get(APPOINT_TEACHER)
-
-   const courseName = localStorageHelper.laod('course')
-
    useEffect(() => {
-      dispatch(getCourseTeachers(params.id))
+      dispatch(getCourseTeachers(id))
       dispatch(getInstructor())
-
-      courses.filter((el) => {
-         if (el.id === params.id) {
-            localStorageHelper.store('course', el.courseName)
-         }
-         return el
-      })
+      dispatch(getSingleCourse(id))
    }, [])
 
    const assignTeacher = () => {
       dispatch(getInstructor())
       setSearchParams({
          [APPOINT_TEACHER]: true,
-         teacherId: params.id,
+         teacherId: id,
       })
    }
 
@@ -62,7 +52,7 @@ export const CourseInstructors = () => {
       },
       {
          path: 'courses',
-         name: courseName,
+         name: сourse?.courseName,
       },
       {
          path: '/instructors',
@@ -93,7 +83,7 @@ export const CourseInstructors = () => {
                closeModal={closeModal}
                instructors={instructors}
                courseTeachers={courseTeachers}
-               id={params.id}
+               id={id}
             />
          )}
          <AppTable columns={COURSE_INSTRUCTORS} data={courseTeachers} />
@@ -105,7 +95,7 @@ const StyledButton = styled.div`
    display: flex;
    align-items: flex-end;
    justify-content: space-between;
-   margin-top: -25px;
+   margin-top: -45px;
    margin-bottom: 25px;
    & svg {
       margin-right: 8px;

@@ -53,7 +53,7 @@ export const LoginForm = ({ onSubmit }) => {
          <InvalidContainer>
             {(errors && isInvalid && (
                <StyledInvalidDiv>
-                  Неправильно указан логин и/или пароль
+                  Неправильно указан логин или пароль
                </StyledInvalidDiv>
             )) ||
                (errors?.password && errors?.email && (

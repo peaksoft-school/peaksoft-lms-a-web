@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { baseFetch } from '../api/baseFetch'
+import { baseFetch } from '../../api/baseFetch'
 
 const initialState = {
    tasks: [],
@@ -7,10 +7,11 @@ const initialState = {
 
 export const getTask = createAsyncThunk(
    'taskInnerPage/getTask',
-   async (_, { rejectWithValue, dispatch }) => {
+   async (id, { rejectWithValue, dispatch }) => {
+      dispatch(clearTask())
       try {
          const response = await baseFetch({
-            path: 'api/tasks',
+            path: `api/tasks/${id}`,
             method: 'GET',
          })
          dispatch(setTasks(response))
@@ -26,9 +27,12 @@ export const taskInnerPageSlice = createSlice({
    initialState,
    reducers: {
       setTasks(state, action) {
-         state.tasks = action.payload
+         state.tasks = [action.payload]
+      },
+      clearTask(state) {
+         state.tasks = []
       },
    },
 })
 
-export const { setTasks } = taskInnerPageSlice.actions
+export const { setTasks, clearTask } = taskInnerPageSlice.actions

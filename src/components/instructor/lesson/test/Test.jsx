@@ -10,7 +10,7 @@ import {
    addTest,
    editTest,
    testActions,
-} from '../../../../store/create-test-slice'
+} from '../../../../store/INSTRUCTOR/create-test-slice'
 import { TEST_KEY } from '../../../../utils/constants/general'
 import { localStorageHelper } from '../../../../utils/helpers/general'
 import {

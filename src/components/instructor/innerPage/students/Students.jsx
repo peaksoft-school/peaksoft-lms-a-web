@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -21,7 +21,7 @@ import {
    getSingleCourse,
    getStudents,
    getStudentsByCourse,
-} from '../../../../store/instructor-courses'
+} from '../../../../store/INSTRUCTOR/instructor-courses'
 import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
 import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
@@ -32,7 +32,6 @@ export const Students = () => {
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
-
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
@@ -41,13 +40,11 @@ export const Students = () => {
    const handleClose = () => {
       setSearchParams(false)
    }
-
    const addStudentHandler = (studentId) => {
       dispatch(addStudentToCourse({ studentId, id }))
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
             dispatch(getStudentsByCourse(id))
          })
          .catch(() => {
@@ -80,23 +77,17 @@ export const Students = () => {
       dispatch(getGroupOfStudents())
    }
 
-   const breadcrumbs = useMemo(
-      () => [
-         { path: 'instructor/instructor_course', name: 'Курсы' },
-         { path: 'instructor/students', name: singleCourse?.courseName },
-         { path: 'instructor/instructor_course', name: 'Студенты' },
-      ],
-      []
-   )
+   const breadcrumbs = [
+      { path: 'instructor/instructor_course', name: 'Курсы' },
+      { path: 'instructor/students', name: singleCourse?.courseName },
+      { path: 'instructor/instructor_course', name: 'Студенты' },
+   ]
 
    const filteredStudents = students.filter(
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const filteredGroups = groupOfStudents.filter(
-      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
-   )
-   const groups = filteredGroups.map((el) => {
+   const groups = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,

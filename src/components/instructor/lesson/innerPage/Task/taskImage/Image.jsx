@@ -3,13 +3,16 @@ import React from 'react'
 
 export const Image = ({ image }) => {
    return (
-      <div>
-         <Img src={image.value} alt={image.name} />
-      </div>
+      <StyledImage>
+         <img src={image.value} alt={image.name} />
+      </StyledImage>
    )
 }
 
-const Img = styled.img`
-   width: 792px;
-   height: 464px;
+const StyledImage = styled.div`
+   img {
+      border-radius: 10px;
+      width: 792px;
+      height: 464px;
+   }
 `

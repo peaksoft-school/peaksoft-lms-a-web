@@ -3,7 +3,8 @@
 import styled from '@emotion/styled'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getTask } from '../../../../../store/taskInnerPage-slice'
+import { useParams } from 'react-router-dom'
+import { getTask } from '../../../../../store/INSTRUCTOR/taskInnerPage-slice'
 import {
    CODE,
    FILE,
@@ -20,17 +21,17 @@ import { Text } from './taskText/Text'
 export const TaskInnerPage = () => {
    const dispatch = useDispatch()
    const { tasks } = useSelector((state) => state.taskInnerPage)
+   const { taskId } = useParams()
 
    useEffect(() => {
-      dispatch(getTask())
+      dispatch(getTask(taskId))
    }, [])
-   console.log(tasks)
 
    return (
       <Wrapper>
          {tasks.map((task) => (
-            <>
-               <h2>{task.taskName}</h2>
+            <div key={task.id}>
+               <p key={task.id}>{task.taskName}</p>
                {task.taskTypeResponses.map((el) => {
                   if (el.taskType === IMAGE) {
                      return <Image image={el} key={el.name} />
@@ -48,7 +49,7 @@ export const TaskInnerPage = () => {
                      return <Text text={el} key={el.name} />
                   }
                })}
-            </>
+            </div>
          ))}
       </Wrapper>
    )
@@ -60,11 +61,17 @@ const Wrapper = styled.div`
    background: #ffffff;
    border-radius: 10px;
    padding: 25px;
-   h2 {
-      font-family: 'Open Sans';
+   margin-top: 15px;
+   div {
+      display: grid;
+      grid-row-gap: 25px;
+   }
+   p {
+      font-family: 'Open Sans', sans-serif;
       font-style: normal;
       font-weight: 400;
-      font-size: 20px;
+      font-size: 25px;
       line-height: 27px;
+      margin-top: 5px;
    }
 `

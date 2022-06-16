@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import styled from '@emotion/styled'
 import { AppTable } from '../../UI/table/AppTable'
 import {
    getGroupsStudents,
@@ -68,11 +69,14 @@ export const GroupDetailPage = () => {
    ]
 
    return (
-      <div>
+      <Container>
          <BreadCrumbs pathsArray={pathsArray} />
          {(isLoading && <Spinner />) || (
             <AppTable data={studentsIState} columns={STUDENTS_INFO} />
          )}
-      </div>
+      </Container>
    )
 }
+const Container = styled.div`
+   margin-top: 38px;
+`

@@ -7,7 +7,7 @@ import {
    getInstructorTests,
    getLesson,
    getSingleCourse,
-} from '../../../../../store/instructor-tests-slice'
+} from '../../../../../store/INSTRUCTOR/instructor-tests-slice'
 import { TEST_INFO } from '../../../../../utils/constants/general'
 import { BreadCrumbs } from '../../../../UI/BreadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
@@ -18,6 +18,7 @@ export const InstructorTests = () => {
    const { tests, course, results, lesson } = useSelector(
       (state) => state.instructorTests
    )
+   console.log(results)
    const { id, lessonId, testId } = useParams()
    const [toggle, setToggle] = useState(false)
 

@@ -1,13 +1,15 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { Task } from '../components/instructor/task/Task'
 import { Test } from '../components/instructor/lesson/test/Test'
 import { InstrutorCourses } from '../components/instructor/primerPage/InstructorCourses'
 import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
 import { Students } from '../components/instructor/innerPage/students/Students'
-import { TaskInnerPage } from '../components/instructor/lesson/innerPage/Task/TaskInnerPage'
+import { EditTask } from '../components/instructor/task/EditTask'
 import { LessonVideo } from '../components/instructor/innerPage/materials/video/LessonVideo'
 import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
+import { TaskInnerPage } from '../components/instructor/lesson/innerPage/Task/TaskInnerPage'
 
 export const InstructorRoutes = () => {
    return (
@@ -38,8 +40,12 @@ export const InstructorRoutes = () => {
                element={<Students />}
             />
             <Route
-               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/task/:taskId`}
-               element={<TaskInnerPage />}
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_task/:lessonId`}
+               element={<Task />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/edit_task/:taskId`}
+               element={<EditTask />}
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/lesson_video/:lessonId`}
@@ -48,6 +54,10 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
                element={<InstructorTests />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/task/:taskId`}
+               element={<TaskInnerPage />}
             />
          </Routes>
       </div>

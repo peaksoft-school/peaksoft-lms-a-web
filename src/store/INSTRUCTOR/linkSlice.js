@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../../api/baseFetch'
-import { getLessons } from '../materials-slice'
+import { getLessons } from './materials-slice'
 
 const initialState = {
    newLinkData: [],

@@ -6,7 +6,9 @@ export const Code = ({ code }) => {
       <Container>
          <span>
             <pre>
-               <p>{code.value}</p>
+               <code>
+                  <p>{code.value}</p>
+               </code>
             </pre>
          </span>
       </Container>
@@ -14,25 +16,13 @@ export const Code = ({ code }) => {
 }
 
 const Container = styled.div`
-   width: 500px;
-   height: 308px;
+   width: min-content;
    background: #eff0f4;
    border-radius: 2px;
    font-size: 14px;
-   /* display: flex;
-   justify-content: center; */
-   span {
-      display: flex;
-      justify-content: center;
-      width: 338px;
-      height: 308px;
-   }
-   pre {
-      tab-size: 40;
-   }
+   padding: 1em;
    p {
       line-height: 2;
-      width: 338px;
-      height: 308px;
+      font-size: 15px;
    }
 `

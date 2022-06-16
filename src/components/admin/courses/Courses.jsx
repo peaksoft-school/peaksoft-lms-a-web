@@ -12,7 +12,6 @@ import { AssignTeacher } from './AssignTeacher'
 import { EditCourse } from './EditCourse'
 import { AddNewCourse } from './AddNewCourse'
 import {
-   coursesActions,
    deleteCourse,
    getAllCourses,
    getInstructor,
@@ -33,17 +32,8 @@ import { Spinner } from '../../UI/Spinner/Spinner'
 
 export const Courses = () => {
    const dispatch = useDispatch()
-   const {
-      сourse,
-      instructors,
-      pages,
-      courses,
-      isModalOpen,
-      isLoading,
-      errorMessage,
-      successMessage,
-      courseTeachers,
-   } = useSelector((state) => state.courses)
+   const { сourse, instructors, pages, courses, isLoading, courseTeachers } =
+      useSelector((state) => state.courses)
 
    const [courseId, setCourseId] = useState()
    const [currentPage, setCurrentPage] = useState(1)
@@ -59,9 +49,7 @@ export const Courses = () => {
       if (courseId) {
          dispatch(getSingleCourse(courseId))
       }
-
       dispatch(getInstructor())
-
       dispatch(getAllCourses(currentPage))
    }, [])
 
@@ -93,7 +81,15 @@ export const Courses = () => {
 
    const deleteHandler = () => {
       dispatch(deleteCourse({ id: courseId, currentPage }))
-      closeModal()
+         .unwrap()
+         .then(() => {
+            showSuccessMessage('Вы удалили курс')
+            dispatch(getAllCourses(currentPage))
+            closeModal()
+         })
+         .catch(() => {
+            showErrorMessage('Не удалось удалить курс')
+         })
    }
 
    const onChangeHandler = (currentPage) => {
@@ -103,35 +99,8 @@ export const Courses = () => {
    }
 
    const closeModal = () => {
-      setSearchParams(false)
+      setSearchParams('')
    }
-
-   useEffect(() => {
-      if (isModalOpen) {
-         setSearchParams(false)
-      }
-      return () => {
-         dispatch(coursesActions.openModal(false))
-      }
-   }, [isModalOpen])
-
-   useEffect(() => {
-      if (successMessage) {
-         showSuccessMessage(successMessage)
-      }
-      return () => {
-         dispatch(coursesActions.showSuccessMessage(null))
-      }
-   }, [successMessage])
-
-   useEffect(() => {
-      if (errorMessage) {
-         showErrorMessage(errorMessage)
-      }
-      return () => {
-         dispatch(coursesActions.showErrorMessage(null))
-      }
-   }, [errorMessage])
 
    const options = useMemo(
       () => [
@@ -170,87 +139,89 @@ export const Courses = () => {
    )
 
    return (
-      <Wrapper>
+      <>
          <AddNewCourse
             isModalOpen={showAddCourseModal}
             closeModal={closeModal}
             addCourseHandler={addCourseHandler}
             currentPage={currentPage}
          />
-         <Container>
-            {courses.map((course) => (
-               <Card
-                  key={course.id}
-                  options={options}
-                  image={course.image}
-                  title={course.courseName}
-                  description={course.description}
-                  date={course.dateOfStart}
-                  id={course.id}
-                  path={`${course.id}/course_instructors`}
+         <Wrapper>
+            <Container>
+               {(isLoading && <Spinner />) ||
+                  courses.map((course) => (
+                     <Card
+                        key={course.id}
+                        options={options}
+                        image={course.image}
+                        title={course.courseName}
+                        description={course.description}
+                        date={course.dateOfStart}
+                        id={course.id}
+                        path={`${course.id}/course_instructors`}
+                     />
+                  ))}
+            </Container>
+            {instructors && (
+               <AssignTeacher
+                  isModalOpen={showAppointTeacherModal}
+                  closeModal={closeModal}
+                  instructors={instructors}
+                  courseTeachers={courseTeachers}
+                  id={courseId}
                />
-            ))}
-         </Container>
-         {instructors && (
-            <AssignTeacher
-               isModalOpen={showAppointTeacherModal}
-               closeModal={closeModal}
-               instructors={instructors}
-               courseTeachers={courseTeachers}
-               id={courseId}
-            />
-         )}
+            )}
 
-         {сourse && (
-            <EditCourse
-               isModalOpen={Boolean(showEditCourseModal)}
-               closeModal={closeModal}
-               сourse={сourse}
-               currentPage={currentPage}
-            />
-         )}
-
-         <ConfirmModal
-            isConfirmModalOpen={Boolean(showConfirmModal)}
-            closeConfirmModal={closeModal}
-            title="Вы уверены, что хотите удалить курс... ?"
-         >
-            <StyledButton>
-               <Button
-                  background="none"
-                  border="1px solid #3772FF"
-                  color="#3772FF"
-                  onClick={closeModal}
-               >
-                  Отмена
-               </Button>
-               <Button
-                  background="#C91E1E"
-                  bgHover="#B62727"
-                  bgActive="#E13A3A"
-                  onClick={deleteHandler}
-               >
-                  Удалить
-               </Button>
-            </StyledButton>
-         </ConfirmModal>
-         {pages && (
-            <StyledPagination>
-               <Pagination
-                  count={pages}
-                  page={currentPage}
-                  onChange={(_, num) => onChangeHandler(num)}
+            {сourse && (
+               <EditCourse
+                  isModalOpen={Boolean(showEditCourseModal)}
+                  closeModal={closeModal}
+                  сourse={сourse}
+                  currentPage={currentPage}
                />
-            </StyledPagination>
-         )}
-         {isLoading && <Spinner />}
-      </Wrapper>
+            )}
+
+            <ConfirmModal
+               isConfirmModalOpen={Boolean(showConfirmModal)}
+               closeConfirmModal={closeModal}
+               title="Вы уверены, что хотите удалить курс... ?"
+            >
+               <StyledButton>
+                  <Button
+                     background="none"
+                     border="1px solid #3772FF"
+                     color="#3772FF"
+                     onClick={closeModal}
+                  >
+                     Отмена
+                  </Button>
+                  <Button
+                     background="#C91E1E"
+                     bgHover="#B62727"
+                     bgActive="#E13A3A"
+                     onClick={deleteHandler}
+                  >
+                     Удалить
+                  </Button>
+               </StyledButton>
+            </ConfirmModal>
+            {pages && (
+               <StyledPagination>
+                  <Pagination
+                     count={pages}
+                     page={currentPage}
+                     onChange={(_, num) => onChangeHandler(num)}
+                  />
+               </StyledPagination>
+            )}
+         </Wrapper>
+      </>
    )
 }
 
 const Wrapper = styled.div`
    position: relative;
-   height: 880px;
+   height: 820px;
 `
 const StyledPagination = styled.div`
    margin-top: 20px;
@@ -275,6 +246,6 @@ const StyledIcon = styled.div`
 const StyledButton = styled.div`
    width: 241px;
    display: flex;
-   margin: 10px 0;
+   margin: 5px 0 10px;
    justify-content: space-between;
 `

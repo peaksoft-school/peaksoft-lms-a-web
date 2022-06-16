@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { baseFetch } from '../api/baseFetch'
+import { baseFetch } from '../../api/baseFetch'
 
 const initialState = {
    tests: {},
@@ -44,9 +44,10 @@ export const getAllResults = createAsyncThunk(
    async (_, { rejectWithValue, dispatch }) => {
       try {
          const response = await baseFetch({
-            path: 'api/resulting/all',
+            path: 'api/answers',
             method: 'GET',
          })
+         console.log(response)
          dispatch(setAllResults(response))
          return response
       } catch (error) {
