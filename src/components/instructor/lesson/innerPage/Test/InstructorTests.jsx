@@ -46,7 +46,10 @@ const InstructorTests = () => {
    }
 
    const breadcrumbs = [
-      { path: 'instructor/instructor_course', name: course?.courseName },
+      {
+         path: `/instructor/instructor_course/${id}/materials`,
+         name: course?.courseName,
+      },
       {
          path: 'instructor/materials',
          name: lesson?.lessonName,

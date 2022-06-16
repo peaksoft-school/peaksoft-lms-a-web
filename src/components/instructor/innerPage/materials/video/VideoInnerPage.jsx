@@ -5,22 +5,40 @@ import { useParams } from 'react-router-dom'
 import ReactPlayer from 'react-player'
 import { getSingleVideo } from '../../../../../store/INSTRUCTOR/video-slice'
 import { Spinner } from '../../../../UI/Spinner/Spinner'
+import { BreadCrumbs } from '../../../../UI/breadCrumb/BreadCrumbs'
+import { getCourse } from '../../../../../store/INSTRUCTOR/materials-slice'
 
-const VideoInnerPage = (props) => {
+const VideoInnerPage = () => {
    const dispatch = useDispatch()
    const { isLoading } = useSelector((state) => state.video)
-
+   const { course } = useSelector((state) => state.materials)
    const { singleVideo } = useSelector((state) => state.video)
-   const { videoId } = useParams()
+   const { videoId, id } = useParams()
 
    useEffect(() => {
       if (videoId) {
          dispatch(getSingleVideo(videoId))
       }
+      dispatch(getCourse(id))
    }, [])
 
+   const pathsArray = [
+      {
+         path: '/instructor/instructor_course',
+         name: 'курсы',
+      },
+      {
+         path: `/instructor/instructor_course/${id}/materials`,
+         name: course?.courseName,
+      },
+      {
+         path: '/instructors',
+         name: 'Материалы',
+      },
+   ]
    return (
-      <div>
+      <Container>
+         <BreadCrumbs pathsArray={pathsArray} />
          {(isLoading && <Spinner />) || (
             <VideoPresentationContainer>
                <div>
@@ -42,12 +60,14 @@ const VideoInnerPage = (props) => {
                </div>
             </VideoPresentationContainer>
          )}
-      </div>
+      </Container>
    )
 }
 
 export default VideoInnerPage
-
+const Container = styled.div`
+   margin-top: 20px;
+`
 const VideoPresentationContainer = styled.div`
    width: 100%;
    background-color: #ffffff;

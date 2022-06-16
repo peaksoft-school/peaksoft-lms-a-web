@@ -5,20 +5,38 @@ import { useParams } from 'react-router-dom'
 import PowerPoint from '../../../../assets/images/PowerPoint.png'
 import PDF from '../../../../assets/images/PDF.png'
 import { getPresentation } from '../../../../store/INSTRUCTOR/presentation-slice'
-import { Button } from '../../../UI/button/Button'
+import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
+import { getCourse } from '../../../../store/INSTRUCTOR/materials-slice'
 
 const PresentationInnerPage = () => {
    const dispatch = useDispatch()
 
    const { singlePresentation } = useSelector((state) => state.presentation)
+   const { course } = useSelector((state) => state.materials)
 
-   const { presentationId } = useParams()
+   const { presentationId, id } = useParams()
 
    useEffect(() => {
       if (presentationId) {
          dispatch(getPresentation(presentationId))
       }
+      dispatch(getCourse(id))
    }, [])
+
+   const pathsArray = [
+      {
+         path: '/instructor/instructor_course',
+         name: 'курсы',
+      },
+      {
+         path: `/instructor/instructor_course/${id}/materials`,
+         name: course?.courseName,
+      },
+      {
+         path: '/instructors',
+         name: 'Материалы',
+      },
+   ]
 
    const presentationType = singlePresentation?.presentationLink.includes('pdf')
 
@@ -33,24 +51,30 @@ const PresentationInnerPage = () => {
    )
 
    return (
-      <PresentationContainer>
-         <div>
-            <h2>{singlePresentation?.presentationName}</h2>
-         </div>
-         <div>
-            <p>{singlePresentation?.description}</p>
-         </div>
-         <LinkStyle>
-            {presentationTypeImage}
+      <Container>
+         <BreadCrumbs pathsArray={pathsArray} />
+         <PresentationContainer>
             <div>
-               <a href={singlePresentation?.presentationLink}>
-                  Скачать презентацию
-               </a>
+               <h2>{singlePresentation?.presentationName}</h2>
             </div>
-         </LinkStyle>
-      </PresentationContainer>
+            <div>
+               <p>{singlePresentation?.description}</p>
+            </div>
+            <LinkStyle>
+               {presentationTypeImage}
+               <div>
+                  <a href={singlePresentation?.presentationLink}>
+                     Скачать презентацию
+                  </a>
+               </div>
+            </LinkStyle>
+         </PresentationContainer>
+      </Container>
    )
 }
+const Container = styled.div`
+   margin-top: 20px;
+`
 const PresentationContainer = styled.div`
    width: 100%;
    background-color: #ffffff;

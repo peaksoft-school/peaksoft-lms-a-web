@@ -73,11 +73,11 @@ const Task = () => {
 
    const pathsArray = [
       {
-         path: '/instructor_course',
+         path: '/instructor/instructor_course',
          name: 'курсы',
       },
       {
-         path: '/materials',
+         path: `/instructor/instructor_course/${id}/materials`,
          name: course?.courseName,
       },
       {

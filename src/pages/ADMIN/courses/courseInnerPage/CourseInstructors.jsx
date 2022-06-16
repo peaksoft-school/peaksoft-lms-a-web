@@ -47,11 +47,11 @@ const CourseInstructors = () => {
 
    const pathsArray = [
       {
-         path: 'admin/courses',
+         path: '/admin/courses',
          name: 'курсы',
       },
       {
-         path: 'courses',
+         path: '/admin/courses',
          name: сourse?.courseName,
       },
       {

@@ -1,20 +1,16 @@
-import { Breadcrumbs, Link, Typography } from '@mui/material'
+import { Breadcrumbs, Typography } from '@mui/material'
 import styled from '@emotion/styled'
-import { useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export const BreadCrumbs = (props) => {
-   const { pathname } = useLocation()
-   const paths = pathname.split('/').filter((x) => x)
-   const pathsHistory = props.pathsArray.slice(0, paths.length)
-   const crumbs = pathsHistory.map((crumb, index) => {
-      const crumbHref = `/${paths.slice(0, index + 1).join('/')}`
-      const isLast = index === paths.length - 2
+export const BreadCrumbs = ({ pathsArray }) => {
+   const crumbs = pathsArray.map((crumb, index) => {
+      const isLast = index === pathsArray.length - 1
       return isLast ? (
          <LastPathStyle color="black" key={crumb.path}>
             {crumb.name}
          </LastPathStyle>
       ) : (
-         <LinkStyleControl underline="hover" href={crumbHref} key={crumb.path}>
+         <LinkStyleControl to={crumb.path} key={crumb.path}>
             {crumb.name}
          </LinkStyleControl>
       )

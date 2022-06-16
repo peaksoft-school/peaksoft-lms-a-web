@@ -56,11 +56,11 @@ const GroupDetailPage = () => {
 
    const pathsArray = [
       {
-         path: 'admin/groups',
+         path: '/admin/groups',
          name: 'Группы',
       },
       {
-         path: 'admin/group_students',
+         path: '/admin/groups',
          name: singleGroup?.groupName,
       },
       {

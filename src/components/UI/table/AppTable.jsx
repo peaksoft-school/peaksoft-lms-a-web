@@ -14,7 +14,6 @@ import {
 import { Pagination } from '../pagination/Pagination'
 
 export const AppTable = ({ columns, data, pagination }) => {
-   console.log(pagination)
    return (
       <ThemeProvider theme={customTheme}>
          <Container component={Paper}>

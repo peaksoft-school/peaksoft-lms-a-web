@@ -337,11 +337,11 @@ const Materials = () => {
 
    const pathsArray = [
       {
-         path: '/instructor_course',
+         path: '/instructor/instructor_course',
          name: 'Kурсы',
       },
       {
-         path: '/materials',
+         path: '/instructor/instructor_course',
          name: course?.courseName,
       },
       {
