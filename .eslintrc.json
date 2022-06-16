@@ -16,9 +16,9 @@
       "sourceType": "module"
    },
    "no-param-reassign": [
-      "error",
+      "off",
       {
-         "props": false,
+         "props": true,
          "ignorePropertyModificationsFor": ["state", "children"]
       }
    ],

@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useCallback, useMemo, useRef } from 'react'
-import { useEffect } from 'react'
+import React, { useCallback, useMemo, useRef, useEffect } from 'react'
 import { createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
 import {

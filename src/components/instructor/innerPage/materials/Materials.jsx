@@ -72,7 +72,8 @@ export const Materials = () => {
    const { lessons, isLoading, lesson, course } = useSelector(
       (state) => state.materials
    )
-   const { presentation } = useSelector((state) => state.presentation)
+   const { singlePresentation } = useSelector((state) => state.presentation)
+   const { singleVideo } = useSelector((state) => state.video)
 
    const [searchParams, setSearchParams] = useSearchParams()
 
@@ -95,6 +96,8 @@ export const Materials = () => {
    const [deletedLessonId, setDeletedLessonId] = useState(null)
    const [materialId, setMaterialId] = useState(null)
 
+   // ----------LESSON RELATED-----------------------
+
    const addLessonMaterials = (option) => {
       if (option.id === 'video') {
          setSearchParams({ [ADD_VIDEO]: true, lessonId: option.lessonId })
@@ -105,6 +108,7 @@ export const Materials = () => {
       if (option.id === 'test') {
          navigate(`create_test/${option.lessonId}`)
       }
+
       if (option.id === 'presentation') {
          setSearchParams({
             [ADD_PRESENTATION]: true,
@@ -126,40 +130,6 @@ export const Materials = () => {
       setSearchParams({ [DELETE_TASK]: true })
    }
 
-   const editVideo = (id) => {
-      setMaterialId(id)
-      dispatch(getSingleVideo(id))
-      setSearchParams({ [EDIT_VIDEO]: true, videoId: id })
-   }
-   const deleteVideo = (id) => {
-      setMaterialId(id)
-      setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
-   }
-
-   const followLinkHandler = (link) => {
-      window.open(link, '_blank')
-   }
-
-   const openDeleteLinkConfirmModal = (id) => {
-      setMaterialId(id)
-      setSearchParams({ [DELETE_LINK]: true })
-   }
-   const editLink = (id) => {
-      setMaterialId(id)
-      dispatch(getSingleLink(id))
-      setSearchParams({ [EDIT_LINK]: true, linkId: id })
-   }
-
-   // ------------------------------TASK INNER PAGE----------------
-   const openTaskInnerPage = (taskId) => {
-      navigate(`task/${taskId}`)
-   }
-
-   // ------------------------------LESSON RELATED-----------------
-   const closeModals = () => {
-      setSearchParams('')
-   }
-
    const openCreateLessonModal = () => {
       setSearchParams({ [ADD_LESSON]: true })
    }
@@ -169,27 +139,9 @@ export const Materials = () => {
       setSearchParams({ [DELETE_LESSON]: true })
    }
 
-   const deleteTest = (id) => {
-      setMaterialId(id)
-      setSearchParams({ [DELETE_TEST]: true })
-   }
-
    const openEditLessonModal = (id) => {
       dispatch(getLesson(id))
       setSearchParams({ [EDIT_LESSON]: true })
-   }
-
-   const openPresentationEditModal = (id) => {
-      dispatch(getPresentation(id))
-      setSearchParams({ [EDIT_PRESENTATION]: true, presentationId: id })
-   }
-
-   const deletePresentationModal = (id) => {
-      setMaterialId(id)
-      setSearchParams({ [DELETE_PRESENTATION]: true })
-   }
-   const openTestInnerPage = (lessonId, testId) => {
-      navigate(`test/${lessonId}/${testId}`)
    }
 
    const addLessonHandler = (value, onClear) => {
@@ -205,7 +157,6 @@ export const Materials = () => {
             showErrorMessage('Не удалось создать урок')
          })
    }
-
    const sendEditedLessonHandler = (value, onClear) => {
       dispatch(editLesson({ id: lesson.id, lessonData: value }))
          .unwrap()
@@ -233,6 +184,57 @@ export const Materials = () => {
          })
    }
 
+   // ------------------VIDEO RELATED----------------
+
+   const editVideo = (id) => {
+      setMaterialId(id)
+      dispatch(getSingleVideo(id))
+      setSearchParams({ [EDIT_VIDEO]: true, videoId: id })
+   }
+
+   const deleteVideo = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_VIDEO]: true, videoId: id })
+   }
+   const openVideoInnerPage = (videoId) => {
+      dispatch(getSingleVideo(videoId))
+      navigate(`video/${videoId}`)
+   }
+
+   // ------------LINK RELATED----------------------------
+
+   const followLinkHandler = (link) => {
+      window.open(link, '_blank')
+   }
+
+   const openDeleteLinkConfirmModal = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_LINK]: true })
+   }
+   const editLink = (id) => {
+      setMaterialId(id)
+      dispatch(getSingleLink(id))
+      setSearchParams({ [EDIT_LINK]: true, linkId: id })
+   }
+
+   const closeModals = () => {
+      setSearchParams('')
+   }
+
+   // ------------------------------TASK INNER PAGE----------------
+
+   const openTaskInnerPage = (taskId) => {
+      navigate(`task/${taskId}`)
+   }
+   // --------------TEST RELATED---------------------------------------
+
+   const deleteTest = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_TEST]: true })
+   }
+   const openTestInnerPage = (lessonId, testId) => {
+      navigate(`test/${lessonId}/${testId}`)
+   }
    const deleteTestHandler = () => {
       dispatch(removeTest(materialId))
          .unwrap()
@@ -246,11 +248,26 @@ export const Materials = () => {
             showErrorMessage('Не удалось удалить тест')
          })
    }
-
    const editTestHandler = (id) => {
       navigate(`edit_test/${id}`)
       dispatch(getTest(id))
    }
+
+   // --------------------PRESENTATION RELATED-----------------
+   const openPresentationInnerPage = (presentationId) => {
+      navigate(`presentation/${presentationId}`)
+   }
+
+   const openPresentationEditModal = (id) => {
+      dispatch(getPresentation(id))
+      setSearchParams({ [EDIT_PRESENTATION]: true, presentationId: id })
+   }
+
+   const deletePresentationModal = (id) => {
+      setMaterialId(id)
+      setSearchParams({ [DELETE_PRESENTATION]: true })
+   }
+
    const addPresentationHandler = (value, file, id, onClear) => {
       dispatch(addPresentation({ value, file, id }))
          .unwrap()
@@ -378,6 +395,9 @@ export const Materials = () => {
                      video={lesson.videoResponse}
                      onEditVideo={editVideo}
                      onDeleteVideo={deleteVideo}
+                     openVideoInnerPage={openVideoInnerPage}
+                     openPresentationInnerPage={openPresentationInnerPage}
+                     // path={`video/${id}`}
                   />
                ))}
          </Container>
@@ -414,12 +434,12 @@ export const Materials = () => {
             onClose={closeModals}
             onAdd={addPresentationHandler}
          />
-         {presentation && (
+         {singlePresentation && (
             <PresentationForm
                showModal={showEditPresentationModal}
                onClose={closeModals}
                onEdit={senEditedPresentationHandler}
-               presentation={presentation}
+               presentation={singlePresentation}
             />
          )}
          <ConfirmModalOnDeletePresentation
