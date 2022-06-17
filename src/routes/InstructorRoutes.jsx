@@ -1,14 +1,33 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Task } from '../components/instructor/task/Task'
-import { Test } from '../components/instructor/lesson/test/Test'
 import { InstrutorCourses } from '../components/instructor/primerPage/InstructorCourses'
-import { Materials } from '../components/instructor/innerPage/materials/Materials'
 import { ROUTES } from '../utils/constants/general'
-import { Students } from '../components/instructor/innerPage/students/Students'
-import { EditTask } from '../components/instructor/task/EditTask'
-import { LessonVideo } from '../components/instructor/innerPage/materials/video/LessonVideo'
-import { InstructorTests } from '../components/instructor/lesson/innerPage/Test/InstructorTests'
+
+const Materials = React.lazy(() =>
+   import('../components/instructor/innerPage/materials/Materials')
+)
+const Test = React.lazy(() =>
+   import('../components/instructor/lesson/test/Test')
+)
+const Students = React.lazy(() =>
+   import('../components/instructor/innerPage/students/Students')
+)
+const Task = React.lazy(() => import('../components/instructor/task/Task'))
+const EditTask = React.lazy(() =>
+   import('../components/instructor/task/EditTask')
+)
+const InstructorTests = React.lazy(() =>
+   import('../components/instructor/lesson/innerPage/Test/InstructorTests')
+)
+const VideoInnerPage = React.lazy(() =>
+   import('../components/instructor/innerPage/materials/video/VideoInnerPage')
+)
+const PresentationInnerPage = React.lazy(() =>
+   import('../components/instructor/lesson/presentation/PresentationInnerPage')
+)
+const TaskInnerPage = React.lazy(() =>
+   import('../components/instructor/lesson/innerPage/Task/TaskInnerPage')
+)
 
 export const InstructorRoutes = () => {
    return (
@@ -25,6 +44,14 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials`}
                element={<Materials />}
+            />
+            <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/video/:videoId`}
+               element={<VideoInnerPage />}
+            />
+            <Route
+               path={`/${ROUTES.INSTRUCTOR_COURSES}/:id/materials/presentation/:presentationId`}
+               element={<PresentationInnerPage />}
             />
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/create_test/:lessonId`}
@@ -47,12 +74,12 @@ export const InstructorRoutes = () => {
                element={<EditTask />}
             />
             <Route
-               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/lesson_video/:lessonId`}
-               element={<LessonVideo />}
-            />
-            <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
                element={<InstructorTests />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/task/:taskId`}
+               element={<TaskInnerPage />}
             />
          </Routes>
       </div>

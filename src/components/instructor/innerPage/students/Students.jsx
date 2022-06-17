@@ -27,12 +27,11 @@ import { Button } from '../../../UI/button/Button'
 import { AddStudent } from '../../primerPage/AddStudent'
 import { AddStudentsOfGroup } from '../../primerPage/AddStudentsOfGroup'
 
-export const Students = () => {
+const Students = () => {
    const dispatch = useDispatch()
    const { newStudentsOfCourse, singleCourse, students, groupOfStudents } =
       useSelector((state) => state.instructorCourses)
    const [searchParams, setSearchParams] = useSearchParams()
-
    const showAddStudentModal = searchParams.get(ADD_STUDENT)
    const showAddGroupModal = searchParams.get(ADD_GROUP)
 
@@ -46,7 +45,6 @@ export const Students = () => {
          .unwrap()
          .then(() => {
             showSuccessMessage('Студент успешно добавлен')
-            handleClose()
             dispatch(getStudentsByCourse(id))
          })
          .catch(() => {
@@ -89,10 +87,7 @@ export const Students = () => {
       (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
    )
 
-   const filteredGroups = groupOfStudents.filter(
-      (item) => !newStudentsOfCourse.some((el) => item.id === el.id)
-   )
-   const groups = filteredGroups.map((el) => {
+   const groups = groupOfStudents.map((el) => {
       return {
          id: el.id,
          title: el.groupName,
@@ -120,7 +115,7 @@ export const Students = () => {
                   onClick={openAddStudentModal}
                >
                   <StyledAddStudent />
-                  Добавить студента в курс
+                  Добавить студента на курс
                </Button>
                <Button
                   background="#3772FF"
@@ -128,7 +123,7 @@ export const Students = () => {
                   bgActive="#6190FF"
                   onClick={openAddGroupModal}
                >
-                  <StyledAddGroup /> Добавить группу в курс
+                  <StyledAddGroup /> Добавить группу на курс
                </Button>
             </StyledButton>
             <AddStudent
@@ -148,19 +143,20 @@ export const Students = () => {
       </>
    )
 }
+export default Students
 
 const Container = styled.div`
    display: flex;
    justify-content: space-between;
-   margin: 7px;
+   margin: 7px 0;
 `
 const StyledBreadCrumbs = styled.div`
    margin-top: 40px;
 `
 const StyledButton = styled.div`
    display: flex;
-   justify-content: space-around;
-   width: 535px;
+   justify-content: space-between;
+   width: 540px;
    height: 45px;
    margin-top: 5px;
 `

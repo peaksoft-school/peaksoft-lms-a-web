@@ -19,7 +19,7 @@ import {
 } from '../../../UI/notification/Notification'
 import { Spinner } from '../../../UI/Spinner/Spinner'
 
-export const Test = () => {
+const Test = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { id, lessonId, testId } = useParams()
@@ -112,6 +112,7 @@ export const Test = () => {
       </div>
    )
 }
+export default Test
 
 const StyledContainer = styled.div`
    display: grid;

@@ -2,10 +2,11 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import styled from '@emotion/styled/macro'
+import { ReactComponent as ProfileIcon } from '../../../assets/icons/Profile.svg'
 import { ReactComponent as ArrowIcon } from '../../../assets/icons/Arrows.svg'
 import { ReactComponent as LogoutIcon } from '../../../assets/icons/logout.svg'
 
-export const LogoutButton = ({ logoutHandler }) => {
+export const LogoutButton = ({ logoutHandler, title }) => {
    const [anchorEl, setAnchorEl] = useState(null)
    const open = Boolean(anchorEl)
 
@@ -21,14 +22,18 @@ export const LogoutButton = ({ logoutHandler }) => {
    }
 
    return (
-      <div>
-         <ArrowIcon
+      <>
+         <StyledProfile
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-         />
+         >
+            <ProfileIcon />
+            <p>{title}</p>
+            <ArrowIcon />
+         </StyledProfile>
          <MenuContainer
             id="basic-menu"
             anchorEl={anchorEl}
@@ -43,7 +48,7 @@ export const LogoutButton = ({ logoutHandler }) => {
                Выйти
             </Container>
          </MenuContainer>
-      </div>
+      </>
    )
 }
 
@@ -77,5 +82,28 @@ const Container = styled(MenuItem)`
    justify-content: space-between;
    &:focus {
       background-color: #dde9f9;
+   }
+`
+const StyledProfile = styled.div`
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 8px 2px 8px 8px;
+   position: absolute;
+   width: 180px;
+   height: 46px;
+   top: 15px;
+   cursor: pointer;
+   & p {
+      font-family: 'Open Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      color: #232323;
+   }
+   svg {
+      padding: 0;
+      margin: 0;
    }
 `

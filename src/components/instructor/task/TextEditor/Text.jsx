@@ -39,7 +39,4 @@ const StyledIcon = styled.div`
       background: #d4d4d4;
       border-radius: 6px;
    }
-   svg {
-      margin-top: 4px;
-   }
 `

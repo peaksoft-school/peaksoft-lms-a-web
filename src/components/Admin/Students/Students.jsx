@@ -47,7 +47,7 @@ const STUDY_FORMAT_OPTION = [
    },
 ]
 
-export const Students = () => {
+const Students = () => {
    const dispatch = useDispatch()
    const {
       studentData,
@@ -322,6 +322,8 @@ export const Students = () => {
       </div>
    )
 }
+export default Students
+
 const StyledButtonsContainer = styled.div`
    width: 100%;
    height: 65px;

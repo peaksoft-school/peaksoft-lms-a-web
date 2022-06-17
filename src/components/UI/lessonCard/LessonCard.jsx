@@ -28,10 +28,14 @@ export const LessonCard = ({
    onDeletePresentation,
    openTestInnerPage,
    followLinkHandler,
+   openTaskInnerPage,
    onEditLink,
    onDeleteLink,
    onEditVideo,
    onDeleteVideo,
+   openVideoInnerPage,
+   openPresentationInnerPage,
+   path,
 }) => {
    const ADD_OPTIONS = [
       {
@@ -93,7 +97,7 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <VideoIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => openVideoInnerPage(video?.id)}>
                   <h2>Видеоурок</h2>
                </StyledDiv>
                <ActionsContainer id="actions">
@@ -119,7 +123,9 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <PresentationIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv
+                  onClick={() => openPresentationInnerPage(presentation?.id)}
+               >
                   <h2>Презентация</h2>
                </StyledDiv>
                <ActionsContainer id="actions">
@@ -145,7 +151,7 @@ export const LessonCard = ({
                <StyledContentIcon>
                   <TaskIcon />
                </StyledContentIcon>
-               <StyledDiv>
+               <StyledDiv onClick={() => openTaskInnerPage(task?.id)}>
                   <h2>Задание</h2>
                </StyledDiv>
                <ActionsContainer id="actions">

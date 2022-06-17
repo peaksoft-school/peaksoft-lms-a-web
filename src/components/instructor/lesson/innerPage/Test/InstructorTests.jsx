@@ -13,11 +13,12 @@ import { BreadCrumbs } from '../../../../UI/breadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
 import { AppTable } from '../../../../UI/table/AppTable'
 
-export const InstructorTests = () => {
+const InstructorTests = () => {
    const dispatch = useDispatch()
    const { tests, course, results, lesson } = useSelector(
       (state) => state.instructorTests
    )
+   console.log(results)
    const { id, lessonId, testId } = useParams()
    const [toggle, setToggle] = useState(false)
 
@@ -46,7 +47,10 @@ export const InstructorTests = () => {
    }
 
    const breadcrumbs = [
-      { path: 'instructor/instructor_course', name: course?.courseName },
+      {
+         path: `/instructor/instructor_course/${id}/materials`,
+         name: course?.courseName,
+      },
       {
          path: 'instructor/materials',
          name: lesson?.lessonName,
@@ -91,6 +95,9 @@ export const InstructorTests = () => {
       </Wrapper>
    )
 }
+
+export default InstructorTests
+
 const Wrapper = styled.div`
    width: 100%;
 `

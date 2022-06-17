@@ -2,12 +2,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { baseFetch } from '../../api/baseFetch'
 
 const initialState = {
-   courses: [],
    newStudentsOfCourse: [],
-   newStudents: [],
    groupOfStudents: [],
    singleCourse: [],
    students: [],
+   courses: [],
    isLoading: null,
 }
 
@@ -171,20 +170,21 @@ export const instructorCoursesSlice = createSlice({
       setSingleCourse(state, action) {
          state.singleCourse = action.payload
       },
+      filteredGroup(state, action) {
+         const { id } = action.payload
+         console.log(id)
+         state.groupOfStudents = state.groupOfStudents.filter(
+            (el) => el.id !== id
+         )
+      },
    },
    extraReducers: {
-      [getCoursesOfInstructor.pending]: setPending,
-      [getCoursesOfInstructor.rejected]: setIsLoading,
-      [getCoursesOfInstructor.fulfilled]: setPending,
       [addGroupToCourse.pending]: setPending,
       [addGroupToCourse.rejected]: setIsLoading,
       [addGroupToCourse.fulfilled]: setPending,
-      [getGroupOfStudents.pending]: setPending,
-      [getGroupOfStudents.rejected]: setIsLoading,
-      [getGroupOfStudents.fulfilled]: setPending,
-      [getStudents.pending]: setPending,
-      [getStudents.rejected]: setIsLoading,
-      [getStudents.fulfilled]: setPending,
+      [addStudentToCourse.pending]: setPending,
+      [addStudentToCourse.rejected]: setIsLoading,
+      [addStudentToCourse.fulfilled]: setPending,
    },
 })
 
@@ -196,4 +196,5 @@ export const {
    setSingleCourse,
    setStudents,
    clearCourse,
+   filteredGroup,
 } = instructorCoursesSlice.actions

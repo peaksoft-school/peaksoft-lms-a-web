@@ -9,7 +9,7 @@ import { AppTable } from '../../../../components/UI/table/AppTable'
 import { getSingleCourse } from '../../../../store/courses-slice'
 import { COURSE_STUDENTS } from '../../../../utils/constants/general'
 
-export const CourseStudents = () => {
+const CourseStudents = () => {
    const { id } = useParams()
    const dispatch = useDispatch()
    const { сourse } = useSelector((state) => state.courses)
@@ -55,6 +55,8 @@ export const CourseStudents = () => {
       </Container>
    )
 }
+export default CourseStudents
+
 const Container = styled.div`
    margin-top: -18px;
 `

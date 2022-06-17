@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
@@ -17,11 +17,16 @@ import { ADD_LINK_MODAL } from '../../../../../utils/constants/general'
 export const AddLinkModal = ({ closeModals, isModalOpen }) => {
    const dispatch = useDispatch()
    const [searchParams, setSearchParams] = useSearchParams()
+   const [formIsValid, setFormIsValid] = useState(false)
 
    const { value, onChange, onClear } = useInput({
       text: '',
       link: '',
    })
+
+   useEffect(() => {
+      setFormIsValid(value.text.length > 0 && value.link.length > 0)
+   }, [value])
 
    const addLinkToLessonHandler = () => {
       const lessonId = searchParams.get('lessonId')
@@ -86,6 +91,7 @@ export const AddLinkModal = ({ closeModals, isModalOpen }) => {
                </div>
                <div>
                   <Button
+                     disabled={!formIsValid}
                      background="#3772FF"
                      bgHover="#1D60FF"
                      bgActive="#6190FF"

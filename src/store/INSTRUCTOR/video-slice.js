@@ -41,6 +41,7 @@ export const getSingleVideo = createAsyncThunk(
             path: `api/videos/${id}`,
             method: 'GET',
          })
+
          dispatch(videoActions.setVideo(response))
          return response
       } catch (error) {

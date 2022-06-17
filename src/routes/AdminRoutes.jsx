@@ -1,13 +1,24 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { GroupsPanel } from '../components/Admin/groups/GroupsPanel'
-import { Teachers } from '../components/Admin/teachers/Teachers'
-import { Students } from '../components/Admin/Students/Students'
 import { ROUTES } from '../utils/constants/general'
-import { GroupDetailPage } from '../components/Admin/groups/GroupDetailPage'
-import { Courses } from '../components/Admin/courses/Courses'
-import { CourseStudents } from '../pages/ADMIN/courses/courseInnerPage/CourseStudents'
-import { CourseInstructors } from '../pages/ADMIN/courses/courseInnerPage/CourseInstructors'
+
+const GroupDetailPage = React.lazy(() =>
+   import('../components/Admin/groups/GroupDetailPage')
+)
+const Courses = React.lazy(() => import('../components/Admin/courses/Courses'))
+const Teachers = React.lazy(() =>
+   import('../components/Admin/teachers/Teachers')
+)
+const Students = React.lazy(() =>
+   import('../components/Admin/Students/Students')
+)
+const CourseInstructors = React.lazy(() =>
+   import('../pages/ADMIN/courses/courseInnerPage/CourseInstructors')
+)
+const CourseStudents = React.lazy(() =>
+   import('../pages/ADMIN/courses/courseInnerPage/CourseStudents')
+)
 
 export const AdminRoutes = () => {
    return (
@@ -18,7 +29,7 @@ export const AdminRoutes = () => {
             path={`/${ROUTES.GROUPS}/:id/group_students`}
             element={<GroupDetailPage />}
          />
-         <Route path={ROUTES.COURSES} element={<Courses />} />
+         <Route exact path={ROUTES.COURSES} element={<Courses />} />
          <Route path={ROUTES.TEACHERS} element={<Teachers />} />
          <Route path={ROUTES.STUDENTS} element={<Students />} />
          <Route
