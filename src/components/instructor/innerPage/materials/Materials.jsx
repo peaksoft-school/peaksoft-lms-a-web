@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../UI/button/Button'
 import { ReactComponent as AddIcon } from '../../../../assets/icons/AddIcon.svg'
-import { BreadCrumbs } from '../../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../UI/breadCrumb/BreadCrumbs'
 import { LessonCreateModal } from './MaterialsCreateModal'
 import {
    ADD_LESSON,
@@ -64,7 +64,7 @@ import { getSingleVideo } from '../../../../store/INSTRUCTOR/video-slice'
 import { ConfirmVideoModalOnDelete } from './video/ConfirmVideoModalOnDelete'
 import { EditVideo } from './video/EditVideo'
 
-export const Materials = () => {
+const Materials = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { id } = useParams()
@@ -137,6 +137,8 @@ export const Materials = () => {
    const deleteLessonModal = (id) => {
       setDeletedLessonId(id)
       setSearchParams({ [DELETE_LESSON]: true })
+      dispatch(getLessonTask(id))
+      dispatch(getLesson(id))
    }
 
    const openEditLessonModal = (id) => {
@@ -341,11 +343,11 @@ export const Materials = () => {
 
    const pathsArray = [
       {
-         path: '/instructor_course',
+         path: '/instructor/instructor_course',
          name: 'Kурсы',
       },
       {
-         path: '/materials',
+         path: '/instructor/instructor_course',
          name: course?.courseName,
       },
       {
@@ -418,6 +420,7 @@ export const Materials = () => {
             showModal={showDeleteLessonConfirmModal}
             onClose={closeModals}
             onDelete={deleteLessonHandler}
+            name={lesson?.lessonName}
          />
          <ConfirmationModal
             showModal={showTaskConfirmationModal}
@@ -478,6 +481,7 @@ export const Materials = () => {
       </>
    )
 }
+export default Materials
 
 const Container = styled.div`
    display: grid;

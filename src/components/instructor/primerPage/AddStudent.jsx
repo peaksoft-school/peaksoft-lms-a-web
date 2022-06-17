@@ -33,7 +33,7 @@ export const AddStudent = ({ isModalOpen, onClose, students, onAdd }) => {
       <BasicModal
          isModalOpen={Boolean(isModalOpen)}
          onClose={onClose}
-         title="Добавить студента в курс"
+         title="Добавить студента на курс"
       >
          <StyledSearch>
             <StyledSearchIcon />

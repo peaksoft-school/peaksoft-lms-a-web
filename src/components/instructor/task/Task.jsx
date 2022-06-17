@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
-import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
 import { TextEditor } from './TextEditor/TextEditor'
 import { Link as TaskLink } from './taskLink/Link'
 import { Code } from './taskCode/Code'
@@ -24,7 +24,7 @@ import { getCourse } from '../../../store/INSTRUCTOR/materials-slice'
 import { TaskCreatorOptions } from './TaskCreatorOptions'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
-export const Task = () => {
+const Task = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { lessonId, id } = useParams()
@@ -73,11 +73,11 @@ export const Task = () => {
 
    const pathsArray = [
       {
-         path: '/instructor_course',
+         path: '/instructor/instructor_course',
          name: 'курсы',
       },
       {
-         path: '/materials',
+         path: `/instructor/instructor_course/${id}/materials`,
          name: course?.courseName,
       },
       {
@@ -93,7 +93,7 @@ export const Task = () => {
          <Container>
             <StyledTitle>Создать задание</StyledTitle>
             <Title>
-               <StyledText
+               <Input
                   placeholder="Название задания"
                   onChange={changeTaskNameHandler}
                />
@@ -146,6 +146,8 @@ export const Task = () => {
    )
 }
 
+export default Task
+
 const Container = styled.div`
    width: 100%;
    border-radius: 8px;
@@ -165,10 +167,6 @@ const Title = styled.div`
    height: 70px;
    display: flex;
    align-items: flex-end;
-`
-const StyledText = styled(Input)`
-   width: 842px;
-   height: 42px;
 `
 
 const StyledContainer = styled.div`

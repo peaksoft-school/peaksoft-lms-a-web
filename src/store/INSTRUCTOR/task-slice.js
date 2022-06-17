@@ -127,6 +127,7 @@ export const sendLessonTask = createAsyncThunk(
 export const getLessonTask = createAsyncThunk(
    'task/getLeassonTask',
    async (id, { rejectWithValue, dispatch }) => {
+      dispatch(taskActions.clearTask())
       try {
          const response = await baseFetch({
             path: `api/tasks/${id}`,

@@ -63,6 +63,7 @@ export const GroupsPanel = () => {
    const getGroupId = (id) => {
       setIsModalOpen(true)
       setGroupId(id)
+      dispatch(getSingleGroup(id))
    }
 
    const deletingModalHandler = () => {
@@ -86,14 +87,15 @@ export const GroupsPanel = () => {
       setPage(page)
       dispatch(groupsPagination(page))
    }
+   console.log(allPages)
 
    return (
       <>
          <GroupCreate page={page} />
-         <StyledContainer>
-            <CardContentStyleControl>
-               {(isLoading && <Spinner />) ||
-                  groups.map((group) => {
+         {(isLoading && <Spinner />) || (
+            <StyledContainer>
+               <CardContentStyleControl>
+                  {groups.map((group) => {
                      return (
                         <Card
                            image={group.image}
@@ -107,30 +109,32 @@ export const GroupsPanel = () => {
                         />
                      )
                   })}
-               <GroupDeleteConfirm
-                  isModalOpen={isModalOpen}
-                  deletingModalHandler={deletingModalHandler}
-                  setIsModalOpen={setIsModalOpen}
-               />
-               {singleGroup && (
-                  <GroupEdit
-                     singleGroup={singleGroup}
-                     openEditGroupModal={openEditGroupModal}
-                     setOpenEditGroupModal={setOpenEditGroupModal}
-                     page={page}
+                  <GroupDeleteConfirm
+                     isModalOpen={isModalOpen}
+                     deletingModalHandler={deletingModalHandler}
+                     setIsModalOpen={setIsModalOpen}
+                     name={singleGroup?.groupName}
                   />
+                  {singleGroup && (
+                     <GroupEdit
+                        singleGroup={singleGroup}
+                        openEditGroupModal={openEditGroupModal}
+                        setOpenEditGroupModal={setOpenEditGroupModal}
+                        page={page}
+                     />
+                  )}
+               </CardContentStyleControl>
+               {allPages > 1 && (
+                  <PaginationStyleControl>
+                     <Pagination
+                        count={allPages}
+                        page={page}
+                        onChange={(_, num) => groupsPaginationHandler(num)}
+                     />
+                  </PaginationStyleControl>
                )}
-            </CardContentStyleControl>
-            {allPages && (
-               <PaginationStyleControl>
-                  <Pagination
-                     count={allPages}
-                     page={page}
-                     onChange={(_, num) => groupsPaginationHandler(num)}
-                  />
-               </PaginationStyleControl>
-            )}
-         </StyledContainer>
+            </StyledContainer>
+         )}
       </>
    )
 }
@@ -141,7 +145,6 @@ const CardContentStyleControl = styled.div`
    grid-row: 30px;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
-   grid-template-rows: repeat(2, 1fr);
    grid-column-gap: 30px;
    grid-row-gap: 30px;
 `
@@ -158,9 +161,8 @@ const Container = styled.div`
    }
 `
 const PaginationStyleControl = styled.div`
-   margin-top: 20px;
+   margin-top: 50px;
 `
 const StyledContainer = styled.div`
-   height: 820px;
    position: relative;
 `

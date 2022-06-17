@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { baseFetch } from '../../../../api/baseFetch'
-import { BreadCrumbs } from '../../../../components/UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { showErrorMessage } from '../../../../components/UI/notification/Notification'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 import { getSingleCourse } from '../../../../store/courses-slice'
 import { COURSE_STUDENTS } from '../../../../utils/constants/general'
 
-export const CourseStudents = () => {
+const CourseStudents = () => {
    const { id } = useParams()
    const dispatch = useDispatch()
    const { сourse } = useSelector((state) => state.courses)
@@ -55,6 +55,8 @@ export const CourseStudents = () => {
       </Container>
    )
 }
+export default CourseStudents
+
 const Container = styled.div`
    margin-top: -18px;
 `

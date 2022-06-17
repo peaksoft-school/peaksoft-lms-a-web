@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../UI/button/Button'
 import { Input } from '../../UI/input/Input'
-import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
 import { TextEditor } from './TextEditor/TextEditor'
 import { Link as TaskLink } from './taskLink/Link'
 import { Code } from './taskCode/Code'
@@ -20,7 +20,7 @@ import { getCourse } from '../../../store/INSTRUCTOR/materials-slice'
 import { TaskCreatorOptions } from './TaskCreatorOptions'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
-export const EditTask = () => {
+const EditTask = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { taskId, id } = useParams()
@@ -34,6 +34,9 @@ export const EditTask = () => {
    useEffect(() => {
       dispatch(getLessonTask(taskId))
       dispatch(getCourse(id))
+      return () => {
+         dispatch(taskActions.clearTask())
+      }
    }, [])
 
    const sendTaskHandler = () => {
@@ -59,11 +62,11 @@ export const EditTask = () => {
 
    const pathsArray = [
       {
-         path: '/instructor_course',
+         path: '/instructor/instructor_course',
          name: 'курсы',
       },
       {
-         path: '/materials',
+         path: `/instructor/instructor_course/${id}/materials`,
          name: course?.courseName,
       },
       {
@@ -131,6 +134,8 @@ export const EditTask = () => {
       </>
    )
 }
+
+export default EditTask
 
 const Container = styled.div`
    width: 100%;

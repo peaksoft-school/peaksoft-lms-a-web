@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { BreadCrumbs } from '../../../../components/UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../../components/UI/breadCrumb/BreadCrumbs'
 import { AppTable } from '../../../../components/UI/table/AppTable'
 import { Button } from '../../../../components/UI/button/Button'
 import { ReactComponent as PinIcon } from '../../../../assets/icons/pinnedIcon.svg'
@@ -15,9 +15,9 @@ import {
    getInstructor,
    getSingleCourse,
 } from '../../../../store/courses-slice'
-import { AssignTeacher } from '../../../../components/admin/courses/AssignTeacher'
+import { AssignTeacher } from '../../../../components/Admin/courses/AssignTeacher'
 
-export const CourseInstructors = () => {
+const CourseInstructors = () => {
    const { id } = useParams()
    const dispatch = useDispatch()
 
@@ -47,11 +47,11 @@ export const CourseInstructors = () => {
 
    const pathsArray = [
       {
-         path: 'admin/courses',
+         path: '/admin/courses',
          name: 'курсы',
       },
       {
-         path: 'courses',
+         path: '/admin/courses',
          name: сourse?.courseName,
       },
       {
@@ -90,6 +90,8 @@ export const CourseInstructors = () => {
       </div>
    )
 }
+
+export default CourseInstructors
 
 const StyledButton = styled.div`
    display: flex;

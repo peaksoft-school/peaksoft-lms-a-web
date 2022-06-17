@@ -8,10 +8,10 @@ import {
    getSingleGroup,
    groupsPagination,
 } from '../../../store/groupSlice'
-import { BreadCrumbs } from '../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../UI/breadCrumb/BreadCrumbs'
 import { Spinner } from '../../UI/Spinner/Spinner'
 
-export const GroupDetailPage = () => {
+const GroupDetailPage = () => {
    const dispatch = useDispatch()
    const { studentsIState, singleGroup, isLoading } = useSelector(
       (state) => state.groups
@@ -53,13 +53,14 @@ export const GroupDetailPage = () => {
          id: 6,
       },
    ])
+
    const pathsArray = [
       {
-         path: 'admin/groups',
+         path: '/admin/groups',
          name: 'Группы',
       },
       {
-         path: 'admin/group_students',
+         path: '/admin/groups',
          name: singleGroup?.groupName,
       },
       {
@@ -77,6 +78,9 @@ export const GroupDetailPage = () => {
       </Container>
    )
 }
+
+export default GroupDetailPage
+
 const Container = styled.div`
    margin-top: 38px;
 `

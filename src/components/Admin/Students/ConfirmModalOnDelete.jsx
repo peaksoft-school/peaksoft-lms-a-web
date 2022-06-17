@@ -5,7 +5,7 @@ import ConfirmModal from '../../UI/modal/ConfirmModal'
 export const ConfirmModalOnDelete = ({ showModal, onClose, onDelete }) => {
    return (
       <ConfirmModal
-         title="Вы уверены, что хотите удалить студента ... ?"
+         title="Вы уверены, что хотите удалить студента?"
          isConfirmModalOpen={Boolean(showModal)}
          closeConfirmModal={onClose}
       >

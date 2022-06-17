@@ -9,11 +9,11 @@ import {
    getSingleCourse,
 } from '../../../../../store/INSTRUCTOR/instructor-tests-slice'
 import { TEST_INFO } from '../../../../../utils/constants/general'
-import { BreadCrumbs } from '../../../../UI/BreadCrumb/BreadCrumbs'
+import { BreadCrumbs } from '../../../../UI/breadCrumb/BreadCrumbs'
 import { ToggleSwitch } from '../../../../UI/switcher/ToggleSwitch'
 import { AppTable } from '../../../../UI/table/AppTable'
 
-export const InstructorTests = () => {
+const InstructorTests = () => {
    const dispatch = useDispatch()
    const { tests, course, results, lesson } = useSelector(
       (state) => state.instructorTests
@@ -47,7 +47,10 @@ export const InstructorTests = () => {
    }
 
    const breadcrumbs = [
-      { path: 'instructor/instructor_course', name: course?.courseName },
+      {
+         path: `/instructor/instructor_course/${id}/materials`,
+         name: course?.courseName,
+      },
       {
          path: 'instructor/materials',
          name: lesson?.lessonName,
@@ -92,6 +95,9 @@ export const InstructorTests = () => {
       </Wrapper>
    )
 }
+
+export default InstructorTests
+
 const Wrapper = styled.div`
    width: 100%;
 `

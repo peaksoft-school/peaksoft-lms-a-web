@@ -23,7 +23,7 @@ export const AddStudentsOfGroup = ({ isModalOpen, onClose, groups, onAdd }) => {
       <BasicModal
          isModalOpen={Boolean(isModalOpen)}
          onClose={onClose}
-         title="Добавить студентов группы в курс"
+         title="Добавить студентов группы на курс"
       >
          <Select
             options={groups}
