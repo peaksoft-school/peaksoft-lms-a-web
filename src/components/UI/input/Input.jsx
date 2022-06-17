@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React, { forwardRef } from 'react'
 
 export const Input = forwardRef((props, ref) => {
-   return <InputWrapper {...props} ref={ref} />
+   return <InputWrapper {...props} ref={ref} autoComplete="off" />
 })
 
 const InputWrapper = styled.input`
