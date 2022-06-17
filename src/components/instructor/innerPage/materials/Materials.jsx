@@ -138,6 +138,7 @@ const Materials = () => {
       setDeletedLessonId(id)
       setSearchParams({ [DELETE_LESSON]: true })
       dispatch(getLessonTask(id))
+      dispatch(getLesson(id))
    }
 
    const openEditLessonModal = (id) => {
@@ -222,6 +223,11 @@ const Materials = () => {
       setSearchParams('')
    }
 
+   // ------------------------------TASK INNER PAGE----------------
+
+   const openTaskInnerPage = (taskId) => {
+      navigate(`task/${taskId}`)
+   }
    // --------------TEST RELATED---------------------------------------
 
    const deleteTest = (id) => {
@@ -386,6 +392,7 @@ const Materials = () => {
                      onDeleteLink={openDeleteLinkConfirmModal}
                      onEditLink={editLink}
                      link={lesson.linkResponse}
+                     openTaskInnerPage={openTaskInnerPage}
                      followLinkHandler={followLinkHandler}
                      video={lesson.videoResponse}
                      onEditVideo={editVideo}

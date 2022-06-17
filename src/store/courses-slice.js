@@ -120,8 +120,10 @@ export const assignTeacherToCourse = createAsyncThunk(
             },
          })
          dispatch(getAllCourses(1))
+         dispatch(getCourseTeachers(courseId))
          return response
       } catch (error) {
+         dispatch(getCourseTeachers(courseId))
          showSuccessMessage('Учитель назначен')
          return rejectWithValue(error.message)
       }

@@ -25,6 +25,9 @@ const VideoInnerPage = React.lazy(() =>
 const PresentationInnerPage = React.lazy(() =>
    import('../components/instructor/lesson/presentation/PresentationInnerPage')
 )
+const TaskInnerPage = React.lazy(() =>
+   import('../components/instructor/lesson/innerPage/Task/TaskInnerPage')
+)
 
 export const InstructorRoutes = () => {
    return (
@@ -73,6 +76,10 @@ export const InstructorRoutes = () => {
             <Route
                path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/test/:lessonId/:testId`}
                element={<InstructorTests />}
+            />
+            <Route
+               path={`${ROUTES.INSTRUCTOR_COURSES}/:id/materials/task/:taskId`}
+               element={<TaskInnerPage />}
             />
          </Routes>
       </div>

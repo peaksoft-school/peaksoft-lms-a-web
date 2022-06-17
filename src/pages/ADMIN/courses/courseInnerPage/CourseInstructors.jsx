@@ -86,7 +86,6 @@ const CourseInstructors = () => {
                id={id}
             />
          )}
-
          <AppTable columns={COURSE_INSTRUCTORS} data={courseTeachers} />
       </div>
    )
